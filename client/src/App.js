@@ -1,10 +1,23 @@
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import NavigationWrapper from "./components/navigation/NavigationWrapper";
+import Courses from "./components/courses/Courses";
+import SignUp from "./components/signUp/SignUp";
+import "./fonts/fonts.css";
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Message Board</h1>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/">
+          <NavigationWrapper>
+            <Courses />
+          </NavigationWrapper>
+        </Route>
+        <Route path="/signup">
+          <SignUp />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
