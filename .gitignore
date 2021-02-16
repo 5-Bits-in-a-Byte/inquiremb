@@ -103,4 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
+## Server files
 **/__pycache__
+server/flask
