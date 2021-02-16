@@ -8,12 +8,12 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/">
+        <Route path="/" exact>
           <NavigationWrapper>
             <Courses />
           </NavigationWrapper>
         </Route>
-        <Route path="/signup">
+        <Route path="/signup" exact>
           <SignUp />
         </Route>
       </Switch>
