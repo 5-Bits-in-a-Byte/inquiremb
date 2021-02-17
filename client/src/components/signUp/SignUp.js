@@ -15,6 +15,7 @@ const SignUp = () => {
   return (
     <Page>
       <div>
+        <a href="http://localhost:5000/login">Sign in</a>
         <Router>
           <Link to="/login" exact>
             <GoogleLogin
@@ -35,8 +36,6 @@ const SignUp = () => {
 export default SignUp;
 
 const Page = styled.div`
-  border: 1px solid #000;
-  background-image: url(${img});
-  width: 2000px;
-  height: 900px;
+  background: url(${img}) no-repeat center center fixed;
+  -webkit-background-size: cover;
 `;
