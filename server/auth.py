@@ -30,7 +30,6 @@ log.setLevel(logging.DEBUG)
 
 # Blueprint stores authentication related routes
 auth_routes = Blueprint('auth_blueprint', __name__)
-
 # OAuth object implements OAuth 2.0 protocol logic
 # configured in app.py
 oauth = OAuth()
