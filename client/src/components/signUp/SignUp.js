@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import img from "../../imgs/signup-background.png";
 import GoogleLogin from "react-google-login";
@@ -24,12 +24,9 @@ const SignUp = () => {
 
 export default SignUp;
 
-const Page = styled.body`
-  background: url(${img}) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+const Page = styled.div`
+  background-image: url(${img});
+  height: 100hv;
   display: grid;
 `;
 
