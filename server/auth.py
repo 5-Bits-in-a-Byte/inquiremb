@@ -14,10 +14,12 @@ Steps:
 4. Check jwt on api requests
 5. lookup user using jwt details on api requests
 """
-from flask import Blueprint, session, url_for, redirect
+from flask import Blueprint, session, url_for, redirect, request, make_response
+from authlib.jose import jwt
 from authlib.integrations.flask_client import OAuth
 import logging
 import sys
+from config import HS_256_KEY
 
 # Authlib logging
 log = logging.getLogger('authlib')
@@ -26,6 +28,7 @@ log.setLevel(logging.DEBUG)
 
 # Blueprint stores authentication related routes
 auth_routes = Blueprint('auth_blueprint', __name__)
+
 # OAuth object implements OAuth 2.0 protocol logic
 # configured in app.py
 oauth = OAuth()
@@ -36,8 +39,14 @@ oauth = OAuth()
 @auth_routes.route('/')
 def homepage():
     user = session.get('user')
-    print(user)
-    return str(user)
+    # resp.set_cookie('email', user['email'])
+    cookie = request.cookies.get('email')
+    # payload = decode_jwt(cookie)
+    if cookie:
+        return cookie
+    else:
+        return ""
+    return cookie
 
 
 @auth_routes.route('/login')
@@ -46,9 +55,35 @@ def login():
     return oauth.google.authorize_redirect(redirect_uri)
 
 
-@auth_routes.route('/auth')
+@auth_routes.route('/fakeauth')
+def fakeauth():
+    user = session['user']
+    print(user['sub'])
+    resp = make_response('hi')
+    resp.set_cookie('userID', user['sub'])
+    resp.set_cookie('email', user['email'])
+    """
+    # resp.set_cookie(
+        'hellomessage', value = encode_jwt({'hi': 'helloooo'}), httponly = True)
+    """
+    return resp
+
+
+@ auth_routes.route('/auth')
 def auth():
     token = oauth.google.authorize_access_token()
     user = oauth.google.parse_id_token(token)
     session['user'] = user
-    return redirect('/')
+    resp = make_response('set cookie')
+    resp.set_cookie(
+        'userID', value=user['sub'], httponly=True)
+    return resp
+
+
+def encode_jwt(payload):
+    header = {'alg': 'HS256'}
+    return jwt.encode(header, payload, HS_256_KEY)
+
+
+def decode_jwt(s):
+    return jwt.decode(s, HS_256_KEY)

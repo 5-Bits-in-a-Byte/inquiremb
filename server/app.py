@@ -32,5 +32,6 @@ api = Api(app)
 # register endpoints from /resources folder here:
 api.add_resource(Demo, '/demo')
 
+
 if __name__ == '__main__':
     app.run(debug=True)
