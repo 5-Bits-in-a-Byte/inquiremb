@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 from mongo import *
 from flask import Flask, render_template, request, send_from_directory
-=======
-from flask import Flask
->>>>>>> 208e19ba944c3e9e7758e72b75c6e2f11cf3acf1
 from flask_restful import Api
 import config
 import os
@@ -12,13 +8,9 @@ from resources.demo import Demo
 # Auth imports
 from auth import oauth, auth_routes
 
-<<<<<<< HEAD
 app = Flask(__name__, static_url_path="",
             static_folder='../client/build',
             template_folder='../client/build')
-=======
-app = Flask(__name__)
->>>>>>> 208e19ba944c3e9e7758e72b75c6e2f11cf3acf1
 # Adding secret key to app
 app.secret_key = '!secret'
 # Configuring flask app
