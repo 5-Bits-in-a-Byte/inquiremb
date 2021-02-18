@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 import MenuItem from "./MenuItem";
 // Menu item images:
+import HomeImg from "../../imgs/home-white.svg";
 import CourseImg from "../../imgs/courses-white.svg";
-import { useLocation } from "react-router-dom";
+import MessagesImg from "../../imgs/messages-white.svg";
 
 const LeftNavBar = () => {
   const location = useLocation();
@@ -12,10 +14,22 @@ const LeftNavBar = () => {
     <Nav>
       <Wrapper>
         <MenuItem
+          to="/home"
+          label="Home"
+          img={HomeImg}
+          active={active === "/home"}
+        />
+        <MenuItem
           to="/"
           label="Courses"
           img={CourseImg}
           active={active === "/"}
+        />
+        <MenuItem
+          to="/messages"
+          label="Messages"
+          img={MessagesImg}
+          active={active === "/messages"}
         />
       </Wrapper>
     </Nav>
