@@ -3,12 +3,20 @@ import styled from "styled-components";
 import MenuItem from "./MenuItem";
 // Menu item images:
 import CourseImg from "../../imgs/courses-white.svg";
+import { useLocation } from "react-router-dom";
 
 const LeftNavBar = () => {
+  const location = useLocation();
+  const active = location.pathname;
   return (
     <Nav>
       <Wrapper>
-        <MenuItem to="/" label="Courses" img={CourseImg} />
+        <MenuItem
+          to="/"
+          label="Courses"
+          img={CourseImg}
+          active={active === "/"}
+        />
       </Wrapper>
     </Nav>
   );
