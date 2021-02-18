@@ -8,20 +8,29 @@ const Button = ({ children, ...props }) => {
 export default Button;
 
 const Btn = styled.button`
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 14px;
+
+  // If secondary prop === true
   ${(props) =>
     props.secondary &&
     css`
-      cursor: pointer;
       background-color: #e7e7e7;
       color: #162b55;
-      border: none;
-      padding: 5px 12px;
-      border-radius: 4px;
-      font-size: 14px;
-      border: none;
 
       &:hover {
         background-color: #dedede;
       }
+    `}
+
+  // If primary prop === true
+    ${(props) =>
+    props.primary &&
+    css`
+      background-color: #4a86fa;
+      color: #fff;
     `}
 `;
