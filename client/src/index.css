@@ -16,6 +16,10 @@ body {
   background: #f8f8f8;
 }
 
+.content {
+  padding: 40px 50px;
+}
+
 h1,
 h2,
 h3,
@@ -48,6 +52,13 @@ body {
 .secondary-btn {
   background-color: #e7e7e7;
   color: #162b55;
+  border: none;
+}
+
+.small-btn {
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .flex-row {
@@ -68,6 +79,7 @@ body {
 }
 
 textarea:focus,
-input:focus {
-  outline: 2px solid var(--primary);
+input:focus,
+button:focus {
+  outline: none;
 }
