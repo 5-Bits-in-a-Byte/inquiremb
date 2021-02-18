@@ -26,7 +26,7 @@ const SearchDiv = styled.div`
 
 const Icon = styled.img`
   height: 16px;
-  padding: 0 11px;
+  padding: 0 7px 0 11px;
   border-right: 1px solid #818181;
 `;
 

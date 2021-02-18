@@ -12,6 +12,10 @@
   appearance: none;
 }
 
+body {
+  background: #f8f8f8;
+}
+
 h1,
 h2,
 h3,
