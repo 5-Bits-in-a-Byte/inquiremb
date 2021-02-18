@@ -1,3 +1,16 @@
+/*
+This component deals with the sign in process by redirecting to Google for authentication upon button click.
+After the authentication process happens, the flask server will send you immediately to the website's home page.
+
+Author: Brian Gunnarson
+Group Name: 5 Bits in a Byte
+
+Modificiation Tracking:
+2-15-2021: Initial setup/get background image displayed and styled
+2-16-2021: Work with Sam to get the routing to Google's OAuth functioning
+2-17-2021: Basic styling/Google sign-in button imported/Incorporate logos and copyright
+*/
+
 import React from "react";
 import styled from "styled-components";
 import img from "../../imgs/signup-background.png";
