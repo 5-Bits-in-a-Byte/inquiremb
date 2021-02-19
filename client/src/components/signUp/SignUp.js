@@ -19,22 +19,27 @@ const SignUp = () => {
       <Nav>
         <SignInLogoImg src={SignInLogo} />
       </Nav>
+
       <CenterBlock>
         <LogoImg src={Logo} />
         <Welcome>Welcome to SuperSwag!</Welcome>
+
         <GoogleButton href={process.env.REACT_APP_SERVER_URL + "/login"}>
           <Icon src={GoogleLogo} />
           <BtnText>Sign up with Google</BtnText>
         </GoogleButton>
+
         <Message>
           Already have an account?&nbsp;
           <a href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign in</a>
         </Message>
       </CenterBlock>
+
       <RightNav>
-        <Btn>Sign In</Btn>
-        <Btn>Sign Up</Btn>
+        <In href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign In</In>
+        <Up href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign Up</Up>
       </RightNav>
+
       <Footer>Copyright© 5 Bits in a Byte</Footer>
     </Page>
   );
@@ -87,18 +92,16 @@ const LogoImg = styled.img`
   margin: auto;
 `;
 
-const GoogleButton = styled.a`
+const GoogleButton = styled.button`
   margin: auto;
   position: relative;
   padding: 15px 40px;
   vertical-align: middle;
   border: 1px solid #bababa;
   border-radius: 3px;
-  width: 100%;
-  max-width: 320px;
+  width: 320px;
   height: 43px;
   background-color: white;
-  text-decoration: none;
   cursor: pointer;
   &:hover {
     background-color: #dedede;
@@ -130,12 +133,45 @@ const RightNav = styled.nav`
   position: fixed;
   left: 0;
   top: 0;
-  display: inline-block;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
-const Btn = styled.button`
-  position: fixed;
-  right: 0;
+const In = styled.a`
+  display: flex;
+  align-items: center;
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  padding: 15px 40px;
+  width: 140px;
+  height: 20px;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover {
+    background-color: #ffffff;
+    opacity: 0.85;
+    color: black;
+  }
+`;
+
+const Up = styled.a`
+  display: flex;
+  align-items: center;
+  padding: 15px 40px;
+  background: #4a86fa;
+  border-radius: 3px;
+  width: 140px;
+  height: 20px;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover {
+    background-color: #4a86fa;
+    opacity: 0.85;
+    color: black;
+  }
 `;
 
 const Footer = styled.footer`
