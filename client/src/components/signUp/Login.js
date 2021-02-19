@@ -18,34 +18,29 @@ import SignInLogo from "../../imgs/signin-logo.png";
 import Logo from "../../imgs/swag-logo.png";
 import GoogleLogo from "../../imgs/g-icon.png";
 
-class SignUp extends React.Component {
-  handleClick() {
-    window.location.assign(process.env.REACT_APP_SERVER_URL + "/login");
-  }
-
-  render() {
-    return (
-      <Page>
-        <Nav>
-          <SignInLogoImg src={SignInLogo} />
-        </Nav>
-        <CenterBlock>
-          <LogoImg src={Logo} />
-          <Welcome>Welcome to SuperSwag!</Welcome>
-          <GoogleButton onClick={this.handleClick.bind(this)}>
-            <Icon src={GoogleLogo} />
-            <BtnText>Sign up with Google</BtnText>
-          </GoogleButton>
-          <Message>
-            Already have an account?&nbsp;
-            <a href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign in</a>
-          </Message>
-        </CenterBlock>
-        <Footer>Copyright© 5 Bits in a Byte</Footer>
-      </Page>
-    );
-  }
-}
+const SignUp = () => {
+  return (
+    <Page>
+      <Nav>
+        <SignInLogoImg src={SignInLogo} />
+      </Nav>
+      <CenterBlock>
+        <LogoImg src={Logo} />
+        <GoogleButton href={process.env.REACT_APP_SERVER_URL + "/login"}>
+          <div>
+            <GoogleImg src={GoogleLogo} />
+            <p>hello</p>
+          </div>
+        </GoogleButton>
+        <Message>
+          Already have an account?{"\t"}
+          <a href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign in</a>
+        </Message>
+      </CenterBlock>
+      <Footer>Copyright© 5 Bits in a Byte</Footer>
+    </Page>
+  );
+};
 
 export default SignUp;
 
@@ -74,53 +69,27 @@ const SignInLogoImg = styled.img`
 const CenterBlock = styled.div`
   position: relative;
   background: #ffffff;
-  width: 400px;
-  height: 357px;
+  width: 300px;
+  height: 250px;
   border-radius: 5px;
   display: grid;
   margin: auto;
 `;
 
-const Welcome = styled.div`
+const LogoImg = styled.img`
+  height: 25px;
+  margin: auto;
+`;
+
+const GoogleButton = styled.a`
   margin: auto;
   display: flex;
   align-items: center;
-  font-weight: 500;
-  font-size: 18px;
 `;
 
-const LogoImg = styled.img`
-  height: 35px;
-  margin: auto;
-`;
-
-const GoogleButton = styled.button`
-  margin: auto;
-  position: relative;
-  padding: 15px 40px;
-  vertical-align: middle;
-  border: 1px solid #bababa;
-  border-radius: 3px;
-  width: 320px;
-  height: 43px;
-  background-color: white;
-  cursor: pointer;
-  &:hover {
-    background-color: #dedede;
-  }
-`;
-
-const BtnText = styled.div`
-  text-align: center;
-  font-size: 17px;
-  transform: translateY(-23%);
-`;
-
-const Icon = styled.img`
-  position: absolute;
+const GoogleImg = styled.img`
   height: 25px;
-  left: 12px;
-  transform: translateY(-25%);
+  margin: auto;
 `;
 
 const Btn = styled.div`
