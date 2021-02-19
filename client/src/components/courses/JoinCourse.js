@@ -7,7 +7,7 @@ import Modal from "../common/Modal";
 
 const JoinCourse = ({ close }) => {
   return (
-    <Modal close={close} width="420px">
+    <Modal close={close} width="420px" data-testid="join-course-modal">
       <h4>JOIN BY ACCESS CODE</h4>
       <InputLabel>Access Code</InputLabel>
       <Input placeholder="ex, AcK21k" />

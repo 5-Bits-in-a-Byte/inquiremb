@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Modal = ({ children, close, ...props }) => {
   return (
-    <Background onClick={close}>
+    <Background onClick={close} data-testid="modal-background">
       <FadeIn>
         <Content {...props} onClick={(e) => e.stopPropagation()}>
           {children}
