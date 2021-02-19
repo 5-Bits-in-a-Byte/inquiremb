@@ -1,5 +1,5 @@
 /*
-This component deals with the login process by redirecting to Google for authentication upon button click.
+This component deals with the login process by redirecting to Google or Github for authentication upon button click.
 After the authentication process happens, the flask server will send you immediately to the website's home page.
 
 Author: Brian Gunnarson
@@ -16,35 +16,44 @@ import GitHubLogo from "../../imgs/github-logo.svg";
 
 const SignUp = () => {
   return (
+    /* Wrapper for the entire page so we can have the background image */
     <Page>
+      {/* Wrapper for the top left section of the page to help align the Inquire logo */}
       <Nav>
         <SignInLogoImg src={SignInLogo} />
       </Nav>
 
+      {/* Wrapper for the center sign in block to help styling */}
       <CenterBlock>
+        {/* Display the Inquire logo */}
         <LogoImg src={Logo} />
 
+        {/* Google Login Button */}
         <Buttons href={process.env.REACT_APP_SERVER_URL + "/login"}>
           <Icon src={GoogleLogo} />
           <BtnText>Sign in with Google</BtnText>
         </Buttons>
 
+        {/* GitHub Login Button */}
         <Buttons href={process.env.REACT_APP_SERVER_URL + "/login"}>
           <Icon src={GitHubLogo} />
           <BtnText>Sign in with GitHub</BtnText>
         </Buttons>
 
+        {/* Account related message */}
         <Message>
           Don't have an account?&nbsp;
           <a href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign up</a>
         </Message>
       </CenterBlock>
 
+      {/* Wrapper for the top right section of the page to help align the sign in and sign up buttons */}
       <RightNav>
         <In href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign In</In>
         <Up href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign Up</Up>
       </RightNav>
 
+      {/* Copyright message */}
       <Footer>Copyright© 5 Bits in a Byte</Footer>
     </Page>
   );
@@ -52,6 +61,7 @@ const SignUp = () => {
 
 export default SignUp;
 
+/* Styling for the background image on the whole page */
 const Page = styled.div`
   background-image: url(${img});
   background-size: cover;
@@ -59,6 +69,7 @@ const Page = styled.div`
   display: grid;
 `;
 
+/* Styling for the top left */
 const Nav = styled.nav`
   width: 100vw;
   height: 55px;
@@ -69,11 +80,13 @@ const Nav = styled.nav`
   align-items: center;
 `;
 
+/* Styling for the top left Logo */
 const SignInLogoImg = styled.img`
   height: 33px;
   margin-left: 10px;
 `;
 
+/* Styling for the center login block */
 const CenterBlock = styled.div`
   position: relative;
   background: #ffffff;
@@ -84,11 +97,13 @@ const CenterBlock = styled.div`
   margin: auto;
 `;
 
+/* Styling for the center Logo */
 const LogoImg = styled.img`
   height: 35px;
   margin: auto;
 `;
 
+/* Styling for the login buttons */
 const Buttons = styled.a`
   margin: auto;
   position: relative;
@@ -107,12 +122,14 @@ const Buttons = styled.a`
   }
 `;
 
+/* Styling for the login text in the buttons */
 const BtnText = styled.div`
   text-align: center;
   font-size: 17px;
   transform: translateY(-23%);
 `;
 
+/* Styling for the icons in the buttons */
 const Icon = styled.img`
   position: absolute;
   height: 25px;
@@ -120,12 +137,14 @@ const Icon = styled.img`
   transform: translateY(-25%);
 `;
 
+/* Styling for the account specific message */
 const Message = styled.div`
   margin: auto;
   display: flex;
   align-items: center;
 `;
 
+/* Styling for the top right alignment */
 const RightNav = styled.nav`
   width: 100vw;
   height: 55px;
@@ -137,6 +156,7 @@ const RightNav = styled.nav`
   align-items: center;
 `;
 
+/* Styling for the top right sign-in button */
 const In = styled.a`
   display: flex;
   align-items: center;
@@ -155,6 +175,7 @@ const In = styled.a`
   }
 `;
 
+/* Styling for the top right sign-up button */
 const Up = styled.a`
   display: flex;
   align-items: center;
@@ -173,6 +194,7 @@ const Up = styled.a`
   }
 `;
 
+/* Styling for the copyright message */
 const Footer = styled.footer`
   text-align: center;
   font-size: 10px;
