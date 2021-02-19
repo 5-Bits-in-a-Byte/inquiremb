@@ -51,6 +51,7 @@ export default SignUp;
 
 const Page = styled.div`
   background-image: url(${img});
+  background-size: cover;
   height: 100vh;
   display: grid;
 `;
