@@ -4,11 +4,6 @@ After the authentication process happens, the flask server will send you immedia
 
 Author: Brian Gunnarson
 Group Name: 5 Bits in a Byte
-
-Modificiation Tracking:
-2-15-2021: Initial setup/get background image displayed and styled
-2-16-2021: Work with Sam to get the routing to Google's OAuth functioning
-2-17-2021: Basic styling/Google sign-in button imported/Incorporate logos and copyright
 */
 
 import React from "react";
@@ -41,6 +36,10 @@ class SignUp extends React.Component {
             <a href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign in</a>
           </Message>
         </CenterBlock>
+        <RightNav>
+          <Btn>Sign In</Btn>
+          <Btn>Sign Up</Btn>
+        </RightNav>
         <Footer>Copyright© 5 Bits in a Byte</Footer>
       </Page>
     );
@@ -61,7 +60,6 @@ const Nav = styled.nav`
   position: fixed;
   left: 0;
   top: 0;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
 `;
@@ -123,20 +121,24 @@ const Icon = styled.img`
   transform: translateY(-25%);
 `;
 
-const Btn = styled.div`
-  position: relative;
-  background: #000000;
-  width: 300px;
-  height: 250px;
-  border-radius: 5px;
-  display: grid;
-  margin: auto;
-`;
-
 const Message = styled.div`
   margin: auto;
   display: flex;
   align-items: center;
+`;
+
+const RightNav = styled.nav`
+  width: 100vw;
+  height: 55px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: inline-block;
+`;
+
+const Btn = styled.button`
+  position: fixed;
+  right: 0;
 `;
 
 const Footer = styled.footer`
