@@ -13,38 +13,32 @@ import SignInLogo from "../../imgs/signin-logo.png";
 import Logo from "../../imgs/swag-logo.png";
 import GoogleLogo from "../../imgs/g-icon.png";
 
-class SignUp extends React.Component {
-  handleClick() {
-    window.location.assign(process.env.REACT_APP_SERVER_URL + "/login");
-  }
-
-  render() {
-    return (
-      <Page>
-        <Nav>
-          <SignInLogoImg src={SignInLogo} />
-        </Nav>
-        <CenterBlock>
-          <LogoImg src={Logo} />
-          <Welcome>Welcome to SuperSwag!</Welcome>
-          <GoogleButton onClick={this.handleClick.bind(this)}>
-            <Icon src={GoogleLogo} />
-            <BtnText>Sign up with Google</BtnText>
-          </GoogleButton>
-          <Message>
-            Already have an account?&nbsp;
-            <a href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign in</a>
-          </Message>
-        </CenterBlock>
-        <RightNav>
-          <Btn>Sign In</Btn>
-          <Btn>Sign Up</Btn>
-        </RightNav>
-        <Footer>Copyright© 5 Bits in a Byte</Footer>
-      </Page>
-    );
-  }
-}
+const SignUp = () => {
+  return (
+    <Page>
+      <Nav>
+        <SignInLogoImg src={SignInLogo} />
+      </Nav>
+      <CenterBlock>
+        <LogoImg src={Logo} />
+        <Welcome>Welcome to SuperSwag!</Welcome>
+        <GoogleButton href={process.env.REACT_APP_SERVER_URL + "/login"}>
+          <Icon src={GoogleLogo} />
+          <BtnText>Sign up with Google</BtnText>
+        </GoogleButton>
+        <Message>
+          Already have an account?&nbsp;
+          <a href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign in</a>
+        </Message>
+      </CenterBlock>
+      <RightNav>
+        <Btn>Sign In</Btn>
+        <Btn>Sign Up</Btn>
+      </RightNav>
+      <Footer>Copyright© 5 Bits in a Byte</Footer>
+    </Page>
+  );
+};
 
 export default SignUp;
 
@@ -93,16 +87,18 @@ const LogoImg = styled.img`
   margin: auto;
 `;
 
-const GoogleButton = styled.button`
+const GoogleButton = styled.a`
   margin: auto;
   position: relative;
   padding: 15px 40px;
   vertical-align: middle;
   border: 1px solid #bababa;
   border-radius: 3px;
-  width: 320px;
+  width: 100%;
+  max-width: 320px;
   height: 43px;
   background-color: white;
+  text-decoration: none;
   cursor: pointer;
   &:hover {
     background-color: #dedede;
