@@ -1,5 +1,5 @@
 /*
-This component deals with the sign in process by redirecting to Google for authentication upon button click.
+This component deals with the signup process by redirecting to Google for authentication upon button click.
 After the authentication process happens, the flask server will send you immediately to the website's home page.
 
 Author: Brian Gunnarson

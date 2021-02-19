@@ -1,14 +1,9 @@
 /*
-This component deals with the sign in process by redirecting to Google for authentication upon button click.
+This component deals with the login process by redirecting to Google for authentication upon button click.
 After the authentication process happens, the flask server will send you immediately to the website's home page.
 
 Author: Brian Gunnarson
 Group Name: 5 Bits in a Byte
-
-Modificiation Tracking:
-2-15-2021: Initial setup/get background image displayed and styled
-2-16-2021: Work with Sam to get the routing to Google's OAuth functioning
-2-17-2021: Basic styling/Google sign-in button imported/Incorporate logos and copyright
 */
 
 import React from "react";
@@ -24,19 +19,26 @@ const SignUp = () => {
       <Nav>
         <SignInLogoImg src={SignInLogo} />
       </Nav>
+
       <CenterBlock>
         <LogoImg src={Logo} />
+
         <GoogleButton href={process.env.REACT_APP_SERVER_URL + "/login"}>
-          <div>
-            <GoogleImg src={GoogleLogo} />
-            <p>hello</p>
-          </div>
+          <Icon src={GoogleLogo} />
+          <BtnText>Sign in with Google</BtnText>
         </GoogleButton>
+
         <Message>
-          Already have an account?{"\t"}
-          <a href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign in</a>
+          Don't have an account?&nbsp;
+          <a href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign up</a>
         </Message>
       </CenterBlock>
+
+      <RightNav>
+        <In href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign In</In>
+        <Up href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign Up</Up>
+      </RightNav>
+
       <Footer>Copyright© 5 Bits in a Byte</Footer>
     </Page>
   );
@@ -46,6 +48,7 @@ export default SignUp;
 
 const Page = styled.div`
   background-image: url(${img});
+  background-size: cover;
   height: 100vh;
   display: grid;
 `;
@@ -56,7 +59,6 @@ const Nav = styled.nav`
   position: fixed;
   left: 0;
   top: 0;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
 `;
@@ -69,43 +71,98 @@ const SignInLogoImg = styled.img`
 const CenterBlock = styled.div`
   position: relative;
   background: #ffffff;
-  width: 300px;
-  height: 250px;
+  width: 400px;
+  height: 357px;
   border-radius: 5px;
   display: grid;
   margin: auto;
 `;
 
 const LogoImg = styled.img`
-  height: 25px;
+  height: 35px;
   margin: auto;
 `;
 
-const GoogleButton = styled.a`
+const GoogleButton = styled.button`
   margin: auto;
-  display: flex;
-  align-items: center;
-`;
-
-const GoogleImg = styled.img`
-  height: 25px;
-  margin: auto;
-`;
-
-const Btn = styled.div`
   position: relative;
-  background: #000000;
-  width: 300px;
-  height: 250px;
-  border-radius: 5px;
-  display: grid;
-  margin: auto;
+  padding: 15px 40px;
+  vertical-align: middle;
+  border: 1px solid #bababa;
+  border-radius: 3px;
+  width: 320px;
+  height: 43px;
+  background-color: white;
+  cursor: pointer;
+  &:hover {
+    background-color: #dedede;
+  }
+`;
+
+const BtnText = styled.div`
+  text-align: center;
+  font-size: 17px;
+  transform: translateY(-23%);
+`;
+
+const Icon = styled.img`
+  position: absolute;
+  height: 25px;
+  left: 12px;
+  transform: translateY(-25%);
 `;
 
 const Message = styled.div`
   margin: auto;
   display: flex;
   align-items: center;
+`;
+
+const RightNav = styled.nav`
+  width: 100vw;
+  height: 55px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const In = styled.a`
+  display: flex;
+  align-items: center;
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  padding: 15px 40px;
+  width: 140px;
+  height: 20px;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover {
+    background-color: #ffffff;
+    opacity: 0.85;
+    color: black;
+  }
+`;
+
+const Up = styled.a`
+  display: flex;
+  align-items: center;
+  padding: 15px 40px;
+  background: #4a86fa;
+  border-radius: 3px;
+  width: 140px;
+  height: 20px;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover {
+    background-color: #4a86fa;
+    opacity: 0.85;
+    color: black;
+  }
 `;
 
 const Footer = styled.footer`
