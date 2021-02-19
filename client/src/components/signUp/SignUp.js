@@ -9,9 +9,10 @@ Group Name: 5 Bits in a Byte
 import React from "react";
 import styled from "styled-components";
 import img from "../../imgs/signup-background.png";
-import SignInLogo from "../../imgs/signin-logo.png";
-import Logo from "../../imgs/swag-logo.png";
+import SignInLogo from "../../imgs/inquire-signin-logo.png";
+import Logo from "../../imgs/inquire-logo.png";
 import GoogleLogo from "../../imgs/g-icon.png";
+import GitHubLogo from "../../imgs/github-logo.svg";
 
 const SignUp = () => {
   return (
@@ -22,12 +23,17 @@ const SignUp = () => {
 
       <CenterBlock>
         <LogoImg src={Logo} />
-        <Welcome>Welcome to SuperSwag!</Welcome>
+        <Welcome>Welcome to Inquire!</Welcome>
 
-        <GoogleButton href={process.env.REACT_APP_SERVER_URL + "/login"}>
+        <Buttons href={process.env.REACT_APP_SERVER_URL + "/login"}>
           <Icon src={GoogleLogo} />
           <BtnText>Sign up with Google</BtnText>
-        </GoogleButton>
+        </Buttons>
+
+        <Buttons href={process.env.REACT_APP_SERVER_URL + "/login"}>
+          <Icon src={GitHubLogo} />
+          <BtnText>Sign up with GitHub</BtnText>
+        </Buttons>
 
         <Message>
           Already have an account?&nbsp;
@@ -92,16 +98,18 @@ const LogoImg = styled.img`
   margin: auto;
 `;
 
-const GoogleButton = styled.button`
+const Buttons = styled.a`
   margin: auto;
   position: relative;
   padding: 15px 40px;
   vertical-align: middle;
   border: 1px solid #bababa;
   border-radius: 3px;
-  width: 320px;
+  width: 100%;
+  max-width: 320px;
   height: 43px;
   background-color: white;
+  text-decoration: none;
   cursor: pointer;
   &:hover {
     background-color: #dedede;
