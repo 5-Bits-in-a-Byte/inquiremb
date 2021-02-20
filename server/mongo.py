@@ -27,5 +27,33 @@ example_permissions = {
     'course_id_2': ["read", "write"]
 }
 
-# print(u)
-# print(u.to_son().to_dict())
+
+'''
+Posts are embedded within the Course model because there will be no
+need to query for posts without know the course they belong to.
+
+Although it may seem sensible to attach user references to the course,
+it is also unnecessary. Each user's document will contain the courses
+they belong to, and their permissions for each course. By storing the
+permissions in a single place (the User model), we eliminate the need
+to modify/query multiple documents when updating classes or permissions.
+'''
+
+
+class Post(MongoModel):
+    title = fields.CharField()
+    content = fields.CharField()
+    postedby = fields.CharField()
+    comments = fields.CharField()
+    likes = fields.CharField()
+    pinned = fields.BooleanField()
+
+
+class Course(MongoModel):
+    university = fields.CharField()
+    course = fields.CharField()
+    posts = fields.EmbeddedDocumentListField(Post)
+
+    class Meta:
+        write_concern = WriteConcern(j=True)
+        connection_alias = 'my-app'
