@@ -30,6 +30,14 @@ p {
   margin: 0;
 }
 
+p {
+  letter-spacing: -0.2px;
+}
+
+.p-small {
+  font-size: 14px;
+}
+
 ul {
   list-style-type: none;
   padding-left: 0;
@@ -76,6 +84,10 @@ body {
 
 .justify {
   justify-content: center;
+}
+
+.flex-1 {
+  flex: 1;
 }
 
 textarea:focus,
