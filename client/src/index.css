@@ -1,3 +1,7 @@
+:root {
+  --primary: #4a86fa;
+}
+
 *,
 :after,
 :before {
@@ -8,6 +12,14 @@
   appearance: none;
 }
 
+body {
+  background: #f8f8f8;
+}
+
+.content {
+  padding: 40px 50px;
+}
+
 h1,
 h2,
 h3,
@@ -16,6 +28,14 @@ h5,
 h6,
 p {
   margin: 0;
+}
+
+p {
+  letter-spacing: -0.2px;
+}
+
+.p-small {
+  font-size: 14px;
 }
 
 ul {
@@ -35,4 +55,43 @@ body {
 
 .font-regular {
   font-weight: 400;
+}
+
+.secondary-btn {
+  background-color: #e7e7e7;
+  color: #162b55;
+  border: none;
+}
+
+.small-btn {
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.flex-row {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.align {
+  align-items: center;
+}
+
+.justify {
+  justify-content: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+textarea:focus,
+input:focus,
+button:focus {
+  outline: none;
 }
