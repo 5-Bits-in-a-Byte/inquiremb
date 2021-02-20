@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import Button from "../common/Button";
 import JoinCourse from "./JoinCourse";
 import CreateCourse from "./CreateCourse";
 
