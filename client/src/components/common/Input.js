@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const Input = ({ type, placeholder, onChange, ...props }) => {
   return (
@@ -10,6 +11,18 @@ const Input = ({ type, placeholder, onChange, ...props }) => {
       {...props}
     />
   );
+};
+
+Input.propTypes = {
+  /* Text handler for onChange event */
+  onChange: PropTypes.func,
+  /* Placeholder text for the input */
+  placeholder: PropTypes.string,
+  /* 
+  The type of input expected: ie, password, submit, etc.
+  Defaults to 'text'
+  */
+  type: PropTypes.string,
 };
 
 export default Input;
