@@ -14,7 +14,7 @@ Steps:
 4. Check jwt on api requests
 5. lookup user using jwt details on api requests
 """
-from flask import Blueprint, session, url_for, redirect, request, make_response, jsonify
+from flask import Blueprint, session, url_for, redirect, request, make_response, jsonify, g, current_app
 from authlib.jose import jwt
 from authlib.integrations.flask_client import OAuth
 import logging
@@ -22,6 +22,8 @@ import sys
 from functools import wraps
 from config import HS_256_KEY
 from mongo import *
+from werkzeug.local import LocalProxy
+
 
 # Authlib logging
 log = logging.getLogger('authlib')
@@ -34,26 +36,60 @@ auth_routes = Blueprint('auth_blueprint', __name__)
 # configured in app.py
 oauth = OAuth()
 
-""" Routes used for testing, will change later """
+
+def get_current_user():
+    """
+    Sets g.current in the current app context.
+
+    Returns:
+        User/None: MongoDB object representing request sending user 
+    """
+    if 'current_user' not in g:
+        user = None
+        cookie = request.cookies.get('userID')
+        if cookie:
+            payload = decode_jwt(cookie)
+            sub = payload['sub']
+            user = retrieve_user(sub)
+        g.current_user = user
+
+    return g.current_user
+
+
+# Allows you to use current_user as a variable in any flask route
+current_user = LocalProxy(get_current_user)
+
+
+def teardown_current_user(exception):
+    """
+    Removes the current_user variable from the app_context.
+
+    Assigned as a teardown funtion for the app variable in app.py
+    Args:
+        exception (Exception): Any exception that might occur while executing a route function
+    """
+    user = g.pop('current_user', None)
 
 
 def permission_layer(permissions, course_id):
+    """
+    Checks if the current_user has the correct permissions to access the endpoint
+    for the given course
+    Args:
+        permissions (List[str]): permission required to access endpoint
+        course_id (str): id of the course
+    """
     def actual_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             if permissions:
                 authorized = False
-                cookie = request.cookies.get('userID')
-                if cookie:
-                    payload = decode_jwt(cookie)
-                    sub = payload['sub']
-                    user = retrieve_user(sub)
-                    if user and (course_id in user.permissions):
-                        for permission in permissions:
-                            if permission not in user.permissions[course_id]:
-                                break
-                        else:
-                            authorized = True
+                if current_user and (course_id in current_user.permissions):
+                    for permission in permissions:
+                        if permission not in current_user.permissions[course_id]:
+                            break
+                    else:
+                        authorized = True
                 if not authorized:
                     return jsonify(message="Resource access restricted"), 403
             return func(*args, **kwargs)

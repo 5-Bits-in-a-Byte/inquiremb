@@ -1,12 +1,13 @@
 from mongo import *
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, jsonify
 from flask_restful import Api
 import config
 import os
 # Import API endpoints here:
 from resources.demo import Demo
+from resources.me import Me
 # Auth imports
-from auth import oauth, auth_routes
+from auth import oauth, auth_routes, teardown_current_user
 
 app = Flask(__name__, static_url_path="",
             static_folder='../client/build',
@@ -30,10 +31,15 @@ oauth.register(
     }
 )
 
-api = Api(app)
+# Setting up API
+api = Api(app, prefix="/api")
 
 # register endpoints from /resources folder here:
 api.add_resource(Demo, '/demo')
+api.add_resource(Me, '/me')
+
+# Current user teardown function
+teardown_current_user = app.teardown_appcontext(teardown_current_user)
 
 
 @ app.route("/")
