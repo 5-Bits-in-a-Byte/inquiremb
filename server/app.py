@@ -1,5 +1,5 @@
 from mongo import *
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, jsonify
 from flask_restful import Api
 import config
 import os
@@ -30,7 +30,7 @@ oauth.register(
     }
 )
 
-api = Api(app)
+api = Api(app, prefix="/api")
 
 # register endpoints from /resources folder here:
 api.add_resource(Demo, '/demo')

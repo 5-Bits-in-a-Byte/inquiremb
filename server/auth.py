@@ -15,6 +15,7 @@ Steps:
 5. lookup user using jwt details on api requests
 """
 from flask import Blueprint, session, url_for, redirect, request, make_response, jsonify
+from flask_restful import abort
 from authlib.jose import jwt
 from authlib.integrations.flask_client import OAuth
 import logging
@@ -55,7 +56,7 @@ def permission_layer(permissions, course_id):
                         else:
                             authorized = True
                 if not authorized:
-                    return jsonify(message="Resource access restricted"), 403
+                    return abort(403, "Resource access restricted")
             return func(*args, **kwargs)
         return wrapper
     return actual_decorator
