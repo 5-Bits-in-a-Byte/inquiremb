@@ -25,9 +25,6 @@ from authlib.jose import jwt
 from flask import Blueprint, session, url_for, redirect, request, make_response, jsonify, g, current_app
 from flask_restful import abort
 from flask import Blueprint, session, url_for, redirect, request, make_response, jsonify
-<< << << < HEAD
-== == == =
->>>>>> > cbc7affa258b47142dab2719e7bd6d0a9dba0f3e
 
 
 # Authlib logging
@@ -96,7 +93,7 @@ def permission_layer(permissions, course_id):
                     else:
                         authorized = True
                 if not authorized:
-                    return abort(403, "Resource access restricted")
+                    return abort(403, msg="Resource access restricted")
             return func(*args, **kwargs)
         return wrapper
     return actual_decorator

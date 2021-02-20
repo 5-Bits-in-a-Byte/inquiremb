@@ -5,6 +5,7 @@ import config
 import os
 # Import API endpoints here:
 from resources.demo import Demo
+from resources.me import Me
 # Auth imports
 from auth import oauth, auth_routes
 
@@ -34,6 +35,7 @@ api = Api(app, prefix="/api")
 
 # register endpoints from /resources folder here:
 api.add_resource(Demo, '/demo')
+api.add_resource(Me, '/me')
 
 
 @ app.route("/")
