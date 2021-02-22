@@ -107,3 +107,6 @@ dist
 **/__pycache__
 server/flask
 server/export_env.sh
+
+#vscode
+**.vscode

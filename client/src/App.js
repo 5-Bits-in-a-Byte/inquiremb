@@ -5,6 +5,7 @@ import SignUp from "./components/signUp/SignUp";
 import "./fonts/fonts.css";
 import Messages from "./components/messages/Messages";
 import Home from "./components/home/Home";
+import ClassView from "./components/forums_and_posts/ClassView";
 
 function App() {
   return (
@@ -18,6 +19,11 @@ function App() {
         <Route path="/" exact>
           <NavigationWrapper>
             <Courses />
+          </NavigationWrapper>
+        </Route>
+        <Route path="/class-view" exact>
+          <NavigationWrapper>
+            <ClassView />
           </NavigationWrapper>
         </Route>
         <Route path="/messages" exact>
