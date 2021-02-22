@@ -1,26 +1,31 @@
 import React from "react";
+import PropTypes from "prop-types"
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 
 const ClassView = (props) => {
   return (
     <Sidebar>
-      <ClassTitle>CIS 422</ClassTitle>
+      <ClassTitle>{props.ClassroomName}</ClassTitle>
 
       <hr style={InlineHRStyle}/>
 
       <ClassSection>
-        <SectionTab setHighlight={true} tabText={"All Posts"} />
-        <SectionTab setHighlight={false} tabText={"Instructor"} />
+        <SectionTab setHighlight={true} tabText={"All Posts"} imageLocation={"./icons8_note.svg"} />
+        <SectionTab setHighlight={false} tabText={"Instructor"} imageLocation={"./icons8_glasses 1.svg"} />
       </ClassSection>
       <ClassSubtitle>My Posts</ClassSubtitle>
       <UserSection>
-        <SectionTab setHighlight={false} tabText={"My Posts"} />
-        <SectionTab setHighlight={false} tabText={"My Upvoted"} />
-        <SectionTab setHighlight={false} tabText={"Bookmarked"} />
+        <SectionTab setHighlight={false} tabText={"My Posts"} imageLocation={"./icons8_user_2 1.svg"} />
+        <SectionTab setHighlight={false} tabText={"My Upvoted"} imageLocation={"./icons8_heart 1.svg"} />
+        <SectionTab setHighlight={false} tabText={"Bookmarked"} imageLocation={"./icons8_bookmark 1.svg"} />
       </UserSection>
     </Sidebar>
   );
+}
+
+SectionTab.propTypes = {
+  ClassroomName: PropTypes.string
 }
 
 export default ClassView;

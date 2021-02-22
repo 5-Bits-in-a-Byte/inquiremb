@@ -7,7 +7,7 @@ const SectionTab = (props) => {
 
   return (
     <Tab style={shouldHighlight}>
-      <Icon />
+      <Icon src={props.imageLocation}/>
       <TabText>{props.tabText}</TabText>
     </Tab>
   );
@@ -15,7 +15,8 @@ const SectionTab = (props) => {
 
 SectionTab.propTypes = {
   setHightlight: PropTypes.bool,
-  tabText: PropTypes.string
+  tabText: PropTypes.string,
+  imageLocation: PropTypes.string
 }
 
 export default SectionTab;
@@ -31,7 +32,7 @@ const Tab = styled.div`
   // border: 1px solid grey;
   width: 80%;
   height: 1.75em;
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
 
   align-items: center;
 
