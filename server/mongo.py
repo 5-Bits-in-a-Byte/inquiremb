@@ -4,6 +4,7 @@ from pymodm.connection import connect
 import pymongo
 from config import MONGO_URI
 import json
+import shortuuid
 connect(MONGO_URI, alias="my-app")
 
 
@@ -29,8 +30,7 @@ example_permissions = {
 
 
 '''
-Posts are embedded within the Course model because there will be no
-need to query for posts without know the course they belong to.
+Posts use the Course ID to reference the course they belong to.
 
 Although it may seem sensible to attach user references to the course,
 it is also unnecessary. Each user's document will contain the courses
@@ -41,19 +41,23 @@ to modify/query multiple documents when updating classes or permissions.
 
 
 class Post(MongoModel):
+    courseid = fields.CharField()
     title = fields.CharField()
     content = fields.CharField()
     postedby = fields.CharField()
     comments = fields.CharField()
     likes = fields.CharField()
     pinned = fields.BooleanField()
+    class Meta:
+        write_concern = WriteConcern(j=True)
+        connection_alias = 'my-app'
 
 
 class Course(MongoModel):
     university = fields.CharField()
     course = fields.CharField()
-    posts = fields.EmbeddedDocumentListField(Post)
-
+    canJoinById = fields.BooleanField()
+    _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
