@@ -1,9 +1,10 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
+import LoadingDots from "./animation/LoadingDots";
 
-const Button = ({ children, ...props }) => {
-  return <Btn {...props}>{children}</Btn>;
+const Button = ({ children, loading, ...props }) => {
+  return <Btn {...props}>{loading ? <LoadingDots /> : children}</Btn>;
 };
 
 Button.propTypes = {
@@ -13,6 +14,8 @@ Button.propTypes = {
   secondary: PropTypes.bool,
   /* Makes the button width === 100% */
   autoWidth: PropTypes.bool,
+  /* Replaces the button label with a loading indicator and prevents onClick */
+  loading: PropTypes.bool,
 };
 
 export default Button;
@@ -24,6 +27,9 @@ const Btn = styled.button`
   padding: 5px 12px;
   font-size: 14px;
   width: ${(props) => props.autoWidth && "100%"};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   // If secondary prop === true
   ${(props) =>

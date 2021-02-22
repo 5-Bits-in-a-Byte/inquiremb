@@ -6,13 +6,14 @@ import InputLabel from "../common/InputLabel";
 import Modal from "../common/Modal";
 import Select from "../common/Select";
 import axios from "axios";
+import LoadingDots from "../common/animation/LoadingDots";
 
 const INVITE_OPTIONS = [
   {
     label: "Share Link / Access Code",
     value: "code",
     description:
-      "Anyone with the link or access code can join. Share the link / code below with students.",
+      "Anyone with the link or access code can join. Create the course to generate a link.",
   },
 ];
 
@@ -22,6 +23,7 @@ const CreateCourse = () => {
     university: null,
     course: null,
     canJoinById: true,
+    loading: false,
   });
 
   const handleChange = (e) => {
@@ -39,6 +41,7 @@ const CreateCourse = () => {
   };
 
   const sendCourseRequest = () => {
+    setForm({ ...form, loading: true });
     const endpoint = "/api/courses";
     const data = {
       university: form.university,
@@ -52,6 +55,9 @@ const CreateCourse = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setForm({ ...form, loading: false });
       });
   };
   return (
@@ -96,27 +102,25 @@ const CreateCourse = () => {
             <LeftColumn className="flex-col flex-1">
               <InputLabel margin="0 0 7px">Student Access</InputLabel>
               <Select
-                placeholder={INVITE_OPTIONS[0].label}
+                defaultValue={INVITE_OPTIONS[0]}
                 options={INVITE_OPTIONS}
               />
-              <InputLabel>Invite Link</InputLabel>
-              <Input placeholder="https://superswag.com/Aji3KlmZ" />
             </LeftColumn>
             <RightColumn className="flex-col flex-1">
               <InputLabel margin="0 0 7px">Description</InputLabel>
               <p className="p-small">{INVITE_OPTIONS[0].description}</p>
-              <InputLabel>Access Code</InputLabel>
-              <Input placeholder="Aji3KlmZ" />
             </RightColumn>
           </HighlightedSection>
           <Button
             primary
             autoWidth
+            loading
             style={{ marginTop: 24 }}
             onClick={sendCourseRequest}
           >
             + Create Course
           </Button>
+          <LoadingDots />
         </Modal>
       )}
     </>

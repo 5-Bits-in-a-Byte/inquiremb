@@ -16,19 +16,19 @@ class Courses(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('university')
         parser.add_argument('course')
-        parser.add_argument('canJoinById', type=str2bool, default=False)
+        parser.add_argument('canJoinById', type=str2bool, default=True)
         args = parser.parse_args()
 
         # Validate the args
-        errors = self.validatePost(args)
+        errors = self.validate_post(args)
         if(bool(errors)):
             return {"errors": errors}, 400
 
         # Add class to MongoDB
-        Course(university=args.university, course=args.course, canJoinById=args.canJoinById).save()
-        return errors, 200
+        course = Course(university=args.university, course=args.course, canJoinById=args.canJoinById).save()
+        return {"_id": course._id, "university": course.university, "course": course.course}, 200
 
-    def validatePost(self, args):
+    def validate_post(self, args):
         errors = {}
         if args.university is None:
             errors["university"] = "University not specified"
