@@ -5,6 +5,7 @@ import Input from "../common/Input";
 import InputLabel from "../common/InputLabel";
 import Modal from "../common/Modal";
 import Select from "../common/Select";
+import axios from "axios";
 
 const INVITE_OPTIONS = [
   {
@@ -17,6 +18,42 @@ const INVITE_OPTIONS = [
 
 const CreateCourse = () => {
   const [modalIsShown, toggleModal] = useState(false);
+  const [form, setForm] = useState({
+    university: null,
+    course: null,
+    canJoinById: true,
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const selectUniversity = (option) => {
+    setForm({
+      ...form,
+      university: option.value,
+    });
+  };
+
+  const sendCourseRequest = () => {
+    const endpoint = "/api/courses";
+    const data = {
+      university: form.university,
+      course: form.course,
+      canJoinById: form.canJoinById,
+    };
+    axios
+      .post(process.env.REACT_APP_SERVER_URL + endpoint, data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <Button
@@ -40,11 +77,19 @@ const CreateCourse = () => {
           <TopSection className="flex-row">
             <LeftColumn className="flex-col flex-1">
               <InputLabel>University Name</InputLabel>
-              <Select placeholder="Select your university" options={[]} />
+              <Select
+                placeholder="Select your university"
+                options={[{ label: "test", value: "test" }]}
+                onChange={selectUniversity}
+              />
             </LeftColumn>
             <RightColumn className="flex-col flex-1">
               <InputLabel>Course Name</InputLabel>
-              <Input placeholder="ex, CIS 210" />
+              <Input
+                placeholder="ex, CIS 210"
+                name="course"
+                onChange={handleChange}
+              />
             </RightColumn>
           </TopSection>
           <HighlightedSection className="flex-row">
@@ -64,7 +109,12 @@ const CreateCourse = () => {
               <Input placeholder="Aji3KlmZ" />
             </RightColumn>
           </HighlightedSection>
-          <Button primary autoWidth style={{ marginTop: 24 }}>
+          <Button
+            primary
+            autoWidth
+            style={{ marginTop: 24 }}
+            onClick={sendCourseRequest}
+          >
             + Create Course
           </Button>
         </Modal>
