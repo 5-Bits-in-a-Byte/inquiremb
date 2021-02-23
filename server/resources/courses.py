@@ -29,11 +29,11 @@ class Courses(Resource):
         return {"_id": course._id, "university": course.university, "course": course.course}, 200
 
     def validate_post(self, args):
-        errors = {}
+        errors = []
         if args.university is None:
-            errors["university"] = "University not specified"
+            errors.append("University not specified")
         if args.course is None:
-            errors["course"] = "Please specify a course name"
-        if args.course is None:
-            errors["canJoinById"] = "Please specify if the course is joinable by id"
+            errors.append("Please specify a course name")
+        if args.canJoinById is None:
+            errors.append("Please specify if the course is joinable by id")
         return errors

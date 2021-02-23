@@ -3,8 +3,13 @@ import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 import LoadingDots from "./animation/LoadingDots";
 
-const Button = ({ children, loading, ...props }) => {
-  return <Btn {...props}>{loading ? <LoadingDots /> : children}</Btn>;
+const Button = ({ children, loading, onClick, ...props }) => {
+  const clickHandler = loading ? undefined : onClick;
+  return (
+    <Btn {...props} onClick={clickHandler}>
+      {loading ? <LoadingDots /> : children}
+    </Btn>
+  );
 };
 
 Button.propTypes = {
