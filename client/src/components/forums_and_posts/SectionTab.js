@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import styled from "styled-components";
 
 const SectionTab = (props) => {
-  const shouldHighlight = props.setHighlight === true ? HighlightTab : {marginRight: "0em"};
+  const shouldHighlight = props.selectedTab === true ? HighlightTab : {marginRight: "0em"};
 
   return (
     <Tab style={shouldHighlight}>
@@ -14,7 +14,7 @@ const SectionTab = (props) => {
 }
 
 SectionTab.propTypes = {
-  setHightlight: PropTypes.bool,
+  selectedTab: PropTypes.bool,
   tabText: PropTypes.string,
   imageLocation: PropTypes.string
 }
@@ -26,6 +26,8 @@ const HighlightTab = {
   background: "rgba(76, 134, 250, 0.09)"
 }
 
+
+//#region Tab Stylings
 const Tab = styled.div`
   display: flex;
 
@@ -44,6 +46,7 @@ const Tab = styled.div`
 const TabText = styled.h3`
   font-size: 1rem;
 
+  user-select: none;
   transition: 150ms ease-in-out;
 
   :hover {
@@ -58,4 +61,7 @@ const Icon = styled.img`
   height: 18px;
   margin-right: 1em;
   margin-left: 0.75em;
+
+  user-select: none;
 `;
+//#endregion
