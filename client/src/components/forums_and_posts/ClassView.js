@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import Post from "./Post"
+import OptionsButton from "./OptionsButton"
 
 const ClassView = (props) => {
   return (
@@ -27,18 +28,35 @@ const ClassView = (props) => {
         </UserSection>
       </Sidebar>
       
-      {/* View of current Post Feed - should populate based on selected tab */}
+      {/* View of current Post Feed - 
+          TODO: should populate based on selected tab */}
       <PostView>
         <PostFeed>
-          {/* TODO: add special secondary buttons */}
-          {/* TODO: add grouping header thingies (i.e. "Pinned Posts") */}
-          <Post postTitle={testTitle} postContent={testContent} posterName={testName} isPinned={true} />
-          <Post postTitle={testTitle} postContent={testContent} posterName={testName} isPinned={false} />
-          <Post postTitle={testTitle} postContent={testContent} posterName={testName} isPinned={false} />
+
+          {/* TODOs as the week goes on...
+              > TODO: Properly implement Post Groupings
+              > TODO: add special secondary buttons to grouping header */}
+
+          <PostGrouping>
+            <PostGroupingHeader>Pinned Posts</PostGroupingHeader>
+            <Post postTitle={testTitle} postContent={testContent} posterName={testName} isPinned={true} />
+          </PostGrouping>
+          <PostGrouping>
+            <PostGroupingHeader>This Week</PostGroupingHeader>
+            <Post postTitle={testTitle} postContent={testContent} posterName={testName} isPinned={false} />
+            <Post postTitle={testTitle} postContent={testContent} posterName={testName} isPinned={false} />
+          </PostGrouping>
         </PostFeed>
+
+        {/* Displays options panel on the right of the webpage */}
         <OptionsWrapper>
-          <h1>Options</h1>
-          <div>options panel</div>
+          <OptionsHeader>OPTIONS</OptionsHeader>
+          <OptionsPanel>
+            <OptionsButton buttonText={"+ New Post"} isPrimary={true} />
+            <OptionsButton buttonText={"Message Instructor"} isPrimary={false} />
+            <OptionsButton buttonText={"Do a thing"} isPrimary={false} />
+            <OptionsButton buttonText={"Do another thing"} isPrimary={false} />
+          </OptionsPanel>
         </OptionsWrapper>
       </PostView>
     </ClassViewWrapper>
@@ -112,6 +130,8 @@ const UserSection = styled.div`
 
 //#region Post View Stylings
 const PostView = styled.div`
+  overflow: scroll;
+
   display: flex;
   flex-direction: row;
 
@@ -127,8 +147,45 @@ const PostFeed = styled.div`
   width: 75%;
 `;
 
+const PostGrouping = styled.div`
+  height: auto;
+
+  // border: 1px solid black;
+`;
+
+const PostGroupingHeader = styled.div`
+  margin: 1em 0;
+
+  font-family: Roboto;
+  font-size: 1.25em;
+  font-weight: 500;
+`;
+//#endregion
+
+//#region Options Stylings
 const OptionsWrapper = styled.div`
   // border: 1px solid green;
   width: 25%;
+`;
+
+const OptionsHeader = styled.h1`
+  margin: 3em 0 2em 0;
+
+  font-size: 14px;
+`;
+
+const OptionsPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 220px;
+  height: 240px;
+
+  // border: 1px solid black;
+  border-radius: 5px;
+
+  box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
 `;
 //#endregion
