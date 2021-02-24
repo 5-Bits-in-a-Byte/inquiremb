@@ -42,7 +42,7 @@ const Content = styled.div`
   position: relative;
   background-color: #fff;
   margin: 15% auto;
-  padding: 20px;
+  padding: 35px 20px;
   border-radius: 4px;
   box-shadow: 3px 3px 9px #48484830;
   width: ${(props) => props.width || "520px"};

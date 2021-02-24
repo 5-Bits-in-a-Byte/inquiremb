@@ -16,7 +16,7 @@ const MenuMargin = ({ children }) => {
 export default MenuMargin;
 
 const Wrapper = styled.div`
-  margin-top: 55px;
-  margin-left: 65px;
+  margin-top: 66px;
+  margin-left: 80px;
   position: relative;
 `;

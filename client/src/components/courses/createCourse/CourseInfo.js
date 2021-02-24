@@ -77,7 +77,7 @@ const CourseInfo = ({ setCourse }) => {
 
   return (
     <>
-      <h4>CREATE A COURSE</h4>
+      <h3 style={{ marginLeft: 15 }}>CREATE A COURSE</h3>
       <TopSection className="flex-row">
         <LeftColumn className="flex-col flex-1">
           <InputLabel>University Name</InputLabel>
@@ -123,11 +123,11 @@ const CourseInfo = ({ setCourse }) => {
 export default CourseInfo;
 
 const LeftColumn = styled.div`
-  margin-right: 5px;
+  margin-right: 7px;
 `;
 
 const RightColumn = styled.div`
-  margin-left: 5px;
+  margin-left: 7px;
 `;
 
 const TopSection = styled.div`

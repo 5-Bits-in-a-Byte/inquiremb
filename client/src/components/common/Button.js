@@ -30,7 +30,7 @@ const Btn = styled.button`
   border: none;
   border-radius: 4px;
   padding: 5px 12px;
-  font-size: 14px;
+  font-size: 16px;
   width: ${(props) => props.autoWidth && "100%"};
   display: flex;
   justify-content: center;
@@ -52,7 +52,7 @@ const Btn = styled.button`
     ${(props) =>
     props.primary &&
     css`
-      padding: 7px 12px;
+      padding: 9px 12px;
       border-radius: 3px;
       background-color: #4a86fa;
       color: #fff;

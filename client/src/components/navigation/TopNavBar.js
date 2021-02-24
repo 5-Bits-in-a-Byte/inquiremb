@@ -28,7 +28,7 @@ const Wrapper = styled.div`
 
 const Nav = styled.nav`
   width: 100vw;
-  height: 55px;
+  height: 66px;
   background-color: #fff;
   position: fixed;
   left: 0;

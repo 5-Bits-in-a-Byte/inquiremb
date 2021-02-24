@@ -47,7 +47,7 @@ const ArrowImg = styled.img`
   margin-left: 7px;
 `;
 
-const Name = styled.h5`
+const Name = styled.h4`
   white-space: nowrap;
   margin-right: 10px;
 `;
