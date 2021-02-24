@@ -37,6 +37,7 @@ const CreateCourse = () => {
               course={course}
               close={() => {
                 toggleModal(false);
+                setCourse(null);
               }}
             />
           )}

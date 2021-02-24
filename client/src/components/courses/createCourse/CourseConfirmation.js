@@ -55,7 +55,7 @@ const RightColumn = styled.div`
 
 const Circle = styled.div`
   background: #4a86fa;
-  box-shadow: 0px 0px 7px 2px rgba(74, 134, 250, 0.29);
+  box-shadow: 0px 0px 7px 2px rgb(74 134 250 / 19%);
   height: 55px;
   width: 55px;
   display: flex;
