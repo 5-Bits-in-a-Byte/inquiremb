@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const SectionTab = (props) => {
   const shouldHighlight = props.selectedTab === true ? HighlightTab : {marginRight: "0em"};
+  // TODO: change to use state to render tab as highlighted or not
 
   return (
     <Tab style={shouldHighlight}>

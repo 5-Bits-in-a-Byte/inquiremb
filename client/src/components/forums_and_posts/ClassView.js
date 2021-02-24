@@ -10,7 +10,7 @@ const ClassView = (props) => {
     <ClassViewWrapper>
       {/* Sidebar view shows tabs of different post feeds and shows which one is selected */}
       <Sidebar>
-        <ClassTitle>{props.ClassroomName}</ClassTitle>
+        <ClassTitle>{props.classroomName}</ClassTitle>
 
         <hr style={InlineHRStyle}/>
 

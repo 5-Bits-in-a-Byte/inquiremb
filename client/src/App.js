@@ -23,7 +23,7 @@ function App() {
         </Route>
         <Route path="/class-view" exact>
           <NavigationWrapper>
-            <ClassView  ClassroomName={"CIS 422"}/>
+            <ClassView  classroomName={"CIS 422"}/>
           </NavigationWrapper>
         </Route>
         <Route path="/messages" exact>
