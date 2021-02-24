@@ -6,12 +6,25 @@ import os
 # Import API endpoints here:
 from resources.demo import Demo
 from resources.me import Me
+from resources.courses import Courses
 # Auth imports
 from auth import oauth, auth_routes
+from flask_cors import CORS
 
 app = Flask(__name__, static_url_path="",
             static_folder='../client/build',
             template_folder='../client/build')
+
+# Allow requests from our localhost (react app in development)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    return response
+
 # Adding secret key to app
 app.secret_key = '!secret'
 # Configuring flask app
@@ -36,6 +49,7 @@ api = Api(app, prefix="/api")
 # register endpoints from /resources folder here:
 api.add_resource(Demo, '/demo')
 api.add_resource(Me, '/me')
+api.add_resource(Courses, '/courses')
 
 
 @ app.route("/")

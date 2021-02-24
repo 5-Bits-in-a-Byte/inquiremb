@@ -15,6 +15,6 @@ const TopContent = () => {
 
 export default TopContent;
 
-const Title = styled.h4`
+const Title = styled.h3`
   margin-right: 15px;
 `;
