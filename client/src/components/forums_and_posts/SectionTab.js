@@ -1,47 +1,48 @@
 import React from "react";
-import PropTypes from "prop-types"
-import styled from "styled-components";
+import PropTypes from "prop-types";
+import styled, { css } from "styled-components";
 
-const SectionTab = (props) => {
-  const shouldHighlight = props.selectedTab === true ? HighlightTab : {marginRight: "0em"};
-  // TODO: change to use state to render tab as highlighted or not
-
+const SectionTab = ({ selectSection, section, imageLocation, tabText }) => {
   return (
-    <Tab style={shouldHighlight}>
-      <Icon src={props.imageLocation}/>
-      <TabText>{props.tabText}</TabText>
+    <Tab
+      highlight={section === tabText}
+      onClick={() => {
+        selectSection(tabText);
+      }}
+    >
+      <Icon src={imageLocation} />
+      <TabText>{tabText}</TabText>
     </Tab>
   );
-}
+};
 
 SectionTab.propTypes = {
-  selectedTab: PropTypes.bool,
+  section: PropTypes.string,
   tabText: PropTypes.string,
-  imageLocation: PropTypes.string
-}
+  imageLocation: PropTypes.string,
+};
 
 export default SectionTab;
-
-const HighlightTab = {
-  borderLeft: "0.3rem solid #4A86FA",
-  background: "rgba(76, 134, 250, 0.09)"
-}
-
 
 //#region Tab Stylings
 const Tab = styled.div`
   display: flex;
-
   // border: 1px solid grey;
   width: 80%;
   height: 1.75em;
   margin: 0.25rem 0;
-
   align-items: center;
 
   :hover {
     cursor: pointer;
   }
+
+  ${(props) =>
+    props.highlight &&
+    css`
+      border-left: 0.3rem solid #4a86fa;
+      background: rgba(76, 134, 250, 0.09);
+    `}
 `;
 
 const TabText = styled.h3`
