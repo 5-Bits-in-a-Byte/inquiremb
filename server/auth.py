@@ -148,7 +148,7 @@ def auth():
         user = create_user(id_token)
 
     # Create a new response
-    resp = make_response(redirect('CLIENT_URL'))
+    resp = make_response(redirect(CLIENT_URL))
     # Encode the user's sub (unique google account identifier) in a JWT), and set that as a cookie attached to the response
     resp.set_cookie(
         'userID', value=encode_jwt({'sub': sub}), httponly=True)
