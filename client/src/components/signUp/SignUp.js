@@ -12,7 +12,6 @@ import img from "../../imgs/signup-background.png";
 import SignInLogo from "../../imgs/inquire-signin-logo.png";
 import Logo from "../../imgs/inquire-logo.png";
 import GoogleLogo from "../../imgs/g-icon.png";
-import GitHubLogo from "../../imgs/github-logo.svg";
 
 const SignUp = () => {
   return (
@@ -33,12 +32,6 @@ const SignUp = () => {
         <Buttons href={process.env.REACT_APP_SERVER_URL + "/login"}>
           <Icon src={GoogleLogo} />
           <BtnText>Sign up with Google</BtnText>
-        </Buttons>
-
-        {/* GitHub Login Button */}
-        <Buttons href={process.env.REACT_APP_SERVER_URL + "/login"}>
-          <Icon src={GitHubLogo} />
-          <BtnText>Sign up with GitHub</BtnText>
         </Buttons>
 
         {/* Account related message */}
