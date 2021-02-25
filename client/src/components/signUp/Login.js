@@ -1,5 +1,5 @@
 /*
-This component deals with the signup process by redirecting to Google or Github for authentication upon button click.
+This component deals with the login process by redirecting to Google or Github for authentication upon button click.
 After the authentication process happens, the flask server will send you immediately to the website's home page.
 
 Author: Brian Gunnarson
@@ -24,20 +24,19 @@ const SignUp = () => {
 
       {/* Wrapper for the center sign in block to help styling */}
       <CenterBlock>
-        {/* Display the Inquire logo and welcome message */}
+        {/* Display the Inquire logo */}
         <LogoImg src={Logo} />
-        <Welcome>Welcome to Inquire!</Welcome>
 
         {/* Google Login Button */}
         <Buttons href={process.env.REACT_APP_SERVER_URL + "/login"}>
           <Icon src={GoogleLogo} />
-          <BtnText>Sign up with Google</BtnText>
+          <BtnText>Sign in with Google</BtnText>
         </Buttons>
 
         {/* Account related message */}
         <Message>
-          Already have an account?&nbsp;
-          <a href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign in</a>
+          Don't have an account?&nbsp;
+          <a href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign up</a>
         </Message>
       </CenterBlock>
 
@@ -57,7 +56,6 @@ export default SignUp;
 
 /* Styling for the background image on the whole page */
 const Page = styled.div`
-  border: 1px solid #000;
   background-image: url(${img});
   background-size: cover;
   height: 100vh;
@@ -81,7 +79,7 @@ const SignInLogoImg = styled.img`
   margin-left: 10px;
 `;
 
-/* Styling for the center signup block */
+/* Styling for the center login block */
 const CenterBlock = styled.div`
   position: relative;
   background: #ffffff;
@@ -92,20 +90,12 @@ const CenterBlock = styled.div`
   margin: auto;
 `;
 
-/* Styling for the welcome message */
-const Welcome = styled.div`
-  margin: auto;
-  display: flex;
-  align-items: center;
-  font-weight: 500;
-  font-size: 18px;
-`;
-
 /* Styling for the center Logo */
 const LogoImg = styled.img`
   height: 35px;
   margin: auto;
 `;
+
 /* Styling for the login buttons */
 const Buttons = styled.a`
   margin: auto;
