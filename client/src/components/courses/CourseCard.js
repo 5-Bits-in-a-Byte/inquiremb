@@ -7,7 +7,7 @@ import styled from "styled-components";
 class CourseCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { numMsgs: 0 };
+    this.state = { numMsgs: 0, courseIndex: props.index };
   }
 
   // Track when new messages come in
@@ -19,7 +19,7 @@ class CourseCard extends React.Component {
 
   render() {
     return (
-      <Card>
+      <div>
         <div>
           <img src={MessagesImg} alt="Messages" />
           <h3>{this.state.numMsgs}</h3>
@@ -31,16 +31,21 @@ class CourseCard extends React.Component {
         <br />
         <img src={CreateImg} alt="Create" />
         <img src={SettingsImg} alt="Settings" />
-      </Card>
+      </div>
     );
   }
 }
 
-export default CourseCard;
+// export default CourseCard;
 
-const Card = styled.div`
-  height: 50vh;
+var displayWidth = 3;
+
+const StyledCourseCard = styled(CourseCard)`
+  height: 100px;
   width: 500px;
-  background-color: #3f0000;
-  left: 100;
+  background-color: #3f3f3f;
+  left: ${100 + 525 * (((props) => props.index) % displayWidth)}px;
+  top: ${100 + 50 * Math.floor((props) => props.index / displayWidth)}px;
 `;
+
+export default StyledCourseCard;
