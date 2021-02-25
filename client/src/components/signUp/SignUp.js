@@ -72,6 +72,7 @@ const Nav = styled.nav`
   top: 0;
   display: flex;
   align-items: center;
+  padding: 0 15px;
 `;
 
 /* Styling for the top left Logo */
