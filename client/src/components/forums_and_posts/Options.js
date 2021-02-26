@@ -1,28 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import OptionsButton from "./OptionsButton"
+import React from "react";
+import PropTypes from "prop-types";
+import OptionsButton from "./OptionsButton";
 import styled from "styled-components";
 
-const Options = props => {
-    return (
-      <OptionsWrapper>
-        <OptionsHeader>OPTIONS</OptionsHeader>
-        <OptionsPanel>
-          <OptionsButton buttonText={"+ New Post"} isPrimary={true} />
-          <OptionsButton
-            buttonText={"Message Instructor"}
-            isPrimary={false}
-          />
-          <OptionsButton buttonText={"Do a thing"} isPrimary={false} />
-          <OptionsButton buttonText={"Do another thing"} isPrimary={false} />
-        </OptionsPanel>
-      </OptionsWrapper>
-    );
+const Options = (props) => {
+  return (
+    <OptionsWrapper>
+      <OptionsHeader>OPTIONS</OptionsHeader>
+      <OptionsPanel>
+        <OptionsButton buttonText={"+ New Post"} isPrimary={true} />
+        <OptionsButton buttonText={"Message Instructor"} isPrimary={false} />
+        <OptionsButton buttonText={"Do a thing"} isPrimary={false} />
+        <OptionsButton buttonText={"Do another thing"} isPrimary={false} />
+      </OptionsPanel>
+    </OptionsWrapper>
+  );
 };
 
-Options.propTypes = {
-    
-};
+Options.propTypes = {};
 
 export default Options;
 

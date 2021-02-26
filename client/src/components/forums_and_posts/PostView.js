@@ -1,29 +1,30 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
-import PropTypes from 'prop-types';
-import Options from './Options';
-import Post from "./Post"
-import Button from "../common/Button"
+import PropTypes from "prop-types";
+import Options from "./Options";
+import Post from "./Post";
+import Button from "../common/Button";
 
 const testTitle = "This is temp post title text?";
 const testContent =
   "Lorem ipsum dolor sit amet, consectetur adipisicing elit. At repudiandae nam, illo perferendis veniam earum fugit rerum temporibus laboriosam aut veritatis amet adipisci nulla!";
 const testName = "Seth Tal";
 
-
-const PostView = props => {
+const PostView = (props) => {
   return (
     <PostViewWrapper>
       <PostFeed>
         {/* TODOs as the week goes on...
             > TODO: Properly implement Post Groupings
             > TODO: add special secondary buttons to grouping header */}
-        
+
         <SortingOptions>
           <Button secondary={true}>
-            <img src="./icons8_line_width_1.svg"/>
+            <img src="./icons8_line_width_1.svg" />
           </Button>
-          <Button secondary={true} style={MarginLeftRight}> Most Recent </Button>
+          <Button secondary={true} style={MarginLeftRight}>
+            {" Most Recent "}
+          </Button>
         </SortingOptions>
 
         <PostGrouping>
@@ -58,16 +59,14 @@ const PostView = props => {
   );
 };
 
-PostView.propTypes = {
-    
-};
+PostView.propTypes = {};
 
 export default PostView;
 
 const MarginLeftRight = {
   marginLeft: "1em",
-  marginRight: "1em"
-}
+  marginRight: "1em",
+};
 
 //#region PostView Styling
 const PostViewWrapper = styled.div`
@@ -99,13 +98,13 @@ const PostFeed = styled.div`
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #C4C4C4;
+    background: #c4c4c4;
     border-radius: 1em;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #A4A4A4;
+    background: #a4a4a4;
   }
 `;
 
