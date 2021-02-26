@@ -152,6 +152,7 @@ def auth():
     # Encode the user's sub (unique google account identifier) in a JWT), and set that as a cookie attached to the response
     resp.set_cookie(
         'userID', value=encode_jwt({'sub': sub}), httponly=True)
+    print(resp)
     # Redirect user to /testauth where cookie is retrieved and jwt is encoded to get at the sub # inside.
     # Planning on using sub # to retrieve user object from mongo
     return resp
