@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from 'prop-types';
 import Options from './Options';
 import Post from "./Post"
+import Button from "../common/Button"
 
 const testTitle = "This is temp post title text?";
 const testContent =
@@ -17,6 +18,13 @@ const PostView = props => {
         {/* TODOs as the week goes on...
             > TODO: Properly implement Post Groupings
             > TODO: add special secondary buttons to grouping header */}
+        
+        <SortingOptions>
+          <Button secondary={true}>
+            <img src="./icons8_line_width_1.svg"/>
+          </Button>
+          <Button secondary={true} style={MarginLeftRight}> Most Recent </Button>
+        </SortingOptions>
 
         <PostGrouping>
           <PostGroupingHeader>Pinned Posts</PostGroupingHeader>
@@ -56,29 +64,63 @@ PostView.propTypes = {
 
 export default PostView;
 
+const MarginLeftRight = {
+  marginLeft: "1em",
+  marginRight: "1em"
+}
+
 //#region PostView Styling
 const PostViewWrapper = styled.div`
-  overflow: scroll;
-
   display: flex;
   flex-direction: row;
 
-  // border: 1px solid red;
   width: 100%;
 `;
 
 const PostFeed = styled.div`
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
   // border: 1px solid orange;
-  width: 75%;
+  width: 70%;
+  height: 1025px;
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    visibility: hidden;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #C4C4C4;
+    border-radius: 1em;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #A4A4A4;
+  }
+`;
+
+const SortingOptions = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+
+  width: 100%;
+  margin: 2.2em 0 1em 0;
 `;
 
 const PostGrouping = styled.div`
   height: auto;
-
-  // border: 1px solid black;
 `;
 
 const PostGroupingHeader = styled.div`

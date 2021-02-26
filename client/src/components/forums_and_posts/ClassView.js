@@ -31,4 +31,5 @@ export default ClassView;
 
 const ClassViewWrapper = styled.div`
   display: flex;
+  height: 100%;
 `;

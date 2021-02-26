@@ -13,6 +13,7 @@
 }
 
 body {
+  overflow: hidden;
   background: #f8f8f8;
 }
 

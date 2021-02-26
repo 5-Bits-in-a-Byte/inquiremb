@@ -29,7 +29,8 @@ export default Options;
 //#region Options Stylings
 const OptionsWrapper = styled.div`
   // border: 1px solid green;
-  width: 25%;
+  width: 30%;
+  margin-left: 3em;
 `;
 
 const OptionsHeader = styled.h1`
