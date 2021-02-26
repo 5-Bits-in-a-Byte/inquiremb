@@ -13,6 +13,15 @@ var coursesArray = [
   "MTH 101",
   "ART 258",
 ];
+var colorsArray = [
+  "#000700",
+  "#440000",
+  "#500F90",
+  "#FF0000",
+  "#0F9900",
+  "#000EEE",
+  "#326500",
+];
 var currentTerm = "Winter 2021";
 
 // List-to-components mapping technique from:
@@ -22,22 +31,22 @@ const courseList = coursesArray.map((course, index) => (
     key={course}
     courseName={course}
     courseTerm={currentTerm}
-    index={index}
+    color={colorsArray[index]}
   />
 ));
 
 const Courses = () => {
   return (
-    <CoursesWrapper>
+    <ScrollDiv>
       <TopContent />
       <CourseDisplay className="content">{courseList}</CourseDisplay>
-    </CoursesWrapper>
+    </ScrollDiv>
   );
 };
 
 export default Courses;
 
-const CoursesWrapper = styled.div`
+const ScrollDiv = styled.div`
   width: 100%;
   height: 100%;
   overflow: scroll;
@@ -48,5 +57,5 @@ const CourseDisplay = styled.div`
   flex-wrap: wrap;
   margin: 1em 1em 1em 1em;
   padding: 0;
-  transition: 150ms ease-in-out;
+  //transition: 150ms ease-in-out;
 `;
