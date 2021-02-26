@@ -19,7 +19,7 @@ class CourseCard extends React.Component {
 
   render() {
     return (
-      <div>
+      <AlignedDiv index={this.state.courseIndex}>
         <div>
           <img src={MessagesImg} alt="Messages" />
           <h3>{this.state.numMsgs}</h3>
@@ -31,21 +31,26 @@ class CourseCard extends React.Component {
         <br />
         <img src={CreateImg} alt="Create" />
         <img src={SettingsImg} alt="Settings" />
-      </div>
+      </AlignedDiv>
     );
   }
 }
 
-// export default CourseCard;
+export default CourseCard;
 
 var displayWidth = 3;
 
-const StyledCourseCard = styled(CourseCard)`
-  height: 100px;
-  width: 500px;
-  background-color: #3f3f3f;
-  left: ${100 + 525 * (((props) => props.index) % displayWidth)}px;
-  top: ${100 + 50 * Math.floor((props) => props.index / displayWidth)}px;
-`;
+const AlignedDiv = styled.div`
+  height: 250px;
+  width: 250px;
 
-export default StyledCourseCard;
+  margin: 0.5em;
+
+  flex-basis: 1;
+
+  background-color: #3f3f3f;
+
+  // left: 100 + 525 * (${(props) => props.index} % displayWidth);
+
+  // top: 100 + 50 * Math.floor(${(props) => props.index} / displayWidth) px;
+`;

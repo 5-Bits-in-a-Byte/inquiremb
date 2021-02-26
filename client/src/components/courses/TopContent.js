@@ -7,7 +7,7 @@ const TopContent = () => {
   const [joinCourseIsShown, toggleJoin] = useState(false);
 
   return (
-    <div className="flex-row align">
+    <TopWrapper className="flex-row align">
       <Title>COURSES</Title>
       <Button secondary onClick={() => toggleJoin(true)}>
         Join a Course
@@ -19,7 +19,7 @@ const TopContent = () => {
           }}
         />
       )}
-    </div>
+    </TopWrapper>
   );
 };
 
@@ -27,4 +27,8 @@ export default TopContent;
 
 const Title = styled.h4`
   margin-right: 15px;
+`;
+
+const TopWrapper = styled.div`
+  margin: 1em 1em 1em 1em;
 `;
