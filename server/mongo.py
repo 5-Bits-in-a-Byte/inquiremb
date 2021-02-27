@@ -1,4 +1,4 @@
-from pymodm import MongoModel, fields
+from pymodm import MongoModel, fields, EmbeddedMongoModel
 from pymongo.write_concern import WriteConcern
 from pymodm.connection import connect
 import pymongo
@@ -9,24 +9,39 @@ connect(MONGO_URI, alias="my-app")
 
 
 class User(MongoModel):
-    sub = fields.CharField(primary_key=True)
+    _id = fields.CharField(primary_key=True)
+    anonymousId = fields.CharField(required=True, default=shortuuid.uuid())
     email = fields.EmailField()
-    first = fields.CharField()
-    last = fields.CharField()
-    instructor = fields.BooleanField(required=True)
-    permissions = fields.DictField()
+    first = fields.CharField(default="Nofirstgiven")
+    last = fields.CharField(default="Nolastgiven")
+    picture = fields.URLField()
+    universities = fields.EmbeddedDocumentListField('UserUniversity')
+    courses = fields.EmbeddedDocumentListField('UserCourse')
 
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
 
-        #indexes = [pymongo.IndexModel([('sub', pymongo.ASCENDING)])]
+        indexes = [pymongo.IndexModel([('_id', pymongo.ASCENDING)]), pymongo.IndexModel([
+            ('anonymousId', pymongo.ASCENDING)], unique=True)]
 
 
-example_permissions = {
-    'course_id_1': ["read", "write", "viewPrivatePosts", "ta"],
-    'course_id_2': ["read", "write"]
-}
+class UserUniversity(EmbeddedMongoModel):
+    name = fields.CharField(required=True)
+    instructor = fields.BooleanField(required=True)
+
+
+class UserCourse(EmbeddedMongoModel):
+    course_id = fields.CharField()
+    course_name = fields.CharField(required=True)
+    nickname = fields.CharField(blank=True)
+    color = fields.CharField()
+    canPost = fields.BooleanField(default=True)
+    seePrivate = fields.BooleanField(default=False)
+    canPin = fields.BooleanField(default=False)
+    canRemove = fields.BooleanField(default=False)
+    canEndorse = fields.BooleanField(default=False)
+    viewAnonymous = fields.BooleanField(default=False)
 
 
 '''
@@ -48,6 +63,7 @@ class Post(MongoModel):
     comments = fields.CharField()
     likes = fields.CharField()
     pinned = fields.BooleanField()
+
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
@@ -58,6 +74,7 @@ class Course(MongoModel):
     course = fields.CharField()
     canJoinById = fields.BooleanField()
     _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
+
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
