@@ -31,8 +31,8 @@ class CourseCard extends React.Component {
           <CourseTerm>{this.props.courseTerm}</CourseTerm>
         </CourseInfo>
         <CourseFooter>
-          <img src={CreateImg} alt="Create" />
-          <img src={SettingsImg} alt="Settings" />
+          <img src={CreateImg} alt="Create" width="25em" />
+          <img src={SettingsImg} alt="Settings" width="25em" />
         </CourseFooter>
       </AlignedDiv>
     );
@@ -89,5 +89,11 @@ const CourseTerm = styled.h3`
 `;
 
 const CourseFooter = styled.footer`
-  margin: 0 0 1em 1em;
+  padding: 0 0 1em 1em;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  width: 33%;
 `;
