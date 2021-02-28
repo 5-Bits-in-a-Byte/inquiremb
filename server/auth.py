@@ -48,14 +48,10 @@ def get_current_user():
     """
     if 'current_user' not in g:
         user = None
-        # Should = "Bearer jwttokenblahblahblah"
-        token_bearer = request.headers.get('Authorization')
-        # Strip the "Bearer" from the string to get the token
-        if token_bearer:
-            token = token_bearer[8:]
-        if token:
-            payload = decode_jwt(token)
-            _id = payload['_id']
+        cookie = request.cookies.get('userID')
+        if cookie:
+            payload = decode_jwt(cookie)
+            _id = payload['sub']
             user = retrieve_user(_id)
         g.current_user = user
 
