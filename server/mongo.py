@@ -18,6 +18,12 @@ class User(MongoModel):
     universities = fields.EmbeddedDocumentListField('UserUniversity')
     courses = fields.EmbeddedDocumentListField('UserCourse')
 
+    def get_course(self, course_id):
+        for course in self.courses:
+            if course.course_id == course_id:
+                return course
+        return None
+
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
