@@ -49,7 +49,9 @@ const CourseInfo = ({ setCourse }) => {
         canJoinById: form.canJoinById,
       };
       axios
-        .post(process.env.REACT_APP_SERVER_URL + endpoint, data)
+        .post(process.env.REACT_APP_SERVER_URL + endpoint, data, {
+          withCredentials: true,
+        })
         .then((res) => {
           setCourse(res.data);
         })

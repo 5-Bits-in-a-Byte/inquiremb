@@ -150,7 +150,7 @@ def auth():
     # Create a new response
     resp = make_response(redirect(CLIENT_URL))
     # cookie_age is the number of seconds the cookie lives before becoming invalid
-    cookie_age = 60*60*24
+    cookie_age = 60 * 60 * 24
     # Encode the user's sub (unique google account identifier) in a JWT), and set that as a cookie attached to the response
     resp.set_cookie(
         'userID', value=encode_jwt({'_id': _id}), httponly=True, max_age=cookie_age)
