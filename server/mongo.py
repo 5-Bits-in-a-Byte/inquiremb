@@ -15,13 +15,20 @@ class User(MongoModel):
     first = fields.CharField(default="Nofirstgiven")
     last = fields.CharField(default="Nolastgiven")
     picture = fields.URLField()
-    universities = fields.EmbeddedDocumentListField('UserUniversity', default=[])
+    universities = fields.EmbeddedDocumentListField(
+        'UserUniversity', default=[])
     courses = fields.EmbeddedDocumentListField('UserCourse', default=[])
 
     def get_course(self, course_id):
         for course in self.courses:
             if course.course_id == course_id:
                 return course
+        return None
+
+    def get_university(self, university_name):
+        for uni in self.universities:
+            if uni.name == name:
+                return uni
         return None
 
     class Meta:
@@ -48,6 +55,7 @@ class UserCourse(EmbeddedMongoModel):
     canRemove = fields.BooleanField(default=False)
     canEndorse = fields.BooleanField(default=False)
     viewAnonymous = fields.BooleanField(default=False)
+    admin = fields.BooleanField(default=False)
 
 
 '''
@@ -79,6 +87,7 @@ class Course(MongoModel):
     university = fields.CharField()
     course = fields.CharField()
     canJoinById = fields.BooleanField()
+    instructorID = fields.CharField()
     _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
 
     class Meta:
