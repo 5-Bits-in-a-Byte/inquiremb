@@ -22,7 +22,7 @@ class CourseCard extends React.Component {
       <AlignedDiv>
         <ColorDiv color={this.state.courseColor}>
           <MessageDiv>
-            <img src={MessagesImg} alt="Messages" />
+            <img src={MessagesImg} alt="Messages" width="25em" />
             {this.state.numMsgs}
           </MessageDiv>
         </ColorDiv>
@@ -31,8 +31,8 @@ class CourseCard extends React.Component {
           <CourseTerm>{this.props.courseTerm}</CourseTerm>
         </CourseInfo>
         <CourseFooter>
-          <img src={CreateImg} alt="Create" width="25em" />
-          <img src={SettingsImg} alt="Settings" width="25em" />
+          <img src={CreateImg} alt="Create" width="20em" />
+          <img src={SettingsImg} alt="Settings" width="20em" />
         </CourseFooter>
       </AlignedDiv>
     );
@@ -50,36 +50,45 @@ const AlignedDiv = styled.div`
 
   background-color: #ffffff;
   box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.07);
-  border-radius: 0.5em;
+  border-radius: 0.35em;
 
   flex-basis: 1;
 `;
 
 const ColorDiv = styled.div`
-  height: 45%;
+  height: 50%;
   width: 100%;
 
   background-color: ${(props) => props.color || "#0000ff"};
 `;
 
 const MessageDiv = styled.p`
-  padding: 1em 0 0 1em;
-  vertical-align: super;
+  padding: 0.6em 0 0 0;
+  margin: 0 0 0 0.75em;
+
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 16.5%;
+
+  //vertical-align: super;
   font-family: Roboto;
   font-style: normal;
-  font-weight: 500;
+  font-size: 1.2em;
+  font-weight: 300;
   color: #ffffff;
 `;
 
 const CourseInfo = styled.div`
-  margin: 1em 0 0 1em;
+  margin: 0.8em 0 0 1.4em;
   font-family: Roboto;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 200;
 `;
 
 const CourseName = styled.h1`
-  font-size: 1.25em;
+  font-size: 1.2em;
   color: #162b55;
 `;
 
@@ -89,7 +98,7 @@ const CourseTerm = styled.h3`
 `;
 
 const CourseFooter = styled.footer`
-  padding: 0 0 1em 1em;
+  padding: 0 0 1em 1.4em;
 
   display: flex;
 
