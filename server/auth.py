@@ -48,11 +48,15 @@ def get_current_user():
     """
     if 'current_user' not in g:
         user = None
-        cookie = request.cookies.get('userID')
-        if cookie:
-            payload = decode_jwt(cookie)
-            sub = payload['sub']
-            user = retrieve_user(sub)
+        # Should = "Bearer jwttokenblahblahblah"
+        token_bearer = request.headers.get('Authorization')
+        # Strip the "Bearer" from the string to get the token
+        if token_bearer:
+            token = token_bearer[8:]
+        if token:
+            payload = decode_jwt(token)
+            _id = payload['_id']
+            user = retrieve_user(_id)
         g.current_user = user
 
     return g.current_user
@@ -141,8 +145,8 @@ def fakeauth():
 def auth():
     token = oauth.google.authorize_access_token()
     id_token = oauth.google.parse_id_token(token)
-    sub = id_token['sub']
-    user = retrieve_user(sub)
+    _id = id_token['sub']
+    user = retrieve_user(_id)
     # If a user wasn't found
     if not user:
         user = create_user(id_token)
@@ -151,7 +155,7 @@ def auth():
     resp = make_response(redirect(CLIENT_URL))
     # Encode the user's sub (unique google account identifier) in a JWT), and set that as a cookie attached to the response
     resp.set_cookie(
-        'userID', value=encode_jwt({'sub': sub}), httponly=True)
+        'userID', value=encode_jwt({'_id': _id}), httponly=True)
     print(resp)
     # Redirect user to /testauth where cookie is retrieved and jwt is encoded to get at the sub # inside.
     # Planning on using sub # to retrieve user object from mongo
@@ -167,8 +171,9 @@ def decode_jwt(s):
     return jwt.decode(s, HS_256_KEY)
 
 
-def retrieve_user(sub):
-    query = User.objects.raw({'_id': sub})
+def retrieve_user(_id):
+    '''Retrieves the user from the database using the google "sub" field as _id'''
+    query = User.objects.raw({'_id': _id})
     count = query.count()
     if count > 1:
         raise Exception(
@@ -181,6 +186,6 @@ def retrieve_user(sub):
 
 def create_user(id_token):
     print(id_token)
-    user = User(id_token['sub'], first=id_token['given_name'], last=id_token['family_name'],
-                email=id_token['email'], instructor=True, permissions=example_permissions).save()
+    user = User(_id=id_token['sub'], first=id_token['given_name'], last=id_token['family_name'],
+                email=id_token['email'], picture=id_token['picture']).save()
     return user

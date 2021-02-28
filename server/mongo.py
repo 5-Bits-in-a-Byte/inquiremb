@@ -15,8 +15,8 @@ class User(MongoModel):
     first = fields.CharField(default="Nofirstgiven")
     last = fields.CharField(default="Nolastgiven")
     picture = fields.URLField()
-    universities = fields.EmbeddedDocumentListField('UserUniversity')
-    courses = fields.EmbeddedDocumentListField('UserCourse')
+    universities = fields.EmbeddedDocumentListField('UserUniversity', default=[])
+    courses = fields.EmbeddedDocumentListField('UserCourse', default=[])
 
     class Meta:
         write_concern = WriteConcern(j=True)

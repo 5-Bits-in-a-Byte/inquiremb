@@ -21,8 +21,11 @@ class Courses(Resource):
 
         # Validate the args
         errors = self.validate_post(args)
+        # Return the failed request with errors if errors exist
         if(bool(errors)):
             return {"errors": errors}, 400
+        
+        # Add the course to the instructor's course list
 
         # Add class to MongoDB
         course = Course(university=args.university, course=args.course, canJoinById=args.canJoinById).save()
