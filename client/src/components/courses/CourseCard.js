@@ -53,6 +53,9 @@ const AlignedDiv = styled.div`
   border-radius: 0.35em;
 
   flex-basis: 1;
+
+  display: flex;
+  flex-direction: column;
 `;
 
 const ColorDiv = styled.div`
@@ -72,7 +75,6 @@ const MessageDiv = styled.p`
   justify-content: space-between;
   width: 16.5%;
 
-  //vertical-align: super;
   font-family: Roboto;
   font-style: normal;
   font-size: 1.2em;
@@ -85,6 +87,7 @@ const CourseInfo = styled.div`
   font-family: Roboto;
   font-style: normal;
   font-weight: 200;
+  flex-grow: 1;
 `;
 
 const CourseName = styled.h1`
@@ -95,14 +98,12 @@ const CourseName = styled.h1`
 const CourseTerm = styled.h3`
   font-size: 0.75em;
   color: #979797;
+  flex-grow: 1;
 `;
 
 const CourseFooter = styled.footer`
   padding: 0 0 1em 1.4em;
-
   display: flex;
-
   justify-content: space-between;
-
   width: 33%;
 `;
