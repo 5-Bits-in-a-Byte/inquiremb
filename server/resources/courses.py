@@ -3,12 +3,15 @@ from flask import request
 from enum import Enum
 from mongo import *
 from utils.argparser_types import str2bool
-
+from auth import permission_layer
 
 # Courses
 # POST - Handles course creation
 # Access - Instructor Only
+
+
 class Courses(Resource):
+    @permission_layer([], requireInstructor=True)
     def post(self):
         # Get json for POST requests
         request.get_json(force=True)
