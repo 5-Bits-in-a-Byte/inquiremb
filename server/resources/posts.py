@@ -30,15 +30,6 @@ class Posts(Resource):
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
-        # parser.add_argument('courseid')
-        # parser.add_argument('postedby')
-        # parser.add_argument('title')
-        # parser.add_argument('content')
-        # parser.add_argument('isPinned')
-        # parser.add_argument('instructorCommented')
-        # parser.add_argument('reactions')
-        # parser.add_argument('comments')
-        # parser.add_argument('createdDate')
         args = parser.parse_args()
 
         # Get the post we're looking for and count how many posts have this id (should be 1 or 0)
@@ -61,15 +52,6 @@ class Posts(Resource):
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
-        # parser.add_argument('courseid')
-        # parser.add_argument('postedby')
-        # parser.add_argument('title')
-        # parser.add_argument('content')
-        # parser.add_argument('isPinned')
-        # parser.add_argument('instructorCommented')
-        # parser.add_argument('reactions')
-        # parser.add_argument('comments')
-        # parser.add_argument('createdDate')
         args = parser.parse_args()
 
         # Get the post you want to delete
