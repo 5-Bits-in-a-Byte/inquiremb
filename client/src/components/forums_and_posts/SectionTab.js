@@ -2,12 +2,17 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 
-const SectionTab = ({ selectSection, section, imageLocation, tabText }) => {
+const SectionTab = ({
+  setHighlightedSection,
+  highlightedSection,
+  imageLocation,
+  tabText,
+}) => {
   return (
     <Tab
-      highlight={section === tabText}
+      highlight={highlightedSection === tabText}
       onClick={() => {
-        selectSection(tabText);
+        setHighlightedSection(tabText);
       }}
     >
       <Icon src={imageLocation} />

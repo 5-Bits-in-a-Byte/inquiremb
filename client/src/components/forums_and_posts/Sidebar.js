@@ -3,7 +3,11 @@ import styled from "styled-components";
 import SectionTab from "./SectionTab";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
-const Sidebar = ({ classroomName, selectSection, section }) => {
+const Sidebar = ({
+  classroomName,
+  setHighlightedSection,
+  highlightedSection,
+}) => {
   return (
     <Container>
       <ClassTitle>{classroomName}</ClassTitle>
@@ -13,6 +17,7 @@ const Sidebar = ({ classroomName, selectSection, section }) => {
         <SectionTab
           tabText={"All Posts"}
           imageLocation={"./icons8_note.svg"}
+          sectionHighlightState={sectionHighlightState}
           selectSection={selectSection}
           section={section}
         />

@@ -6,14 +6,15 @@ import Sidebar from "./Sidebar";
 import PostView from "./PostView";
 
 const ClassView = ({ classroomName }) => {
-  const [section, selectSection] = useState("All Posts");
-  console.log(section);
+  // UseState Hook to declare state variable "", and setState method to change the variable
+  const [highlightedSection, setHighlightedSection] = useState("All Posts");
+
   return (
     <ClassViewWrapper>
       <Sidebar
         classroomName={classroomName}
-        selectSection={selectSection}
-        section={section}
+        setHighlightedSection={setHighlightedSection}
+        highlightedSection={highlightedSection}
       />
 
       {/* View of current Post Feed - 
