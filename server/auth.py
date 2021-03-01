@@ -99,7 +99,7 @@ def permission_layer(required_permissions: list, requireInstructor=False):
                 for permission in required_permissions:
                     user_perm = getattr(current_user, permission, False)
                     if not user_perm:
-                        return abort(403, errrors=["Resource access restricted: missing permissions"])
+                        return abort(403, errors=["Resource access restricted: missing permissions"])
             # Checking if the user is an instructor when it's required
             if requireInstructor:
                 university_name = request.get_json(force=True)['university']
@@ -108,10 +108,10 @@ def permission_layer(required_permissions: list, requireInstructor=False):
                         f'university not specified in body of request to endpoint that requires course based permissions')
                 university = current_user.get_university(university_name)
                 if university is None:
-                    abort(403, errrors=[
+                    abort(403, errors=[
                           "Resource access restricted: not instructor"])
                 if not university.instructor:
-                    return abort(403, errrors=["Resource access restricted: not instructor"])
+                    return abort(403, errors=["Resource access restricted: not instructor"])
             # Running the actual route function
             return func(*args, **kwargs)
         return wrapper
