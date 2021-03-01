@@ -138,8 +138,8 @@ def login():
 
 @ auth_routes.route('/logout')
 def logout():
-    resp = make_response(redirect('/'))
-    resp.set_cookie('userID', value="", expires=0)
+    resp = make_response(redirect(CLIENT_URL))
+    resp.set_cookie('userID', value="", max_age=0)
     return resp
 
 
