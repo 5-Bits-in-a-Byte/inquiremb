@@ -82,10 +82,13 @@ def permission_layer(required_permissions: list, requireInstructor=False):
     def actual_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            uni = UserUniversity("ha", False)
+            current_user.universities = [uni]
+            current_user.save()
             # Checking if user is not logged in when it's required they are
             if current_user == None and (required_permissions or requireInstructor):
                 abort(401, errors=[
-                      "Resource access restricted: unauthorized client"])
+                      "Resource access restricted: unauthenticated client"])
             # Checking if the user has the required course specific permissions
             if required_permissions:
                 course_id = kwargs.get('course_id')
@@ -96,16 +99,19 @@ def permission_layer(required_permissions: list, requireInstructor=False):
                 for permission in required_permissions:
                     user_perm = getattr(current_user, permission, False)
                     if not user_perm:
-                        return abort(403, errrors=["Resource access restricted"])
+                        return abort(403, errrors=["Resource access restricted: missing permissions"])
             # Checking if the user is an instructor when it's required
             if requireInstructor:
-                university_name = kwargs.get('university_name')
-                if university_name is None:
+                university_name = request.get_json(force=True)['university']
+                if university_name == None:
                     raise Exception(
-                        f'university_name not specified in url path of request to endpoint that requires course based permissions')
+                        f'university not specified in body of request to endpoint that requires course based permissions')
                 university = current_user.get_university(university_name)
+                if university is None:
+                    abort(403, errrors=[
+                          "Resource access restricted: not instructor"])
                 if not university.instructor:
-                    return abort(403, errrors=["Resource access restricted"])
+                    return abort(403, errrors=["Resource access restricted: not instructor"])
             # Running the actual route function
             return func(*args, **kwargs)
         return wrapper
@@ -154,7 +160,6 @@ def auth():
     # Encode the user's sub (unique google account identifier) in a JWT), and set that as a cookie attached to the response
     resp.set_cookie(
         'userID', value=encode_jwt({'_id': _id}), httponly=True, max_age=cookie_age)
-    print(resp)
     # Redirect user to /testauth where cookie is retrieved and jwt is encoded to get at the sub # inside.
     # Planning on using sub # to retrieve user object from mongo
     return resp

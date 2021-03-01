@@ -27,7 +27,7 @@ class User(MongoModel):
 
     def get_university(self, university_name):
         for uni in self.universities:
-            if uni.name == name:
+            if uni.name == university_name:
                 return uni
         return None
 
