@@ -8,6 +8,7 @@ import os
 from resources.demo import Demo
 from resources.me import Me
 from resources.courses import Courses
+from resources.posts import Posts
 # Auth imports
 from auth import oauth, auth_routes
 from flask_cors import CORS
@@ -54,9 +55,11 @@ swagger = Swagger(app, config=config.swagger_config)
 api.add_resource(Demo, '/demo')
 api.add_resource(Me, '/me')
 api.add_resource(Courses, '/courses')
-
+api.add_resource(Posts, '/courses/<string:courseid>/posts', endpoint='posts')
 
 # @ app.route("/")
+
+
 def hello():
     return render_template("index.html")
 
