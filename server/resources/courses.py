@@ -28,19 +28,14 @@ class Courses(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
-        # Add the course to the user's course list
-        user = User.objects.raw({'_id': current_user._id})
-        user.courses.append(UserCourse(course_id=course._id, course_name=args.course, 
-                                        canPost=True,
-                                        seePrivate=True,
-                                        canPin=True,
-                                        canRemove=True,
-                                        canEndorse=True,
-                                        viewAnonymous=True,
-                                        admin=True))
-        user.save()
-        # Add class to MongoDB
+        # Add the course to the user's course list and create the course
         course = Course(course=args.course, canJoinById=args.canJoinById).save()
+        # Appends the course with permissions to the user who created it
+        User.objects.raw({'_id': current_user._id}).update({"$push": {"courses": 
+                        {"course_id":course._id, "course_name":args.course, 
+                        "canPost":True, "seePrivate":True, "canPin":True,
+                        "canRemove":True, "canEndorse":True, "viewAnonymous":True,
+                        "admin":True}}})
         return {"_id": course._id, "course": course.course}, 200
 
     def validate_post(self, args):
