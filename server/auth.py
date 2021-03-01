@@ -82,11 +82,9 @@ def permission_layer(required_permissions: list, requireInstructor=False):
     def actual_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            uni = UserUniversity("ha", False)
-            current_user.universities = [uni]
-            current_user.save()
             # Checking if user is not logged in when it's required they are
-            if current_user == None and (required_permissions or requireInstructor):
+            # if current_user == None and (required_permissions or requireInstructor):
+            if current_user == None or required_permissions:
                 abort(401, errors=[
                       "Resource access restricted: unauthenticated client"])
             # Checking if the user has the required course specific permissions
@@ -101,17 +99,18 @@ def permission_layer(required_permissions: list, requireInstructor=False):
                     if not user_perm:
                         return abort(403, errors=["Resource access restricted: missing permissions"])
             # Checking if the user is an instructor when it's required
-            if requireInstructor:
-                university_name = request.get_json(force=True)['university']
-                if university_name == None:
-                    raise Exception(
-                        f'university not specified in body of request to endpoint that requires course based permissions')
-                university = current_user.get_university(university_name)
-                if university is None:
-                    abort(403, errors=[
-                          "Resource access restricted: not instructor"])
-                if not university.instructor:
-                    return abort(403, errors=["Resource access restricted: not instructor"])
+            # if requireInstructor:
+            #     #
+            #     university_name = request.get_json(force=True)['university']
+            #     if university_name == None:
+            #         raise Exception(
+            #             f'university not specified in body of request to endpoint that requires course based permissions')
+            #     university = current_user.get_university(university_name)
+            #     if university is None:
+            #         abort(403, errors=[
+            #               "Resource access restricted: not instructor"])
+            #     if not university.instructor:
+            #         return abort(403, errors=["Resource access restricted: not instructor"])
             # Running the actual route function
             return func(*args, **kwargs)
         return wrapper
@@ -190,5 +189,5 @@ def retrieve_user(_id):
 def create_user(id_token):
     print(id_token)
     user = User(_id=id_token['sub'], first=id_token['given_name'], last=id_token['family_name'],
-                email=id_token['email'], picture=id_token['picture']).save()
+                email=id_token['email'], picture=id_token['picture'], courses=[]).save()
     return user

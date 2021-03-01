@@ -15,9 +15,9 @@ class User(MongoModel):
     first = fields.CharField(default="Nofirstgiven")
     last = fields.CharField(default="Nolastgiven")
     picture = fields.URLField()
-    universities = fields.EmbeddedDocumentListField(
-        'UserUniversity', default=[])
-    courses = fields.EmbeddedDocumentListField('UserCourse', default=[])
+    courses = fields.ListField(fields.EmbeddedDocumentField('UserCourse'), default=[], blank=True, required=True)
+    # universities = fields.EmbeddedDocumentListField(
+    #     'UserUniversity', default=[])
 
     def get_course(self, course_id):
         for course in self.courses:
@@ -25,11 +25,11 @@ class User(MongoModel):
                 return course
         return None
 
-    def get_university(self, university_name):
-        for uni in self.universities:
-            if uni.name == university_name:
-                return uni
-        return None
+    # def get_university(self, university_name):
+    #     for uni in self.universities:
+    #         if uni.name == university_name:
+    #             return uni
+    #     return None
 
     class Meta:
         write_concern = WriteConcern(j=True)
@@ -39,16 +39,16 @@ class User(MongoModel):
             ('anonymousId', pymongo.ASCENDING)], unique=True)]
 
 
-class UserUniversity(EmbeddedMongoModel):
-    name = fields.CharField(required=True)
-    instructor = fields.BooleanField(required=True)
+# class UserUniversity(EmbeddedMongoModel):
+#     name = fields.CharField(required=True)
+#     instructor = fields.BooleanField(required=True)
 
 
 class UserCourse(EmbeddedMongoModel):
     course_id = fields.CharField()
     course_name = fields.CharField(required=True)
     nickname = fields.CharField(blank=True)
-    color = fields.CharField()
+    color = fields.CharField(blank=True)
     canPost = fields.BooleanField(default=True)
     seePrivate = fields.BooleanField(default=False)
     canPin = fields.BooleanField(default=False)
@@ -84,7 +84,7 @@ class Post(MongoModel):
 
 
 class Course(MongoModel):
-    university = fields.CharField()
+    # university = fields.CharField()
     course = fields.CharField()
     canJoinById = fields.BooleanField()
     instructorID = fields.CharField()

@@ -18,7 +18,7 @@ const INVITE_OPTIONS = [
 
 const CourseInfo = ({ setCourse }) => {
   const [form, setForm] = useState({
-    university: null,
+    // university: null,
     course: null,
     canJoinById: true,
     loading: false,
@@ -32,19 +32,19 @@ const CourseInfo = ({ setCourse }) => {
     });
   };
 
-  const selectUniversity = (option) => {
-    setForm({
-      ...form,
-      university: option.value,
-    });
-  };
+  // const selectUniversity = (option) => {
+  //   setForm({
+  //     ...form,
+  //     university: option.value,
+  //   });
+  // };
 
   const sendCourseRequest = () => {
     setForm({ ...form, loading: true });
     setTimeout(() => {
       const endpoint = "/api/courses";
       const data = {
-        university: form.university,
+        // university: form.university,
         course: form.course,
         canJoinById: form.canJoinById,
       };
@@ -82,20 +82,20 @@ const CourseInfo = ({ setCourse }) => {
       <h3 style={{ marginLeft: 15 }}>CREATE A COURSE</h3>
       <TopSection className="flex-row">
         <LeftColumn className="flex-col flex-1">
-          <InputLabel>University Name</InputLabel>
-          <Select
-            placeholder="Select your university"
-            options={[{ label: "test", value: "test" }]}
-            onChange={selectUniversity}
-          />
-        </LeftColumn>
-        <RightColumn className="flex-col flex-1">
           <InputLabel>Course Name</InputLabel>
           <Input
             placeholder="ex, CIS 210"
             name="course"
             onChange={handleChange}
           />
+        </LeftColumn>
+        <RightColumn className="flex-col">
+          {/* <InputLabel>University Name</InputLabel>
+          <Select
+            placeholder="Select your university"
+            options={[{ label: "test", value: "test" }]}
+            onChange={selectUniversity}
+          /> */}
         </RightColumn>
       </TopSection>
       <HighlightedSection className="flex-row">
