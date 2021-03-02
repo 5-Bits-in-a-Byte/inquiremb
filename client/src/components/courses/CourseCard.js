@@ -1,6 +1,6 @@
 import React from "react";
 import SettingsImg from "../../imgs/settings-black.svg";
-import CreateImg from "../../imgs/create-black.svg";
+import EditImg from "../../imgs/create-black.svg";
 import MessagesImg from "../../imgs/message-black.svg";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -15,7 +15,7 @@ class CourseCard extends React.Component {
   componentDidMount() {
     // Placeholder for the updated messages
     //const newMsgs = {};
-    this.setState({ numMsgs: 0 });
+    this.setState({ numMsgs: 1 });
   }
 
   render() {
@@ -37,7 +37,7 @@ class CourseCard extends React.Component {
               console.log("Clicked " + this.props.courseName + " Edit option")
             }
           >
-            <img src={CreateImg} alt="Create" width="20em" />
+            <img src={EditImg} alt="Create" width="20em" />
           </IconButton>
           <IconButton
             onClick={() =>
@@ -136,5 +136,11 @@ const CourseFooter = styled.footer`
 const IconButton = styled.button`
   cursor: pointer;
   border: none;
-  background-color: inherit;
+  background-color: #ffffff;
+  overflow: hidden;
+  border-radius: 0.5em;
+
+  &:hover {
+    background-color: #efefef;
+  }
 `;
