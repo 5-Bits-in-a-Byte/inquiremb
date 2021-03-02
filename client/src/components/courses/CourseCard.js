@@ -20,20 +20,34 @@ class CourseCard extends React.Component {
 
   render() {
     return (
-      <AlignedDiv to={this.props.to}>
+      <AlignedDiv>
         <ColorDiv color={this.state.courseColor}>
           <MessageDiv>
             <img src={MessagesImg} alt="Messages" width="25em" />
             {this.state.numMsgs > 0 && this.state.numMsgs}
           </MessageDiv>
         </ColorDiv>
-        <CourseInfo>
+        <CourseInfo to={this.props.to}>
           <CourseName>{this.props.courseName}</CourseName>
           <CourseTerm>{this.props.courseTerm}</CourseTerm>
         </CourseInfo>
         <CourseFooter>
-          <img src={CreateImg} alt="Create" width="20em" />
-          <img src={SettingsImg} alt="Settings" width="20em" />
+          <IconButton
+            onClick={() =>
+              console.log("Clicked " + this.props.courseName + " Edit option")
+            }
+          >
+            <img src={CreateImg} alt="Create" width="20em" />
+          </IconButton>
+          <IconButton
+            onClick={() =>
+              console.log(
+                "Clicked " + this.props.courseName + " Settings option"
+              )
+            }
+          >
+            <img src={SettingsImg} alt="Settings" width="20em" />
+          </IconButton>
         </CourseFooter>
       </AlignedDiv>
     );
@@ -42,7 +56,7 @@ class CourseCard extends React.Component {
 
 export default CourseCard;
 
-const AlignedDiv = styled(Link)`
+const AlignedDiv = styled.div`
   height: 225px;
   width: 250px;
 
@@ -52,7 +66,6 @@ const AlignedDiv = styled(Link)`
   background-color: #ffffff;
   box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.07);
   border-radius: 0.35em;
-  text-decoration: none;
 
   flex-basis: 1;
 
@@ -60,7 +73,6 @@ const AlignedDiv = styled(Link)`
   flex-direction: column;
 
   &:hover {
-    background-color: #dfdfdf;
     box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.14);
   }
 `;
@@ -89,12 +101,18 @@ const MessageDiv = styled.p`
   color: #ffffff;
 `;
 
-const CourseInfo = styled.div`
+const CourseInfo = styled(Link)`
   margin: 0.8em 0 0 1.4em;
   font-family: Roboto;
   font-style: normal;
   font-weight: 200;
   flex-grow: 1;
+
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const CourseName = styled.h1`
@@ -113,4 +131,10 @@ const CourseFooter = styled.footer`
   display: flex;
   justify-content: space-between;
   width: 33%;
+`;
+
+const IconButton = styled.button`
+  cursor: pointer;
+  border: none;
+  background-color: inherit;
 `;
