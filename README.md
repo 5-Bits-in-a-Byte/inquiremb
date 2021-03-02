@@ -49,6 +49,7 @@ pip install -r requirements.txt
     },
     "title": "example",
     "content": "example content",
+    "isPrivate": false,
     "isPinned": false,
     "instructorCommented": false,
     // Store user Id's to prevent duplicate likes
