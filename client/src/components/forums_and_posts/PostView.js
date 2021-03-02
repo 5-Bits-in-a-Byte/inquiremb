@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Options from "./Options";
@@ -11,6 +11,9 @@ const testContent =
 const testName = "Seth Tal";
 
 const PostView = (props) => {
+  const [isCondensed, setCondensedState] = useState(true);
+  console.log(isCondensed);
+
   return (
     <PostViewWrapper>
       <PostFeed>
@@ -19,7 +22,12 @@ const PostView = (props) => {
             > TODO: add special secondary buttons to grouping header */}
 
         <SortingOptions>
-          <Button secondary={true}>
+          <Button
+            secondary={true}
+            onClick={() => {
+              setCondensedState(!isCondensed);
+            }}
+          >
             <img src="./icons8_line_width_1.svg" />
           </Button>
           <Button secondary={true} style={MarginLeftRight}>
@@ -29,26 +37,32 @@ const PostView = (props) => {
 
         <PostGrouping>
           <PostGroupingHeader>Pinned Posts</PostGroupingHeader>
+
           <Post
             postTitle={testTitle}
             postContent={testContent}
             posterName={testName}
             isPinned={true}
+            isCondensed={isCondensed}
           />
         </PostGrouping>
+
         <PostGrouping>
           <PostGroupingHeader>This Week</PostGroupingHeader>
+
           <Post
             postTitle={testTitle}
             postContent={testContent}
             posterName={testName}
             isPinned={false}
+            isCondensed={isCondensed}
           />
           <Post
             postTitle={testTitle}
             postContent={testContent}
             posterName={testName}
             isPinned={false}
+            isCondensed={isCondensed}
           />
         </PostGrouping>
       </PostFeed>

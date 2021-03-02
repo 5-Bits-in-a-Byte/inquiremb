@@ -1,24 +1,30 @@
-import React from "react"
-import PropTypes from "prop-types"
-import styled from "styled-components";
+import React from "react";
+import PropTypes from "prop-types";
+import styled, { css } from "styled-components";
 
-const Post = (props) => {
-  const isPinned = props.isPinned  === true ?  {visibility: "visible"} : DisplayHidden;
+const Post = ({
+  postTitle,
+  postContent,
+  posterName,
+  isPinned,
+  isCondensed,
+}) => {
+  const pin = isPinned === true ? { visibility: "visible" } : VisibilityHidden;
 
   return (
-    <PostWrapper>
-      <PostTitle>{props.postTitle}</PostTitle>
+    <PostWrapper isCondensed={isCondensed}>
+      <PostTitle isCondensed={isCondensed}>{postTitle}</PostTitle>
 
-      <PinIcon style={isPinned} src="./icons8_pin.svg"/>
+      <PinIcon style={pin} src="./icons8_pin.svg" />
 
-      <PostContent>{props.postContent}</PostContent>
+      {isCondensed && <PostContent>{postContent}</PostContent>}
 
-      <hr style={HRStyle}/>
+      {isCondensed && <hr style={HRStyle} />}
 
       <PostMetaContentWrapper className="meta">
-        <UserIcon src="./icons8_note.svg"/>
-        <UserDescription>Posted by {props.posterName}</UserDescription>
-        
+        <UserIcon src="./icons8_note.svg" />
+        <UserDescription>Posted by {posterName}</UserDescription>
+
         <MetaIconWrapper>
           <Icon src="./icons8_facebook_like 1.svg" />
           <IconValue>1</IconValue>
@@ -28,24 +34,26 @@ const Post = (props) => {
         </MetaIconWrapper>
       </PostMetaContentWrapper>
     </PostWrapper>
-  )
-}
+  );
+};
 
 Post.propTypes = {
   postTitle: PropTypes.string,
-  postContent: PropTypes.string
-}
+  postContent: PropTypes.string,
+  posterName: PropTypes.string,
+  isPinned: PropTypes.bool,
+};
 
 export default Post;
 
-const DisplayHidden = {
-  visibility: "hidden"
-}
+const VisibilityHidden = {
+  visibility: "hidden",
+};
 
 const HRStyle = {
-  width : "90%",
-  border: "1px solid #DDDDDD"
-}
+  width: "90%",
+  border: "1px solid #DDDDDD",
+};
 
 //#region Post Stylings
 const PostWrapper = styled.div`
@@ -55,7 +63,8 @@ const PostWrapper = styled.div`
   flex-direction: column;
 
   width: 720px;
-  height: 150px;
+  height: ${(props) => (props.isCondensed && "150px") || "85px"};
+
   margin: 2em 0;
 
   // border: 1px solid black;
@@ -69,9 +78,11 @@ const PostWrapper = styled.div`
 `;
 
 const PostTitle = styled.h2`
-  margin: 1em 0 0.5em 2em;
+  /* margin: 1em 0 0.5em 2em; */
+  margin: ${(props) =>
+    (props.isCondensed && "1em 0 0.5em 2em") || "1.2em 0 1em 2em"};
 
-  font-size: 18px;
+  font-size: ${(props) => (props.isCondensed && "18px") || "14px"};
 `;
 
 const PinIcon = styled.img`
@@ -137,6 +148,6 @@ const Icon = styled.img`
 `;
 
 const IconValue = styled.h5`
-  color: #8C8C8C;
+  color: #8c8c8c;
 `;
 //#endregion
