@@ -15,9 +15,8 @@ class User(MongoModel):
     first = fields.CharField(default="Nofirstgiven")
     last = fields.CharField(default="Nolastgiven")
     picture = fields.URLField()
-    courses = fields.ListField(fields.EmbeddedDocumentField('UserCourse'), default=[], blank=True, required=True)
-    # universities = fields.EmbeddedDocumentListField(
-    #     'UserUniversity', default=[])
+    courses = fields.EmbeddedDocumentListField(
+        'UserCourse', blank=True, required=True)
 
     def get_course(self, course_id):
         for course in self.courses:
