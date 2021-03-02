@@ -3,7 +3,7 @@ import styled from "styled-components";
 import TopContent from "./TopContent";
 import CourseCard from "./CourseCard";
 
-// Temporary hardcoded courses array and term
+// Temporary hardcoded courses array, colors array, term string
 var coursesArray = [
   "MTH 342",
   "CIS 422",
@@ -31,6 +31,7 @@ const courseList = coursesArray.map((course, index) => (
     key={course}
     courseName={course}
     courseTerm={currentTerm}
+    to={"course-" + course.split(" ").join("") + "-path/landing-page"}
     color={colorsArray[index]}
   />
 ));

@@ -2,6 +2,7 @@ import React from "react";
 import SettingsImg from "../../imgs/settings-black.svg";
 import CreateImg from "../../imgs/create-black.svg";
 import MessagesImg from "../../imgs/message-black.svg";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 class CourseCard extends React.Component {
@@ -19,7 +20,7 @@ class CourseCard extends React.Component {
 
   render() {
     return (
-      <AlignedDiv>
+      <AlignedDiv to={this.props.to}>
         <ColorDiv color={this.state.courseColor}>
           <MessageDiv>
             <img src={MessagesImg} alt="Messages" width="25em" />
@@ -41,7 +42,7 @@ class CourseCard extends React.Component {
 
 export default CourseCard;
 
-const AlignedDiv = styled.div`
+const AlignedDiv = styled(Link)`
   height: 225px;
   width: 250px;
 
@@ -51,6 +52,7 @@ const AlignedDiv = styled.div`
   background-color: #ffffff;
   box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.07);
   border-radius: 0.35em;
+  text-decoration: none;
 
   flex-basis: 1;
 
