@@ -17,15 +17,14 @@ const Sidebar = ({
         <SectionTab
           tabText={"All Posts"}
           imageLocation={"./icons8_note.svg"}
-          sectionHighlightState={sectionHighlightState}
-          selectSection={selectSection}
-          section={section}
+          setHighlightedSection={setHighlightedSection}
+          highlightedSection={highlightedSection}
         />
         <SectionTab
           tabText={"Instructor"}
           imageLocation={"./icons8_glasses 1.svg"}
-          selectSection={selectSection}
-          section={section}
+          setHighlightedSection={setHighlightedSection}
+          highlightedSection={highlightedSection}
         />
       </Section>
 
@@ -35,20 +34,20 @@ const Sidebar = ({
         <SectionTab
           tabText={"My Posts"}
           imageLocation={"./icons8_user_2 1.svg"}
-          selectSection={selectSection}
-          section={section}
+          setHighlightedSection={setHighlightedSection}
+          highlightedSection={highlightedSection}
         />
         <SectionTab
           tabText={"My Upvoted"}
           imageLocation={"./icons8_heart 1.svg"}
-          selectSection={selectSection}
-          section={section}
+          setHighlightedSection={setHighlightedSection}
+          highlightedSection={highlightedSection}
         />
         <SectionTab
           tabText={"Bookmarked"}
           imageLocation={"./icons8_bookmark 1.svg"}
-          selectSection={selectSection}
-          section={section}
+          setHighlightedSection={setHighlightedSection}
+          highlightedSection={highlightedSection}
         />
       </Section>
     </Container>
