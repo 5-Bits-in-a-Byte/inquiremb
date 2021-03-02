@@ -1,24 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import Button from "../common/Button";
 import JoinCourse from "./JoinCourse";
+import CreateCourse from "./CreateCourse";
 
 const TopContent = () => {
-  const [joinCourseIsShown, toggleJoin] = useState(false);
-
   return (
     <TopWrapper className="flex-row align">
       <Title>COURSES</Title>
-      <Button secondary onClick={() => toggleJoin(true)}>
-        Join a Course
-      </Button>
-      {joinCourseIsShown && (
-        <JoinCourse
-          close={() => {
-            toggleJoin(false);
-          }}
-        />
-      )}
+      <JoinCourse />
+      <CreateCourse />
     </TopWrapper>
   );
 };

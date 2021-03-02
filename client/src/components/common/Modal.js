@@ -1,6 +1,7 @@
 import React from "react";
 import FadeIn from "./animation/FadeIn";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const Modal = ({ children, close, ...props }) => {
   return (
@@ -12,6 +13,13 @@ const Modal = ({ children, close, ...props }) => {
       </FadeIn>
     </Background>
   );
+};
+
+Modal.propTypes = {
+  /* JSX elements to be rendered within the modal (the content) */
+  children: PropTypes.node,
+  /* Function that closes the modal */
+  close: PropTypes.func,
 };
 
 export default Modal;
