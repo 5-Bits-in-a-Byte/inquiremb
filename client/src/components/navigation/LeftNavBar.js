@@ -45,6 +45,8 @@ const Nav = styled.nav`
   position: fixed;
   left: 0;
   top: 0;
+
+  z-index: 9999;
 `;
 
 const Wrapper = styled.ul`
