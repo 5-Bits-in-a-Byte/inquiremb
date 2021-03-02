@@ -23,7 +23,7 @@ class CourseCard extends React.Component {
         <ColorDiv color={this.state.courseColor}>
           <MessageDiv>
             <img src={MessagesImg} alt="Messages" width="25em" />
-            {this.state.numMsgs}
+            {this.state.numMsgs > 0 && this.state.numMsgs}
           </MessageDiv>
         </ColorDiv>
         <CourseInfo>
