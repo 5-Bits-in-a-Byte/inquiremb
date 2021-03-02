@@ -8,6 +8,7 @@ import PostView from "./PostView";
 const ClassView = ({ classroomName }) => {
   // UseState Hook to declare state variable "", and setState method to change the variable
   const [highlightedSection, setHighlightedSection] = useState("All Posts");
+  // console.log(hightlightedSection)
 
   return (
     <ClassViewWrapper>

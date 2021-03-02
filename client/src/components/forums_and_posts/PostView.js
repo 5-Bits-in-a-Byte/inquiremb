@@ -12,7 +12,7 @@ const testName = "Seth Tal";
 
 const PostView = (props) => {
   const [isCondensed, setCondensedState] = useState(true);
-  console.log(isCondensed);
+  // console.log(isCondensed);
 
   return (
     <PostViewWrapper>
