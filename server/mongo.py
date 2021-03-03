@@ -1,32 +1,55 @@
-from pymodm import MongoModel, fields
+from pymodm import EmbeddedMongoModel, MongoModel, fields
 from pymongo.write_concern import WriteConcern
 from pymodm.connection import connect
 import pymongo
 from config import MONGO_URI
 import json
 import shortuuid
+import datetime
 connect(MONGO_URI, alias="my-app")
 
 
 class User(MongoModel):
-    sub = fields.CharField(primary_key=True)
+    _id = fields.CharField(primary_key=True)
+    anonymousId = fields.CharField(required=True, default=shortuuid.uuid())
     email = fields.EmailField()
-    first = fields.CharField()
-    last = fields.CharField()
-    instructor = fields.BooleanField(required=True)
-    permissions = fields.DictField()
+    first = fields.CharField(default="Nofirstgiven")
+    last = fields.CharField(default="Nolastgiven")
+    picture = fields.URLField()
+    courses = fields.EmbeddedDocumentListField(
+        'UserCourse', blank=True, required=True)
+
+    def get_course(self, course_id):
+        for course in self.courses:
+            if course.course_id == course_id:
+                return course
+        return None
 
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
 
-        #indexes = [pymongo.IndexModel([('sub', pymongo.ASCENDING)])]
+        indexes = [pymongo.IndexModel([('_id', pymongo.ASCENDING)]), pymongo.IndexModel([
+            ('anonymousId', pymongo.ASCENDING)], unique=True)]
 
 
-example_permissions = {
-    'course_id_1': ["read", "write", "viewPrivatePosts", "ta"],
-    'course_id_2': ["read", "write"]
-}
+class UserCourse(EmbeddedMongoModel):
+    course_id = fields.CharField()
+    course_name = fields.CharField(required=True)
+    nickname = fields.CharField(blank=True)
+    color = fields.CharField(blank=True)
+    canPost = fields.BooleanField(default=True)
+    seePrivate = fields.BooleanField(default=False)
+    canPin = fields.BooleanField(default=False)
+    canRemove = fields.BooleanField(default=False)
+    canEndorse = fields.BooleanField(default=False)
+    viewAnonymous = fields.BooleanField(default=False)
+    admin = fields.BooleanField(default=False)
+
+# example_permissions = {
+#     'course_id_1': ["read", "write", "viewPrivatePosts", "ta"],
+#     'course_id_2': ["read", "write"]
+# }
 
 
 '''
@@ -41,19 +64,27 @@ to modify/query multiple documents when updating classes or permissions.
 
 
 class Post(MongoModel):
+    _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
     courseid = fields.CharField()
     postedby = fields.DictField()
     title = fields.CharField()
     content = fields.CharField()
-    isPinned = fields.BooleanField()
-    instructorCommented = fields.BooleanField()
-    reactions = fields.DictField()
-    comments = fields.IntegerField()
-    createdDate = fields.DateTimeField()
+    isPinned = fields.BooleanField(default=False)
+    isPrivate = fields.BooleanField()
+    instructorCommented = fields.BooleanField(default=False)
+    reactions = fields.DictField(default={"likes": []})
+    comments = fields.IntegerField(default=0)
+    createdDate = fields.DateTimeField(default=datetime.datetime.now())
+    updatedDate = fields.DateTimeField(default=datetime.datetime.now())
+
+    def serialize(self, date):
+        pass
 
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
+
+        indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
 
 
 class Comment(MongoModel):
