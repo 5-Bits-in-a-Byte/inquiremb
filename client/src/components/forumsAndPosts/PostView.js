@@ -7,7 +7,7 @@ import Button from "../common/Button";
 
 const testTitle = "This is temp post title text?";
 const testContent =
-  "Lorem ipsum dolor sit amet, consectetur adipisicing elit. At repudiandae nam, illo perferendis veniam earum fugit rerum temporibus laboriosam aut veritatis amet adipisci nulla!";
+  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis labore saepe voluptatem natus officia molestiae beatae repudiandae nisi. Aspernatur dolores sequi ipsum quaerat facilis.";
 const testName = "Seth Tal";
 
 const PostView = (props) => {

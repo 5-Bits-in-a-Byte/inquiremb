@@ -5,7 +5,8 @@ import SignUp from "./components/signUp/SignUp";
 import "./fonts/fonts.css";
 import Messages from "./components/messages/Messages";
 import Home from "./components/home/Home";
-import ClassView from "./components/forums_and_posts/ClassView";
+import ClassView from "./components/forumsAndPosts/ClassView";
+import CommentView from "./components/comments/CommentView";
 
 function App() {
   return (
@@ -21,9 +22,14 @@ function App() {
             <Courses />
           </NavigationWrapper>
         </Route>
-        <Route path="/class-view" exact>
+        <Route path="/classView" exact>
           <NavigationWrapper>
-            <ClassView  classroomName={"CIS 422"}/>
+            <ClassView classroomName={"CIS 422"} />
+          </NavigationWrapper>
+        </Route>
+        <Route path="/commentView" exact>
+          <NavigationWrapper>
+            <CommentView classroomName={"CIS 422"} />
           </NavigationWrapper>
         </Route>
         <Route path="/messages" exact>

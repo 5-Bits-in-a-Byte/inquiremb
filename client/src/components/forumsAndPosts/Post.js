@@ -61,9 +61,14 @@ const PostWrapper = styled.div`
 
   display: flex;
   flex-direction: column;
+  flex: 1;
 
   width: 720px;
-  height: ${(props) => (props.isCondensed && "150px") || "85px"};
+  min-height: 85px;
+
+  /* Height is commented out so that Posts change height dynamically 
+     depending on size of content */
+  /* height: ${(props) => (props.isCondensed && "150px") || "85px"}; */
 
   margin: 2em 0;
 
