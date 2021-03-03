@@ -6,9 +6,11 @@ import TopNavBar from "./TopNavBar";
 const MenuMargin = ({ children }) => {
   return (
     <>
+      <Wrapper>{children}</Wrapper>
+      {/* Put absolute positioned nav bars after 
+      the children to prevent zIndex issues */}
       <LeftNavBar />
       <TopNavBar />
-      <Wrapper>{children}</Wrapper>
     </>
   );
 };

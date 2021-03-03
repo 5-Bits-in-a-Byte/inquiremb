@@ -10,22 +10,23 @@ from resources.me import Me
 from resources.courses import Courses
 # Auth imports
 from auth import oauth, auth_routes
-from flask_cors import CORS
 
 app = Flask(__name__, static_url_path="",
             static_folder='../client/build',
             template_folder='../client/build')
 
-# Allow requests from our localhost (react app in development)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Origin',
+                         'http://localhost:3000')
     response.headers.add('Access-Control-Allow-Headers',
-                         'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+                         'Content-Type, Authorization')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    response.headers.add('Access-Control-Allow-Methods',
+                         'GET,PUT,POST,DELETE,OPTIONS')
     return response
 
 
@@ -54,11 +55,6 @@ swagger = Swagger(app, config=config.swagger_config)
 api.add_resource(Demo, '/demo')
 api.add_resource(Me, '/me')
 api.add_resource(Courses, '/courses')
-
-
-# @ app.route("/")
-def hello():
-    return render_template("index.html")
 
 
 # @app.route("/<path:path>")
