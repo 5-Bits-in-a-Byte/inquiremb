@@ -70,12 +70,26 @@ to modify/query multiple documents when updating classes or permissions.
 
 class Post(MongoModel):
     courseid = fields.CharField()
+    postedby = fields.DictField()
     title = fields.CharField()
     content = fields.CharField()
-    postedby = fields.CharField()
-    comments = fields.CharField()
-    likes = fields.CharField()
-    pinned = fields.BooleanField()
+    isPinned = fields.BooleanField()
+    instructorCommented = fields.BooleanField()
+    reactions = fields.DictField()
+    comments = fields.IntegerField()
+    createdDate = fields.DateTimeField()
+
+    class Meta:
+        write_concern = WriteConcern(j=True)
+        connection_alias = 'my-app'
+
+
+class Comment(MongoModel):
+    content = fields.CharField()
+    postedby = fields.DictField()
+    endorsed = fields.BooleanField()
+    replies = fields.DictField()
+    reactions = fields.DictField()
 
     class Meta:
         write_concern = WriteConcern(j=True)
