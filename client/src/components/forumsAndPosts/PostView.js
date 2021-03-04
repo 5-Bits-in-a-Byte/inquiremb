@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Options from "./Options";
@@ -6,6 +6,8 @@ import Post from "./Post";
 import Button from "../common/Button";
 import LineWidthImg from "../../imgs/line-width.svg";
 import HollowPinImg from "../../imgs/pin-hollow.svg";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const testTitle = "This is temp post title text?";
 const testContent =
@@ -14,7 +16,13 @@ const testName = "Seth Tal";
 
 const PostView = (props) => {
   const [isCondensed, setCondensedState] = useState(true);
-  // console.log(isCondensed);
+  // Retrieves the courseid from the url parameters
+  const { courseid } = useParams();
+
+  // THIS IS WHERE WE WOULD RETRIEVE POSTS
+  // useEffect(() => {
+  //   axios.get(process.env.REACT_APP_SERVER_URL + "/api/")
+  // }, [courseid]);
 
   return (
     <>
