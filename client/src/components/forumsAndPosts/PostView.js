@@ -35,8 +35,18 @@ const PostView = (props) => {
           </Button>
         </SortingOptions>
 
+        {/* Here we have a component that is literally a form, but asthetically its like a post */}
+        {/* It only displays on the webpage when the user preses the new post button. */}
+
         <PostGrouping>
-          <PostGroupingHeader>Pinned Posts</PostGroupingHeader>
+          <PostGroupingHeader>
+            {" "}
+            <img
+              src="./icons8_pin_hollowed.svg"
+              style={{ width: "18px", height: "18px" }}
+            />{" "}
+            Pinned Posts
+          </PostGroupingHeader>
 
           <Post
             postTitle={testTitle}
@@ -50,6 +60,41 @@ const PostView = (props) => {
         <PostGrouping>
           <PostGroupingHeader>This Week</PostGroupingHeader>
 
+          <Post
+            postTitle={testTitle}
+            postContent={testContent}
+            posterName={testName}
+            isPinned={false}
+            isCondensed={isCondensed}
+          />
+          <Post
+            postTitle={testTitle}
+            postContent={testContent}
+            posterName={testName}
+            isPinned={false}
+            isCondensed={isCondensed}
+          />
+          <Post
+            postTitle={testTitle}
+            postContent={testContent}
+            posterName={testName}
+            isPinned={false}
+            isCondensed={isCondensed}
+          />
+          <Post
+            postTitle={testTitle}
+            postContent={testContent}
+            posterName={testName}
+            isPinned={false}
+            isCondensed={isCondensed}
+          />
+          <Post
+            postTitle={testTitle}
+            postContent={testContent}
+            posterName={testName}
+            isPinned={false}
+            isCondensed={isCondensed}
+          />
           <Post
             postTitle={testTitle}
             postContent={testContent}
@@ -84,20 +129,11 @@ const MarginLeftRight = {
 
 //#region PostView Styling
 const PostViewWrapper = styled.div`
+  overflow: scroll;
   display: flex;
   flex-direction: row;
 
   width: 100%;
-`;
-
-const PostFeed = styled.div`
-  overflow: scroll;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  // border: 1px solid orange;
-  width: 70%;
-  height: 1025px;
 
   /* width */
   ::-webkit-scrollbar {
@@ -120,6 +156,16 @@ const PostFeed = styled.div`
   ::-webkit-scrollbar-thumb:hover {
     background: #a4a4a4;
   }
+`;
+
+const PostFeed = styled.div`
+  /* overflow: scroll; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  // border: 1px solid orange;
+  width: 70%;
+  height: 1025px;
 `;
 
 const SortingOptions = styled.div`

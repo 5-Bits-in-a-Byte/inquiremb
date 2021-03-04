@@ -27,10 +27,13 @@ function App() {
             <ClassView classroomName={"CIS 422"} />
           </NavigationWrapper>
         </Route>
-        <Route path="/commentView" exact>
+        <Route path="/postView" exact>
           <NavigationWrapper>
             <CommentView classroomName={"CIS 422"} />
           </NavigationWrapper>
+        </Route>
+        <Route path="/postForm" exact>
+          <NavigationWrapper></NavigationWrapper>
         </Route>
         <Route path="/messages" exact>
           <NavigationWrapper>
