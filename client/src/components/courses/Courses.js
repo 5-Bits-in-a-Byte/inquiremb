@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../context/UserProvider";
 import styled from "styled-components";
 import TopContent from "./TopContent";
 import CourseCard from "./CourseCard";
@@ -26,21 +27,32 @@ var currentTerm = "Winter 2021";
 
 // List-to-components mapping technique from:
 // https://reactjs.org/docs/lists-and-keys.html#basic-list-component
-const courseList = coursesArray.map((course, index) => (
-  <CourseCard
-    key={course}
-    courseName={course}
-    courseTerm={currentTerm}
-    to={"course-" + course.split(" ").join("") + "-path/landing-page"}
-    color={colorsArray[index]}
-  />
-));
+const courseList = (userCourses) => {
+  let ret = [];
+  userCourses.forEach((course, index) =>
+    ret.push(
+      <CourseCard
+        key={course.course_id}
+        courseName={course.course_name}
+        courseTerm="Winter 2021"
+        // to={"course-" + course.split(" ").join("") + "-path/landing-page"}
+        to="/name"
+        color={course.color || colorsArray[index]}
+      />
+    )
+  );
+  return ret;
+};
 
 const Courses = () => {
+  const user = useContext(UserContext);
+  console.log(user);
   return (
     <ScrollDiv>
       <TopContent />
-      <CourseDisplay className="content">{courseList}</CourseDisplay>
+      <CourseDisplay className="content">
+        {courseList(user.courses)}
+      </CourseDisplay>
     </ScrollDiv>
   );
 };
