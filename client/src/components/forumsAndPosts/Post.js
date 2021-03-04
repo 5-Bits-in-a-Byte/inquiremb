@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
+import CommentImg from "../../imgs/comment.svg";
+import LikeImg from "../../imgs/like.svg";
+import PinImg from "../../imgs/pin.svg";
 
 const Post = ({
   postTitle,
@@ -15,7 +18,7 @@ const Post = ({
     <PostWrapper isCondensed={isCondensed}>
       <PostTitle isCondensed={isCondensed}>{postTitle}</PostTitle>
 
-      <PinIcon style={pin} src="./icons8_pin.svg" />
+      <PinIcon style={pin} src={PinImg} />
 
       {isCondensed && <PostContent>{postContent}</PostContent>}
 
@@ -26,10 +29,10 @@ const Post = ({
         <UserDescription>Posted by {posterName}</UserDescription>
 
         <MetaIconWrapper>
-          <Icon src="./icons8_facebook_like 1.svg" />
+          <Icon src={LikeImg} />
           <IconValue>1</IconValue>
 
-          <Icon src="./icons8_topic 1.svg" />
+          <Icon src={CommentImg} />
           <IconValue>1</IconValue>
         </MetaIconWrapper>
       </PostMetaContentWrapper>

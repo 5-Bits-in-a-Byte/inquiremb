@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
+import UserImg from "../../imgs/user.svg";
+import BookmarkImg from "../../imgs/bookmark.svg";
+import GlassesImg from "../../imgs/glasses.svg";
+import NoteImg from "../../imgs/note.svg";
+import HeartImg from "../../imgs/heart.svg";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
 const Sidebar = ({
@@ -17,13 +22,13 @@ const Sidebar = ({
         <Section>
           <SectionTab
             tabText={"All Posts"}
-            imageLocation={"./icons8_note.svg"}
+            imageLocation={NoteImg}
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
           />
           <SectionTab
             tabText={"Instructor"}
-            imageLocation={"./icons8_glasses 1.svg"}
+            imageLocation={GlassesImg}
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
           />
@@ -34,19 +39,19 @@ const Sidebar = ({
         <Section>
           <SectionTab
             tabText={"My Posts"}
-            imageLocation={"./icons8_user_2 1.svg"}
+            imageLocation={UserImg}
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
           />
           <SectionTab
             tabText={"My Upvoted"}
-            imageLocation={"./icons8_heart 1.svg"}
+            imageLocation={HeartImg}
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
           />
           <SectionTab
             tabText={"Bookmarked"}
-            imageLocation={"./icons8_bookmark 1.svg"}
+            imageLocation={BookmarkImg}
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
           />

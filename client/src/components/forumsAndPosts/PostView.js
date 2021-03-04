@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import Options from "./Options";
 import Post from "./Post";
 import Button from "../common/Button";
+import LineWidthImg from "../../imgs/line-width.svg";
+import HollowPinImg from "../../imgs/pin-hollow.svg";
 
 const testTitle = "This is temp post title text?";
 const testContent =
@@ -32,7 +34,7 @@ const PostView = (props) => {
                 setCondensedState(!isCondensed);
               }}
             >
-              <img src="./icons8_line_width_1.svg" />
+              <img src={LineWidthImg} />
             </Button>
             <Button secondary={true} style={MarginLeftRight}>
               {" Most Recent "}
@@ -41,7 +43,7 @@ const PostView = (props) => {
           <PostGroupingHeader>
             {" "}
             <img
-              src="./icons8_pin_hollowed.svg"
+              src={HollowPinImg}
               style={{ width: "18px", height: "18px" }}
             />{" "}
             Pinned Posts
