@@ -15,30 +15,29 @@ const PostView = (props) => {
   // console.log(isCondensed);
 
   return (
-    <PostViewWrapper>
+    <>
       <PostFeed>
         {/* TODOs as the week goes on...
             > TODO: Properly implement Post Groupings
             > TODO: add special secondary buttons to grouping header */}
 
-        <SortingOptions>
-          <Button
-            secondary={true}
-            onClick={() => {
-              setCondensedState(!isCondensed);
-            }}
-          >
-            <img src="./icons8_line_width_1.svg" />
-          </Button>
-          <Button secondary={true} style={MarginLeftRight}>
-            {" Most Recent "}
-          </Button>
-        </SortingOptions>
-
         {/* Here we have a component that is literally a form, but asthetically its like a post */}
         {/* It only displays on the webpage when the user preses the new post button. */}
 
-        <PostGrouping>
+        <div style={{ maxWidth: 800 }}>
+          <SortingOptions>
+            <Button
+              secondary={true}
+              onClick={() => {
+                setCondensedState(!isCondensed);
+              }}
+            >
+              <img src="./icons8_line_width_1.svg" />
+            </Button>
+            <Button secondary={true} style={MarginLeftRight}>
+              {" Most Recent "}
+            </Button>
+          </SortingOptions>
           <PostGroupingHeader>
             {" "}
             <img
@@ -55,9 +54,6 @@ const PostView = (props) => {
             isPinned={true}
             isCondensed={isCondensed}
           />
-        </PostGrouping>
-
-        <PostGrouping>
           <PostGroupingHeader>This Week</PostGroupingHeader>
 
           <Post
@@ -109,12 +105,12 @@ const PostView = (props) => {
             isPinned={false}
             isCondensed={isCondensed}
           />
-        </PostGrouping>
+        </div>
       </PostFeed>
 
       {/* Displays options panel on the right of the webpage */}
       <Options />
-    </PostViewWrapper>
+    </>
   );
 };
 
@@ -128,43 +124,45 @@ const MarginLeftRight = {
 };
 
 //#region PostView Styling
-const PostViewWrapper = styled.div`
-  overflow: scroll;
-  display: flex;
-  flex-direction: row;
+// const PostViewWrapper = styled.div`
+//   overflow: scroll;
+//   display: flex;
+//   flex-direction: row;
 
-  width: 100%;
+//   width: 100%;
 
-  /* width */
-  ::-webkit-scrollbar {
-    width: 5px;
-  }
+//   /* width */
+//   ::-webkit-scrollbar {
+//     width: 5px;
+//   }
 
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    visibility: hidden;
-  }
+//   /* Track */
+//   ::-webkit-scrollbar-track {
+//     background: #f1f1f1;
+//     visibility: hidden;
+//   }
 
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #c4c4c4;
-    border-radius: 1em;
-  }
+//   /* Handle */
+//   ::-webkit-scrollbar-thumb {
+//     background: #c4c4c4;
+//     border-radius: 1em;
+//   }
 
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #a4a4a4;
-  }
-`;
+//   /* Handle on hover */
+//   ::-webkit-scrollbar-thumb:hover {
+//     background: #a4a4a4;
+//   }
+// `;
 
 const PostFeed = styled.div`
   /* overflow: scroll; */
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   // border: 1px solid orange;
-  width: 70%;
+  flex-grow: 1;
+  max-width: 900px;
+  padding: 0 40px;
   height: 1025px;
 `;
 
@@ -176,10 +174,6 @@ const SortingOptions = styled.div`
 
   width: 100%;
   margin: 2.2em 0 1em 0;
-`;
-
-const PostGrouping = styled.div`
-  height: auto;
 `;
 
 const PostGroupingHeader = styled.div`

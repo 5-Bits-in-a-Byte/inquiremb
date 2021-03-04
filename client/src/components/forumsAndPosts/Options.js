@@ -24,8 +24,8 @@ export default Options;
 //#region Options Stylings
 const OptionsWrapper = styled.div`
   // border: 1px solid green;
-  width: 30%;
-  margin-left: 3em;
+  width: 280px; // Need to make same width as nav + menu bar
+  flex-grow: 1;
 `;
 
 const OptionsHeader = styled.h1`
@@ -39,6 +39,7 @@ const OptionsPanel = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: #fff;
 
   width: 220px;
   height: 240px;

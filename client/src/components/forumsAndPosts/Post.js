@@ -63,7 +63,7 @@ const PostWrapper = styled.div`
   flex-direction: column;
   flex: 1;
 
-  width: 720px;
+  width: 100%;
   min-height: 85px;
 
   /* Height is commented out so that Posts change height dynamically 
@@ -74,7 +74,7 @@ const PostWrapper = styled.div`
 
   // border: 1px solid black;
   border-radius: 0.3em;
-
+  background: #fff;
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
 
   :hover {
