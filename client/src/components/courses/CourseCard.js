@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import SettingsImg from "../../imgs/settings-black.svg";
 import EditImg from "../../imgs/create-black.svg";
 import MessagesImg from "../../imgs/message-black.svg";
@@ -20,14 +21,14 @@ class CourseCard extends React.Component {
 
   render() {
     return (
-      <AlignedDiv>
+      <AlignedDiv onClick={this.viewCourse}>
         <ColorDiv color={this.state.courseColor}>
           <MessageDiv>
             <img src={MessagesImg} alt="Messages" width="25em" />
             {this.state.numMsgs > 0 && this.state.numMsgs}
           </MessageDiv>
         </ColorDiv>
-        <CourseInfo to={this.props.to}>
+        <CourseInfo to={"/course/" + this.props.id}>
           <CourseName>{this.props.courseName}</CourseName>
           <CourseTerm>{this.props.courseTerm}</CourseTerm>
         </CourseInfo>
@@ -54,6 +55,8 @@ class CourseCard extends React.Component {
   }
 }
 
+/* withRouter is imported from react-router-dom and is used
+to redirect to other courses */
 export default CourseCard;
 
 const AlignedDiv = styled.div`
