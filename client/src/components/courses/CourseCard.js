@@ -15,7 +15,7 @@ class CourseCard extends React.Component {
   componentDidMount() {
     // Placeholder for the updated messages
     //const newMsgs = {};
-    this.setState({ numMsgs: 1 });
+    this.setState({ numMsgs: 0 });
   }
 
   render() {
