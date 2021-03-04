@@ -5,6 +5,8 @@ import pymongo
 from config import MONGO_URI
 import json
 import shortuuid
+import datetime
+from bson.objectid import ObjectId
 connect(MONGO_URI, alias="my-app")
 
 
@@ -24,23 +26,12 @@ class User(MongoModel):
                 return course
         return None
 
-    # def get_university(self, university_name):
-    #     for uni in self.universities:
-    #         if uni.name == university_name:
-    #             return uni
-    #     return None
-
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
 
         indexes = [pymongo.IndexModel([('_id', pymongo.ASCENDING)]), pymongo.IndexModel([
             ('anonymousId', pymongo.ASCENDING)], unique=True)]
-
-
-# class UserUniversity(EmbeddedMongoModel):
-#     name = fields.CharField(required=True)
-#     instructor = fields.BooleanField(required=True)
 
 
 class UserCourse(EmbeddedMongoModel):
@@ -69,31 +60,47 @@ to modify/query multiple documents when updating classes or permissions.
 
 
 class Post(MongoModel):
+    _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
     courseid = fields.CharField()
     postedby = fields.DictField()
-    title = fields.CharField()
-    content = fields.CharField()
-    isPinned = fields.BooleanField()
-    instructorCommented = fields.BooleanField()
-    reactions = fields.DictField()
-    comments = fields.IntegerField()
-    createdDate = fields.DateTimeField()
+    title = fields.CharField(required=True)
+    content = fields.CharField(required=True)
+    isPinned = fields.BooleanField(default=False)
+    isPrivate = fields.BooleanField()
+    instructorCommented = fields.BooleanField(default=False)
+    reactions = fields.DictField(default={"likes": []})
+    comments = fields.IntegerField(default=0)
+    createdDate = fields.DateTimeField(default=datetime.datetime.now())
+    updatedDate = fields.DateTimeField(default=datetime.datetime.now())
+
+    def serialize(self, date):
+        pass
 
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
+
+        indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
 
 
 class Comment(MongoModel):
-    content = fields.CharField()
+    post_id = fields.CharField(required=True)
+    content = fields.CharField(required=True, default="")
     postedby = fields.DictField()
-    endorsed = fields.BooleanField()
-    replies = fields.DictField()
-    reactions = fields.DictField()
+    endorsed = fields.BooleanField(default=False)
+    replies = fields.EmbeddedDocumentListField('Reply', blank=True)
+    reactions = fields.DictField(default={'likes': []})
 
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
+
+
+class Reply(EmbeddedMongoModel):
+    _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
+    content = fields.CharField(required=True, default="")
+    postedby = fields.DictField()
+    reactions = fields.DictField(default={'likes': []})
 
 
 class Course(MongoModel):

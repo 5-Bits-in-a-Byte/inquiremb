@@ -63,17 +63,6 @@ class Posts(Resource):
                 {"$or": [{'isPrivate': False}, {'postedby._id': {
                     '$in': [current_user._id, current_user.anonymousId]}}], 'courseid': course_id})
 
-        """
-        {"$and": [{'isPrivate': False}, {'$or': [{'postedby._id': current_user._id}, {'postedby._id': current_user.anonymousId}]}]
-
-        inner_and = "$and": []
-        {"$or": [{'isPrivate': False}, {'postedby._id': {
-        '$in': [current_user._id, current_user.anonymousId]}}], 'courseid': course_id}
-
-
-        Post.objects.raw(
-                {'courseid': course_id, 'isPrivate': False})
-        """
         # Get the json for all the posts we want to display
         result = [self.serialize(post) for post in query]
 
@@ -130,10 +119,12 @@ class Posts(Resource):
         count = query.count()
         if count > 1:
             raise Exception(
-                f'Duplicate post detected, multiple posts in database with id {_id}')
+                f'Duplicate post detected, multiple posts in database with id {args["_id"]}')
         elif count == 1:
             post = query.first()
-            if (current_user._id == post.postedby['_id']) or current_course.admin:
+            id_match = current_user._id == post.postedby[
+                '_id'] or current_user.anonymousId == post.postedby['_id']
+            if id_match or current_course.admin:
                 post.title = args['title']
                 post.content = args['content']
                 post.updatedDate = datetime.datetime.now()
