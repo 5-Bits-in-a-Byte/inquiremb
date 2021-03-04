@@ -23,13 +23,13 @@ const customStyles = {
     ...provided,
     // none of react-select's styles are passed to <Control />
     border: "1px solid #818181",
-    fontSize: 14,
-    height: 33,
-    minHeight: 33,
+    fontSize: 16,
+    height: 35,
+    minHeight: 35,
   }),
   valueContainer: (provided) => ({
     ...provided,
-    height: 33,
+    height: 35,
     padding: "0 4px",
   }),
 
@@ -42,7 +42,7 @@ const customStyles = {
   }),
   indicatorsContainer: (provided, state) => ({
     ...provided,
-    height: "33px",
+    height: "35px",
     padding: "8px",
   }),
 };

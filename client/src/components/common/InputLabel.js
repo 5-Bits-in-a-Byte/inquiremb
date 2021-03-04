@@ -8,7 +8,8 @@ const InputLabel = ({ children, margin }) => {
 
 export default InputLabel;
 
-const Label = styled.h5`
-  font-size: 14px;
+const Label = styled.h3`
+  font-size: 16px;
+  font-weight: 500;
   margin: ${(props) => props.margin || "13px 0 7px 0"};
 `;

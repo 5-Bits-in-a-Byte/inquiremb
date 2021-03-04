@@ -1,15 +1,29 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import Arrow from "../../imgs/carrot-down-secondary.svg";
 import Dropdown from "../common/dropdown/Dropdown";
+import { UserContext } from "../context/UserProvider";
+import DropdownOptions from "./DropdownOptions";
 
 const ProfileDropdown = () => {
+  const user = useContext(UserContext);
+
+  const signOut = () => {
+    axios
+      .get(process.env.REACT_APP_SERVER_URL + "/logout")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Wrapper>
-      <Dropdown options={[{ label: "Some content", onClick: () => {} }]}>
+      <Dropdown content={<DropdownOptions />}>
         <DropdownWrapper className="flex-row align">
-          <Name className="font-regular">First Last</Name>
-          <Profile className="flex-row align justify"></Profile>
+          <Name className="font-regular">
+            {user.first} {user.last}
+          </Name>
+          <Profile className="flex-row align justify" src={user.picture} />
           <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
         </DropdownWrapper>
       </Dropdown>
@@ -35,7 +49,7 @@ const DropdownWrapper = styled.div`
   }
 `;
 
-const Profile = styled.div`
+const Profile = styled.img`
   border-radius: 100px;
   height: 38px;
   width: 38px;
@@ -47,7 +61,7 @@ const ArrowImg = styled.img`
   margin-left: 7px;
 `;
 
-const Name = styled.h5`
+const Name = styled.h4`
   white-space: nowrap;
   margin-right: 10px;
 `;

@@ -1,9 +1,15 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
+import LoadingDots from "./animation/LoadingDots";
 
-const Button = ({ children, ...props }) => {
-  return <Btn {...props}>{children}</Btn>;
+const Button = ({ children, loading, onClick, ...props }) => {
+  const clickHandler = loading ? undefined : onClick;
+  return (
+    <Btn {...props} onClick={clickHandler}>
+      {loading ? <LoadingDots /> : children}
+    </Btn>
+  );
 };
 
 Button.propTypes = {
@@ -13,6 +19,8 @@ Button.propTypes = {
   secondary: PropTypes.bool,
   /* Makes the button width === 100% */
   autoWidth: PropTypes.bool,
+  /* Replaces the button label with a loading indicator and prevents onClick */
+  loading: PropTypes.bool,
 };
 
 export default Button;
@@ -22,8 +30,11 @@ const Btn = styled.button`
   border: none;
   border-radius: 4px;
   padding: 5px 12px;
-  font-size: 14px;
+  font-size: 16px;
   width: ${(props) => props.autoWidth && "100%"};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   // If secondary prop === true
   ${(props) =>
@@ -41,7 +52,7 @@ const Btn = styled.button`
     ${(props) =>
     props.primary &&
     css`
-      padding: 7px 12px;
+      padding: 9px 12px;
       border-radius: 3px;
       background-color: #4a86fa;
       color: #fff;

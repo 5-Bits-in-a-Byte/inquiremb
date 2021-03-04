@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Logo from "../../imgs/swag-logo.png";
+import Logo from "../../imgs/inquire-logo.png";
 import SearchBar from "../common/SearchBar";
 import ProfileDropdown from "./ProfileDropdown";
 
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
 
 const Nav = styled.nav`
   width: 100vw;
-  height: 55px;
+  height: 66px;
   background-color: #fff;
   position: fixed;
   left: 0;
@@ -41,5 +41,5 @@ const Nav = styled.nav`
 `;
 
 const LogoImg = styled.img`
-  height: 33px;
+  height: 40px;
 `;

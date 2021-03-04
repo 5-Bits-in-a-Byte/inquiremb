@@ -1,5 +1,6 @@
 :root {
   --primary: #4a86fa;
+  --alert: #dc2b2b;
 }
 
 *,
@@ -36,7 +37,7 @@ p {
 }
 
 .p-small {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 ul {
@@ -56,6 +57,10 @@ body {
 
 .font-regular {
   font-weight: 400;
+}
+
+.alert-color {
+  color: var(--alert);
 }
 
 .secondary-btn {
@@ -95,4 +100,40 @@ textarea:focus,
 input:focus,
 button:focus {
   outline: none;
+}
+
+.margin-t5 {
+  margin-top: 5px;
+}
+
+.margin-t10 {
+  margin-top: 10px;
+}
+
+.margin-t20 {
+  margin-top: 20px;
+}
+
+.margin-b5 {
+  margin-bottom: 5px;
+}
+
+.margin-b10 {
+  margin-bottom: 10px;
+}
+
+.margin-b20 {
+  margin-bottom: 20px;
+}
+
+.margin-tb5 {
+  margin: 5px 0;
+}
+
+.margin-tb10 {
+  margin: 10px 0;
+}
+
+.margin-tb20 {
+  margin: 20px 0;
 }

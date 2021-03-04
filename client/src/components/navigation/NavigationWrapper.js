@@ -6,9 +6,11 @@ import TopNavBar from "./TopNavBar";
 const MenuMargin = ({ children }) => {
   return (
     <>
+      <Wrapper>{children}</Wrapper>
+      {/* Put absolute positioned nav bars after 
+      the children to prevent zIndex issues */}
       <LeftNavBar />
       <TopNavBar />
-      <Wrapper>{children}</Wrapper>
     </>
   );
 };
@@ -16,7 +18,7 @@ const MenuMargin = ({ children }) => {
 export default MenuMargin;
 
 const Wrapper = styled.div`
-  margin-top: 55px;
-  margin-left: 65px;
+  margin-top: 66px;
+  margin-left: 80px;
   position: relative;
 `;

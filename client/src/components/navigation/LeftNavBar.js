@@ -40,11 +40,13 @@ export default LeftNavBar;
 
 const Nav = styled.nav`
   height: 100vh;
-  width: 65px;
+  width: 80px;
   background-color: #162b55;
   position: fixed;
   left: 0;
   top: 0;
+
+  z-index: 9999;
 `;
 
 const Wrapper = styled.ul`

@@ -19,12 +19,12 @@ const JoinCourse = () => {
           width="420px"
           data-testid="join-course-modal"
         >
-          <h4>SEARCH FOR A COURSE</h4>
+          <h3>SEARCH FOR A COURSE</h3>
           <InputLabel>University</InputLabel>
           <Input placeholder="University Name" />
           <InputLabel>Course Name</InputLabel>
           <Input placeholder="ex, CIS 210" />
-          <h4 style={{ marginTop: 30 }}>OR JOIN BY ACCESS CODE</h4>
+          <h3 style={{ marginTop: 30 }}>OR JOIN BY ACCESS CODE</h3>
           <InputLabel>Access Code</InputLabel>
           <Input placeholder="ex, AcK21k" />
           <Button primary autoWidth style={{ marginTop: 24 }}>

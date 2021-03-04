@@ -27,5 +27,5 @@ const Icon = styled.img``;
 
 const Label = styled.p`
   color: #fff;
-  font-size: 10px;
+  font-size: 13px;
 `;

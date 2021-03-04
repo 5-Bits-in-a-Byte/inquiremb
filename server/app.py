@@ -1,17 +1,35 @@
 from mongo import *
 from flask import Flask, render_template, request, send_from_directory, jsonify
 from flask_restful import Api
+from flasgger import Swagger
 import config
 import os
 # Import API endpoints here:
 from resources.demo import Demo
 from resources.me import Me
+from resources.courses import Courses
 # Auth imports
 from auth import oauth, auth_routes
 
 app = Flask(__name__, static_url_path="",
             static_folder='../client/build',
             template_folder='../client/build')
+
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin',
+                         'http://localhost:3000')
+    response.headers.add('Access-Control-Allow-Headers',
+                         'Content-Type, Authorization')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    response.headers.add('Access-Control-Allow-Methods',
+                         'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
+
 # Adding secret key to app
 app.secret_key = '!secret'
 # Configuring flask app
@@ -32,18 +50,14 @@ oauth.register(
 )
 
 api = Api(app, prefix="/api")
-
+swagger = Swagger(app, config=config.swagger_config)
 # register endpoints from /resources folder here:
 api.add_resource(Demo, '/demo')
 api.add_resource(Me, '/me')
+api.add_resource(Courses, '/courses')
 
 
-@ app.route("/")
-def hello():
-    return render_template("index.html")
-
-
-@app.route("/<path:path>")
+# @app.route("/<path:path>")
 def static_proxy(path):
     """static folder serve"""
     file_name = path.split("/")[-1]
@@ -51,7 +65,7 @@ def static_proxy(path):
     return send_from_directory(dir_name, file_name)
 
 
-@app.errorhandler(404)
+# @app.errorhandler(404)
 def handle_404(e):
     if request.path.startswith("/api/"):
         return jsonify(message="Resource not found"), 404

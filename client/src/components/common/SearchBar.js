@@ -14,7 +14,7 @@ const SearchBar = ({ onChange, placeholder }) => {
 export default SearchBar;
 
 const SearchDiv = styled.div`
-  height: 26px;
+  height: 32px;
   align-items: center;
   border-radius: 3px;
   max-width: 360px;
@@ -36,6 +36,7 @@ const TextInput = styled.input`
   background-color: transparent;
   width: 100%;
   padding-left: 11px;
+  font-size: 16px;
 
   &:focus {
     outline: none;
