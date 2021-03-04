@@ -78,7 +78,7 @@ pip install -r requirements.txt
     "replies": [
         {
             "content": "",
-            "user": {
+            "postedBy": {
                 "first": "Alec",
                 "last": "Springel",
                 "_id": "oasif-jo12j-asdjf-asdf9",
