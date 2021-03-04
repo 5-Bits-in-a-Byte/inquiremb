@@ -17,14 +17,14 @@ const PostView = (props) => {
   return (
     <>
       <PostFeed>
-        {/* TODOs as the week goes on...
+        <ScrollingDiv>
+          {/* TODOs as the week goes on...
             > TODO: Properly implement Post Groupings
             > TODO: add special secondary buttons to grouping header */}
 
-        {/* Here we have a component that is literally a form, but asthetically its like a post */}
-        {/* It only displays on the webpage when the user preses the new post button. */}
+          {/* Here we have a component that is literally a form, but asthetically its like a post */}
+          {/* It only displays on the webpage when the user preses the new post button. */}
 
-        <div style={{ maxWidth: 800 }}>
           <SortingOptions>
             <Button
               secondary={true}
@@ -105,7 +105,7 @@ const PostView = (props) => {
             isPinned={false}
             isCondensed={isCondensed}
           />
-        </div>
+        </ScrollingDiv>
       </PostFeed>
 
       {/* Displays options panel on the right of the webpage */}
@@ -156,14 +156,26 @@ const MarginLeftRight = {
 
 const PostFeed = styled.div`
   /* overflow: scroll; */
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
   // border: 1px solid orange;
-  flex-grow: 1;
+  flex-grow: 1; */
   max-width: 900px;
+  width: 100%;
+  position: relative;
+`;
+
+const ScrollingDiv = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 100%;
   padding: 0 40px;
-  height: 1025px;
+  overflow: auto;
+  ::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+  }
 `;
 
 const SortingOptions = styled.div`
