@@ -8,6 +8,9 @@ import os
 from resources.demo import Demo
 from resources.me import Me
 from resources.courses import Courses
+from resources.posts import Posts
+from resources.comments import Comments
+from resources.replies import Replies
 # Auth imports
 from auth import oauth, auth_routes
 
@@ -55,9 +58,15 @@ swagger = Swagger(app, config=config.swagger_config)
 api.add_resource(Demo, '/demo')
 api.add_resource(Me, '/me')
 api.add_resource(Courses, '/courses')
-
+api.add_resource(Posts, '/courses/<string:course_id>/posts', endpoint='posts')
+api.add_resource(
+    Comments, '/courses/<string:course_id>/posts/<string:post_id>/comments')
+api.add_resource(
+    Replies, '/courses/<string:course_id>/posts/<string:post_id>/comments/<string:comment_id>/replies')
 
 # @app.route("/<path:path>")
+
+
 def static_proxy(path):
     """static folder serve"""
     file_name = path.split("/")[-1]
