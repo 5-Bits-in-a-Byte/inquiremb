@@ -1,4 +1,4 @@
-from pymodm import EmbeddedMongoModel, MongoModel, fields
+from pymodm import MongoModel, fields, EmbeddedMongoModel
 from pymongo.write_concern import WriteConcern
 from pymodm.connection import connect
 import pymongo
@@ -6,6 +6,7 @@ from config import MONGO_URI
 import json
 import shortuuid
 import datetime
+from bson.objectid import ObjectId
 connect(MONGO_URI, alias="my-app")
 
 
@@ -46,11 +47,6 @@ class UserCourse(EmbeddedMongoModel):
     viewAnonymous = fields.BooleanField(default=False)
     admin = fields.BooleanField(default=False)
 
-# example_permissions = {
-#     'course_id_1': ["read", "write", "viewPrivatePosts", "ta"],
-#     'course_id_2': ["read", "write"]
-# }
-
 
 '''
 Posts use the Course ID to reference the course they belong to.
@@ -88,21 +84,30 @@ class Post(MongoModel):
 
 
 class Comment(MongoModel):
-    content = fields.CharField()
+    post_id = fields.CharField(required=True)
+    content = fields.CharField(required=True, default="")
     postedby = fields.DictField()
-    endorsed = fields.BooleanField()
-    replies = fields.DictField()
-    reactions = fields.DictField()
+    endorsed = fields.BooleanField(default=False)
+    replies = fields.EmbeddedDocumentListField('Reply', blank=True)
+    reactions = fields.DictField(default={'likes': []})
 
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
 
 
+class Reply(EmbeddedMongoModel):
+    _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
+    content = fields.CharField(required=True, default="")
+    postedby = fields.DictField()
+    reactions = fields.DictField(default={'likes': []})
+
+
 class Course(MongoModel):
-    university = fields.CharField()
+    # university = fields.CharField()
     course = fields.CharField()
     canJoinById = fields.BooleanField()
+    instructorID = fields.CharField()
     _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
 
     class Meta:

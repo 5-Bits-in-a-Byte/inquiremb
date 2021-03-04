@@ -5,11 +5,11 @@ import CreateCourse from "./CreateCourse";
 
 const TopContent = () => {
   return (
-    <div className="flex-row align">
+    <TopWrapper className="flex-row align">
       <Title>COURSES</Title>
       <JoinCourse />
       <CreateCourse />
-    </div>
+    </TopWrapper>
   );
 };
 
@@ -17,4 +17,8 @@ export default TopContent;
 
 const Title = styled.h3`
   margin-right: 15px;
+`;
+
+const TopWrapper = styled.div`
+  margin: 1em 1em 1em 1em;
 `;

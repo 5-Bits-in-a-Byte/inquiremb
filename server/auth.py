@@ -16,7 +16,7 @@ Steps:
 """
 from werkzeug.local import LocalProxy
 from mongo import *
-from config import HS_256_KEY
+from config import HS_256_KEY, CLIENT_URL
 from functools import wraps
 import sys
 import logging
@@ -24,7 +24,6 @@ from authlib.integrations.flask_client import OAuth
 from authlib.jose import jwt
 from flask import Blueprint, session, url_for, redirect, request, make_response, jsonify, g, current_app
 from flask_restful import abort
-from flask import Blueprint, session, url_for, redirect, request, make_response, jsonify
 
 
 # Authlib logging
@@ -44,15 +43,15 @@ def get_current_user():
     Sets g.current in the current app context.
 
     Returns:
-        User/None: MongoDB object representing request sending user 
+        User/None: MongoDB object representing request sending user
     """
     if 'current_user' not in g:
         user = None
         cookie = request.cookies.get('userID')
         if cookie:
             payload = decode_jwt(cookie)
-            sub = payload['sub']
-            user = retrieve_user(sub)
+            _id = payload['_id']
+            user = retrieve_user(_id)
         g.current_user = user
 
     return g.current_user
@@ -73,85 +72,93 @@ def teardown_current_user(exception):
     user = g.pop('current_user', None)
 
 
-def permission_layer(permissions, course_id):
+def permission_layer(required_permissions: list, requireInstructor=False):
     """
     Checks if the current_user has the correct permissions to access the endpoint
     for the given course
     Args:
         permissions (List[str]): permission required to access endpoint
-        course_id (str): id of the course
     """
     def actual_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if permissions:
-                authorized = False
-                if current_user and (course_id in current_user.permissions):
-                    for permission in permissions:
-                        if permission not in current_user.permissions[course_id]:
-                            break
-                    else:
-                        authorized = True
-                if not authorized:
-                    return abort(403, msg="Resource access restricted")
+            # Checking if user is not logged in when it's required they are
+            # if current_user == None and (required_permissions or requireInstructor):
+            if current_user == None or required_permissions:
+                abort(401, errors=[
+                      "Resource access restricted: unauthenticated client"])
+            # Checking if the user has the required course specific permissions
+            if required_permissions:
+                course_id = kwargs.get('course_id')
+                if course_id is None:
+                    raise Exception(
+                        f'course_id not specified in url path of request to endpoint that requires course based permissions')
+                course = current_user.get_course(course_id)
+                for permission in required_permissions:
+                    user_perm = getattr(current_user, permission, False)
+                    if not user_perm:
+                        return abort(403, errors=["Resource access restricted: missing permissions"])
+            # Checking if the user is an instructor when it's required
+            # if requireInstructor:
+            #     #
+            #     university_name = request.get_json(force=True)['university']
+            #     if university_name == None:
+            #         raise Exception(
+            #             f'university not specified in body of request to endpoint that requires course based permissions')
+            #     university = current_user.get_university(university_name)
+            #     if university is None:
+            #         abort(403, errors=[
+            #               "Resource access restricted: not instructor"])
+            #     if not university.instructor:
+            #         return abort(403, errors=["Resource access restricted: not instructor"])
+            # Running the actual route function
             return func(*args, **kwargs)
         return wrapper
     return actual_decorator
 
 
-@auth_routes.route('/testauthsuccess')
-@permission_layer(["read", "write"], "course_id_1")
+@ auth_routes.route('/testauthsuccess')
+@ permission_layer(["read", "write"], "course_id_1")
 def testauthsuccess():
     return jsonify(message="Congrats, you have access to this resource"), 200
 
 
-@auth_routes.route('/testauthfail')
-@permission_layer(["admin", "write"], "course_id_1")
+@ auth_routes.route('/testauthfail')
+@ permission_layer(["admin", "write"], "course_id_1")
 def testauthfail():
     return jsonify(message="Congrats, you have access to this resource"), 200
 
 
-@auth_routes.route('/login')
+@ auth_routes.route('/login')
 def login():
     redirect_uri = url_for('auth_blueprint.auth', _external=True)
     return oauth.google.authorize_redirect(redirect_uri)
 
 
-@auth_routes.route('/logout')
+@ auth_routes.route('/logout')
 def logout():
-    resp = make_response(redirect('/'))
-    resp.set_cookie('userID', value="", expires=0)
+    resp = make_response(redirect(CLIENT_URL))
+    resp.set_cookie('userID', value="", max_age=0)
     return resp
 
 
-"""
-@auth_routes.route('/fakeauth')
-def fakeauth():
-    user = session['user']
-    print(user['sub'])
-    resp = make_response('hi')
-    resp = make_response('set cookie')
-    resp.set_cookie(
-        'userID', value=encode_jwt({'sub': user['sub']}), httponly=True)
-    return resp
-"""
-
-
-@auth_routes.route('/auth')
+@ auth_routes.route('/auth')
 def auth():
     token = oauth.google.authorize_access_token()
     id_token = oauth.google.parse_id_token(token)
-    sub = id_token['sub']
-    user = retrieve_user(sub)
+    _id = id_token['sub']
+    user = retrieve_user(_id)
     # If a user wasn't found
     if not user:
         user = create_user(id_token)
 
     # Create a new response
-    resp = make_response(redirect('/'))
+    resp = make_response(redirect(CLIENT_URL))
+    # cookie_age is the number of seconds the cookie lives before becoming invalid
+    cookie_age = 60 * 60 * 24
     # Encode the user's sub (unique google account identifier) in a JWT), and set that as a cookie attached to the response
     resp.set_cookie(
-        'userID', value=encode_jwt({'sub': sub}), httponly=True)
+        'userID', value=encode_jwt({'_id': _id}), httponly=True, max_age=cookie_age)
     # Redirect user to /testauth where cookie is retrieved and jwt is encoded to get at the sub # inside.
     # Planning on using sub # to retrieve user object from mongo
     return resp
@@ -166,8 +173,9 @@ def decode_jwt(s):
     return jwt.decode(s, HS_256_KEY)
 
 
-def retrieve_user(sub):
-    query = User.objects.raw({'_id': sub})
+def retrieve_user(_id):
+    '''Retrieves the user from the database using the google "sub" field as _id'''
+    query = User.objects.raw({'_id': _id})
     count = query.count()
     if count > 1:
         raise Exception(
@@ -180,6 +188,6 @@ def retrieve_user(sub):
 
 def create_user(id_token):
     print(id_token)
-    user = User(id_token['sub'], first=id_token['given_name'], last=id_token['family_name'],
-                email=id_token['email'], instructor=True, permissions=example_permissions).save()
+    user = User(_id=id_token['sub'], first=id_token['given_name'], last=id_token['family_name'],
+                email=id_token['email'], picture=id_token['picture'], courses=[]).save()
     return user
