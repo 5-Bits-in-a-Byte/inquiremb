@@ -1,15 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import CommentReply from "./CommentReply";
 
-const Comment = ({ posterName }) => {
+const Comment = ({ posterName, commentContent }) => {
   return (
     <CommentWrapper>
-      <CommentContent>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic libero vero
-        consequatur magnam error quis aut, magni, cupiditate vel sequi,
-        accusamus voluptatum beatae nulla.
-      </CommentContent>
+      <CommentContent>{commentContent}</CommentContent>
 
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
@@ -22,6 +19,10 @@ const Comment = ({ posterName }) => {
             <IconValue>1</IconValue>
           </MetaIconWrapper>
         </PostMetaContentWrapper>
+        <CommentReply />
+        <CommentReply />
+        <CommentReply />
+        <CommentReply />
       </ReplyContainer>
     </CommentWrapper>
   );

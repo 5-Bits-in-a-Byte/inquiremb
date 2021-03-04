@@ -34,7 +34,7 @@ const CommentView = ({ classroomName }) => {
             isPinned={true}
             isCondensed={true}
           />
-          <Comment posterName={testName} />
+          <Comment posterName={testName} commentContent={testContent} />
         </PostCommentContainer>
       </CommentViewContainer>
     </CommentViewWrapper>
