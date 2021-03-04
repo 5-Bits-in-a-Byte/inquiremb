@@ -8,19 +8,14 @@ from bson.objectid import ObjectId
 
 
 class Posts(Resource):
-    # @permission_layer(['read', 'write'], current_user.sub)
     def post(self, course_id=None):
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('title')
         parser.add_argument('content')
         parser.add_argument('isPrivate')
-        parser.add_argument('isAnonymous')
+        parser.add_argument('isAnonymous', type=bool)
         args = parser.parse_args()
-
-        args.title = "title"
-        args.content = "deleting this"
-        args.isPrivate = True
 
         # Validate the args
         errors = self.validate_post(args)
@@ -32,6 +27,12 @@ class Posts(Resource):
         last = current_user.last
         _id = current_user._id
         anonymous = args['isAnonymous']
+
+        # Change for anonymous posting
+        if anonymous:
+            _id = current_user.anonymousId
+            first = "Anonymous"
+            last = ""
 
         postedby = {"first": first, "last": last,
                     "_id": _id, "anonymous": anonymous}
@@ -46,10 +47,8 @@ class Posts(Resource):
         return result, 200
 
     def get(self, course_id=None):
-        # Get the search input
+        # Get the search input and the current course
         req = request.args.get('search')
-
-        # Get the current course
         current_course = current_user.get_course(course_id)
 
         # If the current user can see private posts and there's no search
@@ -73,25 +72,32 @@ class Posts(Resource):
 
         return result, 200
 
-    # @permission_layer(['read', 'write'], current_user.sub)
     def delete(self, course_id=None):
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
         args = parser.parse_args()
 
-        _id = ObjectId(args['_id'])
         # Get the post you want to delete
-        query = Post.objects.raw({'_id': _id})
+        query = Post.objects.raw({'_id': args['_id']})
+        post = query.first()
 
         # Count how many posts had same id for error checking and handle appropriately
         count = query.count()
+
         if count > 1:
             raise Exception(
                 f'Duplicate post detected, multiple posts in database with id {_id}')
         elif count == 1:
-            query.delete()
-            return "Successful delete"
+            # Get the current course
+            current_course = current_user.get_course(course_id)
+            # Permission check
+            if current_user._id == post.postedby['_id'] or current_user.anonymousId == post.postedby['_id'] or current_course.admin:
+                # Delete the post
+                post.delete()
+                return "Successful delete"
+            else:
+                return "Access Denied", 403
         else:
             raise Exception(f'No post with id')
 
@@ -110,7 +116,7 @@ class Posts(Resource):
             return {"errors": errors}, 400
 
         # Query for the post and get the current course
-        query = Post.objects.raw({'_id': _id})
+        query = Post.objects.raw({'_id': args["_id"]})
         current_course = current_user.get_course(course_id)
 
         # Count how many posts had same id for error checking and handle appropriately
@@ -119,12 +125,16 @@ class Posts(Resource):
             raise Exception(
                 f'Duplicate post detected, multiple posts in database with id {_id}')
         elif count == 1:
-            if (current_user._id == query.first().postedby._id) or current_course.admin:
-                query.first().title = args['title']
-                query.first().content = args['content']
+            post = query.first()
+            if (current_user._id == post.postedby['_id']) or current_course.admin:
+                post.title = args['title']
+                post.content = args['content']
+                post.updatedDate = datetime.datetime.now()
                 if current_course.canPin:
-                    query.first().isPinned = args['isPinned']
-                query.first().save()
+                    post.isPinned = args['isPinned']
+                post.save()
+                result = self.serialize(post)
+                return result, 200
         else:
             raise Exception(f'No post with id')
 
@@ -147,6 +157,3 @@ class Posts(Resource):
         date = str(result['updatedDate'])
         result['updatedDate'] = date
         return result
-
-
-# UPDATED POST RESOURCE TO INCLUDE UPDATEDDATE
