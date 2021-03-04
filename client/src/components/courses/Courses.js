@@ -18,18 +18,17 @@ const colorsArray = [
 // https://reactjs.org/docs/lists-and-keys.html#basic-list-component
 const courseList = (userCourses) => {
   let ret = [];
-  userCourses.forEach((course, index) =>
+  userCourses.forEach((course, index) => {
     ret.push(
       <CourseCard
         key={course.course_id}
+        id={course.course_id}
         courseName={course.course_name}
         courseTerm="Winter 2021"
-        // to={"course-" + course.split(" ").join("") + "-path/landing-page"}
-        to="/name"
         color={course.color || colorsArray[index]}
       />
-    )
-  );
+    );
+  });
   return ret;
 };
 

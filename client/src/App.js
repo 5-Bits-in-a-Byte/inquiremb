@@ -37,7 +37,7 @@ function App() {
           <Route path="/login" exact>
             <Login />
           </Route>
-          <Route path="/classView" exact>
+          <Route path="/course/:courseid" exact>
             <NavigationWrapper>
               <ClassView classroomName={"CIS 422"} />
             </NavigationWrapper>
