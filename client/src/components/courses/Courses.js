@@ -4,17 +4,7 @@ import styled from "styled-components";
 import TopContent from "./TopContent";
 import CourseCard from "./CourseCard";
 
-// Temporary hardcoded courses array, colors array, term string
-var coursesArray = [
-  "MTH 342",
-  "CIS 422",
-  "CIS 473",
-  "PSY 201",
-  "SOC 104",
-  "MTH 101",
-  "ART 258",
-];
-var colorsArray = [
+const colorsArray = [
   "#000700",
   "#440000",
   "#500F90",
@@ -23,7 +13,6 @@ var colorsArray = [
   "#000EEE",
   "#326500",
 ];
-var currentTerm = "Winter 2021";
 
 // List-to-components mapping technique from:
 // https://reactjs.org/docs/lists-and-keys.html#basic-list-component
@@ -46,7 +35,6 @@ const courseList = (userCourses) => {
 
 const Courses = () => {
   const user = useContext(UserContext);
-  console.log(user);
   return (
     <ScrollDiv>
       <TopContent />
@@ -62,7 +50,7 @@ export default Courses;
 const ScrollDiv = styled.div`
   width: 100%;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 `;
 
 const CourseDisplay = styled.div`
