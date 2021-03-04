@@ -51,14 +51,15 @@ const VisibilityHidden = {
 };
 
 const HRStyle = {
-  width: "90%",
+  width: "100%",
   border: "1px solid #DDDDDD",
+  margin: "16px 0",
 };
 
 //#region Post Stylings
 const PostWrapper = styled.div`
   position: relative;
-
+  padding: 23px 30px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -84,9 +85,6 @@ const PostWrapper = styled.div`
 
 const PostTitle = styled.h2`
   /* margin: 1em 0 0.5em 2em; */
-  margin: ${(props) =>
-    (props.isCondensed && "1em 0 0.5em 2em") || "1.2em 0 1em 2em"};
-
   font-size: ${(props) => (props.isCondensed && "18px") || "14px"};
 `;
 
@@ -101,9 +99,8 @@ const PinIcon = styled.img`
 `;
 
 const PostContent = styled.p`
-  margin: 0 2.5em 0.5em 2.5em;
-
-  font-size: 14px;
+  margin-top: 10px;
+  font-size: 16px;
   color: #979797;
 `;
 
@@ -112,21 +109,15 @@ const PostMetaContentWrapper = styled.div`
   flex-direction: row;
 
   height: 100%;
-  margin: 0 2.2em 0.5em 2.2em;
-
   // border: 1px solid black;
 `;
 
 const UserIcon = styled.img`
   float: left;
-
   width: 19px;
   height: 19px;
   margin-right: 0.5em;
-
-  background-color: #e0e0e0;
   border-radius: 50%;
-
   user-select: none;
 `;
 
@@ -136,7 +127,7 @@ const UserDescription = styled.h5`
 
 const MetaIconWrapper = styled.div`
   display: inline-flex;
-  margin-left: 350px;
+  margin-left: auto;
 
   height: 100%;
 `;
