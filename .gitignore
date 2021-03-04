@@ -108,3 +108,6 @@ dist
 server/flask
 server/export_env.sh
 server/env.sh
+
+#vscode
+**.vscode

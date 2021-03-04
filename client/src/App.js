@@ -6,6 +6,8 @@ import Login from "./components/signUp/Login";
 import "./fonts/fonts.css";
 import Messages from "./components/messages/Messages";
 import Home from "./components/home/Home";
+import ClassView from "./components/forumsAndPosts/ClassView";
+import CommentView from "./components/comments/CommentView";
 import { UserProvider } from "./components/context/UserProvider";
 import PrivateRoute from "./PrivateRoute";
 
@@ -34,6 +36,19 @@ function App() {
           </Route>
           <Route path="/login" exact>
             <Login />
+          </Route>
+          <Route path="/classView" exact>
+            <NavigationWrapper>
+              <ClassView classroomName={"CIS 422"} />
+            </NavigationWrapper>
+          </Route>
+          <Route path="/postView" exact>
+            <NavigationWrapper>
+              <CommentView classroomName={"CIS 422"} />
+            </NavigationWrapper>
+          </Route>
+          <Route path="/postForm" exact>
+            <NavigationWrapper></NavigationWrapper>
           </Route>
         </Switch>
       </UserProvider>
