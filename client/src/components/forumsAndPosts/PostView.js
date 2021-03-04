@@ -19,10 +19,12 @@ const PostView = (props) => {
   // Retrieves the courseid from the url parameters
   const { courseid } = useParams();
 
-  // THIS IS WHERE WE WOULD RETRIEVE POSTS
-  // useEffect(() => {
-  //   axios.get(process.env.REACT_APP_SERVER_URL + "/api/")
-  // }, [courseid]);
+  // Sends the get request for posts
+  useEffect(() => {
+    axios.get(
+      process.env.REACT_APP_SERVER_URL + "/api/courses/" + courseid + "/posts"
+    );
+  }, [courseid]);
 
   return (
     <>
