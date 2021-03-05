@@ -49,7 +49,7 @@ function App() {
           </PrivateRoute>
           <Route path="/postForm" exact>
             <NavigationWrapper></NavigationWrapper>
-          </Route>
+          </PrivateRoute>
         </Switch>
       </UserProvider>
     </Router>

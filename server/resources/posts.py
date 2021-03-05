@@ -106,7 +106,7 @@ class Posts(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('title')
         parser.add_argument('content')
-        parser.add_argument('isPinned')
+        parser.add_argument('isPinned', type=bool)
         parser.add_argument('_id')
         args = parser.parse_args()
 
