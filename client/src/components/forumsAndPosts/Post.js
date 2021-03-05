@@ -20,9 +20,9 @@ const Post = ({
 
       <PinIcon style={pin} src={PinImg} />
 
-      {isCondensed && <PostContent>{postContent}</PostContent>}
+      {!isCondensed && <PostContent>{postContent}</PostContent>}
 
-      {isCondensed && <hr style={HRStyle} />}
+      {!isCondensed && <hr style={HRStyle} />}
 
       <PostMetaContentWrapper className="meta">
         <UserIcon src="./icons8_note.svg" />
@@ -88,7 +88,7 @@ const PostWrapper = styled.div`
 
 const PostTitle = styled.h2`
   /* margin: 1em 0 0.5em 2em; */
-  font-size: ${(props) => (props.isCondensed && "18px") || "14px"};
+  font-size: ${(props) => (!props.isCondensed && "18px") || "14px"};
 `;
 
 const PinIcon = styled.img`
