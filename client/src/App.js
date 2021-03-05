@@ -42,14 +42,14 @@ function App() {
               <ClassView classroomName={"CIS 422"} />
             </NavigationWrapper>
           </Route>
-          <Route path="/postView" exact>
+          <PrivateRoute path="/postView" exact>
             <NavigationWrapper>
               <CommentView classroomName={"CIS 422"} />
             </NavigationWrapper>
-          </Route>
-          <Route path="/postForm" exact>
+          </PrivateRoute>
+          <PrivateRoute path="/postForm" exact>
             <NavigationWrapper></NavigationWrapper>
-          </Route>
+          </PrivateRoute>
         </Switch>
       </UserProvider>
     </Router>

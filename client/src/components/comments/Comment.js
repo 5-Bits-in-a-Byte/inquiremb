@@ -19,10 +19,10 @@ const Comment = ({ posterName, commentContent }) => {
             <IconValue>1</IconValue>
           </MetaIconWrapper>
         </PostMetaContentWrapper>
-        <CommentReply />
-        <CommentReply />
-        <CommentReply />
-        <CommentReply />
+        <CommentReply posterName={posterName} />
+        <CommentReply posterName={posterName} />
+        <CommentReply posterName={posterName} />
+        <CommentReply posterName={posterName} />
       </ReplyContainer>
     </CommentWrapper>
   );
