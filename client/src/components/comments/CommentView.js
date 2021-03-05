@@ -5,6 +5,7 @@ import Post from "../forumsAndPosts/Post";
 import Sidebar from "../forumsAndPosts/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
+import { useParams } from "react-router-dom";
 
 const testTitle = "This is temp post title text?";
 const testContent =
@@ -12,6 +13,8 @@ const testContent =
 const testName = "Seth Tal";
 
 const CommentView = ({ classroomName }) => {
+  const { courseid, postid } = useParams();
+  console.log(courseid, postid);
   return (
     <CommentViewWrapper>
       <Sidebar
@@ -21,22 +24,22 @@ const CommentView = ({ classroomName }) => {
       />
 
       <CommentViewContainer>
-        <OptionsContainer>
-          <Button>Back to all Posts</Button>
-          <Button>Reply to Post</Button>
-        </OptionsContainer>
-
         <ScrollingDiv>
+          <OptionsContainer>
+            <Button>Back to all Posts</Button>
+            <Button>Reply to Post</Button>
+          </OptionsContainer>
           <Post
             postTitle={testTitle}
             postContent={testContent}
             posterName={testName}
             isPinned={true}
-            isCondensed={true}
+            isCondensed={false}
           />
           <Comment posterName={testName} commentContent={testContent} />
         </ScrollingDiv>
       </CommentViewContainer>
+      <EmptyDiv />
     </CommentViewWrapper>
   );
 };
@@ -51,10 +54,11 @@ const CommentViewWrapper = styled.div`
 `;
 
 const CommentViewContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  max-width: 900px;
   width: 100%;
   /* border: 1px solid green; */
 `;
@@ -62,10 +66,14 @@ const CommentViewContainer = styled.div`
 const OptionsContainer = styled.div`
   display: flex;
   flex-direction: row;
-
+  justify-content: space-between;
   width: 100%;
+  margin: 2.2em 0 1.1em 0;
+`;
 
-  border: 1px solid blue;
+const EmptyDiv = styled.div`
+  width: 280px; // Need to make same width as nav + menu bar
+  flex-grow: 1;
 `;
 
 const PostCommentContainer = styled.div`
@@ -77,7 +85,7 @@ const PostCommentContainer = styled.div`
 const ScrollingDiv = styled.div`
   position: absolute;
   height: 100%;
-  width: 50%;
+  width: 100%;
   padding: 0 40px;
   overflow: auto;
   ::-webkit-scrollbar {

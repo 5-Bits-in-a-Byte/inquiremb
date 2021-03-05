@@ -72,7 +72,7 @@ const PostWrapper = styled(Link)`
   display: flex;
   flex-direction: column;
   flex: 1;
-
+  text-decoration: none;
   width: 100%;
   min-height: 85px;
 

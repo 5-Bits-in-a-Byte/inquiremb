@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
+import LikeImg from "../../imgs/like.svg";
 
 const Comment = ({ posterName, commentContent }) => {
   return (
@@ -14,8 +15,8 @@ const Comment = ({ posterName, commentContent }) => {
           <UserDescription>Reply by {posterName}</UserDescription>
 
           <MetaIconWrapper>
-            <UserDescription>Reply</UserDescription>
-            <Icon src="./icons8_facebook_like 1.svg" />
+            <UserDescription style={{ marginRight: 10 }}>Reply</UserDescription>
+            <Icon src={LikeImg} />
             <IconValue>1</IconValue>
           </MetaIconWrapper>
         </PostMetaContentWrapper>
@@ -33,7 +34,7 @@ Comment.propTypes = {};
 export default Comment;
 
 const CommentWrapper = styled.div`
-  width: 720px;
+  width: 100%;
   min-height: 85px;
 
   /* border: 1px solid red; */
@@ -47,11 +48,11 @@ const CommentWrapper = styled.div`
 `;
 
 const CommentContent = styled.p`
-  margin: 0 2.2em 1em 2.2em;
-  padding-top: 1em;
+  padding: 1em 2.2em 1em 2.2em;
   font-size: 14px;
-
+  background-color: #fff;
   color: #979797;
+  border-radius: 5px 5px 0 0;
 `;
 
 const PostMetaContentWrapper = styled.div`
@@ -59,7 +60,6 @@ const PostMetaContentWrapper = styled.div`
   flex-direction: row;
 
   height: 100%;
-  margin: 0 2.2em 0.5em 2.2em;
   padding-top: 0.5em;
 
   // border: 1px solid black;
@@ -86,8 +86,7 @@ const UserDescription = styled.h5`
 
 const MetaIconWrapper = styled.div`
   display: inline-flex;
-  margin-left: 400px;
-
+  margin-left: auto;
   height: 100%;
 `;
 
@@ -107,8 +106,8 @@ const IconValue = styled.h5`
 `;
 
 const ReplyContainer = styled.div`
-  background-color: #ededed;
-
+  background-color: #f9f9f9;
+  padding: 5px 30px;
   width: 100%;
   min-height: 40px;
 `;

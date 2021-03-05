@@ -28,14 +28,11 @@ CommentReply.propTypes = {};
 export default CommentReply;
 
 const CommentReplyWrapper = styled.div`
-  width: 90%;
+  background-color: #fff;
+  width: 100%;
+  margin: 18px 0;
   min-height: 85px;
-  margin: 1em auto;
-
-  /* border: 1px solid red; */
   border-radius: 0.3em;
-  background-color: #f8f8f8;
-
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
 
   :hover {
@@ -54,30 +51,23 @@ const CommentReplyContent = styled.p`
 const ReplyMetaContentWrapper = styled.div`
   display: flex;
   flex-direction: row;
-
+  align-items: center;
+  padding: 5px 2.2em;
   width: 100%;
   min-height: 1.5em;
-  /* margin: 0 2.2em 0.5em 2.2em; */
-  /* padding-top: 0.5em; */
-
-  // border: 1px solid black;
   background-color: #ededed;
 `;
 
 const UserDescription = styled.h5`
   user-select: none;
-
   color: #8c8c8c;
-
-  margin: auto 2em;
-  line-height: 1.5em;
   font-size: 12px;
 `;
 
 const MetaIconWrapper = styled.div`
-  display: inline-flex;
-  margin-left: 400px;
-
+  display: flex;
+  margin-left: auto;
+  align-items: center;
   height: 1.75em;
 `;
 
