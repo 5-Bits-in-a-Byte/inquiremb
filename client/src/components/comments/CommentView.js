@@ -26,7 +26,7 @@ const CommentView = ({ classroomName }) => {
           <Button>Reply to Post</Button>
         </OptionsContainer>
 
-        <PostCommentContainer>
+        <ScrollingDiv>
           <Post
             postTitle={testTitle}
             postContent={testContent}
@@ -35,7 +35,7 @@ const CommentView = ({ classroomName }) => {
             isCondensed={true}
           />
           <Comment posterName={testName} commentContent={testContent} />
-        </PostCommentContainer>
+        </ScrollingDiv>
       </CommentViewContainer>
     </CommentViewWrapper>
   );
@@ -56,7 +56,7 @@ const CommentViewContainer = styled.div`
   align-items: center;
 
   width: 100%;
-  border: 1px solid green;
+  /* border: 1px solid green; */
 `;
 
 const OptionsContainer = styled.div`
@@ -71,5 +71,17 @@ const OptionsContainer = styled.div`
 const PostCommentContainer = styled.div`
   width: 100%;
 
-  border: 1px solid orange;
+  /* border: 1px solid orange; */
+`;
+
+const ScrollingDiv = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  padding: 0 40px;
+  overflow: auto;
+  ::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+  }
 `;
