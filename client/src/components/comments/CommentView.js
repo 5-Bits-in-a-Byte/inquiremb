@@ -1,24 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Post from "../forumsAndPosts/Post";
 import Sidebar from "../forumsAndPosts/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import Fetch from "../common/requests/Fetch";
 
-const testTitle = "This is temp post title text?";
-const testContent =
-  "Lorem ipsum dolor sit amet, consectetur adipisicing elit. At repudiandae nam, illo perferendis veniam earum fugit rerum temporibus laboriosam aut veritatis amet adipisci nulla!";
-const testName = "Seth Tal";
+const renderComments = (data) => {
+  let ret = [];
+  if (data) {
+    data.forEach((comment) => {
+      ret.push(<Comment comment={comment} />);
+    });
+  }
+  return ret;
+};
 
-const CommentView = ({ classroomName }) => {
+const CommentView = (props) => {
+  const [newComments, setNewComments] = useState([]);
   const { courseid, postid } = useParams();
-  console.log(courseid, postid);
+  // location is passed from the react-router Link which stores
+  // the post that was clicked under location.state
+  let location = useLocation();
+  const post = location.state.post;
+  const { data, errors, loading } = Fetch({
+    type: "get",
+    endpoint: "/api/posts/" + post._id + "/comments",
+  });
+  const comments = renderComments(data);
   return (
     <CommentViewWrapper>
       <Sidebar
-        classroomName={classroomName}
+        classroomName={props.classroomName}
         setHighlightedSection={() => {}}
         highlightedSection={""}
       />
@@ -29,14 +44,8 @@ const CommentView = ({ classroomName }) => {
             <Button>Back to all Posts</Button>
             <Button>Reply to Post</Button>
           </OptionsContainer>
-          <Post
-            postTitle={testTitle}
-            postContent={testContent}
-            posterName={testName}
-            isPinned={true}
-            isCondensed={false}
-          />
-          <Comment posterName={testName} commentContent={testContent} />
+          <Post post={post} isCondensed={false} />
+          {comments}
         </ScrollingDiv>
       </CommentViewContainer>
       <EmptyDiv />

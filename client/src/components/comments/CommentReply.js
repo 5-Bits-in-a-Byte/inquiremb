@@ -3,17 +3,14 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import LikeImg from "../../imgs/like.svg";
 
-const CommentReply = ({ posterName }) => {
+const CommentReply = ({ reply }) => {
   return (
     <CommentReplyWrapper>
-      <CommentReplyContent>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
-        voluptatem nemo dolor quo corporis quas quasi qui provident cumque,
-        quisquam quos quod minima libero.
-      </CommentReplyContent>
+      <CommentReplyContent>{reply.content}</CommentReplyContent>
       <ReplyMetaContentWrapper className="meta">
-        <UserDescription>Reply by {posterName}</UserDescription>
-
+        <UserDescription>
+          Reply by {reply.postedby.first + " " + reply.postedby.last}
+        </UserDescription>
         <MetaIconWrapper>
           <Icon src={LikeImg} />
           <IconValue>1</IconValue>

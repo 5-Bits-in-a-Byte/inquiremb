@@ -1,38 +1,36 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import CommentImg from "../../imgs/comment.svg";
 import LikeImg from "../../imgs/like.svg";
 import PinImg from "../../imgs/pin.svg";
 import { Link } from "react-router-dom";
 
-const Post = ({
-  courseid,
-  id,
-  postTitle,
-  postContent,
-  posterName,
-  isPinned,
-  isCondensed,
-}) => {
-  const pin = isPinned === true ? { visibility: "visible" } : VisibilityHidden;
+const Post = ({ courseid, post, isCondensed }) => {
+  console.log("here", post);
+  const pin =
+    post.isPinned === true ? { visibility: "visible" } : VisibilityHidden;
 
   return (
     <PostWrapper
       isCondensed={isCondensed}
-      to={"/course/" + courseid + "/post/" + id}
+      to={{
+        pathname: "/course/" + courseid + "/post/" + post._id,
+        state: { post },
+      }}
     >
-      <PostTitle isCondensed={isCondensed}>{postTitle}</PostTitle>
+      <PostTitle isCondensed={isCondensed}>{post.title}</PostTitle>
 
       <PinIcon style={pin} src={PinImg} />
 
-      {!isCondensed && <PostContent>{postContent}</PostContent>}
+      {!isCondensed && <PostContent>{post.content}</PostContent>}
 
       {!isCondensed && <hr style={HRStyle} />}
 
       <PostMetaContentWrapper className="meta">
         <UserIcon src="./icons8_note.svg" />
-        <UserDescription>Posted by {posterName}</UserDescription>
+        <UserDescription>
+          Posted by {post.postedby.first + " " + post.postedby.last}
+        </UserDescription>
 
         <MetaIconWrapper>
           <Icon src={LikeImg} />
@@ -44,13 +42,6 @@ const Post = ({
       </PostMetaContentWrapper>
     </PostWrapper>
   );
-};
-
-Post.propTypes = {
-  postTitle: PropTypes.string,
-  postContent: PropTypes.string,
-  posterName: PropTypes.string,
-  isPinned: PropTypes.bool,
 };
 
 export default Post;

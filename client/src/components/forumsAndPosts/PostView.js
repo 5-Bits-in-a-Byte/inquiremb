@@ -11,17 +11,9 @@ import axios from "axios";
 import Fetch from "../common/requests/Fetch";
 
 const createPost = (post, courseid) => {
+  console.log(post);
   return (
-    <Post
-      courseid={courseid}
-      key={post._id}
-      id={post._id}
-      postTitle={post.title}
-      postContent={post.content}
-      posterName={post.postedby.first + " " + post.postedby.last}
-      isPinned={post.isPinned}
-      isCondensed={false}
-    />
+    <Post courseid={courseid} post={post} key={post._id} isCondensed={false} />
   );
 };
 

@@ -4,15 +4,16 @@ import styled from "styled-components";
 import CommentReply from "./CommentReply";
 import LikeImg from "../../imgs/like.svg";
 
-const Comment = ({ posterName, commentContent }) => {
+const Comment = ({ comment }) => {
   return (
     <CommentWrapper>
-      <CommentContent>{commentContent}</CommentContent>
-
+      <CommentContent>{comment.content}</CommentContent>
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
           {/* <UserIcon src="./icons8_note.svg" /> */}
-          <UserDescription>Reply by {posterName}</UserDescription>
+          <UserDescription>
+            Reply by {comment.postedby.first + " " + comment.postedby.last}
+          </UserDescription>
 
           <MetaIconWrapper>
             <UserDescription style={{ marginRight: 10 }}>Reply</UserDescription>
@@ -20,10 +21,9 @@ const Comment = ({ posterName, commentContent }) => {
             <IconValue>1</IconValue>
           </MetaIconWrapper>
         </PostMetaContentWrapper>
-        <CommentReply posterName={posterName} />
-        <CommentReply posterName={posterName} />
-        <CommentReply posterName={posterName} />
-        <CommentReply posterName={posterName} />
+        {comment.replies.map((reply) => (
+          <CommentReply reply={reply} />
+        ))}
       </ReplyContainer>
     </CommentWrapper>
   );
