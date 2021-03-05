@@ -24,7 +24,7 @@ const Fetch = ({ type, url = process.env.REACT_APP_SERVER_URL, endpoint }) => {
           });
         }
       });
-  });
+  }, []);
   return res;
 };
 

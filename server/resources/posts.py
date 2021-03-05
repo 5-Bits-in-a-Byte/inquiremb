@@ -29,7 +29,8 @@ class Posts(Resource):
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
             postedby = {"first": current_user.first, "last": current_user.last,
-                        "_id": current_user._id, "anonymous": anonymous}
+                        "_id": current_user._id, "anonymous": anonymous,
+                        "picture": current_user.picture}
 
         # Add post to MongoDB
         post = Post(courseid=course_id, postedby=postedby, title=args.title,
