@@ -8,21 +8,45 @@ import LineWidthImg from "../../imgs/line-width.svg";
 import HollowPinImg from "../../imgs/pin-hollow.svg";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Fetch from "../common/requests/Fetch";
 
-const testTitle = "This is temp post title text?";
-const testContent =
-  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis labore saepe voluptatem natus officia molestiae beatae repudiandae nisi. Aspernatur dolores sequi ipsum quaerat facilis.";
-const testName = "Seth Tal";
+const createPost = (post) => {
+  return (
+    <Post
+      // key=
+      postTitle={post.title}
+      postContent={post.content}
+      posterName={post.postedby.first + " " + post.postedby.last}
+      isPinned={post.isPinned}
+      isCondensed={false}
+    />
+  );
+};
+
+// Sorts the posts by pinned/date
+const generateSections = (data) => {
+  let posts = { pinned: [], other: [] };
+  if (data) {
+    data.forEach((post) => {
+      if (post.isPinned) {
+        posts.pinned.push(createPost(post));
+      } else {
+        posts.other.push(createPost(post));
+      }
+    });
+  }
+  return posts;
+};
 
 const PostView = (props) => {
   const [isCondensed, setCondensedState] = useState(true);
   // Retrieves the courseid from the url parameters
   const { courseid } = useParams();
-
-  // THIS IS WHERE WE WOULD RETRIEVE POSTS
-  // useEffect(() => {
-  //   axios.get(process.env.REACT_APP_SERVER_URL + "/api/")
-  // }, [courseid]);
+  const { data, errors, loading } = Fetch({
+    type: "get",
+    endpoint: "/api/courses/" + courseid + "/posts",
+  });
+  let posts = generateSections(data);
 
   return (
     <>
@@ -48,76 +72,22 @@ const PostView = (props) => {
               {" Most Recent "}
             </Button>
           </SortingOptions>
-          <PostGroupingHeader>
-            {" "}
-            <img
-              src={HollowPinImg}
-              style={{ width: "18px", height: "18px" }}
-            />{" "}
-            Pinned Posts
-          </PostGroupingHeader>
-
-          <Post
-            postTitle={testTitle}
-            postContent={testContent}
-            posterName={testName}
-            isPinned={true}
-            isCondensed={isCondensed}
-          />
-          <PostGroupingHeader>This Week</PostGroupingHeader>
-
-          <Post
-            postTitle={testTitle}
-            postContent={testContent}
-            posterName={testName}
-            isPinned={false}
-            isCondensed={isCondensed}
-          />
-          <Post
-            postTitle={testTitle}
-            postContent={testContent}
-            posterName={testName}
-            isPinned={false}
-            isCondensed={isCondensed}
-          />
-          <Post
-            postTitle={testTitle}
-            postContent={testContent}
-            posterName={testName}
-            isPinned={false}
-            isCondensed={isCondensed}
-          />
-          <Post
-            postTitle={testTitle}
-            postContent={testContent}
-            posterName={testName}
-            isPinned={false}
-            isCondensed={isCondensed}
-          />
-          <Post
-            postTitle={testTitle}
-            postContent={testContent}
-            posterName={testName}
-            isPinned={false}
-            isCondensed={isCondensed}
-          />
-          <Post
-            postTitle={testTitle}
-            postContent={testContent}
-            posterName={testName}
-            isPinned={false}
-            isCondensed={isCondensed}
-          />
-          <Post
-            postTitle={testTitle}
-            postContent={testContent}
-            posterName={testName}
-            isPinned={false}
-            isCondensed={isCondensed}
-          />
+          {posts.pinned.length > 0 && (
+            <PostGroupingHeader>
+              <img
+                src={HollowPinImg}
+                style={{ width: 18, height: 18, marginRight: 5 }}
+              />
+              Pinned Posts
+            </PostGroupingHeader>
+          )}
+          {posts.pinned}
+          {posts.other.length > 0 && (
+            <PostGroupingHeader>Other Posts</PostGroupingHeader>
+          )}
+          {posts.other}
         </ScrollingDiv>
       </PostFeed>
-
       {/* Displays options panel on the right of the webpage */}
       <Options />
     </>
@@ -189,19 +159,18 @@ const ScrollingDiv = styled.div`
 `;
 
 const SortingOptions = styled.div`
+  position: absolute;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-
+  padding-right: 65px;
   width: 100%;
   margin: 2.2em 0 1em 0;
 `;
 
 const PostGroupingHeader = styled.div`
-  margin: 1em 0;
-
-  font-family: Roboto;
+  margin: 2.2em 0 0em 0;
   font-size: 1.25em;
   font-weight: 500;
 `;
