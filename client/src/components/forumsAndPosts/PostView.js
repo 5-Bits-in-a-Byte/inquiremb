@@ -10,10 +10,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Fetch from "../common/requests/Fetch";
 
-const createPost = (post) => {
+const createPost = (post, courseid) => {
   return (
     <Post
-      // key=
+      courseid={courseid}
+      key={post._id}
+      id={post._id}
       postTitle={post.title}
       postContent={post.content}
       posterName={post.postedby.first + " " + post.postedby.last}
@@ -24,14 +26,14 @@ const createPost = (post) => {
 };
 
 // Sorts the posts by pinned/date
-const generateSections = (data) => {
+const generateSections = (data, courseid) => {
   let posts = { pinned: [], other: [] };
   if (data) {
     data.forEach((post) => {
       if (post.isPinned) {
-        posts.pinned.push(createPost(post));
+        posts.pinned.push(createPost(post, courseid));
       } else {
-        posts.other.push(createPost(post));
+        posts.other.push(createPost(post, courseid));
       }
     });
   }
@@ -46,7 +48,7 @@ const PostView = (props) => {
     type: "get",
     endpoint: "/api/courses/" + courseid + "/posts",
   });
-  let posts = generateSections(data);
+  let posts = generateSections(data, courseid);
 
   return (
     <>

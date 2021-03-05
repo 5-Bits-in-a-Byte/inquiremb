@@ -4,8 +4,11 @@ import styled, { css } from "styled-components";
 import CommentImg from "../../imgs/comment.svg";
 import LikeImg from "../../imgs/like.svg";
 import PinImg from "../../imgs/pin.svg";
+import { Link } from "react-router-dom";
 
 const Post = ({
+  courseid,
+  id,
   postTitle,
   postContent,
   posterName,
@@ -15,7 +18,10 @@ const Post = ({
   const pin = isPinned === true ? { visibility: "visible" } : VisibilityHidden;
 
   return (
-    <PostWrapper isCondensed={isCondensed}>
+    <PostWrapper
+      isCondensed={isCondensed}
+      to={"/course/" + courseid + "/post/" + id}
+    >
       <PostTitle isCondensed={isCondensed}>{postTitle}</PostTitle>
 
       <PinIcon style={pin} src={PinImg} />
@@ -60,7 +66,7 @@ const HRStyle = {
 };
 
 //#region Post Stylings
-const PostWrapper = styled.div`
+const PostWrapper = styled(Link)`
   position: relative;
   padding: 23px 30px;
   display: flex;

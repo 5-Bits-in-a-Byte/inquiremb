@@ -47,9 +47,6 @@ function App() {
               <CommentView classroomName={"CIS 422"} />
             </NavigationWrapper>
           </PrivateRoute>
-          <Route path="/postForm" exact>
-            <NavigationWrapper></NavigationWrapper>
-          </PrivateRoute>
         </Switch>
       </UserProvider>
     </Router>
