@@ -21,15 +21,51 @@ const renderComments = (data) => {
 
 const CommentView = (props) => {
   const user = useContext(UserContext);
-  const [newComments, setNewComments] = useState([]);
+  const [newComments, setNewComments] = useState({ draft: false, created: [] });
   const { courseid, postid } = useParams();
   // location is passed from the react-router Link which stores
   // the post that was clicked under location.state
   let location = useLocation();
   const post = location.state.post;
   const draftNewComment = () => {
-    const comment = {
-      postid: post._id,
+    setNewComments({
+      ...newComments,
+      draft: true,
+    });
+  };
+  // Takes a boolean value: true creates, false cancels
+  const finishComment = (content) => {
+    // If false, clear the draft
+    if (!content) {
+      setNewComments({ ...newComments, draft: false });
+    } else {
+      const newComment = {
+        post_id: postid,
+        content: content,
+        postedby: {
+          first: user.first,
+          last: user.last,
+          _id: user._id,
+        },
+        endorsed: false,
+        replies: [],
+        reactions: { likes: [] },
+      };
+      setNewComments({
+        draft: false,
+        created: newComments.created.concat(<Comment comment={newComment} />),
+      });
+    }
+  };
+
+  const { data, errors, loading } = Fetch({
+    type: "get",
+    endpoint: "/api/posts/" + post._id + "/comments",
+  });
+  const comments = [...renderComments(data), ...newComments.created];
+
+  if (newComments.draft) {
+    const draft = {
       postedby: {
         first: user.first,
         last: user.last,
@@ -37,13 +73,10 @@ const CommentView = (props) => {
       },
       replies: [],
     };
-    setNewComments([...newComments, <Comment comment={comment} isDraft />]);
-  };
-  const { data, errors, loading } = Fetch({
-    type: "get",
-    endpoint: "/api/posts/" + post._id + "/comments",
-  });
-  const comments = [...renderComments(data), ...newComments];
+    comments.push(
+      <Comment comment={draft} isDraft={true} callback={finishComment} />
+    );
+  }
   return (
     <CommentViewWrapper>
       <Sidebar

@@ -6,17 +6,12 @@ import LikeImg from "../../imgs/like.svg";
 import CommentTextBox from "./CommentTextBox";
 import Button from "../common/Button";
 
-const Comment = ({ comment, isDraft }) => {
-  const [isDrafting, setDrafting] = useState(isDraft ? true : false);
+const Comment = ({ comment, isDraft, callback }) => {
   const [content, setContent] = useState("");
 
   const renderContent = () => {
-    if (isDrafting) {
+    if (isDraft) {
       return <CommentTextBox onChange={handleChange} />;
-    }
-    // If their is content from drafting a comment and it has been submitted, return it
-    else if (content.length > 0) {
-      return content;
     }
     // Otherwise, the post has been fetched from the API so return the content
     else {
@@ -40,15 +35,26 @@ const Comment = ({ comment, isDraft }) => {
           </UserDescription>
 
           <MetaIconWrapper>
-            {isDrafting ? (
-              <Button
-                primary
-                onClick={() => {
-                  setDrafting(false);
-                }}
-              >
-                Submit
-              </Button>
+            {isDraft ? (
+              <>
+                <Button
+                  secondary
+                  style={{ marginRight: 10 }}
+                  onClick={() => {
+                    callback();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  primary
+                  onClick={() => {
+                    callback(content);
+                  }}
+                >
+                  Submit
+                </Button>
+              </>
             ) : (
               <>
                 <UserDescription style={{ marginRight: 10 }}>
