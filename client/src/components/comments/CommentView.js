@@ -27,7 +27,10 @@ const CommentView = (props) => {
   // location is passed from the react-router Link which stores
   // the post that was clicked under location.state
   let location = useLocation();
-  const post = location.state.post;
+  let post;
+  if (location.state) {
+    post = location.state.post;
+  }
   const draftNewComment = () => {
     setNewComments({
       ...newComments,
@@ -55,11 +58,14 @@ const CommentView = (props) => {
     }
   };
 
-  const { data, errors, loading } = Fetch({
-    type: "get",
-    endpoint: "/api/posts/" + post._id + "/comments",
-  });
-  const comments = [...renderComments(data), ...newComments.created];
+  let comments = [...newComments.created];
+  if (post && !post.new) {
+    const { data, errors, loading } = Fetch({
+      type: "get",
+      endpoint: "/api/posts/" + post._id + "/comments",
+    });
+    comments = [...renderComments(data), ...comments];
+  }
 
   if (newComments.draft) {
     const draft = {
@@ -88,7 +94,7 @@ const CommentView = (props) => {
             <Button>Back to all Posts</Button>
             <Button onClick={draftNewComment}>Reply to Post</Button>
           </OptionsContainer>
-          <Post post={post} isCondensed={false} />
+          <Post post={post} isCondensed={false} isDraft={postid === "new"} />
           {comments}
         </ScrollingDiv>
       </CommentViewContainer>

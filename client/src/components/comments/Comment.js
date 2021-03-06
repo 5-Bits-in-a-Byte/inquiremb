@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
 import LikeImg from "../../imgs/like.svg";
-import CommentTextBox from "./CommentTextBox";
+import DraftTextBox from "../common/DraftTextArea";
 import Button from "../common/Button";
 
 const Comment = ({ comment, isDraft, callback }) => {
@@ -11,7 +11,7 @@ const Comment = ({ comment, isDraft, callback }) => {
 
   const renderContent = () => {
     if (isDraft) {
-      return <CommentTextBox onChange={handleChange} />;
+      return <DraftTextBox onChange={handleChange} />;
     }
     // Otherwise, the post has been fetched from the API so return the content
     else {

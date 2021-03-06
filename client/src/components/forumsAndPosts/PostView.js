@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import Options from "./Options";
 import Post from "./Post";
 import Button from "../common/Button";
 import LineWidthImg from "../../imgs/line-width.svg";
 import HollowPinImg from "../../imgs/pin-hollow.svg";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import Fetch from "../common/requests/Fetch";
 
-const createPost = (post, courseid) => {
+const createPost = (post) => {
   console.log(post);
-  return (
-    <Post courseid={courseid} post={post} key={post._id} isCondensed={false} />
-  );
+  return <Post post={post} key={post._id} isCondensed={false} />;
 };
 
 // Sorts the posts by pinned/date
-const generateSections = (data, courseid) => {
+const generateSections = (data) => {
   let posts = { pinned: [], other: [] };
   if (data) {
     data.forEach((post) => {
       if (post.isPinned) {
-        posts.pinned.push(createPost(post, courseid));
+        posts.pinned.push(createPost(post));
       } else {
-        posts.other.push(createPost(post, courseid));
+        posts.other.push(createPost(post));
       }
     });
   }
@@ -36,23 +32,18 @@ const PostView = (props) => {
   const [isCondensed, setCondensedState] = useState(true);
   // Retrieves the courseid from the url parameters
   const { courseid } = useParams();
+
+  // Load posts from course
   const { data, errors, loading } = Fetch({
     type: "get",
     endpoint: "/api/courses/" + courseid + "/posts",
   });
-  let posts = generateSections(data, courseid);
+  let posts = generateSections(data);
 
   return (
     <>
       <PostFeed>
         <ScrollingDiv>
-          {/* TODOs as the week goes on...
-            > TODO: Properly implement Post Groupings
-            > TODO: add special secondary buttons to grouping header */}
-
-          {/* Here we have a component that is literally a form, but asthetically its like a post */}
-          {/* It only displays on the webpage when the user preses the new post button. */}
-
           <SortingOptions>
             <Button
               secondary={true}
@@ -83,7 +74,7 @@ const PostView = (props) => {
         </ScrollingDiv>
       </PostFeed>
       {/* Displays options panel on the right of the webpage */}
-      <Options />
+      <Options courseid={courseid} />
     </>
   );
 };

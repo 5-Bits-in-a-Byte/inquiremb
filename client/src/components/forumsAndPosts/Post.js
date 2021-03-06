@@ -1,53 +1,132 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
-import CommentImg from "../../imgs/comment.svg";
-import LikeImg from "../../imgs/like.svg";
 import PinImg from "../../imgs/pin.svg";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import DraftTextArea from "../common/DraftTextArea";
+import { UserContext } from "../context/UserProvider";
+import { useHistory } from "react-router-dom";
+import PostReactions from "./PostReactions";
+import Button from "../common/Button";
+import LazyFetch from "../common/requests/LazyFetch";
 
-const Post = ({ courseid, post, isCondensed }) => {
-  const pin =
-    post.isPinned === true ? { visibility: "visible" } : VisibilityHidden;
+// Checks props to determine if the post is a draft, isPinned, etc.
+const generatePostContent = (
+  user,
+  post,
+  isDraft,
+  handleChange,
+  handleSubmit
+) => {
+  // If a post is passed, set all dynamic content accordingly, otherwise render a draft
+  if (isDraft) {
+    return {
+      title: (
+        <DraftTextArea
+          minRows={1}
+          placeholder="Post title"
+          onChange={handleChange}
+          name="title"
+        />
+      ),
+      content: (
+        <DraftTextArea
+          secondary
+          placeholder="Details"
+          onChange={handleChange}
+          name="content"
+        />
+      ),
+      to: null,
+      isPinned: false,
+      picture: user.picture,
+      postedby: user.first + " " + user.last,
+      meta: (
+        <Button primary onClick={handleSubmit}>
+          Submit
+        </Button>
+      ),
+    };
+  } else {
+    return {
+      title: post.title,
+      content: post.content,
+      to: {
+        pathname: "/course/" + post.courseid + "/post/" + post._id,
+        state: { post },
+      },
+      isPinned: post.isPinned,
+      picture: post.postedby.picture,
+      postedby: post.postedby.first + " " + post.postedby.last,
+      meta: <PostReactions likes={post.reactions.likes.length} />,
+    };
+  }
+};
+
+const Post = ({ post, isCondensed, isDraft }) => {
+  const history = useHistory();
+  const user = useContext(UserContext);
+  const { courseid } = useParams();
+
+  // State and handler for drafting posts
+  const [draft, setDraft] = useState({ title: "", content: "" });
+  const handleChange = (e) => {
+    setDraft({ ...draft, [e.target.name]: e.target.value });
+    console.log(draft);
+  };
+  const handleSubmit = (e) => {
+    LazyFetch({
+      type: "post",
+      endpoint: "/api/courses/" + courseid + "/posts",
+      data: {
+        title: draft.title,
+        content: draft.content,
+        isPrivate: false,
+        isAnonymous: false,
+      },
+      onSuccess: (data) => {
+        /* data.new is used after the redirect to prevent 
+        a request for comments (new posts have 0 comments)*/
+        data.new = true;
+        history.push({
+          pathname: "/course/" + data.courseid + "/post/" + data._id,
+          state: { post: data },
+        });
+      },
+    });
+  };
+
+  // Determines if post is a draft or not and renders accordingly:
+  let render = generatePostContent(
+    user,
+    post,
+    isDraft,
+    handleChange,
+    handleSubmit
+  );
+
+  // Handles redirect if the post is not a draft
+  const navigateToPost = () => {
+    if (render.to) {
+      history.push(render.to);
+    }
+  };
 
   return (
-    <PostWrapper
-      isCondensed={isCondensed}
-      to={{
-        pathname: "/course/" + courseid + "/post/" + post._id,
-        state: { post },
-      }}
-    >
-      <PostTitle isCondensed={isCondensed}>{post.title}</PostTitle>
-
-      <PinIcon style={pin} src={PinImg} />
-
-      {!isCondensed && <PostContent>{post.content}</PostContent>}
-
+    <PostWrapper isCondensed={isCondensed} onClick={navigateToPost}>
+      <PostTitle isCondensed={isCondensed}>{render.title}</PostTitle>
+      <PinIcon isPinned={render.isPinned} src={PinImg} />
+      {!isCondensed && <PostContent>{render.content}</PostContent>}
       {!isCondensed && <hr style={HRStyle} />}
-
       <PostMetaContentWrapper className="meta">
-        <UserIcon src="./icons8_note.svg" />
-        <UserDescription>
-          Posted by {post.postedby.first + " " + post.postedby.last}
-        </UserDescription>
-
-        <MetaIconWrapper>
-          <Icon src={LikeImg} />
-          <IconValue>1</IconValue>
-
-          <Icon src={CommentImg} />
-          <IconValue>1</IconValue>
-        </MetaIconWrapper>
+        <UserIcon src={render.picture} />
+        <UserDescription>Posted by {render.postedby}</UserDescription>
+        <MetaIconWrapper>{render.meta}</MetaIconWrapper>
       </PostMetaContentWrapper>
     </PostWrapper>
   );
 };
 
 export default Post;
-
-const VisibilityHidden = {
-  visibility: "hidden",
-};
 
 const HRStyle = {
   width: "100%",
@@ -56,7 +135,7 @@ const HRStyle = {
 };
 
 //#region Post Stylings
-const PostWrapper = styled(Link)`
+const PostWrapper = styled.div`
   position: relative;
   padding: 23px 30px;
   display: flex;
@@ -88,10 +167,10 @@ const PostTitle = styled.h2`
 `;
 
 const PinIcon = styled.img`
+  visibility: ${(props) => (props.isPinned ? "visible" : "hidden")};
   position: absolute;
   top: 0;
   right: 0;
-
   width: 16px;
   height: 16px;
   margin: 1.1em 2em 0 0;
@@ -106,15 +185,14 @@ const PostContent = styled.p`
 const PostMetaContentWrapper = styled.div`
   display: flex;
   flex-direction: row;
-
+  align-items: center;
   height: 100%;
-  // border: 1px solid black;
 `;
 
 const UserIcon = styled.img`
   float: left;
-  width: 19px;
-  height: 19px;
+  width: 30px;
+  height: 30px;
   margin-right: 0.5em;
   border-radius: 50%;
   user-select: none;
@@ -131,18 +209,4 @@ const MetaIconWrapper = styled.div`
   height: 100%;
 `;
 
-const Icon = styled.img`
-  float: left;
-
-  width: 18px;
-  height: 18px;
-  margin-right: 1em;
-  margin-left: 0.75em;
-
-  user-select: none;
-`;
-
-const IconValue = styled.h5`
-  color: #8c8c8c;
-`;
 //#endregion

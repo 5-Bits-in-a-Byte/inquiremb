@@ -9,11 +9,19 @@ class CommentTextBox extends Component {
   }
 
   componentDidMount() {
-    this.textInput.current.focus();
+    if (!this.props.secondary) {
+      this.textInput.current.focus();
+    }
   }
 
   render() {
-    return <TextInput minRows={4} ref={this.textInput} {...this.props} />;
+    return (
+      <TextInput
+        minRows={this.props.minRows || 4}
+        ref={this.textInput}
+        {...this.props}
+      />
+    );
   }
 }
 
@@ -23,7 +31,7 @@ const TextInput = styled(TextareaAutosize)`
   border: none;
   resize: none;
   width: 100%;
-  background-color: #ededed;
+  background-color: #f1f1f1;
   padding: 10px;
   border-radius: 4px;
   font-family: "Roboto";
