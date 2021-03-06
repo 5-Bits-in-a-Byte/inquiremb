@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Post from "../forumsAndPosts/Post";
@@ -7,6 +7,7 @@ import Button from "../common/Button";
 import Comment from "./Comment";
 import { useLocation, useParams } from "react-router-dom";
 import Fetch from "../common/requests/Fetch";
+import { UserContext } from "../context/UserProvider";
 
 const renderComments = (data) => {
   let ret = [];
@@ -19,17 +20,30 @@ const renderComments = (data) => {
 };
 
 const CommentView = (props) => {
+  const user = useContext(UserContext);
   const [newComments, setNewComments] = useState([]);
   const { courseid, postid } = useParams();
   // location is passed from the react-router Link which stores
   // the post that was clicked under location.state
   let location = useLocation();
   const post = location.state.post;
+  const draftNewComment = () => {
+    const comment = {
+      postid: post._id,
+      postedby: {
+        first: user.first,
+        last: user.last,
+        _id: user._id,
+      },
+      replies: [],
+    };
+    setNewComments([...newComments, <Comment comment={comment} isDraft />]);
+  };
   const { data, errors, loading } = Fetch({
     type: "get",
     endpoint: "/api/posts/" + post._id + "/comments",
   });
-  const comments = renderComments(data);
+  const comments = [...renderComments(data), ...newComments];
   return (
     <CommentViewWrapper>
       <Sidebar
@@ -42,7 +56,7 @@ const CommentView = (props) => {
         <ScrollingDiv>
           <OptionsContainer>
             <Button>Back to all Posts</Button>
-            <Button>Reply to Post</Button>
+            <Button onClick={draftNewComment}>Reply to Post</Button>
           </OptionsContainer>
           <Post post={post} isCondensed={false} />
           {comments}
