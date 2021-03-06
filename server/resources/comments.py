@@ -37,7 +37,7 @@ class Comments(Resource):
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
             postedby = {"first": current_user.first, "last": current_user.last,
-                        "_id": current_user._id, "anonymous": anonymous}
+                        "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add post to MongoDB
         comment = Comment(post_id=post_id, postedby=postedby,
@@ -50,7 +50,7 @@ class Comments(Resource):
 
         return self.serialize(comment), 200
 
-    def put(self, course_id=None, post_id=None):
+    def put(self, post_id=None):
         # Update comment
         # Parse the request
         post = self.retrieve_post(post_id)
@@ -65,7 +65,7 @@ class Comments(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
-        current_course = current_user.get_course(course_id)
+        current_course = current_user.get_course(post.courseid)
         _id = ObjectId(args['_id'])
         query = Comment.objects.raw({'_id': _id})
         count = query.count()

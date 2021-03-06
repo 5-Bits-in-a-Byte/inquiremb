@@ -29,7 +29,7 @@ class Posts(Resource):
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
             postedby = {"first": current_user.first, "last": current_user.last,
-                        "_id": current_user._id, "anonymous": anonymous}
+                        "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add post to MongoDB
         post = Post(courseid=course_id, postedby=postedby, title=args.title,
@@ -43,28 +43,30 @@ class Posts(Resource):
     def get(self, course_id=None):
         # Get the search input and the current course
         req = request.args.get('search')
+        page = request.args.get('page', default=0, type=int)
         current_course = current_user.get_course(course_id)
 
         # If the current user can see private posts and there's no search
         if current_course.seePrivate and (req is None):
-            query = Post.objects.raw({'courseid': course_id})
+            query = Post.objects.raw(
+                {'courseid': course_id}).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page*20).limit(20)
 
         # If the current user can see private posts and there is a search
         elif current_course.seePrivate and (req is not None):
             query = Post.objects.raw(
-                {'courseid': course_id, '$text': {'$search': req}})
+                {'courseid': course_id, '$text': {'$search': req}}).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page*20).limit(20)
 
         # If the current user cannot see private posts and there is a search
         elif (not current_course.seePrivate) and (req is not None):
             query = Post.objects.raw(
                 {"$or": [{'isPrivate': False}, {'postedby._id': {
-                    '$in': [current_user._id, current_user.anonymousId]}}], 'courseid': course_id, '$text': {'$search': req}})
+                    '$in': [current_user._id, current_user.anonymousId]}}], 'courseid': course_id, '$text': {'$search': req}}).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page*20).limit(20)
 
         # If the current user cannot see private posts and there is not a search
         else:
             query = Post.objects.raw(
                 {"$or": [{'isPrivate': False}, {'postedby._id': {
-                    '$in': [current_user._id, current_user.anonymousId]}}], 'courseid': course_id})
+                    '$in': [current_user._id, current_user.anonymousId]}}], 'courseid': course_id}).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page*20).limit(20)
 
         # Get the json for all the posts we want to display
         result = [self.serialize(post) for post in query]
@@ -158,3 +160,16 @@ class Posts(Resource):
         date = str(result['updatedDate'])
         result['updatedDate'] = date
         return result
+
+    def skiplimit(self, query, page_size, page_num):
+        """returns a set of documents belonging to page number `page_num`
+        where size of each page is `page_size`.
+        """
+        # Calculate number of documents to skip
+        skips = page_size * (page_num - 1)
+
+        # Skip and limit
+        cursor = query.skip(skips).limit(page_size)
+
+        # Return documents
+        return [x for x in cursor]
