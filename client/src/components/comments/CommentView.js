@@ -5,7 +5,7 @@ import Post from "../forumsAndPosts/Post";
 import Sidebar from "../forumsAndPosts/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import LazyFetch from "../common/requests/LazyFetch";
 import Fetch from "../common/requests/Fetch";
 import { UserContext } from "../context/UserProvider";
@@ -91,8 +91,12 @@ const CommentView = (props) => {
       <CommentViewContainer>
         <ScrollingDiv>
           <OptionsContainer>
-            <Button>Back to all Posts</Button>
-            <Button onClick={draftNewComment}>Reply to Post</Button>
+            <Link to={"/course/" + courseid} style={{ textDecoration: "none" }}>
+              <Button secondary>Back to all Posts</Button>
+            </Link>
+            <Button onClick={draftNewComment} secondary>
+              Reply to Post
+            </Button>
           </OptionsContainer>
           <Post post={post} isCondensed={false} isDraft={postid === "new"} />
           {comments}
