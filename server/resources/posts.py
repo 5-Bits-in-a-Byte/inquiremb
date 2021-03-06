@@ -160,16 +160,3 @@ class Posts(Resource):
         date = str(result['updatedDate'])
         result['updatedDate'] = date
         return result
-
-    def skiplimit(self, query, page_size, page_num):
-        """returns a set of documents belonging to page number `page_num`
-        where size of each page is `page_size`.
-        """
-        # Calculate number of documents to skip
-        skips = page_size * (page_num - 1)
-
-        # Skip and limit
-        cursor = query.skip(skips).limit(page_size)
-
-        # Return documents
-        return [x for x in cursor]
