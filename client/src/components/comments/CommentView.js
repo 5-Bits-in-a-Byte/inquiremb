@@ -6,6 +6,7 @@ import Sidebar from "../forumsAndPosts/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
 import { useLocation, useParams } from "react-router-dom";
+import LazyFetch from "../common/requests/LazyFetch";
 import Fetch from "../common/requests/Fetch";
 import { UserContext } from "../context/UserProvider";
 
@@ -39,21 +40,17 @@ const CommentView = (props) => {
     if (!content) {
       setNewComments({ ...newComments, draft: false });
     } else {
-      const newComment = {
-        post_id: postid,
-        content: content,
-        postedby: {
-          first: user.first,
-          last: user.last,
-          _id: user._id,
+      LazyFetch({
+        type: "post",
+        endpoint: "/api/posts/" + post._id + "/comments",
+        data: { isAnonymous: false, content: content },
+        onSuccess: (data) => {
+          console.log("new", data);
+          setNewComments({
+            draft: false,
+            created: newComments.created.concat(<Comment comment={data} />),
+          });
         },
-        endorsed: false,
-        replies: [],
-        reactions: { likes: [] },
-      };
-      setNewComments({
-        draft: false,
-        created: newComments.created.concat(<Comment comment={newComment} />),
       });
     }
   };

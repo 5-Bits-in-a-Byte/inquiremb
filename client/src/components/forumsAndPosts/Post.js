@@ -6,7 +6,6 @@ import PinImg from "../../imgs/pin.svg";
 import { Link } from "react-router-dom";
 
 const Post = ({ courseid, post, isCondensed }) => {
-  console.log("here", post);
   const pin =
     post.isPinned === true ? { visibility: "visible" } : VisibilityHidden;
 

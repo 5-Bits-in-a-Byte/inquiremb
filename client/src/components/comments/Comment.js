@@ -66,9 +66,9 @@ const Comment = ({ comment, isDraft, callback }) => {
             )}
           </MetaIconWrapper>
         </PostMetaContentWrapper>
-        {comment.replies.map((reply) => (
-          <CommentReply reply={reply} />
-        ))}
+        {comment.replies &&
+          comment.replies.length > 0 &&
+          comment.replies.map((reply) => <CommentReply reply={reply} />)}
       </ReplyContainer>
     </CommentWrapper>
   );
