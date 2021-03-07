@@ -11,6 +11,7 @@ from resources.courses import Courses
 from resources.posts import Posts
 from resources.comments import Comments
 from resources.replies import Replies
+from resources.join import Join
 # Auth imports
 from auth import oauth, auth_routes
 
@@ -63,6 +64,7 @@ api.add_resource(
     Comments, '/posts/<string:post_id>/comments')
 api.add_resource(
     Replies, '/posts/<string:post_id>/comments/<string:comment_id>/replies')
+api.add_resource(Join, '/join')
 
 # @app.route("/<path:path>")
 

@@ -113,3 +113,5 @@ class Course(MongoModel):
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
+
+        indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
