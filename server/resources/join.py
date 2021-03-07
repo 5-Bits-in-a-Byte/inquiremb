@@ -48,6 +48,8 @@ class Join(Resource):
         parser.add_argument('course_id')
         args = parser.parse_args()
 
+        print(args.course_id)
+
         query = Course.objects.raw({"_id": args['course_id']})
         count = query.count()
 
@@ -68,6 +70,6 @@ class Join(Resource):
                     return {"errors": ["You have already joined this class"]}, 400
 
             user_query.update({"$push": {"courses": {
-                "course_id": args['course_id'], "course_name": course.course, "color": pick_color(DEFAULT_COLORS)}}})
+                "course_id": args['course_id'], "course_name": course.course_name, "color": pick_color(DEFAULT_COLORS)}}})
 
             return {"success": "Course joined successfully"}, 200

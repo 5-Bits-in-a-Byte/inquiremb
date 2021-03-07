@@ -10,15 +10,16 @@ import CheckMark from "../../../imgs/checkmark.svg";
 import Errors from "../../common/Errors";
 import JoinInfo from "./JoinInfo";
 
-const JoinConfirmation = ({ course, joinCourse, close }) => {
-  // const [back, toggleBack] = useState(false);
+const JoinConfirmation = ({
+  course,
+  joinCourse,
+  display,
+  toggleDisplay,
+  close,
+}) => {
   const [loading, toggleLoading] = useState(false);
   const [errors, toggleErrors] = useState(null);
   const [success, toggleSuccess] = useState(null);
-
-  // const goBack = () => {
-  //   toggleBack(true);
-  // };
 
   const confirmJoinRequest = () => {
     toggleLoading(true);
@@ -33,6 +34,7 @@ const JoinConfirmation = ({ course, joinCourse, close }) => {
         })
         .then((res) => {
           toggleSuccess(res.data);
+          toggleDisplay("none");
         })
         .catch((err) => {
           if (err.response && err.response.data) {
@@ -53,10 +55,11 @@ const JoinConfirmation = ({ course, joinCourse, close }) => {
   return (
     <Wrapper className="flex-col align justify">
       <img src={CheckMark}></img>
-      <Title className="margin-t20" style={{}}>
+      <Title className="margin-t20" style={{ display: { display } }}>
         CONFIRM COURSE
       </Title>
-      <HighlightedSection className="flex-row">
+      <Success>{success}</Success>
+      <HighlightedSection className="flex-row" style={{ display: { display } }}>
         <CourseInfo>
           <Course>
             <div style={{ opacity: "70%" }}>Course:&nbsp;</div>{" "}
@@ -70,7 +73,7 @@ const JoinConfirmation = ({ course, joinCourse, close }) => {
           </Instructor>
         </CourseInfo>
       </HighlightedSection>
-      <BottomButtons>
+      <BottomButtons style={{ display: { display } }}>
         <Button
           secondary
           autoWidth
@@ -145,4 +148,10 @@ const HighlightedSection = styled.div`
 const TextContent = styled.div`
   font-weight: 400;
   font-style: normal;
+`;
+
+const Success = styled.div`
+  display: none;
+
+  font-size: 30px;
 `;
