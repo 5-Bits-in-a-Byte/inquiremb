@@ -7,7 +7,7 @@ import JoinInfo from "./joinCourse/JoinInfo";
 const JoinCourse = () => {
   const [modalIsShown, toggleModal] = useState(false);
   const [course, joinCourse] = useState(null);
-  const [display, toggleDisplay] = useState("none");
+  const [display, toggleDisplay] = useState("flex");
 
   return (
     <>
@@ -18,7 +18,7 @@ const JoinCourse = () => {
         <Modal
           close={() => {
             toggleModal(false);
-            toggleDisplay("initial");
+            toggleDisplay("flex");
           }}
           width="724px"
           data-testid="join-course-modal"

@@ -6,7 +6,9 @@ import Input from "../../common/Input";
 import InputLabel from "../../common/InputLabel";
 import CopyImg from "../../../imgs/copy.svg";
 import axios from "axios";
-import CheckMark from "../../../imgs/checkmark.svg";
+import CheckMarkBlue from "../../../imgs/checkmark_blue.svg";
+import CheckMarkGreen from "../../../imgs/checkmark_green.svg";
+// import { ReactComponent as CheckMark } from "../../../imgs/checkmark.svg";
 import Errors from "../../common/Errors";
 import JoinInfo from "./JoinInfo";
 
@@ -21,6 +23,9 @@ const JoinConfirmation = ({
   const [errors, toggleErrors] = useState(null);
   const [success, toggleSuccess] = useState(null);
 
+  console.log(display);
+  console.log("SUCCESS Message: " + success);
+
   const confirmJoinRequest = () => {
     toggleLoading(true);
     setTimeout(() => {
@@ -34,6 +39,7 @@ const JoinConfirmation = ({
         })
         .then((res) => {
           toggleSuccess(res.data.success);
+          toggleLoading(false);
           toggleDisplay("none");
         })
         .catch((err) => {
@@ -54,12 +60,16 @@ const JoinConfirmation = ({
 
   return (
     <Wrapper className="flex-col align justify">
-      <img src={CheckMark}></img>
-      <Title className="margin-t20" style={{ display: { display } }}>
+      <img src={display == "none" ? CheckMarkGreen : CheckMarkBlue}></img>
+      <Title className="margin-t20" style={{ display: display }}>
         CONFIRM COURSE
       </Title>
-      <Success>{success}</Success>
-      <HighlightedSection className="flex-row" style={{ display: { display } }}>
+      <Success
+        style={display == "none" ? { display: "block" } : { display: display }}
+      >
+        {success}
+      </Success>
+      <HighlightedSection className="flex-row" style={{ display: display }}>
         <CourseInfo>
           <Course>
             <div style={{ opacity: "70%" }}>Course:&nbsp;</div>{" "}
@@ -73,7 +83,7 @@ const JoinConfirmation = ({
           </Instructor>
         </CourseInfo>
       </HighlightedSection>
-      <BottomButtons style={{ display: { display } }}>
+      <BottomButtons style={{ display: display }}>
         <Button
           secondary
           autoWidth
