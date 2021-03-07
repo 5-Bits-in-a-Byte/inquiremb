@@ -10,15 +10,15 @@ import CheckMark from "../../../imgs/checkmark.svg";
 import Errors from "../../common/Errors";
 import JoinInfo from "./JoinInfo";
 
-const JoinConfirmation = ({ course, close }) => {
-  const [back, toggleBack] = useState(false);
+const JoinConfirmation = ({ course, joinCourse, close }) => {
+  // const [back, toggleBack] = useState(false);
   const [loading, toggleLoading] = useState(false);
   const [errors, toggleErrors] = useState(null);
   const [success, toggleSuccess] = useState(null);
 
-  const goBack = () => {
-    toggleBack(true);
-  };
+  // const goBack = () => {
+  //   toggleBack(true);
+  // };
 
   const confirmJoinRequest = () => {
     toggleLoading(true);
@@ -71,7 +71,14 @@ const JoinConfirmation = ({ course, close }) => {
         </CourseInfo>
       </HighlightedSection>
       <BottomButtons>
-        <Button secondary autoWidth style={{ margin: "24px 1em 0 1em" }}>
+        <Button
+          secondary
+          autoWidth
+          style={{ margin: "24px 1em 0 1em" }}
+          onClick={() => {
+            joinCourse(null);
+          }}
+        >
           Back
         </Button>
         <Button

@@ -26,6 +26,7 @@ const JoinCourse = () => {
           ) : (
             <JoinConfirmation
               course={course}
+              joinCourse={joinCourse}
               close={() => {
                 toggleModal(false);
                 joinCourse(null);
