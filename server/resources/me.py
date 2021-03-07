@@ -1,6 +1,8 @@
 from flask import jsonify
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from auth import current_user, permission_layer
+from mongo import *
+from resources.courses import pick_color, DEFAULT_COLORS
 
 
 class RandomClass:
