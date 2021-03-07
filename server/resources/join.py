@@ -48,8 +48,6 @@ class Join(Resource):
         parser.add_argument('course_id')
         args = parser.parse_args()
 
-        print(args.course_id)
-
         query = Course.objects.raw({"_id": args['course_id']})
         count = query.count()
 
@@ -59,17 +57,18 @@ class Join(Resource):
         elif count == 0:
             return {"errors": [f"Course with id {args['course_id']} does not exist"]}, 400
         else:
-            course_to_add = query.first()
 
-            # Appends the course with permissions to the user who created it
-            user_query = User.objects.raw({'_id': current_user._id})
-            user = user_query.first()
-
-            for course in user.courses:
+            for course in current_user.courses:
                 if args['course_id'] == course.course_id:
                     return {"errors": ["You have already joined this class"]}, 400
 
-            user_query.update({"$push": {"courses": {
-                "course_id": args['course_id'], "course_name": course.course_name, "color": pick_color(DEFAULT_COLORS)}}})
+            course_to_add = query.first()
 
-            return {"success": "Course joined successfully"}, 200
+            user_course = UserCourse(
+                course_id=args['course_id'], course_name=course_to_add.course, color=pick_color(DEFAULT_COLORS))
+
+            current_user.courses.append(user_course)
+
+            current_user.save()
+
+            return {"success": ["Course joined successfully"]}, 200

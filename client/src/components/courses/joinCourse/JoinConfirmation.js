@@ -33,7 +33,7 @@ const JoinConfirmation = ({
           withCredentials: true,
         })
         .then((res) => {
-          toggleSuccess(res.data);
+          toggleSuccess(res.data.success);
           toggleDisplay("none");
         })
         .catch((err) => {
