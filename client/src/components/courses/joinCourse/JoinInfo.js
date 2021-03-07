@@ -37,8 +37,6 @@ const JoinCourse = ({ joinCourse }) => {
     setForm({ ...form, loading: true });
     setTimeout(() => {
       const endpoint = "/api/join";
-      console.log(form.course_name);
-      console.log(form.access_code);
       const data = {
         course_name: form.course_name,
         access_code: form.access_code,
