@@ -12,7 +12,7 @@ connect(MONGO_URI, alias="my-app")
 
 class User(MongoModel):
     _id = fields.CharField(primary_key=True)
-    anonymousId = fields.CharField(required=True, default=shortuuid.uuid())
+    anonymousId = fields.CharField(required=True, default=ObjectId)
     email = fields.EmailField()
     first = fields.CharField(default="Nofirstgiven")
     last = fields.CharField(default="Nolastgiven")
@@ -60,7 +60,7 @@ to modify/query multiple documents when updating classes or permissions.
 
 
 class Post(MongoModel):
-    _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
+    _id = fields.CharField(primary_key=True, default=ObjectId)
     courseid = fields.CharField()
     postedby = fields.DictField()
     title = fields.CharField(required=True)
@@ -97,7 +97,7 @@ class Comment(MongoModel):
 
 
 class Reply(EmbeddedMongoModel):
-    _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
+    _id = fields.CharField(primary_key=True, default=ObjectId)
     content = fields.CharField(required=True, default="")
     postedby = fields.DictField()
     reactions = fields.DictField(default={'likes': []})
@@ -108,7 +108,7 @@ class Course(MongoModel):
     course = fields.CharField()
     canJoinById = fields.BooleanField()
     instructorID = fields.CharField()
-    _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
+    _id = fields.CharField(primary_key=True, default=shortuuid.uuid)
 
     class Meta:
         write_concern = WriteConcern(j=True)

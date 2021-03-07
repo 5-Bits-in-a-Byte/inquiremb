@@ -1,17 +1,24 @@
 import React from "react";
-import PropTypes from "prop-types";
-import OptionsButton from "./OptionsButton";
 import styled from "styled-components";
+import Button from "../common/Button";
+import { Link } from "react-router-dom";
 
-const Options = (props) => {
+const Options = ({ courseid }) => {
   return (
     <OptionsWrapper>
       <OptionsHeader>OPTIONS</OptionsHeader>
       <OptionsPanel>
-        <OptionsButton buttonText={"+ New Post"} isPrimary={true} />
-        <OptionsButton buttonText={"Message Instructor"} isPrimary={false} />
+        <Link
+          style={{ width: "100%", textDecoration: "none" }}
+          to={"/course/" + courseid + "/post/new"}
+        >
+          <Button primary autoWidth>
+            + New Post
+          </Button>
+        </Link>
+        {/* <OptionsButton buttonText={"Message Instructor"} isPrimary={false} />
         <OptionsButton buttonText={"Do a thing"} isPrimary={false} />
-        <OptionsButton buttonText={"Do another thing"} isPrimary={false} />
+        <OptionsButton buttonText={"Do another thing"} isPrimary={false} /> */}
       </OptionsPanel>
     </OptionsWrapper>
   );
@@ -23,9 +30,11 @@ export default Options;
 
 //#region Options Stylings
 const OptionsWrapper = styled.div`
-  // border: 1px solid green;
   width: 280px; // Need to make same width as nav + menu bar
   flex-grow: 1;
+  position: absolute;
+  right: -40px;
+  top: 0;
 `;
 
 const OptionsHeader = styled.h1`
@@ -40,9 +49,8 @@ const OptionsPanel = styled.div`
   align-items: center;
   justify-content: center;
   background: #fff;
-
   width: 220px;
-  height: 240px;
+  padding: 14px;
 
   // border: 1px solid black;
   border-radius: 5px;
