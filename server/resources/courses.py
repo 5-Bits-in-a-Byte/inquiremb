@@ -7,6 +7,7 @@ from auth import permission_layer, current_user
 from config import DEFAULT_COLORS
 import random
 
+
 # Courses
 # POST - Handles course creation
 # Access - Instructor Only
@@ -22,6 +23,7 @@ class Courses(Resource):
         # parser.add_argument('university')
         parser.add_argument('course')
         parser.add_argument('canJoinById', type=str2bool, default=True)
+        parser.add_argument('color')
         args = parser.parse_args()
 
         # Validate the args
@@ -30,16 +32,23 @@ class Courses(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
+        # Picking user course color
+        if args['color'] is None:
+            color = pick_color(DEFAULT_COLORS)
+        else:
+            color = args['color']
+        print(color, args['color'])
         # Add the course to the user's course list and create the course
         course = Course(course=args.course,
                         canJoinById=args.canJoinById, instructorID=current_user._id).save()
+
         # Appends the course with permissions to the user who created it
         User.objects.raw({'_id': current_user._id}).update({"$push": {"courses":
                                                                       {"course_id": course._id, "course_name": args.course,
                                                                        "canPost": True, "seePrivate": True, "canPin": True,
                                                                        "canRemove": True, "canEndorse": True, "viewAnonymous": True,
-                                                                       "admin": True}}})
-        return {"_id": course._id, "course": course.course}, 200
+                                                                       "admin": True, "color": color}}})
+        return {"_id": course._id, "course": course.course, "color": color}, 200
 
     def validate_post(self, args):
         errors = []

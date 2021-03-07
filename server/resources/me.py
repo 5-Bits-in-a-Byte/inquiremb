@@ -5,13 +5,6 @@ from mongo import *
 from resources.courses import pick_color, DEFAULT_COLORS
 
 
-class RandomClass:
-    "hello"
-
-    def __init__(self):
-        return
-
-
 class Me(Resource):
     def get(self):
         """
@@ -93,3 +86,21 @@ class Me(Resource):
 
         """
         return current_user.to_son().to_dict()
+
+    def put(self):
+        # Parse arguments
+        parser = reqparse.RequestParser()
+        parser.add_argument('course_id')
+        args = parser.parse_args()
+
+        if args['course_id'] is None:
+            return {'errors': ["Please provide course access code"]}, 400
+        else:
+            try:
+                course = Course.objects.raw({'_id': args['course_id']}).first()
+            except:
+                return {'errors': ["Invalid access code"]}, 400
+
+            current_user.update({"$push": {"courses":
+                                           {"course_id": args['course_id'], "course_name": course.course, "color": pick_color(DEFAULT_COLORS)}}})
+            return {"_id": course_id, "course": course.course, "color": color}, 200

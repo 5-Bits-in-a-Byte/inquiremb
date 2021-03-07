@@ -5,13 +5,14 @@ import TopContent from "./TopContent";
 import CourseCard from "./CourseCard";
 
 const colorsArray = [
-  "#000700",
-  "#440000",
-  "#500F90",
-  "#FF0000",
-  "#0F9900",
-  "#000EEE",
-  "#326500",
+  "#dd0000",
+  "#dd7700",
+  "#eedd00",
+  "#00cc00",
+  "#2a2aff",
+  "#7337ee",
+  "#ee55ee",
+  "#00cccc",
 ];
 
 // List-to-components mapping technique from:
@@ -25,7 +26,7 @@ const courseList = (userCourses) => {
         id={course.course_id}
         courseName={course.course_name}
         courseTerm="Winter 2021"
-        color={course.color || colorsArray[index]}
+        color={course.color || colorsArray[index % colorsArray.length]}
       />
     );
   });
