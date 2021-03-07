@@ -5,7 +5,7 @@ from mongo import *
 
 
 class Comments(Resource):
-    def get(self, course_id=None, post_id=None):
+    def get(self, post_id=None):
         # Get all comments on post
         post = self.retrieve_post(post_id)
         if post is None:
@@ -13,7 +13,7 @@ class Comments(Resource):
 
         return [self.serialize(comment) for comment in Comment.objects.raw({'post_id': post_id})]
 
-    def post(self, course_id=None, post_id=None):
+    def post(self, post_id=None):
         # Add comment to post
         # Retrieving post
         print("here")
@@ -37,7 +37,7 @@ class Comments(Resource):
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
             postedby = {"first": current_user.first, "last": current_user.last,
-                        "_id": current_user._id, "anonymous": anonymous}
+                        "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add post to MongoDB
         comment = Comment(post_id=post_id, postedby=postedby,
@@ -50,7 +50,7 @@ class Comments(Resource):
 
         return self.serialize(comment), 200
 
-    def put(self, course_id=None, post_id=None):
+    def put(self, post_id=None):
         # Update comment
         # Parse the request
         post = self.retrieve_post(post_id)
@@ -65,7 +65,7 @@ class Comments(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
-        current_course = current_user.get_course(course_id)
+        current_course = current_user.get_course(post.courseid)
         _id = ObjectId(args['_id'])
         query = Comment.objects.raw({'_id': _id})
         count = query.count()
@@ -86,7 +86,7 @@ class Comments(Resource):
         else:
             raise Exception(f'No comment with id')
 
-    def delete(self, course_id=None, post_id=None):
+    def delete(self, post_id=None):
         # Delete comment
         # Grabbing comment id
         post = self.retrieve_post(post_id)

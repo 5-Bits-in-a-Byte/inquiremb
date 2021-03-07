@@ -5,7 +5,7 @@ from mongo import *
 
 
 class Replies(Resource):
-    def post(self, course_id=None, post_id=None, comment_id=None):
+    def post(self, post_id=None, comment_id=None):
         # Add comment to post
         # Retrieving post
         post = self.retrieve_post(post_id)
@@ -28,7 +28,7 @@ class Replies(Resource):
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
             postedby = {"first": current_user.first, "last": current_user.last,
-                        "_id": current_user._id, "anonymous": anonymous}
+                        "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add reply to MongoDB and retrieve the comment
         reply = Reply(postedby=postedby, content=args.content)
@@ -44,8 +44,10 @@ class Replies(Resource):
 
         return self.serialize(comment), 200
 
-    def put(self, course_id=None, post_id=None, comment_id=None):
+    def put(self, post_id=None, comment_id=None):
         # Update comment
+        post = self.retrieve_post(post_id)
+
         # Parse the request
         parser = reqparse.RequestParser()
         parser.add_argument('content')
@@ -58,7 +60,7 @@ class Replies(Resource):
             return {"errors": errors}, 400
 
         # Get the current course and retrieve the comment
-        current_course = current_user.get_course(course_id)
+        current_course = current_user.get_course(post.courseid)
         comment = self.retrieve_comment(comment_id)
 
         # Get the reply we're looking for
@@ -80,8 +82,10 @@ class Replies(Resource):
             result = self.serialize(comment)
             return result, 200
 
-    def delete(self, course_id=None, post_id=None, comment_id=None):
+    def delete(self, post_id=None, comment_id=None):
         # Delete comment
+        post = self.retrieve_post(post_id)
+
         # Grabbing comment id
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
@@ -92,7 +96,7 @@ class Replies(Resource):
 
         comment = self.retrieve_comment(comment_id)
         # Get the current course
-        current_course = current_user.get_course(course_id)
+        current_course = current_user.get_course(post.courseid)
 
         # Get the reply we're looking for
         reply = None
