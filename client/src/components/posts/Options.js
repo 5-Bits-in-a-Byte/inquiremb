@@ -30,9 +30,11 @@ export default Options;
 
 //#region Options Stylings
 const OptionsWrapper = styled.div`
-  // border: 1px solid green;
   width: 280px; // Need to make same width as nav + menu bar
   flex-grow: 1;
+  position: absolute;
+  right: -40px;
+  top: 0;
 `;
 
 const OptionsHeader = styled.h1`

@@ -70,7 +70,7 @@ const HR = styled.hr`
 `;
 
 const FlexWrapper = styled.div`
-  flex: 1 0 200px;
+  flex: 0 0 200px;
 `;
 
 const Container = styled.div`

@@ -44,37 +44,39 @@ const PostView = (props) => {
     <>
       <PostFeed>
         <ScrollingDiv>
-          <SortingOptions>
-            <Button
-              secondary={true}
-              onClick={() => {
-                setCondensedState(!isCondensed);
-              }}
-            >
-              <img src={LineWidthImg} />
-            </Button>
-            <Button secondary={true} style={MarginLeftRight}>
-              {" Most Recent "}
-            </Button>
-          </SortingOptions>
-          {posts.pinned.length > 0 && (
-            <PostGroupingHeader>
-              <img
-                src={HollowPinImg}
-                style={{ width: 18, height: 18, marginRight: 5 }}
-              />
-              Pinned Posts
-            </PostGroupingHeader>
-          )}
-          {posts.pinned}
-          {posts.other.length > 0 && (
-            <PostGroupingHeader>Other Posts</PostGroupingHeader>
-          )}
-          {posts.other}
+          <CenterWrapper>
+            <SortingOptions>
+              <Button
+                secondary={true}
+                onClick={() => {
+                  setCondensedState(!isCondensed);
+                }}
+              >
+                <img src={LineWidthImg} />
+              </Button>
+              <Button secondary={true} style={MarginLeftRight}>
+                {" Most Recent "}
+              </Button>
+            </SortingOptions>
+            {posts.pinned.length > 0 && (
+              <PostGroupingHeader>
+                <img
+                  src={HollowPinImg}
+                  style={{ width: 18, height: 18, marginRight: 5 }}
+                />
+                Pinned Posts
+              </PostGroupingHeader>
+            )}
+            {posts.pinned}
+            {posts.other.length > 0 && (
+              <PostGroupingHeader>All Posts</PostGroupingHeader>
+            )}
+            {posts.other}
+            <Options courseid={courseid} />
+          </CenterWrapper>
         </ScrollingDiv>
       </PostFeed>
       {/* Displays options panel on the right of the webpage */}
-      <Options courseid={courseid} />
     </>
   );
 };
@@ -88,37 +90,6 @@ const MarginLeftRight = {
   marginRight: "1em",
 };
 
-//#region PostView Styling
-// const PostViewWrapper = styled.div`
-//   overflow: scroll;
-//   display: flex;
-//   flex-direction: row;
-
-//   width: 100%;
-
-//   /* width */
-//   ::-webkit-scrollbar {
-//     width: 5px;
-//   }
-
-//   /* Track */
-//   ::-webkit-scrollbar-track {
-//     background: #f1f1f1;
-//     visibility: hidden;
-//   }
-
-//   /* Handle */
-//   ::-webkit-scrollbar-thumb {
-//     background: #c4c4c4;
-//     border-radius: 1em;
-//   }
-
-//   /* Handle on hover */
-//   ::-webkit-scrollbar-thumb:hover {
-//     background: #a4a4a4;
-//   }
-// `;
-
 const PostFeed = styled.div`
   /* overflow: scroll; */
   /* display: flex;
@@ -126,32 +97,42 @@ const PostFeed = styled.div`
   align-items: center;
   // border: 1px solid orange;
   flex-grow: 1; */
-  max-width: 900px;
+  /* max-width: 900px; */
   width: 100%;
   position: relative;
+  display: flex;
 `;
 
 const ScrollingDiv = styled.div`
   position: absolute;
+  display: flex;
   height: 100%;
   width: 100%;
   padding: 0 40px;
   overflow: auto;
-  ::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
-  }
+  //::-webkit-scrollbar {
+  //width: 0; /* Remove scrollbar space */
+  //background: transparent; /* Optional: just make scrollbar invisible */
+  //}
+`;
+
+const CenterWrapper = styled.div`
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  padding-right: 280px;
+  position: relative;
 `;
 
 const SortingOptions = styled.div`
-  position: absolute;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  padding-right: 65px;
   width: 100%;
   margin: 2.2em 0 1em 0;
+  position: absolute;
+  padding-right: 280px;
 `;
 
 const PostGroupingHeader = styled.div`

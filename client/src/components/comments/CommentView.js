@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Post from "../forumsAndPosts/Post";
-import Sidebar from "../forumsAndPosts/Sidebar";
+import Post from "../posts/Post";
+import Sidebar from "../posts/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
 import { Link, useLocation, useParams } from "react-router-dom";
@@ -89,20 +89,30 @@ const CommentView = (props) => {
       />
 
       <CommentViewContainer>
-        <ScrollingDiv>
-          <OptionsContainer>
-            <Link to={"/course/" + courseid} style={{ textDecoration: "none" }}>
-              <Button secondary>Back to all Posts</Button>
-            </Link>
-            <Button onClick={draftNewComment} secondary>
-              Reply to Post
-            </Button>
-          </OptionsContainer>
-          <Post post={post} isCondensed={false} isDraft={postid === "new"} />
-          {comments}
-        </ScrollingDiv>
+        <AbsoluteWrapper>
+          <ScrollingDiv>
+            <MaxWidth>
+              <OptionsContainer>
+                <Link
+                  to={"/course/" + courseid}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Button secondary>Back to all Posts</Button>
+                </Link>
+                <Button onClick={draftNewComment} secondary>
+                  Reply to Post
+                </Button>
+              </OptionsContainer>
+              <Post
+                post={post}
+                isCondensed={false}
+                isDraft={postid === "new"}
+              />
+              {comments}
+            </MaxWidth>
+          </ScrollingDiv>
+        </AbsoluteWrapper>
       </CommentViewContainer>
-      <EmptyDiv />
     </CommentViewWrapper>
   );
 };
@@ -118,12 +128,14 @@ const CommentViewWrapper = styled.div`
 
 const CommentViewContainer = styled.div`
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 900px;
   width: 100%;
   /* border: 1px solid green; */
+`;
+
+const AbsoluteWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
 `;
 
 const OptionsContainer = styled.div`
@@ -134,25 +146,15 @@ const OptionsContainer = styled.div`
   margin: 2.2em 0 1.1em 0;
 `;
 
-const EmptyDiv = styled.div`
-  width: 280px; // Need to make same width as nav + menu bar
-  flex-grow: 1;
-`;
-
-const PostCommentContainer = styled.div`
-  width: 100%;
-
-  /* border: 1px solid orange; */
-`;
-
 const ScrollingDiv = styled.div`
-  position: absolute;
   height: 100%;
   width: 100%;
-  padding: 0 40px;
+  padding: 0 280px 0 40px;
   overflow: auto;
-  ::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
-  }
+  padding-right: 280px;
+`;
+
+const MaxWidth = styled.div`
+  max-width: 900px;
+  margin: auto;
 `;

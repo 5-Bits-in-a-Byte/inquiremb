@@ -17,10 +17,6 @@ const ClassView = ({ classroomName }) => {
         setHighlightedSection={setHighlightedSection}
         highlightedSection={highlightedSection}
       />
-
-      {/* View of current Post Feed - 
-          TODO: should populate based on selected tab 
-          KATJH SDOIGDIOOIDASFGHOIDASIO*/}
       <PostView />
     </ClassViewWrapper>
   );
