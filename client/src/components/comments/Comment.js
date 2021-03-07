@@ -1,28 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
+import LikeImg from "../../imgs/like.svg";
+import DraftTextBox from "../common/DraftTextArea";
+import Button from "../common/Button";
 
-const Comment = ({ posterName, commentContent }) => {
+const Comment = ({ comment, isDraft, callback }) => {
+  const [content, setContent] = useState("");
+
+  const renderContent = () => {
+    if (isDraft) {
+      return <DraftTextBox onChange={handleChange} />;
+    }
+    // Otherwise, the post has been fetched from the API so return the content
+    else {
+      return comment.content;
+    }
+  };
+
+  // Used for the text box to create a new post
+  const handleChange = (e) => {
+    setContent(e.target.value);
+  };
+
   return (
     <CommentWrapper>
-      <CommentContent>{commentContent}</CommentContent>
-
+      <CommentContent>{renderContent()}</CommentContent>
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
           {/* <UserIcon src="./icons8_note.svg" /> */}
-          <UserDescription>Reply by {posterName}</UserDescription>
+          <UserDescription>
+            Reply by {comment.postedby.first + " " + comment.postedby.last}
+          </UserDescription>
 
           <MetaIconWrapper>
-            <UserDescription>Reply</UserDescription>
-            <Icon src="./icons8_facebook_like 1.svg" />
-            <IconValue>1</IconValue>
+            {isDraft ? (
+              <>
+                <Button
+                  secondary
+                  style={{ marginRight: 10 }}
+                  onClick={() => {
+                    callback();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  primary
+                  onClick={() => {
+                    callback(content);
+                  }}
+                >
+                  Submit
+                </Button>
+              </>
+            ) : (
+              <>
+                <UserDescription style={{ marginRight: 10 }}>
+                  Reply
+                </UserDescription>
+                <Icon src={LikeImg} />
+                <IconValue>1</IconValue>
+              </>
+            )}
           </MetaIconWrapper>
         </PostMetaContentWrapper>
-        <CommentReply posterName={posterName} />
-        <CommentReply posterName={posterName} />
-        <CommentReply posterName={posterName} />
-        <CommentReply posterName={posterName} />
+        {comment.replies &&
+          comment.replies.length > 0 &&
+          comment.replies.map((reply) => <CommentReply reply={reply} />)}
       </ReplyContainer>
     </CommentWrapper>
   );
@@ -33,9 +79,9 @@ Comment.propTypes = {};
 export default Comment;
 
 const CommentWrapper = styled.div`
-  width: 720px;
+  width: 100%;
   min-height: 85px;
-
+  margin: 17px 0;
   /* border: 1px solid red; */
   border-radius: 0.3em;
 
@@ -47,21 +93,18 @@ const CommentWrapper = styled.div`
 `;
 
 const CommentContent = styled.p`
-  margin: 0 2.2em 1em 2.2em;
-  padding-top: 1em;
-  font-size: 14px;
-
-  color: #979797;
+  padding: 1em 2.2em 1em 2.2em;
+  font-size: 16px;
+  background-color: #fff;
+  border-radius: 5px 5px 0 0;
 `;
 
 const PostMetaContentWrapper = styled.div`
   display: flex;
   flex-direction: row;
-
   height: 100%;
-  margin: 0 2.2em 0.5em 2.2em;
-  padding-top: 0.5em;
-
+  padding: 0.5em 0;
+  align-items: center;
   // border: 1px solid black;
 `;
 
@@ -86,8 +129,7 @@ const UserDescription = styled.h5`
 
 const MetaIconWrapper = styled.div`
   display: inline-flex;
-  margin-left: 400px;
-
+  margin-left: auto;
   height: 100%;
 `;
 
@@ -107,8 +149,8 @@ const IconValue = styled.h5`
 `;
 
 const ReplyContainer = styled.div`
-  background-color: #ededed;
-
+  background-color: #f9f9f9;
+  padding: 5px 30px;
   width: 100%;
   min-height: 40px;
 `;

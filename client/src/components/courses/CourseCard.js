@@ -21,7 +21,7 @@ class CourseCard extends React.Component {
 
   render() {
     return (
-      <AlignedDiv onClick={this.viewCourse}>
+      <AlignedDiv>
         <ColorDiv color={this.state.courseColor}>
           <MessageDiv>
             <img src={MessagesImg} alt="Messages" width="25em" />
