@@ -108,7 +108,7 @@ class Course(MongoModel):
     course = fields.CharField()
     canJoinById = fields.BooleanField()
     instructorID = fields.CharField()
-    _id = fields.CharField(primary_key=True, default=shortuuid.uuid())
+    _id = fields.CharField(primary_key=True, default=shortuuid.uuid)
 
     class Meta:
         write_concern = WriteConcern(j=True)

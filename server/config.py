@@ -26,4 +26,13 @@ swagger_config = {
     "title": "Inquire API"
 }
 CLIENT_URL = os.getenv('CLIENT_URL')
-
+DEFAULT_COLORS = [
+    "#dd0000",
+    "#dd7700",
+    "#eedd00",
+    "#00cc00",
+    "#2a2aff",
+    "#7337ee",
+    "#ee55ee",
+    "#00cccc",
+]
