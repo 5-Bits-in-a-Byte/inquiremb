@@ -1,24 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ShareImg from "../../../imgs/share-white.svg";
 import Button from "../../common/Button";
-import Input from "../../common/Input";
-import InputLabel from "../../common/InputLabel";
-import CopyImg from "../../../imgs/copy.svg";
 import axios from "axios";
 import CheckMarkBlue from "../../../imgs/checkmark_blue.svg";
 import CheckMarkGreen from "../../../imgs/checkmark_green.svg";
-// import { ReactComponent as CheckMark } from "../../../imgs/checkmark.svg";
 import Errors from "../../common/Errors";
-import JoinInfo from "./JoinInfo";
 
-const JoinConfirmation = ({
-  course,
-  joinCourse,
-  display,
-  toggleDisplay,
-  close,
-}) => {
+const JoinConfirmation = ({ course, joinCourse, display, toggleDisplay }) => {
   const [loading, toggleLoading] = useState(false);
   const [errors, toggleErrors] = useState(null);
   const [success, toggleSuccess] = useState(null);

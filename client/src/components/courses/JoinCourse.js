@@ -31,10 +31,6 @@ const JoinCourse = () => {
               joinCourse={joinCourse}
               display={display}
               toggleDisplay={toggleDisplay}
-              close={() => {
-                toggleModal(false);
-                joinCourse(null);
-              }}
             />
           )}
         </Modal>
