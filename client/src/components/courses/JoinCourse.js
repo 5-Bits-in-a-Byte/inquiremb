@@ -18,7 +18,7 @@ const JoinCourse = () => {
           close={() => {
             toggleModal(false);
           }}
-          width="420px"
+          width="724px"
           data-testid="join-course-modal"
         >
           {!course ? (

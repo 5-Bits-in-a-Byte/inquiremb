@@ -51,65 +51,78 @@ const JoinConfirmation = ({ course, close }) => {
   };
 
   return (
-    <div className="flex-col align justify">
+    <Wrapper className="flex-col align justify">
       <img src={CheckMark}></img>
-      <h4 className="margin-t20" style={{}}>
+      <Title className="margin-t20" style={{}}>
         CONFIRM COURSE
-      </h4>
+      </Title>
       <HighlightedSection className="flex-row">
         <CourseInfo>
           <Course>
             <div style={{ opacity: "70%" }}>Course:&nbsp;</div>{" "}
-            <div>{course.course}</div>
+            <TextContent>{course.course}</TextContent>
           </Course>
           <Instructor>
             <div style={{ opacity: "70%" }}>Instructor:&nbsp;</div>
-            <div>
+            <TextContent>
               {course.first} {course.last}
-            </div>
+            </TextContent>
           </Instructor>
         </CourseInfo>
       </HighlightedSection>
       <BottomButtons>
-        <Button secondary autoWidth style={{ marginTop: 24 }} onClick={goBack}>
+        <Button secondary autoWidth style={{ margin: "24px 1em 0 1em" }}>
           Back
         </Button>
         <Button
           primary
           autoWidth
-          style={{ marginTop: 24 }}
           onClick={confirmJoinRequest}
           loading={loading}
+          style={{ margin: "24px 1em 0 1em" }}
         >
           Confirm
         </Button>
       </BottomButtons>
       <Errors errors={errors} />
-    </div>
+    </Wrapper>
   );
 };
 
 export default JoinConfirmation;
 
+const Wrapper = styled.div``;
+
+const Title = styled.h4`
+  font-size: 30px;
+`;
+
 const BottomButtons = styled.div`
   display: flex;
-  justify-content: space-between;
   width: 100%;
 `;
 
 const CourseInfo = styled.div`
   display: flex;
   flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+
+  height: 4em;
 `;
 
 const Course = styled.div`
   display: flex;
   flex-direction: row;
+
+  margin: 0.5em 0;
 `;
 
 const Instructor = styled.div`
   display: flex;
   flex-direction: row;
+
+  margin: 0.5em 0;
 `;
 
 const HighlightedSection = styled.div`
@@ -120,4 +133,9 @@ const HighlightedSection = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+`;
+
+const TextContent = styled.div`
+  font-weight: 400;
+  font-style: normal;
 `;
