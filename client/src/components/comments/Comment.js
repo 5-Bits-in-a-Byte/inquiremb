@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
 import LikeImg from "../../imgs/like.svg";
 import DraftTextBox from "../common/DraftTextArea";
 import Button from "../common/Button";
+import { useParams } from "react-router";
+import LazyFetch from "../common/requests/LazyFetch";
 
 const Comment = ({ comment, isDraft, callback }) => {
+  const { postid } = useParams();
   const [content, setContent] = useState("");
+  const [newReplies, setNewReplies] = useState([]);
+  const [isReplying, toggleReply] = useState(false);
 
   const renderContent = () => {
     if (isDraft) {
@@ -19,10 +23,46 @@ const Comment = ({ comment, isDraft, callback }) => {
     }
   };
 
+  // Create or cancel the reply here (depends on if content is passed)
+  const submitReply = (content = null) => {
+    if (!content) {
+      toggleReply(false);
+    } else {
+      LazyFetch({
+        type: "post",
+        endpoint:
+          "/api/posts/" + postid + "/comments/" + comment._id + "/replies",
+        data: { content, isAnonymous: false },
+        onSuccess: (data) => {
+          toggleReply(false);
+          setNewReplies([
+            ...newReplies,
+            <CommentReply reply={data} key={data._id} />,
+          ]);
+        },
+      });
+    }
+  };
+
   // Used for the text box to create a new post
   const handleChange = (e) => {
     setContent(e.target.value);
   };
+
+  // Collect replies from comment data and append any newly created replies (if applicable)
+  let replies = [];
+  if (comment.replies && comment.replies.length > 0) {
+    comment.replies.forEach((reply) => {
+      replies.push(<CommentReply reply={reply} />);
+    });
+  }
+  // Insert new replies that were created from state
+  replies = [...replies, ...newReplies];
+
+  // If the user clicks reply, insert a drafted reply
+  if (isReplying) {
+    replies.push(<CommentReply isDraft submitReply={submitReply} />);
+  }
 
   return (
     <CommentWrapper>
@@ -57,7 +97,12 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
-                <UserDescription style={{ marginRight: 10 }}>
+                <UserDescription
+                  style={{ marginRight: 10 }}
+                  onClick={() => {
+                    toggleReply(true);
+                  }}
+                >
                   Reply
                 </UserDescription>
                 <Icon src={LikeImg} />
@@ -66,15 +111,11 @@ const Comment = ({ comment, isDraft, callback }) => {
             )}
           </MetaIconWrapper>
         </PostMetaContentWrapper>
-        {comment.replies &&
-          comment.replies.length > 0 &&
-          comment.replies.map((reply) => <CommentReply reply={reply} />)}
+        {replies}
       </ReplyContainer>
     </CommentWrapper>
   );
 };
-
-Comment.propTypes = {};
 
 export default Comment;
 
@@ -122,8 +163,6 @@ const UserIcon = styled.img`
 `;
 
 const UserDescription = styled.h5`
-  user-select: none;
-
   color: #8c8c8c;
 `;
 

@@ -1,26 +1,58 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import LikeImg from "../../imgs/like.svg";
+import { UserContext } from "../context/UserProvider";
+import DraftTextArea from "../common/DraftTextArea";
+import Button from "../common/Button";
 
-const CommentReply = ({ reply }) => {
+const CommentReply = ({ reply, isDraft, submitReply }) => {
+  const user = useContext(UserContext);
+  const [draft, setDraft] = useState("");
+  const handleChange = (e) => {
+    setDraft(e.target.value);
+  };
+
+  if (isDraft) {
+    reply = {
+      _id: null,
+      content: <DraftTextArea onChange={handleChange} value={draft} />,
+      postedby: { first: user.first, last: user.last, _id: user._id },
+      reactions: { likes: [] },
+    };
+  }
+  console.log(reply);
   return (
     <CommentReplyWrapper>
       <CommentReplyContent>{reply.content}</CommentReplyContent>
       <ReplyMetaContentWrapper className="meta">
         <UserDescription>
-          Reply by {reply.postedby.first + " " + reply.postedby.last}
+          Reply by{" "}
+          {reply &&
+            reply.postedby &&
+            reply.postedby.first + " " + reply.postedby.last}
         </UserDescription>
+
         <MetaIconWrapper>
-          <Icon src={LikeImg} />
-          <IconValue>1</IconValue>
+          {isDraft ? (
+            <>
+              <Button secondary onClick={() => submitReply(null)}>
+                Cancel
+              </Button>
+              <Button primary onClick={() => submitReply(draft)}>
+                Submit
+              </Button>
+            </>
+          ) : (
+            <>
+              <Icon src={LikeImg} />
+              <IconValue>1</IconValue>
+            </>
+          )}
         </MetaIconWrapper>
       </ReplyMetaContentWrapper>
     </CommentReplyWrapper>
   );
 };
-
-CommentReply.propTypes = {};
 
 export default CommentReply;
 
