@@ -49,12 +49,12 @@ const Sidebar = ({
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
           />
-          <SectionTab
+          {/* <SectionTab
             tabText={"Bookmarked"}
             imageLocation={BookmarkImg}
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
-          />
+          /> */}
         </Section>
       </Container>
     </FlexWrapper>

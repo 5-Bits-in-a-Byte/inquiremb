@@ -9,6 +9,10 @@ from bson.objectid import ObjectId
 
 class Posts(Resource):
     def post(self, course_id=None):
+        course = current_user.get_course(course_id)
+        if not course:
+            return {"errors": ["You have not joined this course"]}, 403
+
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('title')
@@ -22,6 +26,11 @@ class Posts(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
+        # Check if user is instructor
+        isInstructor = False
+        if course.admin:
+            isInstructor = True
+
         # Adding user info to dict
         anonymous = args['isAnonymous']
         if anonymous:
@@ -33,7 +42,7 @@ class Posts(Resource):
 
         # Add post to MongoDB
         post = Post(courseid=course_id, postedby=postedby, title=args.title,
-                    isPrivate=args.isPrivate, content=args.content).save()
+                    isPrivate=args.isPrivate, content=args.content, isInstructor=isInstructor).save()
 
         # Get the JSON format
         result = self.serialize(post)
@@ -44,29 +53,53 @@ class Posts(Resource):
         # Get the search input and the current course
         req = request.args.get('search')
         page = request.args.get('page', default=0, type=int)
+        # filter options: 'instructor', 'me', 'myupvoted'
+        filterby = request.args.get('filterby', type=str)
         current_course = current_user.get_course(course_id)
+        print(filterby)
 
-        # If the current user can see private posts and there's no search
-        if current_course.seePrivate and (req is None):
+        queryParams = {"courseid": course_id}
+        # Filter by 'instructor'
+        if filterby == 'instructor':
+            queryParams["isInstructor"] = True
             query = Post.objects.raw(
-                {'courseid': course_id}).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page*20).limit(20)
+                queryParams).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page * 20).limit(20)
+        # Filter by 'me'
+        elif filterby == 'me':
+            queryParams["postedby._id"] = {
+                '$in': [current_user._id, current_user.anonymousId]}
+            query = Post.objects.raw(
+                queryParams).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page * 20).limit(20)
+        # Filter by 'myupvoted'
+        elif filterby == 'myupvoted':
+            queryParams["reactions.likes"] = current_user._id
+            query = Post.objects.raw(
+                queryParams).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page * 20).limit(20)
+        # If the current user can see private posts and there's no search
+        elif current_course.seePrivate and (req is None):
+            query = Post.objects.raw(
+                queryParams).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page * 20).limit(20)
 
         # If the current user can see private posts and there is a search
         elif current_course.seePrivate and (req is not None):
-            query = Post.objects.raw(
-                {'courseid': course_id, '$text': {'$search': req}}).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page*20).limit(20)
+            queryParams['$text'] = {'$search': req}
+            query = Post.objects.raw(queryParams).order_by(
+                [("isPinned", -1), ("createdDate", -1)]).skip(page * 20).limit(20)
 
         # If the current user cannot see private posts and there is a search
         elif (not current_course.seePrivate) and (req is not None):
-            query = Post.objects.raw(
-                {"$or": [{'isPrivate': False}, {'postedby._id': {
-                    '$in': [current_user._id, current_user.anonymousId]}}], 'courseid': course_id, '$text': {'$search': req}}).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page*20).limit(20)
+            queryParams['$or'] = [{'isPrivate': False}, {'postedby._id': {
+                '$in': [current_user._id, current_user.anonymousId]}}]
+            queryParams['$text'] = {'$search': req}
+            query = Post.objects.raw(queryParams).order_by(
+                [('isPinned', -1), ('createdDate', -1)]).skip(page * 20).limit(20)
 
         # If the current user cannot see private posts and there is not a search
         else:
-            query = Post.objects.raw(
-                {"$or": [{'isPrivate': False}, {'postedby._id': {
-                    '$in': [current_user._id, current_user.anonymousId]}}], 'courseid': course_id}).order_by([("isPinned", -1), ("createdDate", -1)]).skip(page*20).limit(20)
+            queryParams["$or"] = [{'isPrivate': False}, {'postedby._id': {
+                '$in': [current_user._id, current_user.anonymousId]}}]
+            query = Post.objects.raw(queryParams).order_by(
+                [("isPinned", -1), ("createdDate", -1)]).skip(page * 20).limit(20)
 
         # Get the json for all the posts we want to display
         result = [self.serialize(post) for post in query]

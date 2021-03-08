@@ -65,6 +65,7 @@ class Post(MongoModel):
     postedby = fields.DictField()
     title = fields.CharField(required=True)
     content = fields.CharField(required=True)
+    isInstructor = fields.BooleanField(default=False)
     isPinned = fields.BooleanField(default=False)
     isPrivate = fields.BooleanField()
     instructorCommented = fields.BooleanField(default=False)

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import Post from "../posts/Post";
 import Sidebar from "../posts/Sidebar";
@@ -7,7 +6,6 @@ import Button from "../common/Button";
 import Comment from "./Comment";
 import { Link, useLocation, useParams } from "react-router-dom";
 import LazyFetch from "../common/requests/LazyFetch";
-import Fetch from "../common/requests/Fetch";
 import { UserContext } from "../context/UserProvider";
 
 const renderComments = (data) => {
@@ -60,11 +58,13 @@ const CommentView = (props) => {
 
   let comments = [...newComments.created];
   if (post) {
-    const { data, errors, loading } = Fetch({
+    LazyFetch({
       type: "get",
       endpoint: "/api/posts/" + post._id + "/comments",
+      onSuccess: (data) => {
+        comments = [...renderComments(data), ...comments];
+      },
     });
-    comments = [...renderComments(data), ...comments];
   }
 
   if (newComments.draft) {
