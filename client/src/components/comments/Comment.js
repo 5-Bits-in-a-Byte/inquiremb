@@ -60,8 +60,11 @@ const Comment = ({ comment, isDraft, callback }) => {
                 <UserDescription style={{ marginRight: 10 }}>
                   Reply
                 </UserDescription>
-                <Icon src={LikeImg} />
-                <IconValue>1</IconValue>
+                <Icon
+                  src={LikeImg}
+                  onClick={() => console.log("Clicked to like comment")}
+                />
+                <IconValue>{5}</IconValue>
               </>
             )}
           </MetaIconWrapper>

@@ -12,7 +12,10 @@ const CommentReply = ({ reply }) => {
           Reply by {reply.postedby.first + " " + reply.postedby.last}
         </UserDescription>
         <MetaIconWrapper>
-          <Icon src={LikeImg} />
+          <Icon
+            src={LikeImg}
+            onClick={() => console.log("Clicked to like comment reply")}
+          />
           <IconValue>1</IconValue>
         </MetaIconWrapper>
       </ReplyMetaContentWrapper>

@@ -6,7 +6,7 @@ import LikeImg from "../../imgs/like.svg";
 const PostReactions = ({ likes, comments }) => {
   return (
     <>
-      <Icon src={LikeImg} />
+      <Icon src={LikeImg} onClick={() => console.log("Clicked to like post")} />
       <IconValue>{likes}</IconValue>
       <Icon src={CommentImg} />
       <IconValue>{comments}</IconValue>
