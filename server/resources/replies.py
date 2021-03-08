@@ -42,7 +42,7 @@ class Replies(Resource):
         post.updatedDate = datetime.datetime.now()
         post.save()
 
-        return self.serialize(comment), 200
+        return self.serialize(reply), 200
 
     def put(self, post_id=None, comment_id=None):
         # Update comment
