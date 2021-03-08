@@ -28,8 +28,9 @@ export default Button;
 const Btn = styled.button`
   cursor: pointer;
   border: none;
-  border-radius: 4px;
-  padding: 5px 12px;
+  padding: 9px 12px;
+  border-radius: 3px;
+
   font-size: 16px;
   width: ${(props) => props.autoWidth && "100%"};
   display: flex;
@@ -40,9 +41,21 @@ const Btn = styled.button`
   ${(props) =>
     props.secondary &&
     css`
+      border-radius: 4px;
+      padding: 5px 12px;
       background-color: #e7e7e7;
       color: #162b55;
+      &:hover {
+        background-color: #dedede;
+      }
+    `}
 
+  // If largeSecondary prop === true
+  ${(props) =>
+    props.largeSecondary &&
+    css`
+      background-color: #e7e7e7;
+      color: #162b55;
       &:hover {
         background-color: #dedede;
       }
@@ -52,11 +65,8 @@ const Btn = styled.button`
     ${(props) =>
     props.primary &&
     css`
-      padding: 9px 12px;
-      border-radius: 3px;
       background-color: #4a86fa;
       color: #fff;
-
       &:hover {
         background-color: #407df3;
       }

@@ -71,7 +71,7 @@ const Comment = ({ comment, isDraft, callback }) => {
         <PostMetaContentWrapper className="meta">
           {/* <UserIcon src="./icons8_note.svg" /> */}
           <UserDescription>
-            Reply by {comment.postedby.first + " " + comment.postedby.last}
+            by {comment.postedby.first + " " + comment.postedby.last}
           </UserDescription>
 
           <MetaIconWrapper>
@@ -97,14 +97,14 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
-                <UserDescription
+                <ReplyBtn
                   style={{ marginRight: 10 }}
                   onClick={() => {
                     toggleReply(true);
                   }}
                 >
                   Reply
-                </UserDescription>
+                </ReplyBtn>
                 <Icon src={LikeImg} />
                 <IconValue>1</IconValue>
               </>
@@ -125,12 +125,7 @@ const CommentWrapper = styled.div`
   margin: 17px 0;
   /* border: 1px solid red; */
   border-radius: 0.3em;
-
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
-
-  :hover {
-    cursor: pointer;
-  }
 `;
 
 const CommentContent = styled.p`
@@ -164,6 +159,14 @@ const UserIcon = styled.img`
 
 const UserDescription = styled.h5`
   color: #8c8c8c;
+`;
+
+const ReplyBtn = styled.h5`
+  cursor: pointer;
+  color: #8c8c8c;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const MetaIconWrapper = styled.div`
