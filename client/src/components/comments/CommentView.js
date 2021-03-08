@@ -59,7 +59,7 @@ const CommentView = (props) => {
   };
 
   let comments = [...newComments.created];
-  if (post && !post.new) {
+  if (post) {
     const { data, errors, loading } = Fetch({
       type: "get",
       endpoint: "/api/posts/" + post._id + "/comments",
@@ -99,9 +99,11 @@ const CommentView = (props) => {
                 >
                   <Button secondary>Back to all Posts</Button>
                 </Link>
-                <Button onClick={draftNewComment} secondary>
-                  Reply to Post
-                </Button>
+                {postid !== "new" && (
+                  <Button onClick={draftNewComment} secondary>
+                    Reply to Post
+                  </Button>
+                )}
               </OptionsContainer>
               <Post
                 post={post}
@@ -157,4 +159,5 @@ const ScrollingDiv = styled.div`
 const MaxWidth = styled.div`
   max-width: 900px;
   margin: auto;
+  padding-bottom: 40px;
 `;

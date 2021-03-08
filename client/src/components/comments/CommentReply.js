@@ -66,6 +66,7 @@ const CommentReplyWrapper = styled.div`
   margin: 18px 0;
   border-radius: 0.3em;
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
+  border-left: 4px solid gainsboro;
 `;
 
 const CommentReplyContent = styled.p`
@@ -81,7 +82,8 @@ const ReplyMetaContentWrapper = styled.div`
   padding: 0.5em 2.2em;
   width: 100%;
   min-height: 1.5em;
-  background-color: #ededed;
+  background-color: #f9f9f9;
+  border-radius: 0 0 0.3em 0.3em;
 `;
 
 const UserDescription = styled.h5`

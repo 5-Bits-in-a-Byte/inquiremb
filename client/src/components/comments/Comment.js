@@ -195,4 +195,5 @@ const ReplyContainer = styled.div`
   padding: 5px 30px;
   width: 100%;
   min-height: 40px;
+  border-radius: 0 0 0.3em 0.3em;
 `;
