@@ -49,7 +49,7 @@ const CommentReply = ({ reply, isDraft, submitReply }) => {
           ) : (
             <>
               <Icon src={LikeImg} />
-              <IconValue>1</IconValue>
+              <IconValue>0</IconValue>
             </>
           )}
         </MetaIconWrapper>
