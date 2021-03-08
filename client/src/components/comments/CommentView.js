@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import Post from "../posts/Post";
 import Sidebar from "../posts/Sidebar";
@@ -7,7 +6,6 @@ import Button from "../common/Button";
 import Comment from "./Comment";
 import { Link, useLocation, useParams } from "react-router-dom";
 import LazyFetch from "../common/requests/LazyFetch";
-import Fetch from "../common/requests/Fetch";
 import { UserContext } from "../context/UserProvider";
 
 const renderComments = (data) => {
@@ -59,12 +57,14 @@ const CommentView = (props) => {
   };
 
   let comments = [...newComments.created];
-  if (post && !post.new) {
-    const { data, errors, loading } = Fetch({
+  if (post) {
+    LazyFetch({
       type: "get",
       endpoint: "/api/posts/" + post._id + "/comments",
+      onSuccess: (data) => {
+        comments = [...renderComments(data), ...comments];
+      },
     });
-    comments = [...renderComments(data), ...comments];
   }
 
   if (newComments.draft) {
@@ -99,9 +99,11 @@ const CommentView = (props) => {
                 >
                   <Button secondary>Back to all Posts</Button>
                 </Link>
-                <Button onClick={draftNewComment} secondary>
-                  Reply to Post
-                </Button>
+                {postid !== "new" && (
+                  <Button onClick={draftNewComment} secondary>
+                    Reply to Post
+                  </Button>
+                )}
               </OptionsContainer>
               <Post
                 post={post}
@@ -157,4 +159,5 @@ const ScrollingDiv = styled.div`
 const MaxWidth = styled.div`
   max-width: 900px;
   margin: auto;
+  padding-bottom: 40px;
 `;

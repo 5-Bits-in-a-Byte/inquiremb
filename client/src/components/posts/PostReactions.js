@@ -20,8 +20,8 @@ const Icon = styled.img`
   float: left;
   width: 18px;
   height: 18px;
-  margin-right: 1em;
-  margin-left: 0.75em;
+  margin-right: 8px;
+  margin-left: 20px;
   user-select: none;
 `;
 

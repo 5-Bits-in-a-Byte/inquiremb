@@ -9,7 +9,6 @@ import { useParams } from "react-router-dom";
 import Fetch from "../common/requests/Fetch";
 
 const createPost = (post) => {
-  console.log(post);
   return <Post post={post} key={post._id} isCondensed={false} />;
 };
 
@@ -28,15 +27,30 @@ const generateSections = (data) => {
   return posts;
 };
 
-const PostView = (props) => {
+const PostView = ({ highlightedSection }) => {
   const [isCondensed, setCondensedState] = useState(true);
   // Retrieves the courseid from the url parameters
   const { courseid } = useParams();
+  let endpoint = "/api/courses/" + courseid + "/posts";
 
+  switch (highlightedSection) {
+    case "Instructor":
+      endpoint += "?filterby=instructor";
+      break;
+    case "My Posts":
+      endpoint += "?filterby=me";
+      break;
+    case "My Upvoted":
+      endpoint += "?filterby=myupvoted";
+      break;
+    default:
+    // Don't add a filter to endpoint
+  }
+  console.log(endpoint);
   // Load posts from course
   const { data, errors, loading } = Fetch({
     type: "get",
-    endpoint: "/api/courses/" + courseid + "/posts",
+    endpoint: endpoint,
   });
   let posts = generateSections(data);
 

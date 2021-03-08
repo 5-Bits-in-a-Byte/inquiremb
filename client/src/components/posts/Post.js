@@ -57,7 +57,12 @@ const generatePostContent = (
       isPinned: post.isPinned,
       picture: post.postedby.picture,
       postedby: post.postedby.first + " " + post.postedby.last,
-      meta: <PostReactions likes={post.reactions.likes.length} />,
+      meta: (
+        <PostReactions
+          likes={post.reactions.likes.length}
+          comments={post.comments}
+        />
+      ),
     };
   }
 };
@@ -65,7 +70,7 @@ const generatePostContent = (
 const Post = ({ post, isCondensed, isDraft }) => {
   const history = useHistory();
   const user = useContext(UserContext);
-  const { courseid } = useParams();
+  const { courseid, postid } = useParams();
 
   // State and handler for drafting posts
   const [draft, setDraft] = useState({ title: "", content: "" });
@@ -112,7 +117,11 @@ const Post = ({ post, isCondensed, isDraft }) => {
   };
 
   return (
-    <PostWrapper isCondensed={isCondensed} onClick={navigateToPost}>
+    <PostWrapper
+      isCondensed={isCondensed}
+      onClick={navigateToPost}
+      isFocused={postid}
+    >
       <PostTitle isCondensed={isCondensed}>{render.title}</PostTitle>
       <PinIcon isPinned={render.isPinned} src={PinImg} />
       {!isCondensed && <PostContent>{render.content}</PostContent>}
@@ -144,21 +153,18 @@ const PostWrapper = styled.div`
   text-decoration: none;
   width: 100%;
   min-height: 85px;
-
-  /* Height is commented out so that Posts change height dynamically 
-     depending on size of content */
-  /* height: ${(props) => (props.isCondensed && "150px") || "85px"}; */
-
   margin: 2em 0;
-
-  // border: 1px solid black;
   border-radius: 0.3em;
   background: #fff;
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
-
-  :hover {
-    cursor: pointer;
-  }
+  transition: all 100ms ease-in-out;
+  ${(props) =>
+    !props.isFocused &&
+    css`
+      &:hover {
+        box-shadow: 0px 3px 10px 3px rgb(0 0 0 / 7%);
+      }
+    `}
 `;
 
 const PostTitle = styled.h2`
@@ -205,7 +211,6 @@ const UserDescription = styled.h5`
 const MetaIconWrapper = styled.div`
   display: inline-flex;
   margin-left: auto;
-
   height: 100%;
 `;
 

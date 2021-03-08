@@ -17,7 +17,7 @@ const ClassView = ({ classroomName }) => {
         setHighlightedSection={setHighlightedSection}
         highlightedSection={highlightedSection}
       />
-      <PostView />
+      <PostView highlightedSection={highlightedSection} />
     </ClassViewWrapper>
   );
 };
