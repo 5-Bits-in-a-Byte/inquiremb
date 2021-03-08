@@ -20,7 +20,7 @@ const CommentReply = ({ reply, isDraft, submitReply }) => {
       reactions: { likes: [] },
     };
   }
-  console.log(reply);
+
   return (
     <CommentReplyWrapper>
       <CommentReplyContent>{reply.content}</CommentReplyContent>

@@ -46,7 +46,7 @@ const PostView = ({ highlightedSection }) => {
     default:
     // Don't add a filter to endpoint
   }
-  console.log(endpoint);
+
   // Load posts from course
   const { data, errors, loading } = Fetch({
     type: "get",

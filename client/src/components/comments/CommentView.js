@@ -21,6 +21,7 @@ const renderComments = (data) => {
 const CommentView = (props) => {
   const user = useContext(UserContext);
   const [newComments, setNewComments] = useState({ draft: false, created: [] });
+  const [commentData, setCommentData] = useState([]);
   const { courseid, postid } = useParams();
   // location is passed from the react-router Link which stores
   // the post that was clicked under location.state
@@ -29,6 +30,20 @@ const CommentView = (props) => {
   if (location.state) {
     post = location.state.post;
   }
+
+  // Fetch comments
+  useEffect(() => {
+    if (post) {
+      LazyFetch({
+        type: "get",
+        endpoint: "/api/posts/" + post._id + "/comments",
+        onSuccess: (data) => {
+          setCommentData([...renderComments(data)]);
+        },
+      });
+    }
+  }, [post]);
+
   const draftNewComment = () => {
     setNewComments({
       ...newComments,
@@ -56,17 +71,7 @@ const CommentView = (props) => {
     }
   };
 
-  let comments = [...newComments.created];
-  if (post) {
-    LazyFetch({
-      type: "get",
-      endpoint: "/api/posts/" + post._id + "/comments",
-      onSuccess: (data) => {
-        comments = [...renderComments(data), ...comments];
-      },
-    });
-  }
-
+  let comments = [...commentData, ...newComments.created];
   if (newComments.draft) {
     const draft = {
       postedby: {
