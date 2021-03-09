@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
 import LikeImg from "../../imgs/like.svg";
@@ -6,22 +6,21 @@ import DraftTextBox from "../common/DraftTextArea";
 import Button from "../common/Button";
 import { useParams } from "react-router";
 import LazyFetch from "../common/requests/LazyFetch";
+import { UserContext } from "../context/UserProvider";
 
 var dummy_reaction_IDs = [];
-var dummy_current_user = "my_user_ID";
 
 const Comment = ({ comment, isDraft, callback }) => {
   const { postid } = useParams();
   const [content, setContent] = useState("");
+  const user = useContext(UserContext);
   const [reactions, setReactions] = useState({
     likes: [...dummy_reaction_IDs],
   });
-  const [reactCounts, setCounts] = useState({
-    likeCount: Object.keys(reactions.likes).length,
-  });
   const [reactClicked, setClicked] = useState({
-    liked: reactions.likes.includes(dummy_current_user),
+    liked: reactions.likes.includes(user._id),
   });
+
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
 
@@ -64,25 +63,20 @@ const Comment = ({ comment, isDraft, callback }) => {
   const handleLike = () => {
     var temp = reactions;
 
-    var loc = temp.likes.indexOf(dummy_current_user);
+    var loc = temp.likes.indexOf(user._id);
 
     if (loc === -1) {
-      temp.likes.push(dummy_current_user);
+      temp.likes.push(user._id);
       setClicked({ liked: true });
-      console.log("liked");
+      console.log("liked comment");
     } else {
       temp.likes.splice(loc, 1);
       setClicked({ liked: false });
-      console.log("unliked");
+      console.log("unliked comment");
     }
 
-    var newCounts = reactCounts;
-    newCounts.likeCount = Object.keys(reactions.likes).length;
-
-    setCounts(newCounts);
     setReactions(temp);
     console.log(reactions.likes);
-    console.log("New count is: ", reactCounts.likeCount);
   };
 
   // Collect replies from comment data and append any newly created replies (if applicable)
@@ -99,7 +93,6 @@ const Comment = ({ comment, isDraft, callback }) => {
   if (isReplying) {
     replies.push(<CommentReply isDraft submitReply={submitReply} />);
   }
-
 
   return (
     <CommentWrapper>
@@ -141,12 +134,12 @@ const Comment = ({ comment, isDraft, callback }) => {
                   }}
                 >
                   Reply
-                <Icon
-                  src={LikeImg}
-                  onClick={() => handleLike()}
-                  clicked={reactClicked.liked}
-                />
-                <IconValue>{reactCounts.likeCount}</IconValue>
+                  <Icon
+                    src={LikeImg}
+                    onClick={() => handleLike()}
+                    clicked={reactClicked.liked}
+                  />
+                  <IconValue>{reactions.likes.length}</IconValue>
                 </ReplyBtn>
               </>
             )}
