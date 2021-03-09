@@ -79,7 +79,12 @@ const Home = () => {
     <Wrapper>
       <ViewWrapper>
         <ScrollingDiv>
-          <MaxWidth>{groups}</MaxWidth>
+          <MaxWidth>
+            <h1 align="center" style={{ margin: "1em" }}>
+              Recent Posts
+            </h1>
+            {groups}
+          </MaxWidth>
         </ScrollingDiv>
       </ViewWrapper>
     </Wrapper>
