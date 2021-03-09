@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../imgs/inquire-logo.png";
 import SearchBar from "../common/SearchBar";
@@ -8,7 +9,9 @@ const TopNavBar = () => {
   return (
     <Nav>
       <Wrapper>
-        <LogoImg src={Logo} />
+        <Link to={"/"}>
+          <LogoImg src={Logo} />
+        </Link>
       </Wrapper>
       <Wrapper>
         <SearchBar placeholder="Search for a post or class" />

@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Post from "../posts/Post";
 import Sidebar from "../posts/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
-import { Link, useLocation, useParams } from "react-router-dom";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext } from "../context/UserProvider";
+import Fetch from "../common/requests/Fetch";
 
 const renderComments = (data) => {
   let ret = [];
@@ -18,10 +19,21 @@ const renderComments = (data) => {
   return ret;
 };
 
-const CommentView = (props) => {
+const CommentView = ({ classroomName }) => {
   const user = useContext(UserContext);
+  const history = useHistory();
   const [newComments, setNewComments] = useState({ draft: false, created: [] });
+  const [commentData, setCommentData] = useState([]);
   const { courseid, postid } = useParams();
+  const [highlightedSection, setHighlightedSection] = useState("");
+
+  const redirect = (sectionFilter) => {
+    history.push({
+      pathname: "/course/" + courseid,
+      state: { filter: sectionFilter },
+    });
+  };
+
   // location is passed from the react-router Link which stores
   // the post that was clicked under location.state
   let location = useLocation();
@@ -29,6 +41,20 @@ const CommentView = (props) => {
   if (location.state) {
     post = location.state.post;
   }
+
+  // Fetch comments
+  useEffect(() => {
+    if (post) {
+      LazyFetch({
+        type: "get",
+        endpoint: "/api/posts/" + post._id + "/comments",
+        onSuccess: (data) => {
+          setCommentData([...renderComments(data)]);
+        },
+      });
+    }
+  }, [post]);
+
   const draftNewComment = () => {
     setNewComments({
       ...newComments,
@@ -56,17 +82,7 @@ const CommentView = (props) => {
     }
   };
 
-  let comments = [...newComments.created];
-  if (post) {
-    LazyFetch({
-      type: "get",
-      endpoint: "/api/posts/" + post._id + "/comments",
-      onSuccess: (data) => {
-        comments = [...renderComments(data), ...comments];
-      },
-    });
-  }
-
+  let comments = [...commentData, ...newComments.created];
   if (newComments.draft) {
     const draft = {
       postedby: {
@@ -83,9 +99,9 @@ const CommentView = (props) => {
   return (
     <CommentViewWrapper>
       <Sidebar
-        classroomName={props.classroomName}
-        setHighlightedSection={() => {}}
-        highlightedSection={""}
+        classroomName={classroomName}
+        setHighlightedSection={redirect}
+        highlightedSection={highlightedSection}
       />
 
       <CommentViewContainer>

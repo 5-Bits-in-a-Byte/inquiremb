@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import UserImg from "../../imgs/user.svg";
@@ -13,6 +14,8 @@ const Sidebar = ({
   setHighlightedSection,
   highlightedSection,
 }) => {
+  const { courseid, postid } = useParams();
+
   return (
     <FlexWrapper>
       <Container>
