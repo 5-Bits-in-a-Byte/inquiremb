@@ -19,7 +19,9 @@ const Sidebar = ({
   return (
     <FlexWrapper>
       <Container>
-        <ClassTitle>{classroomName}</ClassTitle>
+        <Link to={"/course/" + courseid} style={{ textDecoration: "none" }}>
+          <ClassTitle>{classroomName}</ClassTitle>
+        </Link>
 
         <HR />
         <Section>
