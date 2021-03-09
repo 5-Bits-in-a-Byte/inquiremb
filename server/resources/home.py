@@ -9,6 +9,11 @@ from bson.objectid import ObjectId
 
 class Home(Resource):
     def get(self):
+        course_ids = {}
+        for course in current_user.courses:
+            course_ids[course.course_id] = course.course_name
+        print(course_ids)
+
         queryParams = {"courseid": course_id}
         # Filter by 'instructor'
         if filterby == 'instructor':
