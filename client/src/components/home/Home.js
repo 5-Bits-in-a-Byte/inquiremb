@@ -66,7 +66,6 @@ const generateSections = (data) => {
 };
 
 const Home = () => {
-  const [isCondensed, setCondensedState] = useState(true);
   let endpoint = "/api/home";
 
   // Load posts from course
