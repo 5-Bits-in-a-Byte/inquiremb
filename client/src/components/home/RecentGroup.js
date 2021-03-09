@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const RecentGroup = ({ postList, classroomName, nameColor }) => {
   return (
-    <Wrapper>
+    <Wrapper barColor={nameColor}>
       <GroupWrapper>
         <GroupTitle nameColor={nameColor}>{classroomName}</GroupTitle>
         {postList}
@@ -27,6 +27,7 @@ const Wrapper = styled.div`
   margin: 1em 0;
   padding: 1.5em;
 
+  border-left: 4px solid ${(props) => props.barColor};
   border-radius: 0.3em;
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
 `;
