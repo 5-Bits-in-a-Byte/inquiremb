@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const Fetch = ({ type, url = process.env.REACT_APP_SERVER_URL, endpoint }) => {
-  const [res, setRes] = useState({ data: null, errors: null, loading: false });
   useEffect(() => {
     setRes({ ...res, loading: true });
     axios[type](url + endpoint, { withCredentials: true })
@@ -24,7 +23,8 @@ const Fetch = ({ type, url = process.env.REACT_APP_SERVER_URL, endpoint }) => {
           });
         }
       });
-  }, []);
+  }, [endpoint]);
+  const [res, setRes] = useState({ data: null, errors: null, loading: false });
   return res;
 };
 

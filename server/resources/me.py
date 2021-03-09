@@ -6,6 +6,7 @@ from resources.courses import pick_color, DEFAULT_COLORS
 
 
 class Me(Resource):
+    @permission_layer([])
     def get(self):
         """
         Retrieves the current user

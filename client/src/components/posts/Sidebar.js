@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import UserImg from "../../imgs/user.svg";
@@ -13,6 +14,8 @@ const Sidebar = ({
   setHighlightedSection,
   highlightedSection,
 }) => {
+  const { courseid, postid } = useParams();
+
   return (
     <FlexWrapper>
       <Container>
@@ -49,12 +52,12 @@ const Sidebar = ({
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
           />
-          <SectionTab
+          {/* <SectionTab
             tabText={"Bookmarked"}
             imageLocation={BookmarkImg}
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
-          />
+          /> */}
         </Section>
       </Container>
     </FlexWrapper>

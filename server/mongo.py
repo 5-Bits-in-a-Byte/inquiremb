@@ -65,13 +65,14 @@ class Post(MongoModel):
     postedby = fields.DictField()
     title = fields.CharField(required=True)
     content = fields.CharField(required=True)
+    isInstructor = fields.BooleanField(default=False)
     isPinned = fields.BooleanField(default=False)
     isPrivate = fields.BooleanField()
     instructorCommented = fields.BooleanField(default=False)
     reactions = fields.DictField(default={"likes": []})
     comments = fields.IntegerField(default=0)
-    createdDate = fields.DateTimeField(default=datetime.datetime.now())
-    updatedDate = fields.DateTimeField(default=datetime.datetime.now())
+    createdDate = fields.DateTimeField(default=datetime.datetime.now)
+    updatedDate = fields.DateTimeField(default=datetime.datetime.now)
 
     def serialize(self, date):
         pass
@@ -113,3 +114,5 @@ class Course(MongoModel):
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
+
+        indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]

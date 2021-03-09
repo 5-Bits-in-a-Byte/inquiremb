@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
 import LikeImg from "../../imgs/like.svg";
 import DraftTextBox from "../common/DraftTextArea";
 import Button from "../common/Button";
+import { useParams } from "react-router";
+import LazyFetch from "../common/requests/LazyFetch";
 
 var dummy_reaction_IDs = [];
 var dummy_current_user = "my_user_ID";
 
 const Comment = ({ comment, isDraft, callback }) => {
+  const { postid } = useParams();
   const [content, setContent] = useState("");
   const [reactions, setReactions] = useState({
     likes: [...dummy_reaction_IDs],
@@ -20,6 +22,8 @@ const Comment = ({ comment, isDraft, callback }) => {
   const [reactClicked, setClicked] = useState({
     liked: reactions.likes.includes(dummy_current_user),
   });
+  const [newReplies, setNewReplies] = useState([]);
+  const [isReplying, toggleReply] = useState(false);
 
   const renderContent = () => {
     if (isDraft) {
@@ -28,6 +32,27 @@ const Comment = ({ comment, isDraft, callback }) => {
     // Otherwise, the post has been fetched from the API so return the content
     else {
       return comment.content;
+    }
+  };
+
+  // Create or cancel the reply here (depends on if content is passed)
+  const submitReply = (content = null) => {
+    if (!content) {
+      toggleReply(false);
+    } else {
+      LazyFetch({
+        type: "post",
+        endpoint:
+          "/api/posts/" + postid + "/comments/" + comment._id + "/replies",
+        data: { content, isAnonymous: false },
+        onSuccess: (data) => {
+          toggleReply(false);
+          setNewReplies([
+            ...newReplies,
+            <CommentReply reply={data} key={data._id} />,
+          ]);
+        },
+      });
     }
   };
 
@@ -60,6 +85,22 @@ const Comment = ({ comment, isDraft, callback }) => {
     console.log("New count is: ", reactCounts.likeCount);
   };
 
+  // Collect replies from comment data and append any newly created replies (if applicable)
+  let replies = [];
+  if (comment.replies && comment.replies.length > 0) {
+    comment.replies.forEach((reply) => {
+      replies.push(<CommentReply reply={reply} />);
+    });
+  }
+  // Insert new replies that were created from state
+  replies = [...replies, ...newReplies];
+
+  // If the user clicks reply, insert a drafted reply
+  if (isReplying) {
+    replies.push(<CommentReply isDraft submitReply={submitReply} />);
+  }
+
+
   return (
     <CommentWrapper>
       <CommentContent>{renderContent()}</CommentContent>
@@ -67,7 +108,7 @@ const Comment = ({ comment, isDraft, callback }) => {
         <PostMetaContentWrapper className="meta">
           {/* <UserIcon src="./icons8_note.svg" /> */}
           <UserDescription>
-            Reply by {comment.postedby.first + " " + comment.postedby.last}
+            by {comment.postedby.first + " " + comment.postedby.last}
           </UserDescription>
 
           <MetaIconWrapper>
@@ -93,28 +134,29 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
-                <UserDescription style={{ marginRight: 10 }}>
+                <ReplyBtn
+                  style={{ marginRight: 10 }}
+                  onClick={() => {
+                    toggleReply(true);
+                  }}
+                >
                   Reply
-                </UserDescription>
                 <Icon
                   src={LikeImg}
                   onClick={() => handleLike()}
                   clicked={reactClicked.liked}
                 />
                 <IconValue>{reactCounts.likeCount}</IconValue>
+                </ReplyBtn>
               </>
             )}
           </MetaIconWrapper>
         </PostMetaContentWrapper>
-        {comment.replies &&
-          comment.replies.length > 0 &&
-          comment.replies.map((reply) => <CommentReply reply={reply} />)}
+        {replies}
       </ReplyContainer>
     </CommentWrapper>
   );
 };
-
-Comment.propTypes = {};
 
 export default Comment;
 
@@ -124,12 +166,7 @@ const CommentWrapper = styled.div`
   margin: 17px 0;
   /* border: 1px solid red; */
   border-radius: 0.3em;
-
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
-
-  :hover {
-    cursor: pointer;
-  }
 `;
 
 const CommentContent = styled.p`
@@ -162,9 +199,15 @@ const UserIcon = styled.img`
 `;
 
 const UserDescription = styled.h5`
-  user-select: none;
-
   color: #8c8c8c;
+`;
+
+const ReplyBtn = styled.h5`
+  cursor: pointer;
+  color: #8c8c8c;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const MetaIconWrapper = styled.div`
@@ -194,4 +237,5 @@ const ReplyContainer = styled.div`
   padding: 5px 30px;
   width: 100%;
   min-height: 40px;
+  border-radius: 0 0 0.3em 0.3em;
 `;

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Errors = ({ errors, margin }) => {
-  console.log(errors);
+  //console.log(errors);
   if (!errors || errors.length < 1) {
     return null;
   }

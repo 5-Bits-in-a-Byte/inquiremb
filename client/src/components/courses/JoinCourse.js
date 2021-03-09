@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
-import Input from "../common/Input";
-import InputLabel from "../common/InputLabel";
 import Modal from "../common/Modal";
+import JoinConfirmation from "./joinCourse/JoinConfirmation";
+import JoinInfo from "./joinCourse/JoinInfo";
 
 const JoinCourse = () => {
   const [modalIsShown, toggleModal] = useState(false);
+  const [course, joinCourse] = useState(null);
+  const [display, toggleDisplay] = useState("flex");
+
   return (
     <>
       <Button secondary onClick={() => toggleModal(true)}>
@@ -15,21 +18,21 @@ const JoinCourse = () => {
         <Modal
           close={() => {
             toggleModal(false);
+            toggleDisplay("flex");
           }}
-          width="420px"
+          width="724px"
           data-testid="join-course-modal"
         >
-          <h3>SEARCH FOR A COURSE</h3>
-          <InputLabel>University</InputLabel>
-          <Input placeholder="University Name" />
-          <InputLabel>Course Name</InputLabel>
-          <Input placeholder="ex, CIS 210" />
-          <h3 style={{ marginTop: 30 }}>OR JOIN BY ACCESS CODE</h3>
-          <InputLabel>Access Code</InputLabel>
-          <Input placeholder="ex, AcK21k" />
-          <Button primary autoWidth style={{ marginTop: 24 }}>
-            + Join Course
-          </Button>
+          {!course ? (
+            <JoinInfo joinCourse={joinCourse} />
+          ) : (
+            <JoinConfirmation
+              course={course}
+              joinCourse={joinCourse}
+              display={display}
+              toggleDisplay={toggleDisplay}
+            />
+          )}
         </Modal>
       )}
     </>

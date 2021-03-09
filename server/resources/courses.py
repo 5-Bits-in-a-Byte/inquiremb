@@ -6,6 +6,8 @@ from utils.argparser_types import str2bool
 from auth import permission_layer, current_user
 from config import DEFAULT_COLORS
 import random
+
+
 # Courses
 # POST - Handles course creation
 # Access - Instructor Only
@@ -38,8 +40,8 @@ class Courses(Resource):
         print(color, args['color'])
         # Add the course to the user's course list and create the course
         course = Course(course=args.course,
-                        canJoinById=args.canJoinById).save()
-        print(course._id)
+                        canJoinById=args.canJoinById, instructorID=current_user._id).save()
+
         # Appends the course with permissions to the user who created it
         User.objects.raw({'_id': current_user._id}).update({"$push": {"courses":
                                                                       {"course_id": course._id, "course_name": args.course,
