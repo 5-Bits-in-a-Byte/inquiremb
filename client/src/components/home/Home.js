@@ -1,48 +1,86 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import RecentPost from "./RecentPost";
 import RecentGroup from "./RecentGroup";
+import Fetch from "../common/requests/Fetch";
+import Post from "../posts/Post";
 
-// Fetch ->
-/**
- * returns {
-    "postinfo"
-    "coursename"
-    "color"
-}
- */
+const createPost = (post) => {
+  return <Post post={post} key={post._id} isCondensed={false} />;
+};
 
-const testPosts = [<RecentPost />, <RecentPost />, <RecentPost />];
+const createGroup = (postList, classroomName, nameColor) => {
+  return (
+    <RecentGroup
+      postList={postList}
+      classroomName={classroomName}
+      nameColor={nameColor}
+    />
+  );
+};
 
-const testGroups = [
-  <RecentGroup
-    postList={testPosts}
-    classroomName={"CIS 422"}
-    nameColor={"red"}
-  />,
-  <RecentGroup
-    postList={testPosts}
-    classroomName={"CIS 471"}
-    nameColor={"red"}
-  />,
-  <RecentGroup
-    postList={testPosts}
-    classroomName={"IDK 123"}
-    nameColor={"red"}
-  />,
-  <RecentGroup
-    postList={testPosts}
-    classroomName={"IDK 456"}
-    nameColor={"red"}
-  />,
-];
+// Sorts the posts by pinned/date
+const generateSections = (data) => {
+  let groups = [];
+
+  if (data) {
+    // Initialize classes object
+    let classes = { class: [], color: [] };
+
+    // Populate classes object with class names and colors
+    data.forEach((post) => {
+      if (!classes.class.includes(post.course_name)) {
+        classes.class.push(post.course_name);
+        classes.color.push(post.color);
+      }
+    });
+
+    // Initialize Post Grouping dictionary
+    let postG = {};
+
+    // Initialize empty list for each course
+    classes.class.forEach((className) => {
+      postG[className] = [];
+    });
+
+    // Place posts in the Post Grouping dictionary
+    data.forEach((post) => {
+      if (post.course_name in postG) {
+        postG[post.course_name].push(createPost(post));
+      }
+    });
+
+    // Build the class groups
+    for (let i = 0; i < classes.class.length; i++) {
+      if (!groups.includes(classes.class[i])) {
+        groups.push(
+          createGroup(
+            postG[classes.class[i]],
+            classes.class[i],
+            classes.color[i]
+          )
+        );
+      }
+    }
+  }
+  return groups;
+};
 
 const Home = () => {
+  const [isCondensed, setCondensedState] = useState(true);
+  let endpoint = "/api/home";
+
+  // Load posts from course
+  const { data, errors, loading } = Fetch({
+    type: "get",
+    endpoint: endpoint,
+  });
+  let groups = generateSections(data);
+
   return (
     <Wrapper>
       <ViewWrapper>
         <ScrollingDiv>
-          <MaxWidth>{testGroups}</MaxWidth>
+          <MaxWidth>{groups}</MaxWidth>
         </ScrollingDiv>
       </ViewWrapper>
     </Wrapper>
@@ -58,14 +96,14 @@ const Wrapper = styled.div`
   align-items: center; */
   height: 100%;
 
-  border: 1px solid red;
+  /* border: 1px solid red; */
 `;
 
 const ViewWrapper = styled.div`
   position: relative;
   width: 100%;
 
-  border: 1px solid orange;
+  /* border: 1px solid orange; */
 `;
 
 const ScrollingDiv = styled.div`

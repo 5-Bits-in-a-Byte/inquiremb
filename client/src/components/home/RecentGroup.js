@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import RecentPost from "./RecentPost";
 import styled from "styled-components";
 
 const RecentGroup = ({ postList, classroomName, nameColor }) => {
@@ -14,7 +13,11 @@ const RecentGroup = ({ postList, classroomName, nameColor }) => {
   );
 };
 
-RecentGroup.propTypes = {};
+RecentGroup.propTypes = {
+  postList: PropTypes.array,
+  classroomName: PropTypes.string,
+  nameColor: PropTypes.string,
+};
 
 export default RecentGroup;
 
@@ -39,4 +42,5 @@ const GroupTitle = styled.h1`
   color: ${(props) => props.nameColor};
 
   text-align: center;
+  text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
 `;
