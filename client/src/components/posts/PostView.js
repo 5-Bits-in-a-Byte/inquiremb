@@ -29,6 +29,7 @@ const generateSections = (data) => {
 
 const PostView = ({ highlightedSection }) => {
   const [isCondensed, setCondensedState] = useState(true);
+  const [sortByMostRecent, toggleSort] = useState(true);
   // Retrieves the courseid from the url parameters
   const { courseid } = useParams();
   let endpoint = "/api/courses/" + courseid + "/posts";
@@ -45,6 +46,14 @@ const PostView = ({ highlightedSection }) => {
       break;
     default:
     // Don't add a filter to endpoint
+  }
+
+  if (!sortByMostRecent) {
+    if (highlightedSection !== "All Posts") {
+      endpoint += "&sortby=oldest";
+    } else {
+      endpoint += "?sortby=oldest";
+    }
   }
 
   // Load posts from course
@@ -68,7 +77,11 @@ const PostView = ({ highlightedSection }) => {
               >
                 <img src={LineWidthImg} />
               </Button>
-              <Button secondary={true} style={MarginLeftRight}>
+              <Button
+                secondary={true}
+                style={MarginLeftRight}
+                onClick={() => toggleSort(!sortByMostRecent)}
+              >
                 {" Most Recent "}
               </Button>
             </SortingOptions>
