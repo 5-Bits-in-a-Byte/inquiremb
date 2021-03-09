@@ -6,12 +6,14 @@ import LikeImg from "../../imgs/like.svg";
 import DraftTextBox from "../common/DraftTextArea";
 import Button from "../common/Button";
 
-var dummy_reaction_IDs = ["test_user_1", "test_user_2", "test_user_3"];
+var dummy_reaction_IDs = [];
 var dummy_current_user = "my_user_ID";
 
 const Comment = ({ comment, isDraft, callback }) => {
   const [content, setContent] = useState("");
-  const [reactions, setReactions] = useState({ likes: dummy_reaction_IDs });
+  const [reactions, setReactions] = useState({
+    likes: [...dummy_reaction_IDs],
+  });
   const [reactCounts, setCounts] = useState({
     likeCount: Object.keys(reactions.likes).length,
   });
@@ -94,7 +96,11 @@ const Comment = ({ comment, isDraft, callback }) => {
                 <UserDescription style={{ marginRight: 10 }}>
                   Reply
                 </UserDescription>
-                <Icon src={LikeImg} onClick={() => handleLike()} />
+                <Icon
+                  src={LikeImg}
+                  onClick={() => handleLike()}
+                  clicked={reactClicked.liked}
+                />
                 <IconValue>{reactCounts.likeCount}</IconValue>
               </>
             )}
@@ -171,11 +177,12 @@ const Icon = styled.img`
   float: left;
 
   width: 18px;
-  height: 18px;
+  height: auto;
   margin-right: 1em;
   margin-left: 0.75em;
 
   user-select: none;
+  opacity: ${(props) => (!props.clicked && "50%") || "100%"};
 `;
 
 const IconValue = styled.h5`
