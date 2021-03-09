@@ -75,7 +75,7 @@ const Home = () => {
     type: "get",
     endpoint: endpoint,
   });
-  let groups = generateSections(data);
+  let groups = generateSections(data.posts);
 
   return (
     <Wrapper>
