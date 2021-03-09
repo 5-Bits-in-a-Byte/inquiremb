@@ -9,18 +9,13 @@ import PostReactions from "./PostReactions";
 import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
 
-var dummy_reaction_IDs = [];
-var dummy_current_user = "my_user_ID";
-
 // Checks props to determine if the post is a draft, isPinned, etc.
 const generatePostContent = (
   user,
   post,
   isDraft,
   handleChange,
-  handleSubmit,
-  reactionState,
-  handleLike
+  handleSubmit
 ) => {
   // If a post is passed, set all dynamic content accordingly, otherwise render a draft
   if (isDraft) {
@@ -62,7 +57,7 @@ const generatePostContent = (
       isPinned: post.isPinned,
       picture: post.postedby.picture,
       postedby: post.postedby.first + " " + post.postedby.last,
-      meta: <PostReactions likes={reactionState.count.}, clickHandler={handleLike} />,
+      meta: <PostReactions post={post} user={user} />,
     };
   }
 };
@@ -74,16 +69,6 @@ const Post = ({ post, isCondensed, isDraft }) => {
 
   // State and handler for drafting posts
   const [draft, setDraft] = useState({ title: "", content: "" });
-
-  const [reactions, setReactions] = useState({
-    likes: [...dummy_reaction_IDs],
-  });
-  const [reactCounts, setCounts] = useState({
-    likeCount: Object.keys(reactions.likes).length,
-  });
-  const [reactClicked, setClicked] = useState({
-    liked: reactions.likes.includes(dummy_current_user),
-  });
 
   const handleChange = (e) => {
     setDraft({ ...draft, [e.target.name]: e.target.value });
@@ -111,39 +96,13 @@ const Post = ({ post, isCondensed, isDraft }) => {
     });
   };
 
-  const handleLike = () => {
-    var temp = reactions;
-
-    var loc = temp.likes.indexOf(dummy_current_user);
-
-    if (loc === -1) {
-      temp.likes.push(dummy_current_user);
-      setClicked({ liked: true });
-      console.log("liked post");
-    } else {
-      temp.likes.splice(loc, 1);
-      setClicked({ liked: false });
-      console.log("unliked post");
-    }
-
-    var newCounts = reactCounts;
-    newCounts.likeCount = Object.keys(reactions.likes).length;
-
-    setCounts(newCounts);
-    setReactions(temp);
-    console.log(reactions.likes);
-    console.log("New post count is: ", reactCounts.likeCount);
-  };
-
   // Determines if post is a draft or not and renders accordingly:
   let render = generatePostContent(
     user,
     post,
     isDraft,
     handleChange,
-    handleSubmit,
-    {reactions: reactions, counts: reactCounts, bools: reactClicked},
-    handleLike
+    handleSubmit
   );
 
   // Handles redirect if the post is not a draft
