@@ -82,7 +82,7 @@ const PostView = ({ highlightedSection }) => {
                 style={MarginLeftRight}
                 onClick={() => toggleSort(!sortByMostRecent)}
               >
-                {" Most Recent "}
+                {sortByMostRecent ? "Most Recent" : "Oldest"}
               </Button>
             </SortingOptions>
             {posts.pinned.length > 0 && (
