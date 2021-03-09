@@ -4,24 +4,38 @@ import styled from "styled-components";
 const Home = () => {
   return (
     <Wrapper>
-      {/* <h1>Home Page</h1>
-      <p>Maybe we can do some kind of "recent posts" feed here.</p> */}
-
-      <RecentGroup>
-        <GroupWrapper>
-          lknd lknlskd klsd klgdsk gdskl gjslk lgkdjkls gjlkd jkl
-        </GroupWrapper>
-      </RecentGroup>
-      <RecentGroup>
-        <GroupWrapper>
-          lknd lknlskd klsd klgdsk gdskl gjslk lgkdjkls gjlkd jkl
-        </GroupWrapper>
-      </RecentGroup>
-      <RecentGroup>
-        <GroupWrapper>
-          lknd lknlskd klsd klgdsk gdskl gjslk lgkdjkls gjlkd jkl
-        </GroupWrapper>
-      </RecentGroup>
+      <ViewWrapper>
+        <AbsoluteWrapper>
+          <ScrollingDiv>
+            <MaxWidth>
+              <RecentGroup>
+                <GroupWrapper>
+                  lknd lknlskd klsd klgdsk gdskl gjslk lgkdjkls gjlkd jkl adsdas
+                  faf d fsdf sdf s fsd fsdf sdfsdfsd sdf sdsd fdsf sd dsf sdf sd
+                  fsdf sdf sd fdsdf sf s fs gf gdfg fdg fd gfdg fdg df kmgdfklg
+                  mdlkfg mkdfg df gldmn g fg
+                </GroupWrapper>
+              </RecentGroup>
+              <RecentGroup>
+                <GroupWrapper>
+                  lknd lknlskd klsd klgdsk gdskl gjslk lgkdjkls gjlkd jkl adsdas
+                  faf d fsdf sdf s fsd fsdf sdfsdfsd sdf sdsd fdsf sd dsf sdf sd
+                  fsdf sdf sd fdsdf sf s fs gf gdfg fdg fd gfdg fdg df kmgdfklg
+                  mdlkfg mkdfg df gldmn g fg
+                </GroupWrapper>
+              </RecentGroup>
+              <RecentGroup>
+                <GroupWrapper>
+                  lknd lknlskd klsd klgdsk gdskl gjslk lgkdjkls gjlkd jkl adsdas
+                  faf d fsdf sdf s fsd fsdf sdfsdfsd sdf sdsd fdsf sd dsf sdf sd
+                  fsdf sdf sd fdsdf sf s fs gf gdfg fdg fd gfdg fdg df kmgdfklg
+                  mdlkfg mkdfg df gldmn g fg
+                </GroupWrapper>
+              </RecentGroup>
+            </MaxWidth>
+          </ScrollingDiv>
+        </AbsoluteWrapper>
+      </ViewWrapper>
     </Wrapper>
   );
 };
@@ -42,11 +56,16 @@ export default Home;
 // `;
 
 const Wrapper = styled.div`
-  overflow: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100%;
+`;
+
+const ViewWrapper = styled.div`
+  position: relative;
+  width: 100%;
 `;
 
 const RecentGroup = styled.div`
@@ -64,4 +83,24 @@ const GroupWrapper = styled.div`
   min-height: 85px;
 
   border: 1px solid black;
+`;
+
+const AbsoluteWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`;
+
+const ScrollingDiv = styled.div`
+  height: 100%;
+  width: 100%;
+  padding: 0 280px 0 200px;
+  overflow: auto;
+  padding-right: 280px;
+`;
+
+const MaxWidth = styled.div`
+  max-width: 900px;
+  margin: auto;
+  padding-bottom: 40px;
 `;

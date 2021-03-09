@@ -12,7 +12,8 @@ class Home(Resource):
         course_ids = {}
         for course in current_user.courses:
             course_ids[course.course_id] = course.course_name
-        print(course_ids)
+            query = Post.objects.raw({"courseid": course.course_id}).order_by(
+                [("createdDate", -1)]).limit(20)
 
         queryParams = {"courseid": course_id}
         # Filter by 'instructor'
