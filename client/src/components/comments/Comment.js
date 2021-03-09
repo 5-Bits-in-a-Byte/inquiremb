@@ -7,9 +7,21 @@ import Button from "../common/Button";
 import { useParams } from "react-router";
 import LazyFetch from "../common/requests/LazyFetch";
 
+var dummy_reaction_IDs = [];
+var dummy_current_user = "my_user_ID";
+
 const Comment = ({ comment, isDraft, callback }) => {
   const { postid } = useParams();
   const [content, setContent] = useState("");
+  const [reactions, setReactions] = useState({
+    likes: [...dummy_reaction_IDs],
+  });
+  const [reactCounts, setCounts] = useState({
+    likeCount: Object.keys(reactions.likes).length,
+  });
+  const [reactClicked, setClicked] = useState({
+    liked: reactions.likes.includes(dummy_current_user),
+  });
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
 
@@ -49,6 +61,30 @@ const Comment = ({ comment, isDraft, callback }) => {
     setContent(e.target.value);
   };
 
+  const handleLike = () => {
+    var temp = reactions;
+
+    var loc = temp.likes.indexOf(dummy_current_user);
+
+    if (loc === -1) {
+      temp.likes.push(dummy_current_user);
+      setClicked({ liked: true });
+      console.log("liked");
+    } else {
+      temp.likes.splice(loc, 1);
+      setClicked({ liked: false });
+      console.log("unliked");
+    }
+
+    var newCounts = reactCounts;
+    newCounts.likeCount = Object.keys(reactions.likes).length;
+
+    setCounts(newCounts);
+    setReactions(temp);
+    console.log(reactions.likes);
+    console.log("New count is: ", reactCounts.likeCount);
+  };
+
   // Collect replies from comment data and append any newly created replies (if applicable)
   let replies = [];
   if (comment.replies && comment.replies.length > 0) {
@@ -63,6 +99,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   if (isReplying) {
     replies.push(<CommentReply isDraft submitReply={submitReply} />);
   }
+
 
   return (
     <CommentWrapper>
@@ -104,9 +141,13 @@ const Comment = ({ comment, isDraft, callback }) => {
                   }}
                 >
                   Reply
+                <Icon
+                  src={LikeImg}
+                  onClick={() => handleLike()}
+                  clicked={reactClicked.liked}
+                />
+                <IconValue>{reactCounts.likeCount}</IconValue>
                 </ReplyBtn>
-                <Icon src={LikeImg} />
-                <IconValue>0</IconValue>
               </>
             )}
           </MetaIconWrapper>
@@ -179,11 +220,12 @@ const Icon = styled.img`
   float: left;
 
   width: 18px;
-  height: 18px;
+  height: auto;
   margin-right: 1em;
   margin-left: 0.75em;
 
   user-select: none;
+  opacity: ${(props) => (!props.clicked && "50%") || "100%"};
 `;
 
 const IconValue = styled.h5`

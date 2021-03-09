@@ -48,8 +48,11 @@ const CommentReply = ({ reply, isDraft, submitReply }) => {
             </>
           ) : (
             <>
-              <Icon src={LikeImg} />
-              <IconValue>0</IconValue>
+              <Icon
+            src={LikeImg}
+            onClick={() => console.log("Clicked to like comment reply")}
+          />
+          <IconValue>1</IconValue>
             </>
           )}
         </MetaIconWrapper>

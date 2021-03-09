@@ -57,12 +57,7 @@ const generatePostContent = (
       isPinned: post.isPinned,
       picture: post.postedby.picture,
       postedby: post.postedby.first + " " + post.postedby.last,
-      meta: (
-        <PostReactions
-          likes={post.reactions.likes.length}
-          comments={post.comments}
-        />
-      ),
+      meta: <PostReactions post={post} user={user} />,
     };
   }
 };
@@ -74,6 +69,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
 
   // State and handler for drafting posts
   const [draft, setDraft] = useState({ title: "", content: "" });
+
   const handleChange = (e) => {
     setDraft({ ...draft, [e.target.name]: e.target.value });
     console.log(draft);
