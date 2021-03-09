@@ -1,40 +1,49 @@
 import React from "react";
 import styled from "styled-components";
+import RecentPost from "./RecentPost";
+import RecentGroup from "./RecentGroup";
+
+// Fetch ->
+/**
+ * returns {
+    "postinfo"
+    "coursename"
+    "color"
+}
+ */
+
+const testPosts = [<RecentPost />, <RecentPost />, <RecentPost />];
+
+const testGroups = [
+  <RecentGroup
+    postList={testPosts}
+    classroomName={"CIS 422"}
+    nameColor={"red"}
+  />,
+  <RecentGroup
+    postList={testPosts}
+    classroomName={"CIS 471"}
+    nameColor={"red"}
+  />,
+  <RecentGroup
+    postList={testPosts}
+    classroomName={"IDK 123"}
+    nameColor={"red"}
+  />,
+  <RecentGroup
+    postList={testPosts}
+    classroomName={"IDK 456"}
+    nameColor={"red"}
+  />,
+];
 
 const Home = () => {
   return (
     <Wrapper>
       <ViewWrapper>
-        <AbsoluteWrapper>
-          <ScrollingDiv>
-            <MaxWidth>
-              <RecentGroup>
-                <GroupWrapper>
-                  lknd lknlskd klsd klgdsk gdskl gjslk lgkdjkls gjlkd jkl adsdas
-                  faf d fsdf sdf s fsd fsdf sdfsdfsd sdf sdsd fdsf sd dsf sdf sd
-                  fsdf sdf sd fdsdf sf s fs gf gdfg fdg fd gfdg fdg df kmgdfklg
-                  mdlkfg mkdfg df gldmn g fg
-                </GroupWrapper>
-              </RecentGroup>
-              <RecentGroup>
-                <GroupWrapper>
-                  lknd lknlskd klsd klgdsk gdskl gjslk lgkdjkls gjlkd jkl adsdas
-                  faf d fsdf sdf s fsd fsdf sdfsdfsd sdf sdsd fdsf sd dsf sdf sd
-                  fsdf sdf sd fdsdf sf s fs gf gdfg fdg fd gfdg fdg df kmgdfklg
-                  mdlkfg mkdfg df gldmn g fg
-                </GroupWrapper>
-              </RecentGroup>
-              <RecentGroup>
-                <GroupWrapper>
-                  lknd lknlskd klsd klgdsk gdskl gjslk lgkdjkls gjlkd jkl adsdas
-                  faf d fsdf sdf s fsd fsdf sdfsdfsd sdf sdsd fdsf sd dsf sdf sd
-                  fsdf sdf sd fdsdf sf s fs gf gdfg fdg fd gfdg fdg df kmgdfklg
-                  mdlkfg mkdfg df gldmn g fg
-                </GroupWrapper>
-              </RecentGroup>
-            </MaxWidth>
-          </ScrollingDiv>
-        </AbsoluteWrapper>
+        <ScrollingDiv>
+          <MaxWidth>{testGroups}</MaxWidth>
+        </ScrollingDiv>
       </ViewWrapper>
     </Wrapper>
   );
@@ -42,53 +51,21 @@ const Home = () => {
 
 export default Home;
 
-// const ScrollingDiv = styled.div`
-//   position: absolute;
-//   display: flex;
-//   height: 100%;
-//   width: 100%;
-//   padding: 0 40px;
-//   overflow: auto;
-//   //::-webkit-scrollbar {
-//   //width: 0; /* Remove scrollbar space */
-//   //background: transparent; /* Optional: just make scrollbar invisible */
-//   //}
-// `;
-
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
   height: 100%;
+
+  border: 1px solid red;
 `;
 
 const ViewWrapper = styled.div`
   position: relative;
   width: 100%;
-`;
 
-const RecentGroup = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1em 0;
-  padding: 1.5em;
-
-  box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
-`;
-
-const GroupWrapper = styled.div`
-  width: 100%;
-  min-height: 85px;
-
-  border: 1px solid black;
-`;
-
-const AbsoluteWrapper = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  border: 1px solid orange;
 `;
 
 const ScrollingDiv = styled.div`
