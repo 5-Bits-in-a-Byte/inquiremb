@@ -72,61 +72,53 @@ def teardown_current_user(exception):
     user = g.pop('current_user', None)
 
 
-def permission_layer(required_permissions: list, requireInstructor=False):
+def permission_layer(required_permissions: list, require_login=True):
     """
     Checks if the current_user has the correct permissions to access the endpoint
     for the given course
+
     Args:
-        permissions (List[str]): permission required to access endpoint
+        required_permissions (list): List of permissions required to access the endpoint
+        require_login (bool, optional): [description]. If the user is required
+        to be logged in. Defaults to True.
     """
     def actual_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Checking if user is not logged in when it's required they are
-            # if current_user == None and (required_permissions or requireInstructor):
-            if current_user == None or required_permissions:
+            if current_user == None and (required_permissions or require_login):
                 abort(401, errors=[
                       "Resource access restricted: unauthenticated client"])
-            # Checking if the user has the required course specific permissions
-            if required_permissions:
-                course_id = kwargs.get('course_id')
-                if course_id is None:
-                    raise Exception(
-                        f'course_id not specified in url path of request to endpoint that requires course based permissions')
+
+            errors = []
+            # Getting the current course
+            course_id = kwargs.get('course_id')
+            if course_id or required_permissions:
                 course = current_user.get_course(course_id)
+                if course is None:
+                    errors.append(
+                        "Resource access restricted: invalid course id")
+
+            # Checking if the user has the required course specific permissions
+            if required_permissions and course:
+                missing = []
                 for permission in required_permissions:
-                    user_perm = getattr(current_user, permission, False)
+                    user_perm = getattr(
+                        course, permission, False)
                     if not user_perm:
-                        return abort(403, errors=["Resource access restricted: missing permissions"])
-            # Checking if the user is an instructor when it's required
-            # if requireInstructor:
-            #     #
-            #     university_name = request.get_json(force=True)['university']
-            #     if university_name == None:
-            #         raise Exception(
-            #             f'university not specified in body of request to endpoint that requires course based permissions')
-            #     university = current_user.get_university(university_name)
-            #     if university is None:
-            #         abort(403, errors=[
-            #               "Resource access restricted: not instructor"])
-            #     if not university.instructor:
-            #         return abort(403, errors=["Resource access restricted: not instructor"])
-            # Running the actual route function
-            return func(*args, **kwargs)
+                        print(permission, user_perm, course.seePrivate)
+                        missing.append(permission)
+                if missing:
+                    errors.append(
+                        f'Resource access restricted: missing course permission(s) {", ".join(missing)}')
+            # If there are any errors, we return a 403
+            if errors:
+                return abort(403, errors=errors)
+            # If there are no errors, we return the result of executing the resource function
+            else:
+                return func(*args, **kwargs)
         return wrapper
     return actual_decorator
-
-
-@ auth_routes.route('/testauthsuccess')
-@ permission_layer(["read", "write"], "course_id_1")
-def testauthsuccess():
-    return jsonify(message="Congrats, you have access to this resource"), 200
-
-
-@ auth_routes.route('/testauthfail')
-@ permission_layer(["admin", "write"], "course_id_1")
-def testauthfail():
-    return jsonify(message="Congrats, you have access to this resource"), 200
 
 
 @ auth_routes.route('/login')
