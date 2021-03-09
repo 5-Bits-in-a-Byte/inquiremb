@@ -4,19 +4,6 @@ import styled from "styled-components";
 import TopContent from "./TopContent";
 import CourseCard from "./CourseCard";
 
-const colorsArray = [
-  "#dd0000",
-  "#dd7700",
-  "#eedd00",
-  "#00cc00",
-  "#2a2aff",
-  "#7337ee",
-  "#ee55ee",
-  "#00cccc",
-];
-
-// List-to-components mapping technique from:
-// https://reactjs.org/docs/lists-and-keys.html#basic-list-component
 const courseList = (userCourses) => {
   let ret = [];
   userCourses.forEach((course, index) => {
@@ -26,7 +13,7 @@ const courseList = (userCourses) => {
         id={course.course_id}
         courseName={course.course_name}
         courseTerm="Winter 2021"
-        color={course.color || colorsArray[index % colorsArray.length]}
+        color={course.color || "#000000"}
       />
     );
   });
