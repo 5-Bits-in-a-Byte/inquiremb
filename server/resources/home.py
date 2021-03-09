@@ -12,7 +12,7 @@ class Home(Resource):
 
         # TODO: should I add this? Would you be able to handle this format on the front end or should I change it?
         # if len(current_user.courses) == 0:
-        #     return {"result": "You have not yet joined or created a course!"}, 200
+        #     return {"result": "You have not yet joined or created a course."}, 200
 
         course_ids = []
         for course in current_user.courses:

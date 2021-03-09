@@ -4,10 +4,12 @@ import RecentGroup from "./RecentGroup";
 import Fetch from "../common/requests/Fetch";
 import Post from "../posts/Post";
 
+// Create the post using the Post component
 const createPost = (post) => {
   return <Post post={post} key={post._id} isCondensed={false} />;
 };
 
+// Create a group of posts with the RecentGroup component
 const createGroup = (postList, classroomName, nameColor) => {
   return (
     <RecentGroup
@@ -18,7 +20,7 @@ const createGroup = (postList, classroomName, nameColor) => {
   );
 };
 
-// Sorts the posts by pinned/date
+// Sorts the posts by most recent and groups them into their specific classes
 const generateSections = (data) => {
   let groups = [];
 
@@ -94,15 +96,11 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center; */
   height: 100%;
-
-  /* border: 1px solid red; */
 `;
 
 const ViewWrapper = styled.div`
   position: relative;
   width: 100%;
-
-  /* border: 1px solid orange; */
 `;
 
 const ScrollingDiv = styled.div`
