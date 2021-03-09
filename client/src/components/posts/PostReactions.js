@@ -3,10 +3,10 @@ import styled from "styled-components";
 import CommentImg from "../../imgs/comment.svg";
 import LikeImg from "../../imgs/like.svg";
 
-const PostReactions = ({ likes, comments }) => {
+const PostReactions = ({ likes, comments, clickHandler }) => {
   return (
     <>
-      <Icon src={LikeImg} onClick={() => console.log("Clicked to like post")} />
+      <Icon src={LikeImg} onClick={clickHandler} />
       <IconValue>{likes}</IconValue>
       <Icon src={CommentImg} />
       <IconValue>{comments}</IconValue>
