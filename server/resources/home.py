@@ -11,8 +11,8 @@ class Home(Resource):
     def get(self):
 
         # TODO: should I add this? Would you be able to handle this format on the front end or should I change it?
-        # if len(current_user.courses) == 0:
-        #     return {"result": "You have not yet joined or created a course."}, 200
+        if len(current_user.courses) == 0:
+            return {"result": "You have not yet joined or created a course."}, 200
 
         course_ids = []
         for course in current_user.courses:
@@ -32,12 +32,15 @@ class Home(Resource):
             [("createdDate", -1)]).limit(20)
 
         # TODO: should I add this too?
-        # count = query.count()
-        # if count == 0:
-        #     return {"result": "There are no posts in any of your courses yet. Don't be shy, post away!"}, 200
+        count = query.count()
+        if count == 0:
+            return {"result": "There are no posts in any of your courses yet. Don't be shy, post away!"}, 200
+
+        result = {"result": "", "posts": [
+            self.serialize(post) for post in query]}
 
         # Serialize and return the posts
-        return [self.serialize(post) for post in query], 200
+        return result, 200
 
     def serialize(self, post):
         # Get the JSON format
