@@ -127,19 +127,20 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
+                <Icon
+                  src={LikeImg}
+                  onClick={() => handleLike()}
+                  clicked={reactClicked.liked}
+                />
+                <IconValue>{reactions.likes.length}</IconValue>
+
                 <ReplyBtn
-                  style={{ marginRight: 10 }}
+                  style={{ marginRight: 10, marginLeft: 20 }}
                   onClick={() => {
                     toggleReply(true);
                   }}
                 >
                   Reply
-                  <Icon
-                    src={LikeImg}
-                    onClick={() => handleLike()}
-                    clicked={reactClicked.liked}
-                  />
-                  <IconValue>{reactions.likes.length}</IconValue>
                 </ReplyBtn>
               </>
             )}
@@ -214,8 +215,8 @@ const Icon = styled.img`
 
   width: 18px;
   height: auto;
-  margin-right: 1em;
-  margin-left: 0.75em;
+  margin-right: 8px;
+  margin-left: 20px;
 
   user-select: none;
   opacity: ${(props) => (!props.clicked && "50%") || "100%"};
