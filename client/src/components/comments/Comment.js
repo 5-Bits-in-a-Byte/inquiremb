@@ -6,8 +6,18 @@ import LikeImg from "../../imgs/like.svg";
 import DraftTextBox from "../common/DraftTextArea";
 import Button from "../common/Button";
 
+var dummy_reaction_IDs = ["test_user_1", "test_user_2", "test_user_3"];
+var dummy_current_user = "my_user_ID";
+
 const Comment = ({ comment, isDraft, callback }) => {
   const [content, setContent] = useState("");
+  const [reactions, setReactions] = useState({ likes: dummy_reaction_IDs });
+  const [reactCounts, setCounts] = useState({
+    likeCount: Object.keys(reactions.likes).length,
+  });
+  const [reactClicked, setClicked] = useState({
+    liked: reactions.likes.includes(dummy_current_user),
+  });
 
   const renderContent = () => {
     if (isDraft) {
@@ -22,6 +32,30 @@ const Comment = ({ comment, isDraft, callback }) => {
   // Used for the text box to create a new post
   const handleChange = (e) => {
     setContent(e.target.value);
+  };
+
+  const handleLike = () => {
+    var temp = reactions;
+
+    var loc = temp.likes.indexOf(dummy_current_user);
+
+    if (loc === -1) {
+      temp.likes.push(dummy_current_user);
+      setClicked({ liked: true });
+      console.log("liked");
+    } else {
+      temp.likes.splice(loc, 1);
+      setClicked({ liked: false });
+      console.log("unliked");
+    }
+
+    var newCounts = reactCounts;
+    newCounts.likeCount = Object.keys(reactions.likes).length;
+
+    setCounts(newCounts);
+    setReactions(temp);
+    console.log(reactions.likes);
+    console.log("New count is: ", reactCounts.likeCount);
   };
 
   return (
@@ -60,11 +94,8 @@ const Comment = ({ comment, isDraft, callback }) => {
                 <UserDescription style={{ marginRight: 10 }}>
                   Reply
                 </UserDescription>
-                <Icon
-                  src={LikeImg}
-                  onClick={() => console.log("Clicked to like comment")}
-                />
-                <IconValue>{5}</IconValue>
+                <Icon src={LikeImg} onClick={() => handleLike()} />
+                <IconValue>{reactCounts.likeCount}</IconValue>
               </>
             )}
           </MetaIconWrapper>
