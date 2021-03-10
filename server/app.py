@@ -12,7 +12,7 @@ from resources.posts import Posts
 from resources.comments import Comments
 from resources.replies import Replies
 from resources.join import Join
-from resources.reactions import Reaction
+from resources.reactions import Reactions
 # Auth imports
 from auth import oauth, auth_routes
 
@@ -60,7 +60,7 @@ swagger = Swagger(app, config=config.swagger_config)
 api.add_resource(Demo, '/demo')
 api.add_resource(Me, '/me')
 api.add_resource(Courses, '/courses')
-api.add_resource(Reaction, '/reaction')
+api.add_resource(Reactions, '/reactions')
 api.add_resource(Posts, '/courses/<string:course_id>/posts')
 api.add_resource(
     Comments, '/posts/<string:post_id>/comments')
