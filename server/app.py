@@ -13,6 +13,7 @@ from resources.comments import Comments
 from resources.replies import Replies
 from resources.join import Join
 from resources.reactions import Reactions
+from resources.home import Home
 # Auth imports
 from auth import oauth, auth_routes
 
@@ -54,6 +55,14 @@ oauth.register(
     }
 )
 
+oauth.register(
+    name='github',
+    access_token_url='https://github.com/login/oauth/access_token',
+    authorize_url='https://github.com/login/oauth/authorize',
+    api_base_url='https://api.github.com/',
+    client_kwargs={'scope': 'read:user user:email'},
+)
+
 api = Api(app, prefix="/api")
 swagger = Swagger(app, config=config.swagger_config)
 # register endpoints from /resources folder here:
@@ -61,6 +70,7 @@ api.add_resource(Demo, '/demo')
 api.add_resource(Me, '/me')
 api.add_resource(Courses, '/courses')
 api.add_resource(Reactions, '/reactions')
+api.add_resource(Home, '/home')
 api.add_resource(Posts, '/courses/<string:course_id>/posts')
 api.add_resource(
     Comments, '/posts/<string:post_id>/comments')

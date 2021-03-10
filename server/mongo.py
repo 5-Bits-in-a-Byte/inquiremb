@@ -13,9 +13,9 @@ connect(MONGO_URI, alias="my-app")
 class User(MongoModel):
     _id = fields.CharField(primary_key=True)
     anonymousId = fields.CharField(required=True, default=ObjectId)
-    email = fields.EmailField()
-    first = fields.CharField(default="Nofirstgiven")
-    last = fields.CharField(default="Nolastgiven")
+    email = fields.EmailField(blank=True)
+    first = fields.CharField(default="Nofirstgiven", blank=True)
+    last = fields.CharField(default="Nolastgiven", blank=True)
     picture = fields.URLField()
     courses = fields.EmbeddedDocumentListField(
         'UserCourse', blank=True, required=True)
