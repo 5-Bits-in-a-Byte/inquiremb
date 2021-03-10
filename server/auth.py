@@ -127,6 +127,13 @@ def login():
     return oauth.google.authorize_redirect(redirect_uri)
 
 
+@ auth_routes.route('/github-login')
+def github_login():
+    redirect_uri = url_for('auth_blueprint.github_auth', _external=True)
+    print(redirect_uri)
+    return oauth.github.authorize_redirect(redirect_uri)
+
+
 @ auth_routes.route('/logout')
 def logout():
     resp = make_response(redirect(CLIENT_URL))
@@ -140,7 +147,7 @@ def auth():
     id_token = oauth.google.parse_id_token(token)
     _id = id_token['sub']
     user = retrieve_user(_id)
-    # If a user wasn't found
+    # If a user wasn't found we add them to the database
     if not user:
         user = create_user(id_token)
 
@@ -151,8 +158,29 @@ def auth():
     # Encode the user's sub (unique google account identifier) in a JWT), and set that as a cookie attached to the response
     resp.set_cookie(
         'userID', value=encode_jwt({'_id': _id}), httponly=True, max_age=cookie_age)
-    # Redirect user to /testauth where cookie is retrieved and jwt is encoded to get at the sub # inside.
-    # Planning on using sub # to retrieve user object from mongo
+    return resp
+
+
+@ auth_routes.route('/github-auth')
+def github_auth():
+    token = oauth.github.authorize_access_token()
+    # token = {'access_token': '5853c9ce07e1306a72fd085264973bb438fdb45d',
+    #          'token_type': 'bearer', 'scope': 'read:user'}
+    resp = oauth.github.get('user')
+    profile = resp.json()
+    github_user_id = str(profile['id'])
+    user = retrieve_user(github_user_id)
+    # If a user wasn't found we add them to the database
+    if not user:
+        user = create_user(profile, mode="github")
+
+    # Create a new response
+    resp = make_response(redirect(CLIENT_URL))
+    # cookie_age is the number of seconds the cookie lives before becoming invalid
+    cookie_age = 60 * 60 * 24
+    # Encode the user's sub (unique google account identifier) in a JWT), and set that as a cookie attached to the response
+    resp.set_cookie(
+        'userID', value=encode_jwt({'_id': github_user_id}), httponly=True, max_age=cookie_age)
     return resp
 
 
@@ -178,8 +206,29 @@ def retrieve_user(_id):
         return None
 
 
-def create_user(id_token):
-    print(id_token)
-    user = User(_id=id_token['sub'], first=id_token['given_name'], last=id_token['family_name'],
-                email=id_token['email'], picture=id_token['picture'], courses=[]).save()
+def create_user(data, mode="google"):
+    if mode == "google":
+        user = User(_id=data['sub'], first=data['given_name'], last=data['family_name'],
+                    email=data['email'], picture=data['picture'], courses=[]).save()
+    elif mode == "github":
+        _id = str(data['id'])
+        name = data['name']
+        split_name = name.split()
+        if len(split_name) == 1:
+            first = name
+            last = ""
+        elif len(split_name) == 2:
+            first = split_name[0]
+            last = split_name[1]
+        else:
+            first = name
+            last = ""
+        email = data['email']
+        if email is None:
+            email = ""
+        picture = data['avatar_url']
+        print(_id, first, last, email, picture)
+        user = User(_id=_id, first=first, last=last,
+                    email=email, picture=picture, courses=[]).save()
+        print(type(user), 'abc')
     return user
