@@ -2,7 +2,7 @@ from flask_socketio import *
 from auth import current_user
 from flask import Blueprint, render_template
 
-io = SocketIO(logger=True, engineio_logger=True)
+io = SocketIO(logger=True, engineio_logger=True, cors_allowed_origins="*")
 
 # Blueprint stores authentication related routes
 socketio_blueprint = Blueprint(
@@ -11,19 +11,11 @@ socketio_blueprint = Blueprint(
 
 @io.on('connect')
 def connect():
+    print(current_user, "user")
     if current_user == None:
-        raise ConnectionRefusedError('unauthorized!')
+        raise ConnectionRefusedError('unauthorized testing!')
     else:
         print(current_user.first, "connected")
-    return "connected"
-
-
-@io.on('connect')
-def connect():
-    if current_user == None:
-        raise ConnectionRefusedError('unauthorized!')
-    else:
-        print(f"{current_user.first} {current_user.last} connected")
     return "connected"
 
 
@@ -36,9 +28,14 @@ def test_disconnect():
     return "connected"
 
 
+@io.on('blah')
+def blah():
+    return "blah"
+
+
 @socketio_blueprint.route('/emit-msg')
 def emit_msg():
-    io.emit('test', {'msg': "abc", 'nums': [1, 2, 3]}, namespace='/')
+    io.emit('test', {'msg': "abc", 'nums': [1, 2, 3]})
     return 'success'
 
 
