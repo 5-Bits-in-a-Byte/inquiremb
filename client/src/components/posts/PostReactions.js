@@ -22,11 +22,9 @@ const PostReactions = ({ likes, comments }) => {
     if (loc === -1) {
       temp.likes.push(user._id);
       setClicked({ liked: true });
-      console.log("liked post");
     } else {
       temp.likes.splice(loc, 1);
       setClicked({ liked: false });
-      console.log("unliked post");
     }
 
     setReactions(temp);

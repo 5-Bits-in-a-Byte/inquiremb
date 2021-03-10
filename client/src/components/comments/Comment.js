@@ -68,11 +68,9 @@ const Comment = ({ comment, isDraft, callback }) => {
     if (loc === -1) {
       temp.likes.push(user._id);
       setClicked({ liked: true });
-      console.log("liked comment");
     } else {
       temp.likes.splice(loc, 1);
       setClicked({ liked: false });
-      console.log("unliked comment");
     }
 
     setReactions(temp);

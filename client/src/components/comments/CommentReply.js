@@ -30,11 +30,9 @@ const CommentReply = ({ reply, isDraft, submitReply }) => {
     if (loc === -1) {
       temp.likes.push(user._id);
       setClicked({ liked: true });
-      console.log("liked reply");
     } else {
       temp.likes.splice(loc, 1);
       setClicked({ liked: false });
-      console.log("unliked reply");
     }
 
     setReactions(temp);
