@@ -115,12 +115,10 @@ const Post = ({ post, isCondensed, isDraft }) => {
   };
 
   return (
-    <PostWrapper
-      isCondensed={isCondensed}
-      onClick={navigateToPost}
-      isFocused={postid}
-    >
-      <PostTitle isCondensed={isCondensed}>{render.title}</PostTitle>
+    <PostWrapper isCondensed={isCondensed} isFocused={postid}>
+      <PostTitle isCondensed={isCondensed} onClick={navigateToPost}>
+        {render.title}
+      </PostTitle>
       <PinIcon isPinned={render.isPinned} src={PinImg} />
       {!isCondensed && <PostContent>{render.content}</PostContent>}
       {!isCondensed && <hr style={HRStyle} />}
@@ -168,6 +166,9 @@ const PostWrapper = styled.div`
 const PostTitle = styled.h2`
   /* margin: 1em 0 0.5em 2em; */
   font-size: ${(props) => (!props.isCondensed && "18px") || "14px"};
+
+  ${(props) =>
+    !props.isCondensed ? "&:hover {text-decoration: underline}" : ""};
 `;
 
 const PinIcon = styled.img`
