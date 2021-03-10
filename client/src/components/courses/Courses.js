@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../context/UserProvider";
 import styled from "styled-components";
 import TopContent from "./TopContent";
@@ -22,11 +22,13 @@ const courseList = (userCourses) => {
 
 const Courses = () => {
   const user = useContext(UserContext);
+  const [courseState, setCourseList] = useState(user.courses);
+
   return (
     <ScrollDiv>
-      <TopContent />
+      <TopContent nestedState={courseState} nestedSetter={setCourseList} />
       <CourseDisplay className="content">
-        {courseList(user.courses)}
+        {courseList(courseState)}
       </CourseDisplay>
     </ScrollDiv>
   );

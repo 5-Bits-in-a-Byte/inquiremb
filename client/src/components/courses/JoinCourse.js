@@ -4,7 +4,7 @@ import Modal from "../common/Modal";
 import JoinConfirmation from "./joinCourse/JoinConfirmation";
 import JoinInfo from "./joinCourse/JoinInfo";
 
-const JoinCourse = () => {
+const JoinCourse = (nestedState, nestedSetter) => {
   const [modalIsShown, toggleModal] = useState(false);
   const [course, joinCourse] = useState(null);
   const [display, toggleDisplay] = useState("flex");

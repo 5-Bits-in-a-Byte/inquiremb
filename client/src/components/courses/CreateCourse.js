@@ -5,7 +5,7 @@ import Modal from "../common/Modal";
 import CourseConfirmation from "./createCourse/CourseConfirmation";
 import CourseInfo from "./createCourse/CourseInfo";
 
-const CreateCourse = () => {
+const CreateCourse = (nestedState, nestedSetter) => {
   const [modalIsShown, toggleModal] = useState(false);
   // Course is set by the CourseInfo component when instructors create the course
   // The info is used to share the course link/access code provided by the API
@@ -38,6 +38,7 @@ const CreateCourse = () => {
               close={() => {
                 toggleModal(false);
                 setCourse(null);
+                console.log(nestedState, nestedSetter);
               }}
             />
           )}

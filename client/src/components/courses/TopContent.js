@@ -3,12 +3,12 @@ import styled from "styled-components";
 import JoinCourse from "./JoinCourse";
 import CreateCourse from "./CreateCourse";
 
-const TopContent = () => {
+const TopContent = (nestedState, nestedSetter) => {
   return (
     <TopWrapper className="flex-row align">
       <Title>COURSES</Title>
-      <JoinCourse />
-      <CreateCourse />
+      <JoinCourse nestedState={nestedState} nestedSetter={nestedSetter} />
+      <CreateCourse nestedState={nestedState} nestedSetter={nestedSetter} />
     </TopWrapper>
   );
 };
