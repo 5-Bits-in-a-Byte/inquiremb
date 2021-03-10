@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import PostReactions from "./PostReactions";
 import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
+import Checkbox from "../common/Checkbox";
 
 // Checks props to determine if the post is a draft, isPinned, etc.
 const generatePostContent = (
