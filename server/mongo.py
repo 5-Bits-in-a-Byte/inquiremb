@@ -13,7 +13,7 @@ connect(MONGO_URI, alias="my-app")
 class User(MongoModel):
     _id = fields.CharField(primary_key=True)
     anonymousId = fields.CharField(required=True, default=ObjectId)
-    email = fields.EmailField()
+    email = fields.EmailField(blank=True)
     first = fields.CharField(default="Nofirstgiven")
     last = fields.CharField(default="Nolastgiven")
     picture = fields.URLField()
