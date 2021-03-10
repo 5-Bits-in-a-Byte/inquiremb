@@ -13,7 +13,7 @@ const courseList = (userCourses) => {
         id={course.course_id}
         courseName={course.course_name}
         courseTerm="Winter 2021"
-        color={course.color || "#000000"}
+        color={course.color || "#121212"}
       />
     );
   });
