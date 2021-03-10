@@ -106,7 +106,6 @@ def permission_layer(required_permissions: list, require_login=True):
                     user_perm = getattr(
                         course, permission, False)
                     if not user_perm:
-                        print(permission, user_perm, course.seePrivate)
                         missing.append(permission)
                 if missing:
                     errors.append(
@@ -130,7 +129,6 @@ def login():
 @ auth_routes.route('/github-login')
 def github_login():
     redirect_uri = url_for('auth_blueprint.github_auth', _external=True)
-    print(redirect_uri)
     return oauth.github.authorize_redirect(redirect_uri)
 
 
@@ -213,6 +211,8 @@ def create_user(data, mode="google"):
     elif mode == "github":
         _id = str(data['id'])
         name = data['name']
+        if name is None:
+            name = ""
         split_name = name.split()
         if len(split_name) == 1:
             first = name
@@ -227,8 +227,6 @@ def create_user(data, mode="google"):
         if email is None:
             email = ""
         picture = data['avatar_url']
-        print(_id, first, last, email, picture)
         user = User(_id=_id, first=first, last=last,
                     email=email, picture=picture, courses=[]).save()
-        print(type(user), 'abc')
     return user
