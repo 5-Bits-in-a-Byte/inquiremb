@@ -3,8 +3,6 @@ from flask_restful import reqparse, Resource
 from auth import current_user, permission_layer
 from mongo import *
 
-{'contentType': 'comment', 'reaction': 'like'}
-
 
 class Reactions(Resource):
     def put(self):
@@ -13,7 +11,7 @@ class Reactions(Resource):
         commentid = request.args.get('commentid')
         replyid = request.args.get('replyid')
 
-        # Post has been liked
+        # Post reaction handler
         if postid:
             # Query for the correct post
             query = Post.objects.raw({"_id": postid})
@@ -28,12 +26,14 @@ class Reactions(Resource):
             likes = post.reactions['likes']
             # Check if the user's id is already in likes (this also shouldn't be possible)
             if current_user._id in likes:
-                return {"errors": [f"You should be in the delete method"]}, 400
-            # Add user's id to the list of likes and save the post
-            likes.append(current_user._id)
+                likes.remove(current_user._id)
+            else:
+                likes.append(current_user._id)
+            # Save the changes to the post
             post.save()
+            return {"reactions": {"likes": likes}}, 200
 
-        # Comment has been liked
+        # Comment reaction handler
         elif commentid:
             c_id = ObjectId(commentid)
             # Query for the correct post
@@ -47,20 +47,39 @@ class Reactions(Resource):
             # Get the post and the likes associated with it
             comment = query.first()
             likes = comment.reactions['likes']
-            # Check if the user's id is already in likes (this also shouldn't be possible)
+            # Check if the user's id is already in likes and remove it if it is
             if current_user._id in likes:
-                return {"errors": [f"You should be in the delete method"]}, 400
-            # Add user's id to the list of likes and save the post
-            likes.append(current_user._id)
+                likes.remove(current_user._id)
+            else:
+                likes.append(current_user._id)
+            # Save the changes to the comment
             comment.save()
+            return {"reactions": {"likes": likes}}, 200
 
-        # Reply has been liked
+        # Reply reaction handler
         elif replyid:
-            r_id = ObjectId(replyid)
+            # Query for the comment that the reply is associated with since it's an embedded field
+            replyid_list = [replyid]
+            query = Comment.objects.raw({"replies._id": {"$in": replyid_list}})
+            # Error checking even though neither of these options should be possible
+            count = query.count()
+            if count > 1:
+                return {"errors": [f"Multiple comments with the same reply id: {replyid}"]}, 400
+            elif count == 0:
+                return {"errors": [f"No comments with the reply id: {replyid}"]}, 400
+            # Get the comment and correct reply
+            comment = query.first()
+            for reply in comment.replies:
+                if reply._id == replyid:
+                    break
+            # Check if the user's id is already in likes and remove it if so
+            likes = reply.reactions['likes']
+            if current_user._id in likes:
+                likes.remove(current_user._id)
+            else:
+                likes.append(current_user._id)
+            # Save the changes to the comment
+            comment.save()
+            return {"reactions": {"likes": likes}}, 200
         else:
-            return {'errors': "how are you even here"}, 400
-
-        return {'hello': 'put'}
-
-    def delete(self, todo_id):
-        return {'hello': 'delete'}
+            return {'errors': ["how are you even here"]}, 400
