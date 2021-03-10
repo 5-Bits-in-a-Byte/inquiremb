@@ -4,7 +4,7 @@ import LikeImg from "../../imgs/like.svg";
 import { UserContext } from "../context/UserProvider";
 
 // Post and User to connect to backend
-const Reaction = ({ likes }) => {
+const Reaction = ({ likes, type, id }) => {
   const user = useContext(UserContext);
   const [reactions, setReactions] = useState({
     likes,
@@ -12,6 +12,21 @@ const Reaction = ({ likes }) => {
   const [reactClicked, setClicked] = useState({
     liked: reactions.likes.includes(user._id),
   });
+  let endpoint = "/api/reactions";
+
+  switch (type) {
+    case "post":
+      endpoint += "?postid=" + id;
+      break;
+    case "comment":
+      endpoint += "?commentid=" + id;
+      break;
+    case "reply":
+      endpoint += "?replyid=" + id;
+      break;
+    default:
+    // Don't add a filter to endpoint
+  }
 
   const handleLike = () => {
     var temp = reactions;

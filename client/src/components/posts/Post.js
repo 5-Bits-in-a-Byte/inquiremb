@@ -57,9 +57,7 @@ const generatePostContent = (
       isPinned: post.isPinned,
       picture: post.postedby.picture,
       postedby: post.postedby.first + " " + post.postedby.last,
-      meta: (
-        <PostReactions likes={post.reactions.likes} comments={post.comments} />
-      ),
+      meta: <PostReactions post={post} />,
     };
   }
 };

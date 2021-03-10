@@ -51,7 +51,11 @@ const CommentReply = ({ reply, isDraft, submitReply }) => {
             </>
           ) : (
             <>
-              <Reaction likes={[...dummy_reaction_IDs]} />
+              <Reaction
+                likes={reply.reactions.likes}
+                type="reply"
+                id={reply._id}
+              />
             </>
           )}
         </MetaIconWrapper>

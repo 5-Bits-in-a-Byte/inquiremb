@@ -102,7 +102,11 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
-                <Reaction likes={[...dummy_reaction_IDs]} />
+                <Reaction
+                  likes={comment.reactions.likes}
+                  type="comment"
+                  id={comment._id}
+                />
 
                 <ReplyBtn
                   style={{ marginRight: 10, marginLeft: 20 }}
