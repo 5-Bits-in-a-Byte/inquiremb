@@ -1,40 +1,12 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import CommentImg from "../../imgs/comment.svg";
-import LikeImg from "../../imgs/like.svg";
-import { UserContext } from "../context/UserProvider";
+import Reaction from "../common/Reaction";
 
-// Post and User to connect to backend
 const PostReactions = ({ likes, comments }) => {
-  const user = useContext(UserContext);
-  const [reactions, setReactions] = useState({
-    likes,
-  });
-  const [reactClicked, setClicked] = useState({
-    liked: reactions.likes.includes(user._id),
-  });
-
-  const handleLike = () => {
-    var temp = reactions;
-
-    var loc = temp.likes.indexOf(user._id);
-
-    if (loc === -1) {
-      temp.likes.push(user._id);
-      setClicked({ liked: true });
-    } else {
-      temp.likes.splice(loc, 1);
-      setClicked({ liked: false });
-    }
-
-    setReactions(temp);
-    console.log(reactions.likes);
-  };
-
   return (
     <>
-      <Icon src={LikeImg} onClick={handleLike} clicked={reactClicked.liked} />
-      <IconValue>{reactions.likes.length}</IconValue>
+      <Reaction likes={likes} />
       <Icon src={CommentImg} />
       <IconValue>{comments}</IconValue>
     </>
@@ -50,7 +22,6 @@ const Icon = styled.img`
   margin-right: 8px;
   margin-left: 20px;
   user-select: none;
-  opacity: ${(props) => (!props.clicked && "50%") || "100%"};
 `;
 
 const IconValue = styled.h5`

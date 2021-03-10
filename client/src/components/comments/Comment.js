@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
-import LikeImg from "../../imgs/like.svg";
 import DraftTextBox from "../common/DraftTextArea";
 import Button from "../common/Button";
 import { useParams } from "react-router";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext } from "../context/UserProvider";
+import Reaction from "../common/Reaction";
 
 var dummy_reaction_IDs = [];
 
@@ -14,12 +14,6 @@ const Comment = ({ comment, isDraft, callback }) => {
   const { postid } = useParams();
   const [content, setContent] = useState("");
   const user = useContext(UserContext);
-  const [reactions, setReactions] = useState({
-    likes: [...dummy_reaction_IDs],
-  });
-  const [reactClicked, setClicked] = useState({
-    liked: reactions.likes.includes(user._id),
-  });
 
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
@@ -58,23 +52,6 @@ const Comment = ({ comment, isDraft, callback }) => {
   // Used for the text box to create a new post
   const handleChange = (e) => {
     setContent(e.target.value);
-  };
-
-  const handleLike = () => {
-    var temp = reactions;
-
-    var loc = temp.likes.indexOf(user._id);
-
-    if (loc === -1) {
-      temp.likes.push(user._id);
-      setClicked({ liked: true });
-    } else {
-      temp.likes.splice(loc, 1);
-      setClicked({ liked: false });
-    }
-
-    setReactions(temp);
-    console.log(reactions.likes);
   };
 
   // Collect replies from comment data and append any newly created replies (if applicable)
@@ -125,12 +102,7 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
-                <Icon
-                  src={LikeImg}
-                  onClick={() => handleLike()}
-                  clicked={reactClicked.liked}
-                />
-                <IconValue>{reactions.likes.length}</IconValue>
+                <Reaction likes={[...dummy_reaction_IDs]} />
 
                 <ReplyBtn
                   style={{ marginRight: 10, marginLeft: 20 }}
@@ -217,7 +189,6 @@ const Icon = styled.img`
   margin-left: 20px;
 
   user-select: none;
-  opacity: ${(props) => (!props.clicked && "50%") || "100%"};
 `;
 
 const IconValue = styled.h5`
