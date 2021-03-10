@@ -75,15 +75,17 @@ const Home = () => {
     type: "get",
     endpoint: endpoint,
   });
-  console.log(data);
-  // if (data.result) {
-  //   var result = data.result;
-  // }
-  // if (data.posts) {
-  //   var groups = generateSections(data.posts);
-  // }
+  console.log("Data: ", data);
 
-  let groups = generateSections(data);
+  let groups =
+    data != null && data.length == 0 ? (
+      <h2 align="center">
+        You have not yet joined or created a course, or there are no posts in
+        any of your courses yet.
+      </h2>
+    ) : (
+      generateSections(data)
+    );
 
   return (
     <Wrapper>
@@ -94,12 +96,6 @@ const Home = () => {
               Recent Posts
             </h1>
             {groups}
-            {/* {{ groups } || <h1 align="center">{result}</h1>} */}
-            {/* <RecentGroup
-              postList={[]}
-              classroomName={"Default Name"}
-              nameColor={"#121212"}
-            /> */}
           </MaxWidth>
         </ScrollingDiv>
       </ViewWrapper>
