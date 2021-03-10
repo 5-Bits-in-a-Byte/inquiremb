@@ -6,7 +6,7 @@ const RecentGroup = ({ postList, classroomName, nameColor }) => {
   return (
     <Wrapper barColor={nameColor}>
       <GroupWrapper>
-        <GroupTitle nameColor={nameColor}>{classroomName}</GroupTitle>
+        <GroupTitle>{classroomName}</GroupTitle>
         {postList}
       </GroupWrapper>
     </Wrapper>
@@ -40,7 +40,7 @@ const GroupWrapper = styled.div`
 `;
 
 const GroupTitle = styled.h1`
-  color: ${(props) => props.nameColor};
+  /* color: ${(props) => props.nameColor}; */
 
   text-align: center;
   text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);

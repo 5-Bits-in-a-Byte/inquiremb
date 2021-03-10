@@ -75,7 +75,15 @@ const Home = () => {
     type: "get",
     endpoint: endpoint,
   });
-  let groups = generateSections(data.posts);
+  console.log(data);
+  // if (data.result) {
+  //   var result = data.result;
+  // }
+  // if (data.posts) {
+  //   var groups = generateSections(data.posts);
+  // }
+
+  let groups = generateSections(data);
 
   return (
     <Wrapper>
@@ -86,6 +94,12 @@ const Home = () => {
               Recent Posts
             </h1>
             {groups}
+            {/* {{ groups } || <h1 align="center">{result}</h1>} */}
+            {/* <RecentGroup
+              postList={[]}
+              classroomName={"Default Name"}
+              nameColor={"#121212"}
+            /> */}
           </MaxWidth>
         </ScrollingDiv>
       </ViewWrapper>
