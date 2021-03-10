@@ -110,11 +110,9 @@ const Home = () => {
 export default Home;
 
 const Wrapper = styled.div`
-  display: flex;
-  /* flex-direction: column;
-  justify-content: center;
-  align-items: center; */
-  height: 100%;
+  display: absolute;
+  height: calc(100vh - 66px);
+  overflow-y: auto;
 `;
 
 const ViewWrapper = styled.div`
@@ -126,7 +124,6 @@ const ScrollingDiv = styled.div`
   height: 100%;
   width: 100%;
   padding: 0 280px 0 200px;
-  overflow: auto;
   padding-right: 280px;
 `;
 
