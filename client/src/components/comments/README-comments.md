@@ -2,7 +2,7 @@
 
 This folder contains three files pertaining to creating and displaying comments and replies on posts.
 
-## String of events
+## String of Events
 
 There is a string of events that happens here:
 
