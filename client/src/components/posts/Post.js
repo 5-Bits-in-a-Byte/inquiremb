@@ -49,22 +49,18 @@ const generatePostContent = (
       ),
       isAnonymous: (
         <Checkbox
-          checkboxName="isAnonymous"
+          name="isAnonymous"
           labelText={"isAnonymous"}
           onChange={handleChange}
         />
       ),
       isPrivate: (
         <Checkbox
-          checkboxName="isPrivate"
+          name="isPrivate"
           labelText={"isPrivate"}
           onChange={handleChange}
         />
       ),
-      // options: [
-      //   <Checkbox labelText={"isAnonymous"} />,
-      //   <Checkbox labelText={"isPrivate"} />,
-      // ],
     };
   } else {
     return {
@@ -102,8 +98,10 @@ const Post = ({ post, isCondensed, isDraft }) => {
         e.target.type === "checkbox" ? e.target.checked : e.target.value,
     });
     // setDraft(newDraft);
-    console.log(draft);
   };
+
+  // console.log(draft);
+
   const handleSubmit = (e) => {
     LazyFetch({
       type: "post",
@@ -118,6 +116,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
         /* data.new is used after the redirect to prevent 
         a request for comments (new posts have 0 comments)*/
         data.new = true;
+        // console.log(data);
         history.push({
           pathname: "/course/" + data.courseid + "/post/" + data._id,
           state: { post: data },
@@ -154,7 +153,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
       {!isCondensed && <PostContent>{render.content}</PostContent>}
       {!isCondensed && <hr style={HRStyle} />}
       <PostMetaContentWrapper className="meta">
-        <UserIcon src={render.picture} />
+        {render.picture ? <UserIcon src={render.picture} /> : null}
         <UserDescription>Posted by {render.postedby}</UserDescription>
         <MetaIconWrapper>
           {/* {isDraft == true ? (

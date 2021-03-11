@@ -12,7 +12,7 @@ export const INDETERMINATE = -1;
 //   return <input type="checkbox" {...otherProps} />;
 // };
 
-const Checkbox = ({ value, checkboxName, labelText, onChange }) => {
+const Checkbox = ({ value, name, labelText, onChange }) => {
   // const checkRef = useRef();
 
   // useEffect(() => {
@@ -45,7 +45,7 @@ const Checkbox = ({ value, checkboxName, labelText, onChange }) => {
         <Box>
           <img src={PinImg} />
         </Box>
-        <SpecialInput name={checkboxName} type="checkbox" onChange={onChange} />
+        <SpecialInput name={name} type="checkbox" onChange={onChange} />
         {labelText}
       </CheckLabel>
     </Wrapper>
