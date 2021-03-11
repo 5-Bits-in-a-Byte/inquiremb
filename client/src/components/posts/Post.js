@@ -9,6 +9,7 @@ import PostReactions from "./PostReactions";
 import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
 import Checkbox from "../common/Checkbox";
+import { MDBCheckbox } from "mdb-react-ui-kit";
 
 // Checks props to determine if the post is a draft, isPinned, etc.
 const generatePostContent = (
@@ -17,7 +18,8 @@ const generatePostContent = (
   isDraft,
   handleChange,
   handleSubmit,
-  postid
+  postid,
+  draft
 ) => {
   // If a post is passed, set all dynamic content accordingly, otherwise render a draft
   if (isDraft) {
@@ -50,15 +52,17 @@ const generatePostContent = (
       isAnonymous: (
         <Checkbox
           checkboxName="isAnonymous"
-          labelText={"isAnonymous"}
+          labelText={"Make Anonymous"}
           onChange={handleChange}
+          draft={draft}
         />
       ),
       isPrivate: (
         <Checkbox
           checkboxName="isPrivate"
-          labelText={"isPrivate"}
+          labelText={"Make Private"}
           onChange={handleChange}
+          draft={draft}
         />
       ),
       // options: [
@@ -96,11 +100,25 @@ const Post = ({ post, isCondensed, isDraft }) => {
   });
 
   const handleChange = (e) => {
-    setDraft({
-      ...draft,
-      [e.target.name]:
-        e.target.type === "checkbox" ? e.target.checked : e.target.value,
-    });
+    if (e.target.name == "isAnonymous") {
+      var newDraft = {
+        title: draft.title,
+        content: draft.content,
+        isAnonymous:
+          e.target.type === "checkbox" ? e.target.checked : e.target.value,
+        isPrivate: draft.isPrivate,
+      };
+    } else if (e.target.name == "isPrivate") {
+      var newDraft = {
+        title: draft.title,
+        content: draft.content,
+        isAnonymous: draft.isAnonymous,
+        isPrivate:
+          e.target.type === "checkbox" ? e.target.checked : e.target.value,
+      };
+    }
+
+    setDraft(newDraft);
     // setDraft(newDraft);
     console.log(draft);
   };
@@ -133,7 +151,8 @@ const Post = ({ post, isCondensed, isDraft }) => {
     isDraft,
     handleChange,
     handleSubmit,
-    postid
+    postid,
+    draft
   );
 
   // Handles redirect if the post is not a draft
