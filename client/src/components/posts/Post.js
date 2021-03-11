@@ -8,6 +8,8 @@ import { useHistory } from "react-router-dom";
 import PostReactions from "./PostReactions";
 import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
+import Checkbox from "../common/Checkbox";
+import { MDBCheckbox } from "mdb-react-ui-kit";
 
 // Checks props to determine if the post is a draft, isPinned, etc.
 const generatePostContent = (
@@ -16,7 +18,9 @@ const generatePostContent = (
   isDraft,
   handleChange,
   handleSubmit,
-  postid
+  postid,
+  isAnon,
+  isPriv
 ) => {
   // If a post is passed, set all dynamic content accordingly, otherwise render a draft
   if (isDraft) {
@@ -46,6 +50,22 @@ const generatePostContent = (
           Submit
         </Button>
       ),
+      isAnonymous: (
+        <Checkbox
+          checkboxName="isAnonymous"
+          labelText={"Make Anonymous"}
+          onChange={handleChange}
+          checkStatus={isAnon}
+        />
+      ),
+      isPrivate: (
+        <Checkbox
+          checkboxName="isPrivate"
+          labelText={"Make Private"}
+          onChange={handleChange}
+          checkStatus={isPriv}
+        />
+      ),
     };
   } else {
     return {
@@ -69,12 +89,23 @@ const Post = ({ post, isCondensed, isDraft }) => {
   const { courseid, postid } = useParams();
 
   // State and handler for drafting posts
-  const [draft, setDraft] = useState({ title: "", content: "" });
+  const [draft, setDraft] = useState({
+    title: "",
+    content: "",
+    isAnonymous: false,
+    isPrivate: false,
+  });
 
   const handleChange = (e) => {
-    setDraft({ ...draft, [e.target.name]: e.target.value });
-    console.log(draft);
+    setDraft({
+      ...draft,
+      [e.target.name]:
+        e.target.type === "checkbox" ? e.target.checked : e.target.value,
+    });
   };
+
+  // console.log(draft);
+
   const handleSubmit = (e) => {
     LazyFetch({
       type: "post",
@@ -82,13 +113,14 @@ const Post = ({ post, isCondensed, isDraft }) => {
       data: {
         title: draft.title,
         content: draft.content,
-        isPrivate: false,
-        isAnonymous: false,
+        isPrivate: draft.isPrivate,
+        isAnonymous: draft.isAnonymous,
       },
       onSuccess: (data) => {
         /* data.new is used after the redirect to prevent 
         a request for comments (new posts have 0 comments)*/
         data.new = true;
+        // console.log(data);
         history.push({
           pathname: "/course/" + data.courseid + "/post/" + data._id,
           state: { post: data },
@@ -97,6 +129,14 @@ const Post = ({ post, isCondensed, isDraft }) => {
     });
   };
 
+  if (draft != null) {
+    var isAnon = draft.isAnonymous;
+    var isPriv = draft.isPrivate;
+  } else {
+    isAnon = false;
+    isPriv = false;
+  }
+
   // Determines if post is a draft or not and renders accordingly:
   let render = generatePostContent(
     user,
@@ -104,7 +144,9 @@ const Post = ({ post, isCondensed, isDraft }) => {
     isDraft,
     handleChange,
     handleSubmit,
-    postid
+    postid,
+    isAnon,
+    isPriv
   );
 
   // Handles redirect if the post is not a draft
@@ -125,9 +167,19 @@ const Post = ({ post, isCondensed, isDraft }) => {
       {!isCondensed && <PostContent>{render.content}</PostContent>}
       {!isCondensed && <hr style={HRStyle} />}
       <PostMetaContentWrapper className="meta">
-        <UserIcon src={render.picture} />
+        {render.picture ? <UserIcon src={render.picture} /> : null}
         <UserDescription>Posted by {render.postedby}</UserDescription>
-        <MetaIconWrapper>{render.meta}</MetaIconWrapper>
+        <MetaIconWrapper>
+          {/* {isDraft == true ? (
+            <Checkbox labelText={"isAnonymous"} onChange={handleChange} />
+          ) : null}
+          {isDraft == true ? (
+            <Checkbox labelText={"isPrivate"} onChange={handleChange} />
+          ) : null} */}
+          {render.isAnonymous}
+          {render.isPrivate}
+          {render.meta}
+        </MetaIconWrapper>
       </PostMetaContentWrapper>
     </PostWrapper>
   );
