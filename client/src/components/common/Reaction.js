@@ -2,12 +2,10 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import LikeImg from "../../imgs/like.svg";
 import { UserContext } from "../context/UserProvider";
-import Fetch from "./requests/Fetch";
 import LazyFetch from "./requests/LazyFetch";
 
 // Post and User to connect to backend
 const Reaction = ({ reactions, type, id, postid }) => {
-  console.log("reactions = " + reactions.likes);
   const user = useContext(UserContext);
   const [reactionState, setReactions] = useState(reactions);
   const [reactClicked, setClicked] = useState({
@@ -36,14 +34,9 @@ const Reaction = ({ reactions, type, id, postid }) => {
       endpoint: endpoint,
       data: null,
       onSuccess: (data) => {
-        console.log("data = " + data.reactions.likes);
         setReactions(data.reactions);
       },
     });
-    // const { data, errors, loading } = Fetch({
-    //   type: "put",
-    //   endpoint: endpoint,
-    // });
 
     var loc = reactionState.likes.indexOf(user._id);
 
@@ -53,7 +46,6 @@ const Reaction = ({ reactions, type, id, postid }) => {
       setClicked({ liked: false });
     }
   };
-  console.log("reactionState = " + reactionState.likes);
 
   return (
     <>
