@@ -4,7 +4,7 @@ import styled from "styled-components";
 import TopContent from "./TopContent";
 import CourseCard from "./CourseCard";
 
-const courseList = (userCourses) => {
+const generateCourseList = (userCourses) => {
   let ret = [];
   userCourses.forEach((course, index) => {
     ret.push(
@@ -22,14 +22,14 @@ const courseList = (userCourses) => {
 
 const Courses = () => {
   const user = useContext(UserContext);
-  const [courseState, setCourseList] = useState(user.courses);
+  let currentCourseState = generateCourseList(user.courses);
+  const [courseList, setCourseList] = useState(currentCourseState);
+  // console.log(currentCourseState);
 
   return (
     <ScrollDiv>
-      <TopContent nestedState={courseState} nestedSetter={setCourseList} />
-      <CourseDisplay className="content">
-        {courseList(courseState)}
-      </CourseDisplay>
+      <TopContent courseList={courseList} setCourseList={setCourseList} />
+      <CourseDisplay className="content">{courseList}</CourseDisplay>
     </ScrollDiv>
   );
 };
