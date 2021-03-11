@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import PostReactions from "./PostReactions";
 import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
+import Checkbox from "../common/Checkbox";
 
 // Checks props to determine if the post is a draft, isPinned, etc.
 const generatePostContent = (
@@ -46,6 +47,24 @@ const generatePostContent = (
           Submit
         </Button>
       ),
+      isAnonymous: (
+        <Checkbox
+          name="isAnonymous"
+          labelText={"isAnonymous"}
+          onChange={handleChange}
+        />
+      ),
+      isPrivate: (
+        <Checkbox
+          name="isPrivate"
+          labelText={"isPrivate"}
+          onChange={handleChange}
+        />
+      ),
+      // options: [
+      //   <Checkbox labelText={"isAnonymous"} />,
+      //   <Checkbox labelText={"isPrivate"} />,
+      // ],
     };
   } else {
     return {
@@ -69,7 +88,12 @@ const Post = ({ post, isCondensed, isDraft }) => {
   const { courseid, postid } = useParams();
 
   // State and handler for drafting posts
-  const [draft, setDraft] = useState({ title: "", content: "" });
+  const [draft, setDraft] = useState({
+    title: "",
+    content: "",
+    isAnonymous: false,
+    isPrivate: false,
+  });
 
   const handleChange = (e) => {
     setDraft({ ...draft, [e.target.name]: e.target.value });
@@ -82,8 +106,8 @@ const Post = ({ post, isCondensed, isDraft }) => {
       data: {
         title: draft.title,
         content: draft.content,
-        isPrivate: false,
-        isAnonymous: false,
+        isPrivate: draft.isPrivate,
+        isAnonymous: draft.isAnonymous,
       },
       onSuccess: (data) => {
         /* data.new is used after the redirect to prevent 
@@ -127,7 +151,17 @@ const Post = ({ post, isCondensed, isDraft }) => {
       <PostMetaContentWrapper className="meta">
         <UserIcon src={render.picture} />
         <UserDescription>Posted by {render.postedby}</UserDescription>
-        <MetaIconWrapper>{render.meta}</MetaIconWrapper>
+        <MetaIconWrapper>
+          {/* {isDraft == true ? (
+            <Checkbox labelText={"isAnonymous"} onChange={handleChange} />
+          ) : null}
+          {isDraft == true ? (
+            <Checkbox labelText={"isPrivate"} onChange={handleChange} />
+          ) : null} */}
+          {render.isAnonymous}
+          {render.isPrivate}
+          {render.meta}
+        </MetaIconWrapper>
       </PostMetaContentWrapper>
     </PostWrapper>
   );
