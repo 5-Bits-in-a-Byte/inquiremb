@@ -2,7 +2,7 @@ from flask_socketio import *
 from auth import current_user
 from flask import Blueprint, render_template
 
-io = SocketIO(logger=True, engineio_logger=True, cors_allowed_origins="*")
+io = SocketIO(logger=True, cors_allowed_origins="*")
 
 # Blueprint stores authentication related routes
 socketio_blueprint = Blueprint(
@@ -29,7 +29,8 @@ def test_disconnect():
 
 
 @io.on('blah')
-def blah():
+def blah(data):
+    print(data)
     return "blah"
 
 

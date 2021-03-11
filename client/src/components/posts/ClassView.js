@@ -1,20 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserProvider";
-import socketIOClient from "socket.io-client";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import Sidebar from "./Sidebar";
 import PostView from "./PostView";
 import { useLocation, useParams } from "react-router";
+import io from "../../services/socketio";
 
 const ClassView = ({ classroomName }) => {
   const location = useLocation();
   let defaultHighlight = "All Posts";
   useEffect(() => {
-    const socket = socketIOClient(process.env.REACT_APP_SERVER_URL);
-    // socket.emit("blah", { test: "testing" });
-    socket.on("test", (data) => {
+    // io.emit("blah", { test: "testing" });
+    io.on("test", (data) => {
       console.log("test");
       console.log(data);
     });
