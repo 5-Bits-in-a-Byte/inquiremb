@@ -7,8 +7,8 @@ This folder contains all of the components related to navigating the web app. Th
 Each component in this folder has specific functionality so we'll break them down one-by-one:
 
 - NavigationWrapper.js handles displaying everything related to this folder. This includes everything in the TopNavBar and also everything in the LeftNavBar
-- TopNavBar.js handles the entire top display of the web app. This includes the logo in the top left, the search bar in the middle, and the profile name and picture/dropdown menu. Within this component are several other components which include:
-  - The logo image located in the imgs folder
+- TopNavBar.js handles the entire top display of the web app. This includes the Inquire logo in the top left, the search bar in the middle, and the profile name and picture/dropdown menu. Within this component are several other components which include:
+  - The Inquire logo image located in the imgs folder
   - The SearchBar component located in the common folder
   - The ProfileDropdown component
 - ProfileDropdown.js handles creating and displaying the top right hand corner of the TopNavBar. This includes the profile name, picture, and dropdown menu to log out. This component includes:
