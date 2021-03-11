@@ -9,15 +9,9 @@ import { useLocation, useParams } from "react-router";
 import io from "../../services/socketio";
 
 const ClassView = ({ classroomName }) => {
+  const { courseid } = useParams();
   const location = useLocation();
   let defaultHighlight = "All Posts";
-  useEffect(() => {
-    // io.emit("blah", { test: "testing" });
-    io.on("test", (data) => {
-      console.log("test");
-      console.log(data);
-    });
-  }, []);
 
   if (location.state && location.state.filter) {
     defaultHighlight = location.state.filter;
@@ -28,7 +22,6 @@ const ClassView = ({ classroomName }) => {
     defaultHighlight
   );
   // console.log(hightlightedSection)
-  const { postid } = useParams();
 
   var classroomID = useParams().courseid;
 
