@@ -2,16 +2,18 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import LikeImg from "../../imgs/like.svg";
 import { UserContext } from "../context/UserProvider";
+import Fetch from "./requests/Fetch";
+import LazyFetch from "./requests/LazyFetch";
 
 // Post and User to connect to backend
-const Reaction = ({ likes, type, id }) => {
+const Reaction = ({ reactions, type, id, postid }) => {
+  console.log("reactions = " + reactions.likes);
   const user = useContext(UserContext);
-  const [reactions, setReactions] = useState({
-    likes,
-  });
+  const [reactionState, setReactions] = useState(reactions);
   const [reactClicked, setClicked] = useState({
     liked: reactions.likes.includes(user._id),
   });
+
   let endpoint = "/api/reactions";
 
   switch (type) {
@@ -29,26 +31,39 @@ const Reaction = ({ likes, type, id }) => {
   }
 
   const handleLike = () => {
-    var temp = reactions;
+    LazyFetch({
+      type: "put",
+      endpoint: endpoint,
+      data: null,
+      onSuccess: (data) => {
+        console.log("data = " + data.reactions.likes);
+        setReactions(data.reactions);
+      },
+    });
+    // const { data, errors, loading } = Fetch({
+    //   type: "put",
+    //   endpoint: endpoint,
+    // });
 
-    var loc = temp.likes.indexOf(user._id);
+    var loc = reactionState.likes.indexOf(user._id);
 
     if (loc === -1) {
-      temp.likes.push(user._id);
       setClicked({ liked: true });
     } else {
-      temp.likes.splice(loc, 1);
       setClicked({ liked: false });
     }
-
-    setReactions(temp);
-    console.log(reactions.likes);
   };
+  console.log("reactionState = " + reactionState.likes);
 
   return (
     <>
-      <Icon src={LikeImg} onClick={handleLike} clicked={reactClicked.liked} />
-      <IconValue>{reactions.likes.length}</IconValue>
+      <Icon
+        src={LikeImg}
+        onClick={handleLike}
+        clicked={reactClicked.liked}
+        postid={postid}
+      />
+      <IconValue>{reactionState.likes.length}</IconValue>
     </>
   );
 };
@@ -62,6 +77,7 @@ const Icon = styled.img`
   margin-right: 8px;
   margin-left: 20px;
   user-select: none;
+  cursor: ${(props) => (props.postid ? "pointer" : "default")};
   opacity: ${(props) => (!props.clicked && "50%") || "100%"};
 `;
 

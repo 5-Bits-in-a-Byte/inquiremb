@@ -52,7 +52,7 @@ const CommentReply = ({ reply, isDraft, submitReply }) => {
           ) : (
             <>
               <Reaction
-                likes={reply.reactions.likes}
+                reactions={reply.reactions}
                 type="reply"
                 id={reply._id}
               />

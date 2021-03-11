@@ -103,7 +103,7 @@ const Comment = ({ comment, isDraft, callback }) => {
             ) : (
               <>
                 <Reaction
-                  likes={comment.reactions.likes}
+                  reactions={comment.reactions}
                   type="comment"
                   id={comment._id}
                 />
