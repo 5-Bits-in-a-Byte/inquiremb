@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import UserImg from "../../imgs/user.svg";
+import { UserContext } from "../context/UserProvider";
 import BookmarkImg from "../../imgs/bookmark.svg";
 import GlassesImg from "../../imgs/glasses.svg";
 import NoteImg from "../../imgs/note.svg";
@@ -15,6 +16,18 @@ const Sidebar = ({
   highlightedSection,
 }) => {
   const { courseid, postid } = useParams();
+
+  // Extracting the course name from the user context and current course ID
+  var classroomID = useParams().courseid;
+  var courseContext = useContext(UserContext).courses;
+  var temp;
+
+  for (temp in courseContext) {
+    if (courseContext[temp].course_id === classroomID) {
+      classroomName = courseContext[temp].course_name;
+      break;
+    }
+  }
 
   return (
     <FlexWrapper>
