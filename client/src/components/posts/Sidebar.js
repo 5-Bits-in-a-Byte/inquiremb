@@ -10,16 +10,13 @@ import NoteImg from "../../imgs/note.svg";
 import HeartImg from "../../imgs/heart.svg";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
-const Sidebar = ({
-  classroomName,
-  setHighlightedSection,
-  highlightedSection,
-}) => {
+const Sidebar = ({ setHighlightedSection, highlightedSection }) => {
   const { courseid, postid } = useParams();
 
   // Extracting the course name from the user context and current course ID
   var classroomID = useParams().courseid;
   var courseContext = useContext(UserContext).courses;
+  var classroomName = " ";
   var temp;
 
   for (temp in courseContext) {
@@ -31,6 +28,7 @@ const Sidebar = ({
 
   // If the name is longer than 18 characters, scale the font size down by this proportion
   var nameRatio = Math.min(1.0, 18 / classroomName.length);
+  //var nameRatio = 1;
 
   return (
     <FlexWrapper>

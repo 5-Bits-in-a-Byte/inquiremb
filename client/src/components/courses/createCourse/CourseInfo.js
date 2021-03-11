@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Select from "../../common/Select";
 import axios from "axios";
 import Button from "../../common/Button";
@@ -6,6 +6,7 @@ import Input from "../../common/Input";
 import InputLabel from "../../common/InputLabel";
 import styled from "styled-components";
 import Errors from "../../common/Errors";
+import { UserContext, UserDispatchContext } from "../../context/UserProvider";
 
 const INVITE_OPTIONS = [
   {
@@ -17,6 +18,8 @@ const INVITE_OPTIONS = [
 ];
 
 const CourseInfo = ({ setCourse }) => {
+  const user = useContext(UserContext);
+  const setUser = useContext(UserDispatchContext);
   const [form, setForm] = useState({
     // university: null,
     course: null,
@@ -53,6 +56,11 @@ const CourseInfo = ({ setCourse }) => {
           withCredentials: true,
         })
         .then((res) => {
+          //let userCopy = user;
+          //console.log(userCopy);
+          //console.log(res);
+          //userCopy.courses.push(res.data);
+          //setUser(userCopy);
           setCourse(res.data);
         })
         .catch((err) => {

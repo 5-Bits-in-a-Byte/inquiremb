@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 import PostView from "./PostView";
 import { useLocation, useParams } from "react-router";
 
-const ClassView = ({ classroomName }) => {
+const ClassView = () => {
   const location = useLocation();
   let defaultHighlight = "All Posts";
 
@@ -24,7 +24,6 @@ const ClassView = ({ classroomName }) => {
   return (
     <ClassViewWrapper>
       <Sidebar
-        classroomName={classroomName}
         setHighlightedSection={setHighlightedSection}
         highlightedSection={highlightedSection}
       />
