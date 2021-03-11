@@ -29,11 +29,14 @@ const Sidebar = ({
     }
   }
 
+  // If the name is longer than 18 characters, scale the font size down by this proportion
+  var nameRatio = Math.min(1.0, 18 / classroomName.length);
+
   return (
     <FlexWrapper>
       <Container>
         <Link to={"/course/" + courseid} style={{ textDecoration: "none" }}>
-          <ClassTitle>{classroomName}</ClassTitle>
+          <ClassTitle nameFit={nameRatio}>{classroomName}</ClassTitle>
         </Link>
 
         <HR />
@@ -101,7 +104,7 @@ const Container = styled.div`
 const ClassTitle = styled.h1`
   height: 2em;
   line-height: 2.5em;
-  font-size: 1.5rem;
+  font-size: ${(props) => props.nameFit * 1.5}rem;
   text-align: center;
   user-select: none;
 `;
