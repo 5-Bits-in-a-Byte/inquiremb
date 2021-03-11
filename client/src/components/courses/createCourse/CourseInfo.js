@@ -56,11 +56,12 @@ const CourseInfo = ({ setCourse }) => {
           withCredentials: true,
         })
         .then((res) => {
-          //let userCopy = user;
-          //console.log(userCopy);
-          //console.log(res);
-          //userCopy.courses.push(res.data);
-          //setUser(userCopy);
+          let userCopy = user;
+          console.log(userCopy, "user before update");
+          console.log(res.data, "request data");
+          userCopy.courses.push(res.data);
+          console.log(userCopy, "user after update");
+          setUser(userCopy);
           setCourse(res.data);
         })
         .catch((err) => {

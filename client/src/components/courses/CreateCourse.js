@@ -27,9 +27,9 @@ const AddNewCourseToList = (newCourse, courseList) => {
 
   ret.push(
     <CourseCard
-      key={newCourse._id}
-      id={newCourse._id}
-      courseName={newCourse.course}
+      key={newCourse.course_id}
+      id={newCourse.course_id}
+      courseName={newCourse.course_name}
       courseTerm="Winter 2021"
       color={newCourse.color || "#121212"}
     />

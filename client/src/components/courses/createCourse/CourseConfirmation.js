@@ -5,6 +5,7 @@ import Button from "../../common/Button";
 import Input from "../../common/Input";
 import InputLabel from "../../common/InputLabel";
 import CopyImg from "../../../imgs/copy.svg";
+
 const CourseConfirmation = ({ course, close }) => {
   return (
     <div className="flex-col align justify">
@@ -23,7 +24,9 @@ const CourseConfirmation = ({ course, close }) => {
           <CopyOverlay>
             <CopyIcon src={CopyImg} />
             <Input
-              value={process.env.REACT_APP_CLIENT_URL + "/join/" + course._id}
+              value={
+                process.env.REACT_APP_CLIENT_URL + "/join/" + course.course_id
+              }
               readOnly
             />
           </CopyOverlay>
@@ -32,7 +35,7 @@ const CourseConfirmation = ({ course, close }) => {
           <InputLabel margin="0 0 7px">Access Code</InputLabel>
           <CopyOverlay>
             <CopyIcon src={CopyImg} />
-            <Input value={course._id} readOnly />
+            <Input value={course.course_id} readOnly />
           </CopyOverlay>
         </RightColumn>
       </HighlightedSection>

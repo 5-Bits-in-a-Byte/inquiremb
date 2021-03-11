@@ -17,9 +17,10 @@ const Sidebar = ({ setHighlightedSection, highlightedSection }) => {
   var classroomID = useParams().courseid;
   var courseContext = useContext(UserContext).courses;
   var classroomName = " ";
-  var temp;
 
-  for (temp in courseContext) {
+  console.log(courseContext, "COURSE CONTEXT");
+
+  for (let temp in courseContext) {
     if (courseContext[temp].course_id === classroomID) {
       classroomName = courseContext[temp].course_name;
       break;
