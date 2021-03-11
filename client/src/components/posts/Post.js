@@ -49,14 +49,14 @@ const generatePostContent = (
       ),
       isAnonymous: (
         <Checkbox
-          name="isAnonymous"
+          checkboxName="isAnonymous"
           labelText={"isAnonymous"}
           onChange={handleChange}
         />
       ),
       isPrivate: (
         <Checkbox
-          name="isPrivate"
+          checkboxName="isPrivate"
           labelText={"isPrivate"}
           onChange={handleChange}
         />
@@ -96,7 +96,12 @@ const Post = ({ post, isCondensed, isDraft }) => {
   });
 
   const handleChange = (e) => {
-    setDraft({ ...draft, [e.target.name]: e.target.value });
+    setDraft({
+      ...draft,
+      [e.target.name]:
+        e.target.type === "checkbox" ? e.target.checked : e.target.value,
+    });
+    // setDraft(newDraft);
     console.log(draft);
   };
   const handleSubmit = (e) => {
