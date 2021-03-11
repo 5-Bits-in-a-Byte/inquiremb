@@ -46,7 +46,7 @@ The remaining components in this file are not grouped specifically but they are 
   - Options.js
   - Post.js
   - PostView.js
-- Checkbox.js which is used in Post.js and future files in the future
+- Checkbox.js which is used in Post.js and future files we will create
 - DraftTextArea.js which is used in the following files:
   - CommentReply.js
   - Messages.js
@@ -64,3 +64,12 @@ The remaining components in this file are not grouped specifically but they are 
   - CourseConfirmation.js
   - CourseInfo.js
   - JoinInfo.js
+- Modal.js which is used in the following files:
+  - CreateCourse.js
+  - JoinCourse.js
+- Reaction.js which is used in the following files:
+  - Comment.js
+  - CommentReply.js
+  - PostReactions.js
+- SearchBar.js which is used in TopNavBar.js and future files we will create
+- Select.js which is used in CouseInfo.js and future files we will create
