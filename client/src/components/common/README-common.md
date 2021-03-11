@@ -29,3 +29,38 @@ There are two files in this folder, Fetch.js and LazyFetch.js, that are both use
 These components should've also been used in JoinInfo.js, JoinConfirmation.js, and CourseInfo.js located within the courses folder. However, by the time we created the Fetch and LazyFetch files, these three components (JoinInfo, JoinConfirmation, and CourseInfo) were already implemented and we didn't have enough time to go back and refactor them.
 
 ## Remaining Files
+
+The remaining components in this file are not grouped specifically but they are still common components used thruoughout our entire web app. The components include:
+
+- Button.js which is used in the following files:
+  - Comment.js
+  - CommentReply.js
+  - CommentView.js
+  - CreateCourse.js
+  - JoinCourse.js
+  - CourseConfirmation.js
+  - CourseInfo.js
+  - JoinConfirmation.js
+  - JoinInfo.js
+  - Messages.js
+  - Options.js
+  - Post.js
+  - PostView.js
+- Checkbox.js which is used in Post.js and future files in the future
+- DraftTextArea.js which is used in the following files:
+  - CommentReply.js
+  - Messages.js
+  - Post.js
+- Errors.js which is used in the following files:
+  - CourseInfo.js
+  - JoinConfirmation.js
+  - JoinInfo.js
+- Input.js which is used in the following files:
+  - CourseConfirmation.js
+  - CourseInfo.js
+  - JoinInfo.js
+  - Messages.js
+- InputLabel.js which is used in the following files:
+  - CourseConfirmation.js
+  - CourseInfo.js
+  - JoinInfo.js
