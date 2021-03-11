@@ -28,6 +28,15 @@ const generateSections = (data) => {
 };
 
 const PostView = ({ highlightedSection }) => {
+  const [socketPosts, setSocketPosts] = useState([])
+  useEffect(() => {
+    io.emit("join", { room: courseid, room_type: "course" });
+    io.on("newpost", (post) => {
+      if(post && postedby._id !== 
+      setSocketPosts()
+    });
+  }, []);
+
   const [isCondensed, setCondensedState] = useState(true);
   // Retrieves the courseid from the url parameters
   const { courseid } = useParams();
