@@ -39,12 +39,12 @@ function App() {
           </Route>
           <PrivateRoute path="/course/:courseid" exact>
             <NavigationWrapper>
-              <ClassView classroomName={"CIS 422"} />
+              <ClassView />
             </NavigationWrapper>
           </PrivateRoute>
           <PrivateRoute path="/course/:courseid/post/:postid" exact>
             <NavigationWrapper>
-              <CommentView classroomName={"CIS 422"} />
+              <CommentView />
             </NavigationWrapper>
           </PrivateRoute>
         </Switch>

@@ -16,7 +16,8 @@ const generatePostContent = (
   post,
   isDraft,
   handleChange,
-  handleSubmit
+  handleSubmit,
+  postid
 ) => {
   // If a post is passed, set all dynamic content accordingly, otherwise render a draft
   if (isDraft) {
@@ -46,6 +47,24 @@ const generatePostContent = (
           Submit
         </Button>
       ),
+      isAnonymous: (
+        <Checkbox
+          checkboxName="isAnonymous"
+          labelText={"isAnonymous"}
+          onChange={handleChange}
+        />
+      ),
+      isPrivate: (
+        <Checkbox
+          checkboxName="isPrivate"
+          labelText={"isPrivate"}
+          onChange={handleChange}
+        />
+      ),
+      // options: [
+      //   <Checkbox labelText={"isAnonymous"} />,
+      //   <Checkbox labelText={"isPrivate"} />,
+      // ],
     };
   } else {
     return {
@@ -58,9 +77,7 @@ const generatePostContent = (
       isPinned: post.isPinned,
       picture: post.postedby.picture,
       postedby: post.postedby.first + " " + post.postedby.last,
-      meta: (
-        <PostReactions likes={post.reactions.likes} comments={post.comments} />
-      ),
+      meta: <PostReactions post={post} postid={postid} />,
     };
   }
 };
@@ -71,10 +88,20 @@ const Post = ({ post, isCondensed, isDraft }) => {
   const { courseid, postid } = useParams();
 
   // State and handler for drafting posts
-  const [draft, setDraft] = useState({ title: "", content: "" });
+  const [draft, setDraft] = useState({
+    title: "",
+    content: "",
+    isAnonymous: false,
+    isPrivate: false,
+  });
 
   const handleChange = (e) => {
-    setDraft({ ...draft, [e.target.name]: e.target.value });
+    setDraft({
+      ...draft,
+      [e.target.name]:
+        e.target.type === "checkbox" ? e.target.checked : e.target.value,
+    });
+    // setDraft(newDraft);
     console.log(draft);
   };
   const handleSubmit = (e) => {
@@ -84,8 +111,8 @@ const Post = ({ post, isCondensed, isDraft }) => {
       data: {
         title: draft.title,
         content: draft.content,
-        isPrivate: false,
-        isAnonymous: false,
+        isPrivate: draft.isPrivate,
+        isAnonymous: draft.isAnonymous,
       },
       onSuccess: (data) => {
         /* data.new is used after the redirect to prevent 
@@ -105,7 +132,8 @@ const Post = ({ post, isCondensed, isDraft }) => {
     post,
     isDraft,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    postid
   );
 
   // Handles redirect if the post is not a draft
@@ -116,17 +144,29 @@ const Post = ({ post, isCondensed, isDraft }) => {
   };
 
   return (
-    <PostWrapper isCondensed={isCondensed} isFocused={postid}>
-      <PostTitle isCondensed={isCondensed} onClick={navigateToPost}>
-        {render.title}
-      </PostTitle>
+    <PostWrapper
+      isCondensed={isCondensed}
+      isFocused={postid}
+      onClick={navigateToPost}
+    >
+      <PostTitle isCondensed={isCondensed}>{render.title} </PostTitle>
       <PinIcon isPinned={render.isPinned} src={PinImg} />
       {!isCondensed && <PostContent>{render.content}</PostContent>}
       {!isCondensed && <hr style={HRStyle} />}
       <PostMetaContentWrapper className="meta">
         <UserIcon src={render.picture} />
         <UserDescription>Posted by {render.postedby}</UserDescription>
-        <MetaIconWrapper>{render.meta}</MetaIconWrapper>
+        <MetaIconWrapper>
+          {/* {isDraft == true ? (
+            <Checkbox labelText={"isAnonymous"} onChange={handleChange} />
+          ) : null}
+          {isDraft == true ? (
+            <Checkbox labelText={"isPrivate"} onChange={handleChange} />
+          ) : null} */}
+          {render.isAnonymous}
+          {render.isPrivate}
+          {render.meta}
+        </MetaIconWrapper>
       </PostMetaContentWrapper>
     </PostWrapper>
   );

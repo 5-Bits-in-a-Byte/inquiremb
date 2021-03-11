@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import { UserContext } from "../context/UserProvider";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
@@ -7,7 +6,7 @@ import Sidebar from "./Sidebar";
 import PostView from "./PostView";
 import { useLocation, useParams } from "react-router";
 
-const ClassView = ({ classroomName }) => {
+const ClassView = () => {
   const location = useLocation();
   let defaultHighlight = "All Posts";
 
@@ -22,33 +21,9 @@ const ClassView = ({ classroomName }) => {
   // console.log(hightlightedSection)
   const { postid } = useParams();
 
-  console.log(classroomName);
-  //console.log(location);
-  console.log(useParams().courseid);
-
-  var classroomID = useParams().courseid;
-
-  var courseContext = useContext(UserContext).courses;
-
-  console.log(courseContext);
-
-  console.log("beginning search");
-
-  var temp;
-
-  for (temp in courseContext) {
-    console.log(courseContext[temp].course_id);
-    console.log(courseContext[temp].course_name);
-    if (courseContext[temp].course_id === classroomID) {
-      classroomName = courseContext[temp].course_name;
-      break;
-    }
-  }
-
   return (
     <ClassViewWrapper>
       <Sidebar
-        classroomName={classroomName}
         setHighlightedSection={setHighlightedSection}
         highlightedSection={highlightedSection}
       />

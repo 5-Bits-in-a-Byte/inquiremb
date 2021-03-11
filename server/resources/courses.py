@@ -48,7 +48,10 @@ class Courses(Resource):
                                                                        "canPost": True, "seePrivate": True, "canPin": True,
                                                                        "canRemove": True, "canEndorse": True, "viewAnonymous": True,
                                                                        "admin": True, "color": color}}})
-        return {"_id": course._id, "course": course.course, "color": color}, 200
+        return {"course_id": course._id, "course_name": args.course,
+                "canPost": True, "seePrivate": True, "canPin": True,
+                "canRemove": True, "canEndorse": True, "viewAnonymous": True,
+                "admin": True, "color": color}, 200
 
     def validate_post(self, args):
         errors = []
