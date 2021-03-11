@@ -5,25 +5,7 @@ import PinImg from "../../imgs/pin.svg";
 import BlueCheckmark from "../../imgs/bluecheck.svg";
 import GreyCheckmark from "../../imgs/greycheck.svg";
 
-export const CHECKED = 1;
-export const UNCHECKED = 2;
-export const INDETERMINATE = -1;
-
-// const IndeterminateCheckbox = (props) => {
-//   const { value, ...otherProps } = props;
-//   return <input type="checkbox" {...otherProps} />;
-// };
-
 const Checkbox = ({ checkboxName, labelText, onChange, draft }) => {
-  const handleCheckboxChange = (event) => {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-
-    const name = target.name;
-
-    console.log(value);
-  };
-
   return (
     <Wrapper>
       <CheckLabel>
@@ -42,6 +24,7 @@ const Checkbox = ({ checkboxName, labelText, onChange, draft }) => {
             console.log(props.checked);
           }}
         />
+
         {labelText}
       </CheckLabel>
     </Wrapper>
