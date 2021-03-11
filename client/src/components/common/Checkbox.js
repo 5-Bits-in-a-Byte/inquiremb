@@ -5,7 +5,7 @@ import PinImg from "../../imgs/pin.svg";
 import BlueCheckmark from "../../imgs/bluecheck.svg";
 import GreyCheckmark from "../../imgs/greycheck.svg";
 
-const Checkbox = ({ checkboxName, labelText, onChange, draft }) => {
+const Checkbox = ({ checkboxName, labelText, onChange, checkStatus }) => {
   return (
     <Wrapper>
       <CheckLabel>
@@ -13,16 +13,17 @@ const Checkbox = ({ checkboxName, labelText, onChange, draft }) => {
           <CheckMark
             className="checkMark"
             id="Checkmark"
-            src={draft[checkboxName] == true ? BlueCheckmark : GreyCheckmark}
+            src={checkStatus == true ? BlueCheckmark : GreyCheckmark}
           />
         </Box>
         <SpecialInput
           name={checkboxName}
           type="checkbox"
           onChange={onChange}
-          onClick={(props) => {
-            console.log(props.checked);
-          }}
+          // onClick was used here for debug purposes
+          // onClick={(props) => {
+          //   console.log(props.checked || checkStatus);
+          // }}
         />
 
         {labelText}

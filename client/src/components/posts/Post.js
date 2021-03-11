@@ -19,7 +19,8 @@ const generatePostContent = (
   handleChange,
   handleSubmit,
   postid,
-  draft
+  isAnon,
+  isPriv
 ) => {
   // If a post is passed, set all dynamic content accordingly, otherwise render a draft
   if (isDraft) {
@@ -54,7 +55,7 @@ const generatePostContent = (
           checkboxName="isAnonymous"
           labelText={"Make Anonymous"}
           onChange={handleChange}
-          draft={draft}
+          checkStatus={isAnon}
         />
       ),
       isPrivate: (
@@ -62,7 +63,7 @@ const generatePostContent = (
           checkboxName="isPrivate"
           labelText={"Make Private"}
           onChange={handleChange}
-          draft={draft}
+          checkStatus={isPriv}
         />
       ),
     };
@@ -96,26 +97,11 @@ const Post = ({ post, isCondensed, isDraft }) => {
   });
 
   const handleChange = (e) => {
-    if (e.target.name == "isAnonymous") {
-      var newDraft = {
-        title: draft.title,
-        content: draft.content,
-        isAnonymous:
-          e.target.type === "checkbox" ? e.target.checked : e.target.value,
-        isPrivate: draft.isPrivate,
-      };
-    } else if (e.target.name == "isPrivate") {
-      var newDraft = {
-        title: draft.title,
-        content: draft.content,
-        isAnonymous: draft.isAnonymous,
-        isPrivate:
-          e.target.type === "checkbox" ? e.target.checked : e.target.value,
-      };
-    }
-
-    setDraft(newDraft);
-    // setDraft(newDraft);
+    setDraft({
+      ...draft,
+      [e.target.name]:
+        e.target.type === "checkbox" ? e.target.checked : e.target.value,
+    });
   };
 
   // console.log(draft);
@@ -143,6 +129,14 @@ const Post = ({ post, isCondensed, isDraft }) => {
     });
   };
 
+  if (draft != null) {
+    var isAnon = draft.isAnonymous;
+    var isPriv = draft.isPrivate;
+  } else {
+    isAnon = false;
+    isPriv = false;
+  }
+
   // Determines if post is a draft or not and renders accordingly:
   let render = generatePostContent(
     user,
@@ -151,7 +145,8 @@ const Post = ({ post, isCondensed, isDraft }) => {
     handleChange,
     handleSubmit,
     postid,
-    draft
+    isAnon,
+    isPriv
   );
 
   // Handles redirect if the post is not a draft
