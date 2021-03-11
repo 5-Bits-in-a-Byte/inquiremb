@@ -15,7 +15,8 @@ const generatePostContent = (
   post,
   isDraft,
   handleChange,
-  handleSubmit
+  handleSubmit,
+  postid
 ) => {
   // If a post is passed, set all dynamic content accordingly, otherwise render a draft
   if (isDraft) {
@@ -57,9 +58,7 @@ const generatePostContent = (
       isPinned: post.isPinned,
       picture: post.postedby.picture,
       postedby: post.postedby.first + " " + post.postedby.last,
-      meta: (
-        <PostReactions likes={post.reactions.likes} comments={post.comments} />
-      ),
+      meta: <PostReactions post={post} postid={postid} />,
     };
   }
 };
@@ -104,7 +103,8 @@ const Post = ({ post, isCondensed, isDraft }) => {
     post,
     isDraft,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    postid
   );
 
   // Handles redirect if the post is not a draft
@@ -115,10 +115,12 @@ const Post = ({ post, isCondensed, isDraft }) => {
   };
 
   return (
-    <PostWrapper isCondensed={isCondensed} isFocused={postid}>
-      <PostTitle isCondensed={isCondensed} onClick={navigateToPost}>
-        {render.title}
-      </PostTitle>
+    <PostWrapper
+      isCondensed={isCondensed}
+      isFocused={postid}
+      onClick={navigateToPost}
+    >
+      <PostTitle isCondensed={isCondensed}>{render.title} </PostTitle>
       <PinIcon isPinned={render.isPinned} src={PinImg} />
       {!isCondensed && <PostContent>{render.content}</PostContent>}
       {!isCondensed && <hr style={HRStyle} />}
