@@ -118,8 +118,5 @@ class Me(Resource):
             description: Unable to retrieve current user data
             schema:
               $ref: '#/definitions/403Message'
-
-
-
         """
         return current_user.to_son().to_dict()

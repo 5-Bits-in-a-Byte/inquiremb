@@ -1,0 +1,14 @@
+400Message:
+  type: object
+  properties:
+    errors:
+      type: list
+      description: List of errors related to failed request
+      example: ["Invalid courseid"]
+403Message:
+  type: object
+  properties:
+    msg:
+      type: string
+      description: Reason the request did not succeed or was rejected
+      example: "Resource access restricted"

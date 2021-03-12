@@ -1,0 +1,28 @@
+User:
+  type: object
+  properties:
+    sub:
+      type: string
+      description: Unique user identifier
+      example: abcde12345
+    email:
+      type: string
+      description: Email address
+      example: cyrilfiggis@gmail.com
+    first:
+      type: string
+      description: First name
+      example: Cyril
+    last:
+      type: string
+      description: Last name
+      example: Figgis
+    instructor:
+      type: boolean
+      default: false
+      description: Boolean representing if the user is an instructor on the platform
+      example: cyrilfiggis@gmail.com
+    permissions:
+      type: array
+      items:
+        $ref: "#/definitions/CoursePermissions"
