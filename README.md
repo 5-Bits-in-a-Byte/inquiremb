@@ -28,6 +28,13 @@ This project was created as the second group assignment for CIS 422 taught by Pr
 
 ## System Architecture
 
+<p align="left">
+  <img alt="Flask" src="https://img.shields.io/badge/flask%20-%23000.svg?&style=for-the-badge&logo=flask&logoColor=white"/>
+  <img alt="React" src="https://img.shields.io/badge/react%20-%2320232a.svg?&style=for-the-badge&logo=react&logoColor=%2361DAFB"/>
+  <img alt="MongoDB" src ="https://img.shields.io/badge/MongoDB-%234ea94b.svg?&style=for-the-badge&logo=mongodb&logoColor=white"/>
+  <img alt="Python" src="https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white"/>
+</p>
+
 Inquire is set up with a React frontend and Flask backend. We incorporated an OAuth2 authentication system for security measures. Additionally, we decided to hook our server up to a MongoDB database to store user information, course content, and more. On top of this, to make flow of the website smooth and friendly for all users we included web sockets with socket.io.
 
 ## How to Deploy Locally
