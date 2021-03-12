@@ -3,12 +3,12 @@ import styled from "styled-components";
 import JoinCourse from "./JoinCourse";
 import CreateCourse from "./CreateCourse";
 
-const TopContent = () => {
+const TopContent = ({ courseList, setCourseList }) => {
   return (
     <TopWrapper className="flex-row align">
       <Title>COURSES</Title>
-      <JoinCourse />
-      <CreateCourse />
+      <JoinCourse courseList={courseList} setCourseList={setCourseList} />
+      <CreateCourse courseList={courseList} setCourseList={setCourseList} />
     </TopWrapper>
   );
 };

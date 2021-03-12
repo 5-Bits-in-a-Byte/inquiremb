@@ -1,13 +1,16 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import LikeImg from "../../imgs/like.svg";
 import { UserContext } from "../context/UserProvider";
 import DraftTextArea from "../common/DraftTextArea";
 import Button from "../common/Button";
+import Reaction from "../common/Reaction";
 
-const CommentReply = ({ reply, isDraft, submitReply }) => {
+var dummy_reaction_IDs = [];
+
+const CommentReply = ({ reply, isDraft, submitReply, postid }) => {
   const user = useContext(UserContext);
   const [draft, setDraft] = useState("");
+
   const handleChange = (e) => {
     setDraft(e.target.value);
   };
@@ -48,11 +51,12 @@ const CommentReply = ({ reply, isDraft, submitReply }) => {
             </>
           ) : (
             <>
-              <Icon
-            src={LikeImg}
-            onClick={() => console.log("Clicked to like comment reply")}
-          />
-          <IconValue>1</IconValue>
+              <Reaction
+                reactions={reply.reactions}
+                type="reply"
+                id={reply._id}
+                postid={postid}
+              />
             </>
           )}
         </MetaIconWrapper>
@@ -105,8 +109,8 @@ const Icon = styled.img`
 
   width: 18px;
   height: 18px;
-  margin-right: 1em;
-  margin-left: 0.75em;
+  margin-right: 8px;
+  margin-left: 20px;
 
   user-select: none;
 `;

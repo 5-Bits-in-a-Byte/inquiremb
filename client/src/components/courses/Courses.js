@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../context/UserProvider";
 import styled from "styled-components";
 import TopContent from "./TopContent";
 import CourseCard from "./CourseCard";
 
-const courseList = (userCourses) => {
+const generateCourseList = (userCourses) => {
   let ret = [];
   userCourses.forEach((course, index) => {
     ret.push(
@@ -13,7 +13,7 @@ const courseList = (userCourses) => {
         id={course.course_id}
         courseName={course.course_name}
         courseTerm="Winter 2021"
-        color={course.color || "#000000"}
+        color={course.color || "#121212"}
       />
     );
   });
@@ -22,12 +22,14 @@ const courseList = (userCourses) => {
 
 const Courses = () => {
   const user = useContext(UserContext);
+  let currentCourseState = generateCourseList(user.courses);
+  const [courseList, setCourseList] = useState(currentCourseState);
+  // console.log(currentCourseState);
+
   return (
     <ScrollDiv>
-      <TopContent />
-      <CourseDisplay className="content">
-        {courseList(user.courses)}
-      </CourseDisplay>
+      <TopContent courseList={courseList} setCourseList={setCourseList} />
+      <CourseDisplay className="content">{courseList}</CourseDisplay>
     </ScrollDiv>
   );
 };

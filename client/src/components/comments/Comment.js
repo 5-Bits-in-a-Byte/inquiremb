@@ -1,27 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
-import LikeImg from "../../imgs/like.svg";
 import DraftTextBox from "../common/DraftTextArea";
 import Button from "../common/Button";
 import { useParams } from "react-router";
 import LazyFetch from "../common/requests/LazyFetch";
-
-var dummy_reaction_IDs = [];
-var dummy_current_user = "my_user_ID";
+import { UserContext } from "../context/UserProvider";
+import Reaction from "../common/Reaction";
 
 const Comment = ({ comment, isDraft, callback }) => {
   const { postid } = useParams();
   const [content, setContent] = useState("");
-  const [reactions, setReactions] = useState({
-    likes: [...dummy_reaction_IDs],
-  });
-  const [reactCounts, setCounts] = useState({
-    likeCount: Object.keys(reactions.likes).length,
-  });
-  const [reactClicked, setClicked] = useState({
-    liked: reactions.likes.includes(dummy_current_user),
-  });
+  // const user = useContext(UserContext);
+
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
 
@@ -49,7 +40,7 @@ const Comment = ({ comment, isDraft, callback }) => {
           toggleReply(false);
           setNewReplies([
             ...newReplies,
-            <CommentReply reply={data} key={data._id} />,
+            <CommentReply reply={data} key={data._id} postid={postid} />,
           ]);
         },
       });
@@ -61,35 +52,11 @@ const Comment = ({ comment, isDraft, callback }) => {
     setContent(e.target.value);
   };
 
-  const handleLike = () => {
-    var temp = reactions;
-
-    var loc = temp.likes.indexOf(dummy_current_user);
-
-    if (loc === -1) {
-      temp.likes.push(dummy_current_user);
-      setClicked({ liked: true });
-      console.log("liked");
-    } else {
-      temp.likes.splice(loc, 1);
-      setClicked({ liked: false });
-      console.log("unliked");
-    }
-
-    var newCounts = reactCounts;
-    newCounts.likeCount = Object.keys(reactions.likes).length;
-
-    setCounts(newCounts);
-    setReactions(temp);
-    console.log(reactions.likes);
-    console.log("New count is: ", reactCounts.likeCount);
-  };
-
   // Collect replies from comment data and append any newly created replies (if applicable)
   let replies = [];
   if (comment.replies && comment.replies.length > 0) {
     comment.replies.forEach((reply) => {
-      replies.push(<CommentReply reply={reply} />);
+      replies.push(<CommentReply reply={reply} postid={postid} />);
     });
   }
   // Insert new replies that were created from state
@@ -97,16 +64,16 @@ const Comment = ({ comment, isDraft, callback }) => {
 
   // If the user clicks reply, insert a drafted reply
   if (isReplying) {
-    replies.push(<CommentReply isDraft submitReply={submitReply} />);
+    replies.push(
+      <CommentReply isDraft submitReply={submitReply} postid={postid} />
+    );
   }
-
 
   return (
     <CommentWrapper>
       <CommentContent>{renderContent()}</CommentContent>
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
-          {/* <UserIcon src="./icons8_note.svg" /> */}
           <UserDescription>
             by {comment.postedby.first + " " + comment.postedby.last}
           </UserDescription>
@@ -134,19 +101,20 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
+                <Reaction
+                  reactions={comment.reactions}
+                  type="comment"
+                  id={comment._id}
+                  postid={postid}
+                />
+
                 <ReplyBtn
-                  style={{ marginRight: 10 }}
+                  style={{ marginRight: 10, marginLeft: 20 }}
                   onClick={() => {
                     toggleReply(true);
                   }}
                 >
                   Reply
-                <Icon
-                  src={LikeImg}
-                  onClick={() => handleLike()}
-                  clicked={reactClicked.liked}
-                />
-                <IconValue>{reactCounts.likeCount}</IconValue>
                 </ReplyBtn>
               </>
             )}
@@ -221,11 +189,10 @@ const Icon = styled.img`
 
   width: 18px;
   height: auto;
-  margin-right: 1em;
-  margin-left: 0.75em;
+  margin-right: 8px;
+  margin-left: 20px;
 
   user-select: none;
-  opacity: ${(props) => (!props.clicked && "50%") || "100%"};
 `;
 
 const IconValue = styled.h5`

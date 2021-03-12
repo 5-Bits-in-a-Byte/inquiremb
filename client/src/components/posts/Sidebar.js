@@ -1,25 +1,42 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import UserImg from "../../imgs/user.svg";
+import { UserContext } from "../context/UserProvider";
 import BookmarkImg from "../../imgs/bookmark.svg";
 import GlassesImg from "../../imgs/glasses.svg";
 import NoteImg from "../../imgs/note.svg";
 import HeartImg from "../../imgs/heart.svg";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
-const Sidebar = ({
-  classroomName,
-  setHighlightedSection,
-  highlightedSection,
-}) => {
+const Sidebar = ({ setHighlightedSection, highlightedSection }) => {
   const { courseid, postid } = useParams();
+
+  // Extracting the course name from the user context and current course ID
+  var classroomID = useParams().courseid;
+  var courseContext = useContext(UserContext).courses;
+  var classroomName = " ";
+
+  console.log(courseContext, "COURSE CONTEXT");
+
+  for (let temp in courseContext) {
+    if (courseContext[temp].course_id === classroomID) {
+      classroomName = courseContext[temp].course_name;
+      break;
+    }
+  }
+
+  // If the name is longer than 18 characters, scale the font size down by this proportion
+  var nameRatio = Math.min(1.0, 12 / classroomName.length);
+  //var nameRatio = 1;
 
   return (
     <FlexWrapper>
       <Container>
-        <ClassTitle>{classroomName}</ClassTitle>
+        <Link to={"/course/" + courseid} style={{ textDecoration: "none" }}>
+          <ClassTitle nameFit={nameRatio}>{classroomName}</ClassTitle>
+        </Link>
 
         <HR />
         <Section>
@@ -86,7 +103,7 @@ const Container = styled.div`
 const ClassTitle = styled.h1`
   height: 2em;
   line-height: 2.5em;
-  font-size: 1.5rem;
+  font-size: ${(props) => props.nameFit * 1.5}rem;
   text-align: center;
   user-select: none;
 `;
