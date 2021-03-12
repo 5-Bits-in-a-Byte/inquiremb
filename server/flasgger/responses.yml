@@ -1,14 +1,18 @@
-400Message:
+400Response:
   type: object
   properties:
     errors:
       type: list
       description: List of errors related to failed request
       example: ["Invalid courseid"]
-403Message:
+403Response:
   type: object
+  description: Response to authorized requests
   properties:
-    msg:
-      type: string
-      description: Reason the request did not succeed or was rejected
-      example: "Resource access restricted"
+    errors:
+      type: array
+      description: List of authorization errors
+      example:
+        [
+          "Resource access restricted: missing course permission(s) admin, seePrivate",
+        ]

@@ -20,24 +20,20 @@ class Courses(Resource):
         Creates a new course and responds with the instructor's permissions for the course
         ---
         tags:
-          - Courses
-        definitions:
-          import: "./flasgger/courses.yml"
-          import: "./flasgger/responses.yml"
-
+          - Courses          
         responses:
           200:
             description: Stored user data for the currently logged in user
             schema:
-              $ref: '#/definitions/CoursePermissions'
+              $ref: '#/definitions/UserCourse'
           400:
             description: Array of errors gathered from request
             schema:
-              $ref: '#/definitions/400Message'
+              $ref: '#/definitions/400Response'
           403:
             description: Unable to retrieve current user data
             schema:
-              $ref: '#/definitions/403Message'
+              $ref: '#/definitions/403Response'
         """
         # Get json for POST requests
         request.get_json(force=True)
