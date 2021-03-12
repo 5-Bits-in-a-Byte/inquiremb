@@ -2,6 +2,7 @@ from flask import jsonify
 from flask_restful import Resource, abort, reqparse
 from auth import current_user, permission_layer
 from mongo import *
+from socketio_app import io
 
 
 class Comments(Resource):

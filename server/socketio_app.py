@@ -1,6 +1,7 @@
 from flask_socketio import *
 from auth import current_user, permission_layer
 from flask import Blueprint, render_template
+from mongo import *
 
 io = SocketIO(logger=True, engineio_logger=False, cors_allowed_origins="*")
 
