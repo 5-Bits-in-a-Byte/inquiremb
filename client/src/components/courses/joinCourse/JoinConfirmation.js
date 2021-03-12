@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import Button from "../../common/Button";
 import axios from "axios";
@@ -6,12 +6,13 @@ import CheckMarkBlue from "../../../imgs/checkmark_blue.svg";
 import CheckMarkGreen from "../../../imgs/checkmark_green.svg";
 import Errors from "../../common/Errors";
 import CourseCard from "../CourseCard";
+import { UserContext, UserDispatchContext } from "../../context/UserProvider";
 
 const AddNewCourseToList = (newCourse, courseList) => {
   if (newCourse === null) return;
-  console.log("Course to add: ", newCourse);
-  console.log("Example from list: ", courseList[0]);
-  console.log("Before: ", "\nCourseList: ", courseList);
+  // console.log("Course to add: ", newCourse);
+  // console.log("Example from list: ", courseList[0]);
+  // console.log("Before: ", "\nCourseList: ", courseList);
 
   let ret = [];
   for (let i = 0; i < courseList.length; i++) {
@@ -37,7 +38,7 @@ const AddNewCourseToList = (newCourse, courseList) => {
     />
   );
 
-  console.log("After: ", "\nCourseList: ", ret);
+  // console.log("After: ", "\nCourseList: ", ret);
   return ret;
 };
 
@@ -52,6 +53,8 @@ const JoinConfirmation = ({
   const [loading, toggleLoading] = useState(false);
   const [errors, toggleErrors] = useState(null);
   const [success, toggleSuccess] = useState(null);
+  const user = useContext(UserContext);
+  const setUser = useContext(UserDispatchContext);
 
   console.log(display);
   console.log("SUCCESS Message: " + success);
@@ -68,7 +71,15 @@ const JoinConfirmation = ({
           withCredentials: true,
         })
         .then((res) => {
-          joinCourse(res.data);
+          let newCourseList = AddNewCourseToList(res.data.course, courseList);
+          if (newCourseList != null) setCourseList(newCourseList);
+          joinCourse(res.data.course);
+
+          // have to update the user model in order to correct get the course page
+          let temp = user;
+          temp.courses.push(res.data.course);
+          setUser(temp);
+
           toggleSuccess(res.data.success);
           toggleLoading(false);
           toggleDisplay("none");
@@ -129,9 +140,6 @@ const JoinConfirmation = ({
           primary
           autoWidth
           onClick={() => {
-            console.log(course);
-            let newCourseList = AddNewCourseToList(course, courseList);
-            if (newCourseList != null) setCourseList(newCourseList);
             confirmJoinRequest();
           }}
           loading={loading}
