@@ -70,28 +70,28 @@ class Posts(Resource):
         if filterby == 'instructor':
             queryParams["isInstructor"] = True
             query = Post.objects.raw(
-                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)]).skip(page * 20).limit(20)
+                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
         # Filter by 'me'
         elif filterby == 'me':
             queryParams["postedby._id"] = {
                 '$in': [current_user._id, current_user.anonymousId]}
             query = Post.objects.raw(
-                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)]).skip(page * 20).limit(20)
+                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
         # Filter by 'myupvoted'
         elif filterby == 'myupvoted':
             queryParams["reactions.likes"] = current_user._id
             query = Post.objects.raw(
-                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)]).skip(page * 20).limit(20)
+                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
         # If the current user can see private posts and there's no search
         elif current_course.seePrivate and (req is None):
             query = Post.objects.raw(
-                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)]).skip(page * 20).limit(20)
+                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
 
         # If the current user can see private posts and there is a search
         elif current_course.seePrivate and (req is not None):
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
-                [("isPinned", -1), ("createdDate", sort_date)]).skip(page * 20).limit(20)
+                [("isPinned", -1), ("createdDate", sort_date)])
 
         # If the current user cannot see private posts and there is a search
         elif (not current_course.seePrivate) and (req is not None):
@@ -99,14 +99,14 @@ class Posts(Resource):
                 '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
-                [('isPinned', -1), ('createdDate', sort_date)]).skip(page * 20).limit(20)
+                [('isPinned', -1), ('createdDate', sort_date)])
 
         # If the current user cannot see private posts and there is not a search
         else:
             queryParams["$or"] = [{'isPrivate': False}, {'postedby._id': {
                 '$in': [current_user._id, current_user.anonymousId]}}]
             query = Post.objects.raw(queryParams).order_by(
-                [("isPinned", -1), ("createdDate", sort_date)]).skip(page * 20).limit(20)
+                [("isPinned", -1), ("createdDate", sort_date)])
 
         # Get the json for all the posts we want to display
         result = [self.serialize(post) for post in query]
