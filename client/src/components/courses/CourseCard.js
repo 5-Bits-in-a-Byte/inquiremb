@@ -28,7 +28,7 @@ class CourseCard extends React.Component {
               alert(
                 "You clicked the Unread Messages icon for " +
                   this.props.courseName +
-                  ".\nThis feature is still a work in progress."
+                  ".\nThis feature is a work in progress."
               )
             }
           >
@@ -46,7 +46,7 @@ class CourseCard extends React.Component {
               alert(
                 "You clicked the Edit option for " +
                   this.props.courseName +
-                  ".\nThis feature is still a work in progress."
+                  ".\nThis feature is a work in progress."
               )
             }
           >
