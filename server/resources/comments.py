@@ -48,7 +48,7 @@ class Comments(Resource):
         post.comments += 1
         post.save()
         result = self.serialize(comment)
-        io.emit('Comments/create', result, room=post_id)
+        io.emit('Comment/create', result, room=post_id)
         return result, 200
 
     def put(self, post_id=None):

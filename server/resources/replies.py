@@ -42,7 +42,7 @@ class Replies(Resource):
         post.updatedDate = datetime.datetime.now()
         post.save()
         result = self.serialize(reply)
-        io.emit('Replies/create',
+        io.emit('Reply/create',
                 {'comment_id': comment_id, 'reply': result}, room=post_id)
         return result, 200
 
