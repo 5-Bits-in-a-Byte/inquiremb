@@ -1,16 +1,12 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import NavigationWrapper from "./components/navigation/NavigationWrapper";
-import Courses from "./components/courses/Courses";
-import SignUp from "./components/signUp/SignUp";
-import Login from "./components/signUp/Login";
-import "./fonts/fonts.css";
-import Messages from "./components/messages/Messages";
-import Home from "./components/home/Home";
-import ClassView from "./components/posts/ClassView";
-import CommentView from "./components/comments/CommentView";
-import { UserProvider } from "./components/context/UserProvider";
-import PrivateRoute from "./PrivateRoute";
+# SRC
 
+This ReadMe discusses the App.js, index.js, and PrivateRoute.js files.
+
+## App.js
+
+This is the root app entry for the frontend of the project. Here is where every unique webpage is routed through.
+
+```js
 function App() {
   return (
     <Router>
@@ -52,5 +48,41 @@ function App() {
     </Router>
   );
 }
+```
 
-export default App;
+## PrivateRoute.js
+
+PrivateRoute is a wrapper Router to route user data from the backend to each respective webpage wrapped in the PrivateRouter. Here is how the user data is fetched from the backend:
+
+```js
+const attemptSignIn = (token) => {
+  axios
+    .get(process.env.REACT_APP_SERVER_URL + "/api/me", {
+      withCredentials: true,
+    })
+    // User has an active cookie from server, sign in success
+    .then((res) => {
+      if (res.data && res.data._id) {
+        setUser(res.data);
+      }
+    })
+    // No active cookie - redirect to login page
+    .catch((err) => {
+      console.log("Error completing sign in:", err);
+      setUser(false);
+    });
+};
+```
+
+## Index.js
+
+Index.js is the wrapper entry for React to pass the app into the DOM of index.html.
+
+```js
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
+);
+```

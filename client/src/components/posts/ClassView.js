@@ -10,6 +10,7 @@ import io from "../../services/socketio";
 
 const ClassView = ({ classroomName }) => {
   const { courseid } = useParams();
+
   const location = useLocation();
   let defaultHighlight = "All Posts";
 
@@ -41,7 +42,6 @@ const ClassView = ({ classroomName }) => {
   return (
     <ClassViewWrapper>
       <Sidebar
-        classroomName={classroomName}
         setHighlightedSection={setHighlightedSection}
         highlightedSection={highlightedSection}
       />
