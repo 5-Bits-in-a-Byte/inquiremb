@@ -1,4 +1,6 @@
-# [Inquire](https://inquiremb.com "Inquire Webapp")
+![comment draft](/client/src/imgs/inquire-logo.png)
+
+## [Click me to view site!](https://inquiremb.com "Inquire Webapp")
 
 Welcome to Inquire, a message board/forum for course instructors and students to post questions, provide answers, connect, and communicate.
 
