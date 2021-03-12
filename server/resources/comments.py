@@ -47,8 +47,9 @@ class Comments(Resource):
         post.updatedDate = datetime.datetime.now()
         post.comments += 1
         post.save()
-
-        return self.serialize(comment), 200
+        result = self.serialize(comment)
+        io.emit('Comments/create', result, room=post_id)
+        return result, 200
 
     def put(self, post_id=None):
         # Update comment

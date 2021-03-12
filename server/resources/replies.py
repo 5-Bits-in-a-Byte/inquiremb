@@ -41,8 +41,10 @@ class Replies(Resource):
         # Updating date and saving to database
         post.updatedDate = datetime.datetime.now()
         post.save()
-
-        return self.serialize(reply), 200
+        result = self.serialize(reply)
+        io.emit('Replies/create',
+                {'comment_id': comment_id, 'reply': result}, room=post_id)
+        return result, 200
 
     def put(self, post_id=None, comment_id=None):
         # Update comment

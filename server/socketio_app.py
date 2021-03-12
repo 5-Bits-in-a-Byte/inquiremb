@@ -2,7 +2,7 @@ from flask_socketio import *
 from auth import current_user, permission_layer
 from flask import Blueprint, render_template
 
-io = SocketIO(logger=True, engineio_logger=False, cors_allowed_origins="*")
+io = SocketIO(logger=True, engineio_logger=True, cors_allowed_origins="*")
 
 # Blueprint stores authentication related routes
 socketio_blueprint = Blueprint(
@@ -15,20 +15,22 @@ def connect():
         raise ConnectionRefusedError('unauthorized testing!')
     else:
         print(current_user.first, "connected")
+    print(request.sid)
     return "connected"
 
 
 @io.on('disconnect')
-def test_disconnect():
+def disconnect():
     if current_user == None:
         print("Unauthorized user disconnected")
     else:
         print(f"{current_user.first} {current_user.last} disconnected")
-    return "connected"
+    return "disconnected"
 
 
-@socketio.on('join')
+@io.on('join')
 def on_join(data):
+    print(request.sid)
     room = data['room']
     room_type = data['room_type']
     status = False
@@ -44,14 +46,12 @@ def on_join(data):
                 status = True
     if status:
         join_room(room)
-    send(current_user.first + ' has entered the room.', room=room)
 
 
-@socketio.on('leave')
+@io.on('leave')
 def on_leave(data):
     room = data['room']
     leave_room(room)
-    send(username + ' has left the room.', room=room)
 
 
 @io.on('blah')
