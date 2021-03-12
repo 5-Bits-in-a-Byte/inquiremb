@@ -47,7 +47,8 @@ class Posts(Resource):
 
         # Get the JSON format
         result = self.serialize(post)
-        io.emit('Post/create', result, room=course_id)
+        if not result['isPrivate']:
+            io.emit('Post/create', result, room=course_id)
         return result, 200
 
     def get(self, course_id=None):
