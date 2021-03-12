@@ -5,8 +5,50 @@ import axios from "axios";
 import CheckMarkBlue from "../../../imgs/checkmark_blue.svg";
 import CheckMarkGreen from "../../../imgs/checkmark_green.svg";
 import Errors from "../../common/Errors";
+import CourseCard from "../CourseCard";
 
-const JoinConfirmation = ({ course, joinCourse, display, toggleDisplay }) => {
+const AddNewCourseToList = (newCourse, courseList) => {
+  if (newCourse === null) return;
+  console.log("Course to add: ", newCourse);
+  console.log("Example from list: ", courseList[0]);
+  console.log("Before: ", "\nCourseList: ", courseList);
+
+  let ret = [];
+  for (let i = 0; i < courseList.length; i++) {
+    // console.log(courseList[i]);
+    ret.push(
+      <CourseCard
+        key={courseList[i].props.id}
+        id={courseList[i].props.id}
+        courseName={courseList[i].props.courseName}
+        courseTerm="Winter 2021"
+        color={courseList[i].props.color || "#121212"}
+      />
+    );
+  }
+
+  ret.push(
+    <CourseCard
+      key={newCourse.course_id}
+      id={newCourse.course_id}
+      courseName={newCourse.course_name}
+      courseTerm="Winter 2021"
+      color={newCourse.color || "#121212"}
+    />
+  );
+
+  console.log("After: ", "\nCourseList: ", ret);
+  return ret;
+};
+
+const JoinConfirmation = ({
+  course,
+  joinCourse,
+  display,
+  toggleDisplay,
+  courseList,
+  setCourseList,
+}) => {
   const [loading, toggleLoading] = useState(false);
   const [errors, toggleErrors] = useState(null);
   const [success, toggleSuccess] = useState(null);
@@ -26,6 +68,7 @@ const JoinConfirmation = ({ course, joinCourse, display, toggleDisplay }) => {
           withCredentials: true,
         })
         .then((res) => {
+          joinCourse(res.data);
           toggleSuccess(res.data.success);
           toggleLoading(false);
           toggleDisplay("none");
@@ -85,7 +128,12 @@ const JoinConfirmation = ({ course, joinCourse, display, toggleDisplay }) => {
         <Button
           primary
           autoWidth
-          onClick={confirmJoinRequest}
+          onClick={() => {
+            console.log(course);
+            let newCourseList = AddNewCourseToList(course, courseList);
+            if (newCourseList != null) setCourseList(newCourseList);
+            confirmJoinRequest();
+          }}
           loading={loading}
           style={{ margin: "24px 1em 0 1em" }}
         >
