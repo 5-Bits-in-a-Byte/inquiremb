@@ -1,3 +1,11 @@
+'''
+This file deals with the Posts resource. It's responsible for handling all requests sent from
+the frontend for getting, posting, updating, and deleting posts.
+
+Authors: Brian Gunnarson and Sam Peters
+
+Last Modified Date: 03/12/2021
+'''
 from flask import jsonify, request
 from flask_restful import reqparse, Resource
 from auth import current_user, permission_layer

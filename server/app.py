@@ -1,3 +1,11 @@
+'''
+This file puts the entire backend together. It sets up the app with a secret key and configuration
+variables, creates routes for OAuth purposes, and establishes endpoints for resources.
+
+Authors: Brian Gunnarson, Sam Peters, and Alec Springel
+
+Last Modified Date: 03/12/2021
+'''
 from mongo import *
 from flask import Flask, render_template, request, send_from_directory, jsonify
 from flask_restful import Api

@@ -1,3 +1,11 @@
+'''
+This file explicitly defines the models for our collections and their embedded fields.
+It provides default values where necessary and links to the database.
+
+Authors: Brian Gunnarson, Sam Peters, and Alec Springel
+
+Last Modified Date: 03/12/2021
+'''
 from pymodm import MongoModel, fields, EmbeddedMongoModel
 from pymongo.write_concern import WriteConcern
 from pymodm.connection import connect

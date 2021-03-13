@@ -1,3 +1,12 @@
+'''
+This file deals with the Join resource. It's responsible for handling all requests sent from
+the frontend for joining a course. The post request is used to obtain the course id, name,
+and instructor name. The put request is used to update the user's list of classes.
+
+Authors: Brian Gunnarson
+
+Last Modified Date: 03/12/2021
+'''
 from flask_restful import Resource, reqparse
 from auth import current_user
 from mongo import *

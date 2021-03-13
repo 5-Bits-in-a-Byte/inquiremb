@@ -1,3 +1,11 @@
+'''
+This file deals with the Home resource. It's responsible for getting the 20 most
+recent posts from all of a users classes to display on the home page.
+
+Authors: Brian Gunnarson
+
+Last Modified Date: 03/12/2021
+'''
 from flask import jsonify, request
 from flask_restful import reqparse, Resource
 from auth import current_user, permission_layer
@@ -10,10 +18,8 @@ from bson.objectid import ObjectId
 class Home(Resource):
     def get(self):
 
-        # TODO: should I add this? Would you be able to handle this format on the front end or should I change it?
         if len(current_user.courses) == 0:
             return []
-            # return {"result": "You have not yet joined or created a course.", "posts": []}, 200
 
         course_ids = []
         for course in current_user.courses:
@@ -32,14 +38,9 @@ class Home(Resource):
         query = Post.objects.raw(queryParams).order_by(
             [("createdDate", -1)]).limit(20)
 
-        # TODO: should I add this too?
         count = query.count()
         if count == 0:
             return []
-            # return {"result": "There are no posts in any of your courses yet. Don't be shy, post away!", "posts": []}, 200
-
-        # result = {"result": "", "posts": [
-        #     self.serialize(post) for post in query]}
 
         result = [self.serialize(post) for post in query]
 
