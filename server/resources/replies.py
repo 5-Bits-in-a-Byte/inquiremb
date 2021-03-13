@@ -3,6 +3,7 @@ This file deals with the Replies resource. It's responsible for handling all req
 the frontend for posting, updating, and deleting replies.
 
 Authors: Brian Gunnarson and Sam Peters
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''

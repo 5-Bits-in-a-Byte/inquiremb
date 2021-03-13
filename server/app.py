@@ -3,6 +3,7 @@ This file puts the entire backend together. It sets up the app with a secret key
 variables, creates routes for OAuth purposes, and establishes endpoints for resources.
 
 Authors: Brian Gunnarson, Sam Peters, and Alec Springel
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''

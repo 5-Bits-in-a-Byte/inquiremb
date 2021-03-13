@@ -3,6 +3,7 @@ Config file imports environmeant variables
 Used to configure the flask app in app.py
 
 Authors: Sam Peters and Alec Springel
+Group Name: 5 Bits in a Byte
 """
 import os
 

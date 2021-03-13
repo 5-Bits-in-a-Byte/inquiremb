@@ -3,6 +3,7 @@ This file explicitly defines the models for our collections and their embedded f
 It provides default values where necessary and links to the database.
 
 Authors: Brian Gunnarson, Sam Peters, and Alec Springel
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''

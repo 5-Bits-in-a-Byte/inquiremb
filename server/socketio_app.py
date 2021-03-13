@@ -3,6 +3,7 @@ This file deals with the websockets using SocketIO.
 It's how our client can be updated in realtime for the user.
 
 Authors: Sam Peters and Alec Springel
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''

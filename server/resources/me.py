@@ -3,6 +3,7 @@ This file deals with the Me resource. It's responsible for handling the get requ
 to obtain the current_user's information.
 
 Authors: Sam Peters
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 02/15/2021
 '''

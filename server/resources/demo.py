@@ -2,6 +2,7 @@
 This is a demo file for setting up a resource.
 
 Author: Sam Peters
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 02/10/21
 '''
