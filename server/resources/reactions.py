@@ -6,6 +6,49 @@ from mongo import *
 
 class Reactions(Resource):
     def put(self):
+        """
+        Responds with a reaction to a post, comment, or reply
+        ---
+        tags:
+          - Reactions     
+        parameters:
+          - in: query
+            name: postid
+            schema:
+              type: string
+              example: "postid123"
+              required: true
+            description: Id of the post to react to
+          - in: query
+            name: commentid
+            schema:
+              type: string
+              example: "commentid321"
+              required: true
+            description: Id of the comment to react to
+          - in: query
+            name: replyid
+            schema:
+              type: string
+              example: "replyid321"
+              required: true
+            description: Id of the reply to react to
+        responses:
+          200:
+            description: Responds with reactions object
+            schema:
+              type: array
+              items:
+                $ref: '#/definitions/Reactions'
+          400:
+            description: Array of errors gathered from request
+            schema:
+              $ref: '#/definitions/400Response'
+          403:
+            description: Unable to retrieve current user data
+            schema:
+              $ref: '#/definitions/403Response'
+        """
         # Parse arguments
         postid = request.args.get('postid')
         commentid = request.args.get('commentid')

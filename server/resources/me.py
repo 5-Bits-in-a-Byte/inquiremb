@@ -20,6 +20,7 @@ class Me(Resource):
           import: "./flasgger/posts.yml"
           import: "./flasgger/comments.yml"
           import: "./flasgger/replies.yml"
+          import: "./flasgger/requests.yml"
 
         responses:
           200:
