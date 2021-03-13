@@ -20,7 +20,19 @@ class Courses(Resource):
         Creates a new course and responds with the instructor's permissions for the course
         ---
         tags:
-          - Courses          
+          - Courses   
+        parameters: 
+          - name: body
+            in: body
+            required: true
+            description: Course creation options
+            schema:
+              type: object
+              properties:
+                course:
+                  type: string
+                  description: Name of the course
+                  example: CIS 422
         responses:
           200:
             description: Stored user data for the currently logged in user
