@@ -1,6 +1,8 @@
 """
 Config file imports environmeant variables
 Used to configure the flask app in app.py
+
+Authors: Sam Peters and Alec Springel
 """
 import os
 
@@ -53,5 +55,5 @@ DEFAULT_COLORS = [
     "#d9edd5",
     "#a8e0dc",
     "#2b3659",
-    
+
 ]

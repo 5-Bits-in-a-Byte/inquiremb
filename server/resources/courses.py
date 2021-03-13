@@ -1,3 +1,11 @@
+'''
+This file deals with the Courses resource. It's responsible for handling all requests sent from
+the frontend for creating a new course.
+
+Authors: Alec Springel
+
+Last Modified Date: 03/12/2021
+'''
 from flask_restful import reqparse, Resource
 from flask import request
 from enum import Enum

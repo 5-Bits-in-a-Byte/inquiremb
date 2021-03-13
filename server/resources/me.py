@@ -1,3 +1,11 @@
+'''
+This file deals with the Me resource. It's responsible for handling the get request
+to obtain the current_user's information.
+
+Authors: Sam Peters
+
+Last Modified Date: 02/15/2021
+'''
 from flask import jsonify
 from flask_restful import Resource, reqparse
 from auth import current_user, permission_layer

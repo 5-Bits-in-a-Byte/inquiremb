@@ -1,3 +1,11 @@
+'''
+This file deals with the Replies resource. It's responsible for handling all requests sent from
+the frontend for posting, updating, and deleting replies.
+
+Authors: Brian Gunnarson and Sam Peters
+
+Last Modified Date: 03/12/2021
+'''
 from flask import jsonify
 from flask_restful import Resource, abort, reqparse
 from auth import current_user, permission_layer

@@ -1,3 +1,11 @@
+'''
+This file deals with the websockets using SocketIO.
+It's how our client can be updated in realtime for the user.
+
+Authors: Sam Peters and Alec Springel
+
+Last Modified Date: 03/12/2021
+'''
 from flask_socketio import *
 from auth import current_user, permission_layer
 from flask import Blueprint, render_template
