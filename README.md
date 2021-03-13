@@ -46,12 +46,25 @@ Inquire is set up with a React frontend and Flask backend. We incorporated an OA
 
 ## Deploying Locally with Docker
 
+
 ### Requirements
 Running the project using docker requires the user to have docker installed
 
+## Required Environment Variable File Setup
+If the "docker-env" file is provided continue reading...
+
+Put the docker-env file inside of the /server folder.
+
+If the "docker-env" file is not provided...
+
+Navigate to the /server and rename the "example-docker-env" file to "docker-env". Then replace the values in each key-value pair in the file with new ones from your Google and Github API accounts.
+
+
 ## Building and running the project with docker
-Navigate to the root folder of the project. Run the command
-`docker compose up`
+Navigate to the root folder of the project. There should be a docker-compose.yml file inside the folderRun the command
+```
+docker compose up
+````
 
 
 ## Deploying Locally without Docker
