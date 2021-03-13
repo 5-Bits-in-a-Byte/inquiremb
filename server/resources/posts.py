@@ -83,7 +83,7 @@ class Posts(Resource):
 
     def get(self, course_id=None):
         """
-        Creates a new post
+        Retrieves all the posts in a course
         ---
         tags:
           - Posts     
@@ -188,7 +188,7 @@ class Posts(Resource):
 
     def delete(self, course_id=None):
         """
-        Creates a new post
+        Deletes a post
         ---
         tags:
           - Posts     
@@ -196,7 +196,7 @@ class Posts(Resource):
           - in: path
             name: course_id
             required: true
-            description: course id from which to retrieve posts
+            description: Id of a course
           - name: body
             in: body
             required: true

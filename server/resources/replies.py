@@ -74,7 +74,35 @@ class Replies(Resource):
         return result, 200
 
     def put(self, post_id=None, comment_id=None):
-        # Update comment
+        """
+        Updates a reply
+        ---
+        tags:
+          - Replies
+        parameters:
+          - in: path
+            description: Id of a post
+            name: post_id
+            required: true
+          - in: path
+            description: Id of a comment
+            name: comment_id
+            required: true
+          - name: body
+            in: body
+            description: Submitted reply data
+            required: true
+            schema:
+              $ref: '#/definitions/ReplyBody'
+        responses:
+          200:
+            description: Returns updated comment
+            schema:
+                $ref: '#/definitions/Comment'
+          400:
+            schema:
+              $ref: '#/definitions/400Response'
+        """
         post = self.retrieve_post(post_id)
 
         # Parse the request
@@ -112,7 +140,49 @@ class Replies(Resource):
             return result, 200
 
     def delete(self, post_id=None, comment_id=None):
-        # Delete comment
+        """
+        Deletes a reply
+        ---
+        tags:
+          - Replies
+        parameters:
+          - in: path
+            description: Id of a post
+            name: post_id
+            required: true
+          - in: path
+            description: Id of a comment
+            name: comment_id
+            required: true
+          - name: body
+            in: body
+            description: Data needed to delete a reply
+            required: true
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: Id of the reply
+                  example: abcde12345
+        responses:
+          200:
+            description: Returns successful delete
+            schema:
+              type: object
+              properties:
+                deleted:
+                  type: bool
+                  example: True
+          403:
+            description: Returns unsuccessful delete
+            schema:
+              type: object
+              properties:
+                deleted:
+                  type: bool
+                  example: False
+        """
         post = self.retrieve_post(post_id)
 
         # Grabbing comment id

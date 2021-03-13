@@ -167,7 +167,7 @@ class Comments(Resource):
             required: true
           - name: body
             in: body
-            description: Data needed to delete comment
+            description: Data needed to delete a comment
             required: true
             schema:
               type: object
