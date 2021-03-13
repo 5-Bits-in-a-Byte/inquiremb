@@ -17,6 +17,7 @@ class Me(Resource):
           import: "./flasgger/courses.yml"
           import: "./flasgger/user.yml"
           import: "./flasgger/shared.yml"
+          import: "./flasgger/posts.yml"
 
         responses:
           200:

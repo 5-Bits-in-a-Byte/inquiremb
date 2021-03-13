@@ -1,0 +1,57 @@
+Post:
+  type: object
+  description: Posts with content created by users
+  properties:
+    _id:
+      type: string
+      description: Id of the user who created the post
+      example: abcde12345
+    courseid:
+      type: string
+      description: Id of the course the post was created in
+      example: oFAeuzdT4VwKf3dHUFGhwu
+    postedby:
+      $ref: "#/definitions/PostedBy"
+    title:
+      type: string
+      description: Title of the post
+      example: Question about homework 3?
+    content:
+      type: string
+      description: Content of the post
+      example: This homework doesn't make any sense to me. What chapters does this cover in the book?
+    isInstructor:
+      type: boolean
+      default: false
+      description: Whether or not the post was created by an instructor
+      example: false
+    isPinned:
+      type: boolean
+      default: false
+      description: Whether or not the post is pinned
+      example: false
+    isPrivate:
+      type: boolean
+      default: false
+      description: Whether or not the post is private
+      example: false
+    instructorCommented:
+      type: boolean
+      default: false
+      description: Whether or not the instructor has responded to the post
+      example: false
+    reactions:
+      $ref: "#/definitions/Reactions"
+    comments:
+      type: integer
+      description: Number of comments on the post
+      default: 0
+      example: 3
+    createdDate:
+      type: string
+      description: Date the post was created
+      example: 2021-03-12 20:40:00.752000
+    updatedDate:
+      type: string
+      description: Date the post was was last responded to or modified
+      example: 2021-03-13 21:20:00.322000

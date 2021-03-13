@@ -10,6 +10,25 @@ from socketio_app import io
 
 class Posts(Resource):
     def post(self, course_id=None):
+        """
+        Creates a new post
+        ---
+        tags:
+          - Posts          
+        responses:
+          200:
+            description: Responds with the newly created post
+            schema:
+              $ref: '#/definitions/Post'
+          400:
+            description: Array of errors gathered from request
+            schema:
+              $ref: '#/definitions/400Response'
+          403:
+            description: Unable to retrieve current user data
+            schema:
+              $ref: '#/definitions/403Response'
+        """
         course = current_user.get_course(course_id)
         if not course:
             return {"errors": ["You have not joined this course"]}, 403
