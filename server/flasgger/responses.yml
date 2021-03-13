@@ -10,7 +10,7 @@
   description: Response to authorized requests
   properties:
     errors:
-      type: array
+      type: list
       description: List of authorization errors
       example:
         [
