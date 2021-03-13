@@ -3,6 +3,7 @@ This file deals with the Comments resource. It's responsible for handling all re
 the frontend for getting, posting, updating, and deleting comments.
 
 Authors: Brian Gunnarson and Sam Peters
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''

@@ -1,6 +1,7 @@
 """
 Contains functions used to perform user authentication, and secure the rest api.
 Authors: Sam Peters
+Group Name: 5 Bits in a Byte
 
 Users login with their google accounts
 This is done through the OAuth2 protocol

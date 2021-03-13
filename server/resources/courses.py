@@ -3,6 +3,7 @@ This file deals with the Courses resource. It's responsible for handling all req
 the frontend for creating a new course.
 
 Authors: Alec Springel
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''

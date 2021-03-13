@@ -3,6 +3,7 @@ This file deals with the Reactions resource. It's responsible for handling a req
 the client to update the reactions on a post, comment, or reply.
 
 Authors: Brian Gunnarson
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''

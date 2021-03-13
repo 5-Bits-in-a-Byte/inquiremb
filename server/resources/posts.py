@@ -3,6 +3,7 @@ This file deals with the Posts resource. It's responsible for handling all reque
 the frontend for getting, posting, updating, and deleting posts.
 
 Authors: Brian Gunnarson and Sam Peters
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''

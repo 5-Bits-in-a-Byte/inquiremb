@@ -4,6 +4,7 @@ the frontend for joining a course. The post request is used to obtain the course
 and instructor name. The put request is used to update the user's list of classes.
 
 Authors: Brian Gunnarson
+Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
