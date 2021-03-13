@@ -1,0 +1,47 @@
+Comment:
+  type: object
+  description: Comment on a post
+  properties:
+    post_id:
+      required: true
+      type: string
+      description: Id of the parent post
+      example: abcde12345
+    content:
+      required: true
+      type: string
+      description: Comment content
+      example: I also have that question!
+    postedby:
+      required: true
+      $ref: "#/definitions/PostedBy"
+    endorsed:
+      required: true
+      type: boolean
+      description: If the instructor endorsed this comment
+      default: false
+      example: true
+    replies:
+      required: true
+      type: array
+      items:
+        $ref: "#/definitions/Reply"
+    reactions:
+      required: true
+      $ref: "#/definitions/Reactions"
+
+CommentBody:
+  type: object
+  description: A new comment sent from a client
+  properties:
+    content:
+      required: true
+      type: string
+      description: Comment content
+      example: I also have that question!
+    isAnonymous:
+      required: true
+      type: boolean
+      description: If the user wants the comment to be anonymous
+      default: false
+      example: true

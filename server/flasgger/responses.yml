@@ -1,5 +1,6 @@
 400Response:
   type: object
+  description: Response to bad requests
   properties:
     errors:
       type: list
@@ -7,7 +8,7 @@
       example: ["Invalid courseid"]
 403Response:
   type: object
-  description: Response to authorized requests
+  description: Response to unauthorized requests
   properties:
     errors:
       type: list

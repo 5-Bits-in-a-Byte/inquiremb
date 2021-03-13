@@ -7,8 +7,35 @@ from socketio_app import io
 
 class Replies(Resource):
     def post(self, post_id=None, comment_id=None):
-        # Add comment to post
-        # Retrieving post
+        """
+        Creates a new reply
+        ---
+        tags:
+          - Replies
+        parameters:
+          - in: path
+            description: Id of a post
+            name: post_id
+            required: true
+          - in: path
+            description: Id of a comment
+            name: comment_id
+            required: true
+          - name: body
+            in: body
+            description: Submitted reply data
+            required: true
+            schema:
+              $ref: '#/definitions/ReplyBody'
+        responses:
+          200:
+            description: Returns created reply
+            schema:
+                $ref: '#/definitions/Reply'
+          400:
+            schema:
+              $ref: '#/definitions/400Response'
+        """
         post = self.retrieve_post(post_id)
         if post is None:
             return abort(400, errors=["Bad post id"])
