@@ -36,7 +36,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin',
-                         'http://localhost:3000')
+                         config.CLIENT_URL)
     response.headers.add('Access-Control-Allow-Headers',
                          'Content-Type, Authorization')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -109,4 +109,4 @@ def handle_404(e):
 io.init_app(app)
 
 if __name__ == '__main__':
-    io.run(app, debug=False)
+    io.run(app, host="0.0.0.0",debug=False)
