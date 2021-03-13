@@ -44,6 +44,18 @@ Inquire is set up with a React frontend and Flask backend. We incorporated an OA
 
 ## How to Deploy Locally
 
+## Deploying Locally with Docker
+
+### Requirements
+Running the project using docker requires the user to have docker installed
+
+## Building and running the project with docker
+Navigate to the root folder of the project. Run the command
+`docker compose up`
+
+
+## Deploying Locally without Docker
+
 ### Client Startup
 
 ```
