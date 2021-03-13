@@ -15,7 +15,53 @@ from resources.courses import pick_color, DEFAULT_COLORS
 
 class Join(Resource):
     def post(self):
-       # Parse arguments
+        """
+        Begins adding user to course
+        ---
+        tags:
+          - Other
+        parameters:
+          - name: body
+            in: body
+            description: Course the user wants to join
+            required: true
+            schema:
+              type: object
+              properties:
+                course_name:
+                  type: string
+                  description: Name of the course
+                  example: CIS 499 Advanced Debugging
+                access_code:
+                  type: string
+                  description: Access code for the course
+                  example: ihuaweoliawfeh
+        responses:
+          200:
+            description: Returns additional course information
+            schema:
+              type: object
+              properties:
+                course_name:
+                  type: string
+                  description: Name of the course
+                  example: CIS 499 Advanced Debugging
+                course_id:
+                  type: string
+                  description: Id of the course
+                  example: qewruiopq12313
+                first:
+                  type: string
+                  description: Instructor first name
+                  example: Sam
+                last:
+                  type: string
+                  description: Instructor last name
+                  example: Peters
+          400:
+            schema:
+              $ref: '#/definitions/400Response'
+        """
         parser = reqparse.RequestParser()
         parser.add_argument('course_name')
         parser.add_argument('access_code')
@@ -52,7 +98,39 @@ class Join(Resource):
             return {"course_id": course._id, "course": course.course, "first": instructor.first, "last": instructor.last}, 200
 
     def put(self):
-        # Parse arguments
+        """
+        Confirms adding user to course
+        ---
+        tags:
+          - Other
+        parameters:
+          - name: body
+            in: body
+            description: Course the user wants to join
+            required: true
+            schema:
+              type: object
+              properties:
+                course_id:
+                  type: string
+                  description: Id of the course
+                  example: abcde12389
+        responses:
+          200:
+            description: Returns successful delete
+            schema:
+              type: object
+              properties:
+                success:
+                  required: true
+                  type: string
+                  example: Course joined successfully
+                course:
+                  $ref: '#/definitions/UserCourse'
+          400:
+            schema:
+              $ref: '#/definitions/400Response'
+        """
         parser = reqparse.RequestParser()
         parser.add_argument('course_id')
         args = parser.parse_args()

@@ -15,7 +15,27 @@ from socketio_app import io
 
 class Comments(Resource):
     def get(self, post_id=None):
-        # Get all comments on post
+        """
+        Retrieves all the comments responding to a specific post
+        ---
+        parameters:
+          - in: path
+            description: Id of a post
+            name: post_id
+            required: true
+        tags:
+          - Comments         
+        responses:
+          200:
+            description: Returns list of comments
+            schema:
+                type: array
+                items:
+                    $ref: '#/definitions/Comment'
+          400:
+            schema:
+              $ref: '#/definitions/400Response'
+        """
         post = self.retrieve_post(post_id)
         if post is None:
             return abort(400, errors=["Bad post id"])
@@ -23,8 +43,31 @@ class Comments(Resource):
         return [self.serialize(comment) for comment in Comment.objects.raw({'post_id': post_id})]
 
     def post(self, post_id=None):
-        # Add comment to post
-        # Retrieving post
+        """
+        Creates a new comment
+        ---
+        tags:
+          - Comments
+        parameters:
+          - in: path
+            description: Id of a post
+            name: post_id
+            required: true
+          - name: body
+            in: body
+            description: Submitted comment data
+            required: true
+            schema:
+              $ref: '#/definitions/CommentBody'
+        responses:
+          200:
+            description: Returns created comment
+            schema:
+                $ref: '#/definitions/Comment'
+          400:
+            schema:
+              $ref: '#/definitions/400Response'
+        """
         print("here")
         post = self.retrieve_post(post_id)
         if post is None:
@@ -61,8 +104,31 @@ class Comments(Resource):
         return result, 200
 
     def put(self, post_id=None):
-        # Update comment
-        # Parse the request
+        """
+        Updates a comment
+        ---
+        tags:
+          - Comments
+        parameters:
+          - in: path
+            description: Id of a post
+            name: post_id
+            required: true
+          - name: body
+            in: body
+            description: Submitted comment data
+            required: true
+            schema:
+              $ref: '#/definitions/CommentBody'
+        responses:
+          200:
+            description: Returns updated comment
+            schema:
+                $ref: '#/definitions/Comment'
+          400:
+            schema:
+              $ref: '#/definitions/400Response'
+        """
         post = self.retrieve_post(post_id)
 
         parser = reqparse.RequestParser()
@@ -97,8 +163,45 @@ class Comments(Resource):
             raise Exception(f'No comment with id')
 
     def delete(self, post_id=None):
-        # Delete comment
-        # Grabbing comment id
+        """
+        Deletes a comment
+        ---
+        tags:
+          - Comments
+        parameters:
+          - in: path
+            description: Id of a post
+            name: post_id
+            required: true
+          - name: body
+            in: body
+            description: Data needed to delete a comment
+            required: true
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: Id of the comment
+                  example: abcde12345
+        responses:
+          200:
+            description: Returns successful delete
+            schema:
+              type: object
+              properties:
+                deleted:
+                  type: bool
+                  example: True
+          403:
+            description: Returns unsuccessful delete
+            schema:
+              type: object
+              properties:
+                deleted:
+                  type: bool
+                  example: False
+        """
         post = self.retrieve_post(post_id)
         parser = reqparse.RequestParser()
         parser.add_argument('_id')

@@ -1,0 +1,36 @@
+Reply:
+  type: object
+  description: Reply to a comment
+  properties:
+    _id:
+      type: string
+      required: true
+      description: Reply ID
+      example: ofjaepwofj324
+    content:
+      type: string
+      required: true
+      description: Comment content
+      example: That is a great comment. Wow!
+    postedby:
+      required: true
+      $ref: "#/definitions/PostedBy"
+    reactions:
+      required: true
+      $ref: "#/definitions/Reactions"
+
+ReplyBody:
+  type: object
+  description: A new reply sent from a client
+  properties:
+    content:
+      required: true
+      type: string
+      description: Reply content
+      example: That's a great comment!
+    isAnonymous:
+      required: true
+      type: boolean
+      description: If the user wants the reply to be anonymous
+      default: false
+      example: true

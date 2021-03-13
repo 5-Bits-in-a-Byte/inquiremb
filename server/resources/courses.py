@@ -24,6 +24,37 @@ import random
 class Courses(Resource):
     @permission_layer([])
     def post(self):
+        """
+        Creates a new course and responds with the instructor's permissions for the course
+        ---
+        tags:
+          - Courses   
+        parameters: 
+          - name: body
+            in: body
+            required: true
+            description: Course creation options
+            schema:
+              type: object
+              properties:
+                course:
+                  type: string
+                  description: Name of the course
+                  example: CIS 422
+        responses:
+          200:
+            description: Stored user data for the currently logged in user
+            schema:
+              $ref: '#/definitions/UserCourse'
+          400:
+            description: Array of errors gathered from request
+            schema:
+              $ref: '#/definitions/400Response'
+          403:
+            description: Unable to retrieve current user data
+            schema:
+              $ref: '#/definitions/403Response'
+        """
         # Get json for POST requests
         request.get_json(force=True)
         # Parse arguments

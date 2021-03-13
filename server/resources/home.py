@@ -17,6 +17,20 @@ from bson.objectid import ObjectId
 
 class Home(Resource):
     def get(self):
+        """
+        Retrieves all the posts in a users feed
+        ---
+        tags:
+          - Other         
+        responses:
+          200:
+            description: Returns list of posts
+            schema:
+                type: array
+                items:
+                    $ref: '#/definitions/Post'
+        """
+        # TODO: should I add this? Would you be able to handle this format on the front end or should I change it?
 
         if len(current_user.courses) == 0:
             return []

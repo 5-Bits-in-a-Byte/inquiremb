@@ -1,0 +1,19 @@
+400Response:
+  type: object
+  description: Response to bad requests
+  properties:
+    errors:
+      type: list
+      description: List of errors related to failed request
+      example: ["Invalid courseid"]
+403Response:
+  type: object
+  description: Response to unauthorized requests
+  properties:
+    errors:
+      type: list
+      description: List of authorization errors
+      example:
+        [
+          "Resource access restricted: missing course permission(s) admin, seePrivate",
+        ]

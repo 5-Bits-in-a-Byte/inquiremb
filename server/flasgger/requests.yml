@@ -1,0 +1,21 @@
+POSTPostBody:
+  type: object
+  properties:
+    title:
+      type: string
+      description: Title of post
+      example: Question about homework 3?
+    content:
+      type: string
+      description: Content of the post
+      example: This homework doesn't make any sense to me. What chapters does this cover in the book?
+    isPrivate:
+      type: boolean
+      default: false
+      description: Whether or not the post is private
+      example: false
+    isAnonymous:
+      type: boolean
+      default: false
+      description: Whether or not the post is anonymous
+      example: false

@@ -1,0 +1,33 @@
+Reactions:
+  type: object
+  description: Reaction types with arrays of _ids of the users who reacted
+  properties:
+    likes:
+      type: list
+      description: List of users who have liked the content
+      example: ["abcde12345"]
+PostedBy:
+  type: object
+  description: Information about the user who posted the content
+  properties:
+    first:
+      type: string
+      description: First name of the user who posted the content
+      example: Alec
+    last:
+      type: string
+      description: Last name of the user who posted the content
+      example: Springel
+    _id:
+      type: string
+      description: _id or anonymousId of user who posted the content
+      example: abcde12345
+    anonymous:
+      type: boolean
+      default: false
+      description: Whether or not the content is posted anonymously
+      example: false
+    picture:
+      type: string
+      description: Profile photo URL
+      example: "https://google.com/user123/photo123"

@@ -18,6 +18,36 @@ from socketio_app import io
 
 class Posts(Resource):
     def post(self, course_id=None):
+        """
+        Creates a new post
+        ---
+        tags:
+          - Posts
+        parameters:
+          - in: path
+            name: course_id
+            description: Id of the course to post to
+            required: true   
+          - name: body
+            in: body
+            required: true
+            description: Content and post options
+            schema:
+              $ref: '#/definitions/POSTPostBody'
+        responses:
+          200:
+            description: Responds with the newly created post
+            schema:
+              $ref: '#/definitions/Post'
+          400:
+            description: Array of errors gathered from request
+            schema:
+              $ref: '#/definitions/400Response'
+          403:
+            description: Unable to retrieve current user data
+            schema:
+              $ref: '#/definitions/403Response'
+        """
         course = current_user.get_course(course_id)
         if not course:
             return {"errors": ["You have not joined this course"]}, 403
@@ -60,6 +90,47 @@ class Posts(Resource):
         return result, 200
 
     def get(self, course_id=None):
+        """
+        Retrieves all the posts in a course
+        ---
+        tags:
+          - Posts     
+        parameters:
+          - in: path
+            name: course_id
+            required: true
+            description: course id from which to retrieve posts
+          - in: query
+            name: filterby
+            schema:
+              type: string
+              enum: ['instructor', 'me', 'myupvoted']
+              required: false
+            description: Filter posts by category 
+          - in: query
+            name: sortby
+            schema:
+              type: string
+              enum: ['newest', 'oldest']
+              required: false
+              default: 'newest'
+            description: Sort posts by age
+        responses:
+          200:
+            description: Responds with array of posts
+            schema:
+              type: array
+              items:
+                $ref: '#/definitions/Post'
+          400:
+            description: Array of errors gathered from request
+            schema:
+              $ref: '#/definitions/400Response'
+          403:
+            description: Unable to retrieve current user data
+            schema:
+              $ref: '#/definitions/403Response'
+        """
         # Get the search input and the current course
         req = request.args.get('search')
         page = request.args.get('page', default=0, type=int)
@@ -124,6 +195,51 @@ class Posts(Resource):
         return result, 200
 
     def delete(self, course_id=None):
+        """
+        Deletes a post
+        ---
+        tags:
+          - Posts     
+        parameters:
+          - in: path
+            name: course_id
+            required: true
+            description: Id of a course
+          - name: body
+            in: body
+            required: true
+            description: Content and post options
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: Id of the post
+                  example: abcde12345
+        responses:
+          200:
+            description: Responds with success or failure
+            schema:
+              type: object
+              properties:
+                deleted:
+                  type: boolean
+                  description: Whether or not the post was deleted
+                  example: true
+          400:
+            description: Array of errors gathered from request
+            schema:
+              $ref: '#/definitions/400Response'
+          403:
+            description: Unable to delete the post
+            schema:
+              type: object
+              properties:
+                deleted:
+                  type: boolean
+                  description: Whether or not the post was deleted
+                  example: false
+        """
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
@@ -153,6 +269,36 @@ class Posts(Resource):
             raise Exception(f'No post with id')
 
     def put(self, course_id):
+        """
+        Edits a post
+        ---
+        tags:
+          - Posts
+        parameters:
+          - in: path
+            name: course_id
+            description: Id of the course to post to
+            required: true   
+          - name: body
+            in: body
+            required: true
+            description: Content and post options
+            schema:
+              $ref: '#/definitions/POSTPostBody'
+        responses:
+          200:
+            description: Responds with the newly edited post
+            schema:
+              $ref: '#/definitions/Post'
+          400:
+            description: Array of errors gathered from request
+            schema:
+              $ref: '#/definitions/400Response'
+          403:
+            description: Unable to retrieve current user data
+            schema:
+              $ref: '#/definitions/403Response'
+        """
         # Parse the request
         parser = reqparse.RequestParser()
         parser.add_argument('title')
