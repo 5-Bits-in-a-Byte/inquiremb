@@ -1,0 +1,7 @@
+GOOGLE_CLIENT_ID=4729821372809688-oawefjfioeiwjap.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=SOFPJOAIojfoejoewjaio
+GITHUB_CLIENT_ID=AODWJOWDAJODJdwpak
+GITHUB_CLIENT_SECRET=pofewjapowejfioOFAEIJfoaeij
+HS_256_KEY=AWOPofjeipawpofjeEFOIJoef
+MONGO_URI=mongodb+srv://dbUser:L8XqpfwaepofweaQ@cluster0.vhgh.mongodb.net/main?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE
+CLIENT_URL=http://localhost:3000

@@ -42,7 +42,7 @@ This project was created as the second group assignment for CIS 422 taught by Pr
 
 Inquire is set up with a React frontend and Flask backend. We incorporated an OAuth2 authentication system for security measures. Additionally, we decided to hook our server up to a MongoDB database to store user information, course content, and more. On top of this, to make flow of the website smooth and friendly for all users we included web sockets with socket.io.
 
-## How to Deploy Locally
+
 
 ## Deploying Locally with Docker
 
@@ -50,17 +50,18 @@ Inquire is set up with a React frontend and Flask backend. We incorporated an OA
 ### Requirements
 Running the project using docker requires the user to have docker installed
 
-## Required Environment Variable File Setup
-If the "docker-env" file is provided continue reading...
+### Required Environment Variable File Setup
+### If the "docker-env" file is provided continue reading:
+
 
 Put the docker-env file inside of the /server folder.
 
-If the "docker-env" file is not provided...
+### If the "docker-env" file is not provided:
 
 Navigate to the /server and rename the "example-docker-env" file to "docker-env". Then replace the values in each key-value pair in the file with new ones from your Google and Github API accounts.
 
 
-## Building and running the project with docker
+### Building and running the project with docker
 Navigate to the root folder of the project. There should be a docker-compose.yml file inside the folderRun the command
 ```
 docker compose up
