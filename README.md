@@ -100,6 +100,9 @@ cd server
 pip install -r requirements.txt
 ```
 
+## Viewing Interactive API Documentation
+While running the project, visit http://localhost:5000/apidocs/
+
 ## How to Use Publicly
 
 If you have a Google or GitHub account you can log into our site at https://inquiremb.com/login.
