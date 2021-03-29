@@ -4,6 +4,7 @@ import Input from "../../common/Input";
 import InputLabel from "../../common/InputLabel";
 import axios from "axios";
 import Errors from "../../common/Errors";
+import LazyFetch from "../../common/requests/LazyFetch";
 
 const JoinCourse = ({ joinCourse }) => {
   const [disabledCourse, toggleDisabledCourse] = useState(false);
@@ -36,20 +37,14 @@ const JoinCourse = ({ joinCourse }) => {
   const sendJoinRequest = () => {
     setForm({ ...form, loading: true });
     setTimeout(() => {
-      const endpoint = "/api/join";
-      const data = {
-        course_name: form.course_name,
-        access_code: form.access_code,
-      };
-      // TODO: maybe change this to a put request? depends how it looks in backend
-      axios
-        .post(process.env.REACT_APP_SERVER_URL + endpoint, data, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          joinCourse(res.data);
-        })
-        .catch((err) => {
+      LazyFetch({
+        type: "post",
+        endpoint: "/api/join",
+        data: { course_name: form.course_name, access_code: form.access_code },
+        onSuccess: (data) => {
+          joinCourse(data);
+        },
+        onFailure: (err) => {
           if (err.response && err.response.data) {
             // Set the errors provided by our API request
             console.log(err.response.data.errors);
@@ -67,7 +62,40 @@ const JoinCourse = ({ joinCourse }) => {
               ],
             });
           }
-        });
+        },
+      });
+      // const endpoint = "/api/join";
+      // const data = {
+      //   course_name: form.course_name,
+      //   access_code: form.access_code,
+      // };
+      // // TODO: maybe change this to a put request? depends how it looks in backend
+      // axios
+      //   .post(process.env.REACT_APP_SERVER_URL + endpoint, data, {
+      //     withCredentials: true,
+      //   })
+      //   .then((res) => {
+      //     joinCourse(res.data);
+      //   })
+      //   .catch((err) => {
+      //     if (err.response && err.response.data) {
+      //       // Set the errors provided by our API request
+      //       console.log(err.response.data.errors);
+      //       setForm({
+      //         ...form,
+      //         errors: err.response.data.errors,
+      //         loading: false,
+      //       });
+      //     } else {
+      //       setForm({
+      //         ...form,
+      //         loading: false,
+      //         errors: [
+      //           "There was an error joining the course. Please try again.",
+      //         ],
+      //       });
+      //     }
+      //   });
     }, 1000);
   };
   return (

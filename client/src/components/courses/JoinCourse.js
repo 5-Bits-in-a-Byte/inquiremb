@@ -19,6 +19,7 @@ const JoinCourse = ({ courseList, setCourseList }) => {
           close={() => {
             toggleModal(false);
             toggleDisplay("flex");
+            joinCourse(null);
           }}
           width="724px"
           data-testid="join-course-modal"

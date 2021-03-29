@@ -5,12 +5,22 @@ import {
   UserDispatchContext,
   UserContext,
 } from "./components/context/UserProvider";
+import LazyFetch from "./components/common/requests/LazyFetch";
 
 const PrivateRoute = (props) => {
   const setUser = useContext(UserDispatchContext);
   const user = useContext(UserContext);
 
   const attemptSignIn = (token) => {
+    //   LazyFetch({
+    //     type: "get",
+    //     endpoint: "/api/me",
+    //     onSuccess: (data) => {
+    //       console.log("Data:" + data);
+    //       setUser(data);
+    //     },
+    //   });
+    // };
     axios
       .get(process.env.REACT_APP_SERVER_URL + "/api/me", {
         withCredentials: true,
@@ -18,6 +28,7 @@ const PrivateRoute = (props) => {
       // User has an active cookie from server, sign in success
       .then((res) => {
         if (res.data && res.data._id) {
+          console.log("Data:" + res.data);
           setUser(res.data);
         }
       })
@@ -28,6 +39,7 @@ const PrivateRoute = (props) => {
       });
   };
 
+  console.log("User: " + user);
   useEffect(() => {
     if (!user) {
       attemptSignIn();
