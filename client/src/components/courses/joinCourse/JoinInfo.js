@@ -64,38 +64,6 @@ const JoinCourse = ({ joinCourse }) => {
           }
         },
       });
-      // const endpoint = "/api/join";
-      // const data = {
-      //   course_name: form.course_name,
-      //   access_code: form.access_code,
-      // };
-      // // TODO: maybe change this to a put request? depends how it looks in backend
-      // axios
-      //   .post(process.env.REACT_APP_SERVER_URL + endpoint, data, {
-      //     withCredentials: true,
-      //   })
-      //   .then((res) => {
-      //     joinCourse(res.data);
-      //   })
-      //   .catch((err) => {
-      //     if (err.response && err.response.data) {
-      //       // Set the errors provided by our API request
-      //       console.log(err.response.data.errors);
-      //       setForm({
-      //         ...form,
-      //         errors: err.response.data.errors,
-      //         loading: false,
-      //       });
-      //     } else {
-      //       setForm({
-      //         ...form,
-      //         loading: false,
-      //         errors: [
-      //           "There was an error joining the course. Please try again.",
-      //         ],
-      //       });
-      //     }
-      //   });
     }, 1000);
   };
   return (
