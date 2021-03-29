@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 import InputLabel from "../../common/InputLabel";
-import axios from "axios";
 import Errors from "../../common/Errors";
 import LazyFetch from "../../common/requests/LazyFetch";
 

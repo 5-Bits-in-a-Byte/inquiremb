@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import Button from "../../common/Button";
-import axios from "axios";
 import CheckMarkBlue from "../../../imgs/checkmark_blue.svg";
 import CheckMarkGreen from "../../../imgs/checkmark_green.svg";
 import Errors from "../../common/Errors";
