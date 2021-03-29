@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useContext } from "react";
 import styled from "styled-components";
 import Arrow from "../../imgs/carrot-down-secondary.svg";
@@ -8,13 +7,6 @@ import DropdownOptions from "./DropdownOptions";
 
 const ProfileDropdown = () => {
   const user = useContext(UserContext);
-
-  const signOut = () => {
-    axios
-      .get(process.env.REACT_APP_SERVER_URL + "/logout")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
 
   return (
     <Wrapper>
