@@ -8,7 +8,13 @@ const LazyFetch = ({
   onSuccess,
   onFailure,
 }) => {
-  axios[type](url + endpoint, data, { withCredentials: true })
+  const full_url = url + endpoint;
+  axios({
+    method: type,
+    url: full_url,
+    data: data,
+    withCredentials: true,
+  })
     .then((response) => {
       console.log(response.data);
       if (onSuccess) {

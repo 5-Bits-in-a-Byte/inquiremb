@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useContext, useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
 import {
@@ -12,37 +11,20 @@ const PrivateRoute = (props) => {
   const user = useContext(UserContext);
 
   const attemptSignIn = (token) => {
-    //   LazyFetch({
-    //     type: "get",
-    //     endpoint: "/api/me",
-    //     onSuccess: (data) => {
-    //       if (data && data._id) {
-    //         console.log("Data:" + data);
-    //         setUser(data);
-    //       }
-    //     },
-    //     onFailure: (err) => {
-    //       console.log("Error completing sign in:", err);
-    //       setUser(false);
-    //     },
-    //   });
-    // };
-    axios
-      .get(process.env.REACT_APP_SERVER_URL + "/api/me", {
-        withCredentials: true,
-      })
-      // User has an active cookie from server, sign in success
-      .then((res) => {
-        if (res.data && res.data._id) {
-          console.log("Data:" + res.data);
-          setUser(res.data);
+    LazyFetch({
+      type: "get",
+      endpoint: "/api/me",
+      onSuccess: (data) => {
+        if (data && data._id) {
+          console.log("Data:" + data);
+          setUser(data);
         }
-      })
-      // No active cookie - redirect to login page
-      .catch((err) => {
+      },
+      onFailure: (err) => {
         console.log("Error completing sign in:", err);
         setUser(false);
-      });
+      },
+    });
   };
 
   useEffect(() => {
