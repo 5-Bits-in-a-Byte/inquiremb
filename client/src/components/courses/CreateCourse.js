@@ -84,5 +84,3 @@ const CreateCourse = ({ courseList, setCourseList }) => {
 };
 
 export default CreateCourse;
-
-const AnimationSlider = styled.div``;

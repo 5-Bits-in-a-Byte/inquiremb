@@ -101,18 +101,3 @@ const MetaIconWrapper = styled.div`
   margin-left: auto;
   align-items: center;
 `;
-
-const Icon = styled.img`
-  float: left;
-
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
-  margin-left: 20px;
-
-  user-select: none;
-`;
-
-const IconValue = styled.h5`
-  color: #8c8c8c;
-`;

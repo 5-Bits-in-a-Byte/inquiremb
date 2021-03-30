@@ -69,7 +69,7 @@ const CommentView = ({ classroomName }) => {
         comment.postedby._id !== user._id &&
         comment.postedby._id !== user.anonymousId
       ) {
-        console.log(commentData);
+        // console.log(commentData);
         setCommentData([
           ...commentData,
           <Comment comment={comment} key={comment._id} />,
@@ -77,16 +77,15 @@ const CommentView = ({ classroomName }) => {
       }
     });
     io.on("Reply/create", (comment) => {
-      console.log(commentData);
-      console.log(comment, "ws");
+      // console.log(comment, "ws");
       // Take copy of socketComments and append reply to matching comment (with _id)
-      console.log(commentData);
+      // console.log(commentData);
       let allComments = [...commentData];
-      console.log(allComments);
+      // console.log(allComments);
       for (let i in allComments) {
-        console.log(allComments[i], "in for loop");
+        // console.log(allComments[i], "in for loop");
         if (allComments[i].props.comment._id === comment._id) {
-          console.log("found a match");
+          // console.log("found a match");
           allComments[i] = <Comment comment={comment} key={comment._id} />;
           break;
         }

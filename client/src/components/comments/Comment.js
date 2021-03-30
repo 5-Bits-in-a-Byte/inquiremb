@@ -130,7 +130,6 @@ const CommentWrapper = styled.div`
   width: 100%;
   min-height: 85px;
   margin: 17px 0;
-  /* border: 1px solid red; */
   border-radius: 0.3em;
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
 `;
@@ -148,20 +147,6 @@ const PostMetaContentWrapper = styled.div`
   height: 100%;
   padding: 0.5em 0;
   align-items: center;
-  // border: 1px solid black;
-`;
-
-const UserIcon = styled.img`
-  float: left;
-
-  width: 19px;
-  height: 19px;
-  margin-right: 0.5em;
-
-  background-color: #e0e0e0;
-  border-radius: 50%;
-
-  user-select: none;
 `;
 
 const UserDescription = styled.h5`
@@ -180,21 +165,6 @@ const MetaIconWrapper = styled.div`
   display: inline-flex;
   margin-left: auto;
   height: 100%;
-`;
-
-const Icon = styled.img`
-  float: left;
-
-  width: 18px;
-  height: auto;
-  margin-right: 8px;
-  margin-left: 20px;
-
-  user-select: none;
-`;
-
-const IconValue = styled.h5`
-  color: #8c8c8c;
 `;
 
 const ReplyContainer = styled.div`
