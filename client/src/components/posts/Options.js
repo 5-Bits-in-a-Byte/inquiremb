@@ -16,9 +16,6 @@ const Options = ({ courseid }) => {
             + New Post
           </Button>
         </Link>
-        {/* <OptionsButton buttonText={"Message Instructor"} isPrimary={false} />
-        <OptionsButton buttonText={"Do a thing"} isPrimary={false} />
-        <OptionsButton buttonText={"Do another thing"} isPrimary={false} /> */}
       </OptionsPanel>
     </OptionsWrapper>
   );
