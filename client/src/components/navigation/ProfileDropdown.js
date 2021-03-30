@@ -3,14 +3,20 @@ import styled from "styled-components";
 import Arrow from "../../imgs/carrot-down-secondary.svg";
 import Dropdown from "../common/dropdown/Dropdown";
 import { UserContext } from "../context/UserProvider";
-import DropdownOptions from "./DropdownOptions";
 
 const ProfileDropdown = () => {
   const user = useContext(UserContext);
 
+  const handleSignOut = () => {
+    const link = process.env.REACT_APP_SERVER_URL + "/logout";
+    window.location.href = link;
+  };
+
+  const options = [{ onClick: handleSignOut, label: "Sign Out" }];
+
   return (
     <Wrapper>
-      <Dropdown content={<DropdownOptions />}>
+      <Dropdown options={options}>
         <DropdownWrapper className="flex-row align">
           <Name className="font-regular">
             {user.first} {user.last}

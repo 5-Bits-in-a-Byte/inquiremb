@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const DropdownOption = (props) => {
+  console.log(props);
   return (
     <Option {...props}>
       <Label>{props.children}</Label>

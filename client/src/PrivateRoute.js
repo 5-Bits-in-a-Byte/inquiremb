@@ -16,8 +16,14 @@ const PrivateRoute = (props) => {
     //     type: "get",
     //     endpoint: "/api/me",
     //     onSuccess: (data) => {
-    //       console.log("Data:" + data);
-    //       setUser(data);
+    //       if (data && data._id) {
+    //         console.log("Data:" + data);
+    //         setUser(data);
+    //       }
+    //     },
+    //     onFailure: (err) => {
+    //       console.log("Error completing sign in:", err);
+    //       setUser(false);
     //     },
     //   });
     // };
@@ -39,7 +45,6 @@ const PrivateRoute = (props) => {
       });
   };
 
-  console.log("User: " + user);
   useEffect(() => {
     if (!user) {
       attemptSignIn();
