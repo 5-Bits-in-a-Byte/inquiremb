@@ -1,5 +1,4 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 
@@ -9,8 +8,6 @@ const SectionTab = ({
   imageLocation,
   tabText,
 }) => {
-  const { courseid, postid } = useParams();
-
   return (
     <Tab
       highlight={highlightedSection === tabText}
@@ -18,10 +15,8 @@ const SectionTab = ({
         setHighlightedSection(tabText);
       }}
     >
-      {/* <Link to={"/course/" + courseid} style={{ textDecoration: "none" }}> */}
       <Icon src={imageLocation} />
       <TabText>{tabText}</TabText>
-      {/* </Link> */}
     </Tab>
   );
 };

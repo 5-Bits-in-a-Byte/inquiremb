@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import PinImg from "../../imgs/pin.svg";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import DraftTextArea from "../common/DraftTextArea";
 import { UserContext } from "../context/UserProvider";
 import { useHistory } from "react-router-dom";
@@ -10,7 +10,6 @@ import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
 import InstructorIcon from "../../imgs/instructor.svg";
 import Checkbox from "../common/Checkbox";
-import { MDBCheckbox } from "mdb-react-ui-kit";
 
 // Checks props to determine if the post is a draft, isPinned, etc.
 const generatePostContent = (

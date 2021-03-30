@@ -5,8 +5,6 @@ import DraftTextArea from "../common/DraftTextArea";
 import Button from "../common/Button";
 import Reaction from "../common/Reaction";
 
-var dummy_reaction_IDs = [];
-
 const CommentReply = ({ reply, isDraft, submitReply, postid }) => {
   const user = useContext(UserContext);
   const [draft, setDraft] = useState("");

@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import PinImg from "../../imgs/pin.svg";
 import BlueCheckmark from "../../imgs/bluecheck.svg";
 import GreyCheckmark from "../../imgs/greycheck.svg";
 

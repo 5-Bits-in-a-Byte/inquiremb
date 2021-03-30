@@ -5,13 +5,11 @@ import DraftTextBox from "../common/DraftTextArea";
 import Button from "../common/Button";
 import { useParams } from "react-router";
 import LazyFetch from "../common/requests/LazyFetch";
-import { UserContext } from "../context/UserProvider";
 import Reaction from "../common/Reaction";
 
 const Comment = ({ comment, isDraft, callback }) => {
   const { postid } = useParams();
   const [content, setContent] = useState("");
-  // const user = useContext(UserContext);
 
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);

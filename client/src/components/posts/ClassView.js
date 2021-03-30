@@ -6,11 +6,8 @@ import SectionTab from "./SectionTab";
 import Sidebar from "./Sidebar";
 import PostView from "./PostView";
 import { useLocation, useParams } from "react-router";
-import io from "../../services/socketio";
 
 const ClassView = ({ classroomName }) => {
-  const { courseid } = useParams();
-
   const location = useLocation();
   let defaultHighlight = "All Posts";
 
