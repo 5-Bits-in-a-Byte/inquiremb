@@ -63,12 +63,24 @@ const Btn = styled.button`
 
   // If primary prop === true
     ${(props) =>
-    props.primary &&
-    css`
-      background-color: #4a86fa;
-      color: #fff;
-      &:hover {
-        background-color: #407df3;
-      }
-    `}
+      props.primary &&
+      css`
+        background-color: #4a86fa;
+        color: #fff;
+        &:hover {
+          background-color: #407df3;
+        }
+      `}
+
+    ${(props) =>
+      props.signin &&
+      css`
+        background-color: transparent;
+        color: #fff;
+        width: 10%;
+        &:hover {
+          background-color: white;
+          opacity: 0.85;
+          color: black;
+      `}}
 `;
