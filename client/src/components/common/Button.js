@@ -72,6 +72,7 @@ const Btn = styled.button`
         }
       `}
 
+  // If signin prop === true
     ${(props) =>
       props.signin &&
       css`
