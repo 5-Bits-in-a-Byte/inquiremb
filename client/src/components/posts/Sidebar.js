@@ -17,8 +17,6 @@ const Sidebar = ({ setHighlightedSection, highlightedSection }) => {
   var courseContext = useContext(UserContext).courses;
   var classroomName = " ";
 
-  console.log(courseContext, "COURSE CONTEXT");
-
   for (let temp in courseContext) {
     if (courseContext[temp].course_id === classroomID) {
       classroomName = courseContext[temp].course_name;

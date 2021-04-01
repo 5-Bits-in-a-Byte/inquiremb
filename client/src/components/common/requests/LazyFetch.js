@@ -16,7 +16,7 @@ const LazyFetch = ({
     withCredentials: true,
   })
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       if (onSuccess) {
         onSuccess(response.data);
       }

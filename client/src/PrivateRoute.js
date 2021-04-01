@@ -16,7 +16,6 @@ const PrivateRoute = (props) => {
       endpoint: "/api/me",
       onSuccess: (data) => {
         if (data && data._id) {
-          console.log("Data:" + data);
           setUser(data);
         }
       },

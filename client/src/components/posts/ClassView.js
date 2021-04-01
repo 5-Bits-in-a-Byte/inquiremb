@@ -1,13 +1,16 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { useLocation, useParams } from "react-router";
 import { UserContext } from "../context/UserProvider";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import Sidebar from "./Sidebar";
 import PostView from "./PostView";
-import { useLocation, useParams } from "react-router";
 
-const ClassView = ({ classroomName }) => {
+/**
+ * ClassView Component ~ Blueprint for displaying a specific course post feed, as well as
+ */
+const ClassView = () => {
   const location = useLocation();
   let defaultHighlight = "All Posts";
 
@@ -19,19 +22,16 @@ const ClassView = ({ classroomName }) => {
   const [highlightedSection, setHighlightedSection] = useState(
     defaultHighlight
   );
-  // console.log(hightlightedSection)
-
   var classroomID = useParams().courseid;
-
   var courseContext = useContext(UserContext).courses;
 
-  var temp;
+  // console.log("Course Context", courseContext);
 
-  for (temp in courseContext) {
-    console.log(courseContext[temp].course_id);
-    console.log(courseContext[temp].course_name);
-    if (courseContext[temp].course_id === classroomID) {
-      classroomName = courseContext[temp].course_name;
+  var classroomName;
+
+  for (var item in courseContext) {
+    if (courseContext[item].course_id === classroomID) {
+      classroomName = courseContext[item].course_name;
       break;
     }
   }

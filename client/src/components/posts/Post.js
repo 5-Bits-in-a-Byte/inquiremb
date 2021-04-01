@@ -85,6 +85,13 @@ const generatePostContent = (
   }
 };
 
+/**
+ * Post ~ Blueprint for displaying Posts of various types.
+ *
+ * @param {string} post idk what this does tbh
+ * @param {bool} isCondensed tells the post whether to display completely or condensed
+ * @param {bool} isDraft tells the post whether to display as a form to fill out or not
+ */
 const Post = ({ post, isCondensed, isDraft }) => {
   const history = useHistory();
   const user = useContext(UserContext);
