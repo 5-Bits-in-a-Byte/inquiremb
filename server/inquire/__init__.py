@@ -33,9 +33,15 @@ def create_app(override_config=None, testing=False, include_socketio=True):
 
     # Adding secret key to app
     app.secret_key = '!secret'
-    # Configuring flask app
     from inquire import config
-    app.config.from_object(config)
+    # Configuring flask app
+    if override_config:
+        app.config.from_object(override_config)
+    else:
+        app.config.from_object(config)
+
+    from pymodm.connection import connect
+    connect(app.config['MONGO_URI'], alias="my-app")
 
     # Importing blueprints
     from inquire.auth import auth_routes

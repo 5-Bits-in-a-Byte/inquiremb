@@ -9,6 +9,7 @@ from inquire import create_app
 import inquire.config as config
 from inquire.auth import create_user, encode_jwt
 
+# Test Database URI
 config.MONGO_URI = "mongodb://mongoadmin:secret@localhost:27888/message-board?authSource=admin"
 config.TESTING = True
 

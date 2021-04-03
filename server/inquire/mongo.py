@@ -17,7 +17,6 @@ import json
 import shortuuid
 import datetime
 from bson.objectid import ObjectId
-connect(MONGO_URI, alias="my-app")
 
 
 class User(MongoModel):
