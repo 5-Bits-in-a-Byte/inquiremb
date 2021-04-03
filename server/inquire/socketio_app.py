@@ -7,10 +7,11 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
+from inquire.auth import current_user, permission_layer
+from inquire.mongo import *
+
 from flask_socketio import *
-from auth import current_user, permission_layer
 from flask import Blueprint, render_template
-from mongo import *
 
 io = SocketIO(logger=True, engineio_logger=False, cors_allowed_origins="*")
 

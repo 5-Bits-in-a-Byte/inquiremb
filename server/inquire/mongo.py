@@ -7,11 +7,12 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
+from inquire.config import MONGO_URI
+
 from pymodm import MongoModel, fields, EmbeddedMongoModel
 from pymongo.write_concern import WriteConcern
 from pymodm.connection import connect
 import pymongo
-from config import MONGO_URI
 import json
 import shortuuid
 import datetime

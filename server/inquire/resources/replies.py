@@ -9,9 +9,9 @@ Last Modified Date: 03/12/2021
 '''
 from flask import jsonify
 from flask_restful import Resource, abort, reqparse
-from auth import current_user, permission_layer
-from mongo import *
-from socketio_app import io
+from inquire.auth import current_user, permission_layer
+from inquire.mongo import *
+from inquire.socketio_app import io
 
 
 class Replies(Resource):

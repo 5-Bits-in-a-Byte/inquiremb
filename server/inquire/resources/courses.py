@@ -10,12 +10,12 @@ Last Modified Date: 03/12/2021
 from flask_restful import reqparse, Resource
 from flask import request
 from enum import Enum
-from mongo import *
-from utils.argparser_types import str2bool
-from auth import permission_layer, current_user
-from config import DEFAULT_COLORS
+from inquire.utils.argparser_types import str2bool
 import random
 
+from inquire.mongo import *
+from inquire.auth import permission_layer, current_user
+from inquire.config import DEFAULT_COLORS
 
 # Courses
 # POST - Handles course creation

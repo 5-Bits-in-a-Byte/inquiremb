@@ -15,9 +15,10 @@ Steps:
 4. Check jwt on api requests
 5. lookup user using jwt details on api requests
 """
+from inquire.mongo import *
+from inquire.config import HS_256_KEY, CLIENT_URL
+
 from werkzeug.local import LocalProxy
-from mongo import *
-from config import HS_256_KEY, CLIENT_URL
 from functools import wraps
 import sys
 import logging

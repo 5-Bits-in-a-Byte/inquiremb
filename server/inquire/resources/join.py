@@ -9,9 +9,9 @@ Group Name: 5 Bits in a Byte
 Last Modified Date: 03/12/2021
 '''
 from flask_restful import Resource, reqparse
-from auth import current_user
-from mongo import *
-from resources.courses import pick_color, DEFAULT_COLORS
+from inquire.auth import current_user
+from inquire.mongo import *
+from inquire.resources.courses import pick_color, DEFAULT_COLORS
 
 
 class Join(Resource):
