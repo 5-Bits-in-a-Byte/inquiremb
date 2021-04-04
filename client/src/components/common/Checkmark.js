@@ -3,6 +3,11 @@ import styled from "styled-components";
 import BlueCheckmark from "../../imgs/bluecheck.svg";
 import GreyCheckmark from "../../imgs/greycheck.svg";
 
+/** Checkmark Component
+ * Checkmark that can change states, to be used with the checkbox component.
+ *
+ * @returns Simple component containing the checkmark for a checkbox.
+ */
 const Checkmark = ({ checkSize, checkFloat, checkStatus }) => {
   return (
     <Box
