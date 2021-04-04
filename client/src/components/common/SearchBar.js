@@ -2,6 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import SearchImg from "../../imgs/search-gray.svg";
 
+/** SearchBar Component
+ *
+ *
+ * @param {function} onChange event handler called when the textfield changes.
+ * @param {string} placeholder placeholder text in the search textfield
+ * @returns
+ */
 const SearchBar = ({ onChange, placeholder }) => {
   return (
     <SearchDiv className="secondary-btn flex-row">

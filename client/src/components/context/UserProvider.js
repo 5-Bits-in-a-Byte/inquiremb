@@ -16,6 +16,12 @@ const UserDispatchContext = createContext(undefined);
 }
 */
 
+/** UserProvider
+ * Creates a user data DOM to get information about the user.
+ *
+ * @param {node} children idk?
+ * @returns UserContext DOM to interface with user related data.
+ */
 function UserProvider({ children }) {
   const [userDetails, setUserDetails] = useState(null);
 

@@ -2,6 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
+/** Input Component
+ * Common component acting as a textfield styled to fit sitewide conventions.
+ *
+ * @param {string} types String representing the input type. ('password', 'submit', etc) Default: 'text'
+ * @param {string} placeholder placeholder text.
+ * @param {function} onChange event handler called when the input field has changes.
+ * @param {object} props the rest of the component properties.
+ * @returns Textfield styled to fit sitewide conventions.
+ */
 const Input = ({ type, placeholder, onChange, ...props }) => {
   return (
     <StyledInput

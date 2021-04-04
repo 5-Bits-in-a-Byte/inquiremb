@@ -5,7 +5,9 @@ import LikedImg from "../../imgs/like_blue.svg";
 import { UserContext } from "../context/UserProvider";
 import LazyFetch from "./requests/LazyFetch";
 
-// Post and User to connect to backend
+/**
+ * Intented to be used above "Input" components to label them
+ */
 const Reaction = ({ reactions, type, id, postid }) => {
   const user = useContext(UserContext);
   const [reactionState, setReactions] = useState(reactions);

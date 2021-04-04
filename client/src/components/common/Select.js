@@ -2,7 +2,9 @@ import React from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 
-/* Read about react-select props here: https://react-select.com/props */
+/**
+ * Read about react-select props here: https://react-select.com/props
+ */
 export default ({ options, ...props }) => (
   <Select options={options} styles={customStyles} {...props} />
 );
