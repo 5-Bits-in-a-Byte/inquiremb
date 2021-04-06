@@ -8,9 +8,16 @@ from flask import make_response, request
 from inquire import create_app
 import inquire.config as config
 from inquire.auth import create_user, encode_jwt
+import os
 
 # Test Database URI
-config.MONGO_URI = "mongodb://mongoadmin:secret@localhost:27888/message-board?authSource=admin"
+test_mongo_uri = os.environ['TEST_MONGO_URI']
+if test_mongo_uri:
+    config.MONGO_URI = test_mongo_uri
+elif test_mongo_uri is None:
+    raise Error("Missing mongodb test URI")
+elif test_mongo_uri == config.MONGO_URI:
+    raise Error("Don't use normal mongodb for testing")
 config.TESTING = True
 
 
