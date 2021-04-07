@@ -85,12 +85,12 @@ class Courses(Resource):
         # Appends the course with permissions to the user who created it
         User.objects.raw({'_id': current_user._id}).update({"$push": {"courses":
                                                                       {"course_id": course._id, "course_name": args.course,
-                                                                       "canPost": True, "seePrivate": True, "canPin": True,
-                                                                       "canRemove": True, "canEndorse": True, "viewAnonymous": True,
+                                                                       "can_post": True, "see_private": True, "can_pin": True,
+                                                                       "can_remove": True, "can_endorse": True, "view_anonymous": True,
                                                                        "admin": True, "color": color}}})
         return {"course_id": course._id, "course_name": args.course,
-                "canPost": True, "seePrivate": True, "canPin": True,
-                "canRemove": True, "canEndorse": True, "viewAnonymous": True,
+                "can_post": True, "see_private": True, "can_pin": True,
+                "can_remove": True, "can_endorse": True, "view_anonymous": True,
                 "admin": True, "color": color}, 200
 
     def validate_post(self, args):

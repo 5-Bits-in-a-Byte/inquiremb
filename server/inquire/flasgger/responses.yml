@@ -15,5 +15,5 @@
       description: List of authorization errors
       example:
         [
-          "Resource access restricted: missing course permission(s) admin, seePrivate",
+          "Resource access restricted: missing course permission(s) admin, see_private",
         ]

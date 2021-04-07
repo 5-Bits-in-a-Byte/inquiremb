@@ -100,7 +100,7 @@ This component handles setting up all of our MongoDB models so that each collect
 ```json
 {
   "_id": "oasif-jo12j-asdjf-asdf9",
-  "anonymousId": "cuk19-lzi91-soc01-cks83",
+  "anonymous_id": "cuk19-lzi91-soc01-cks83",
   "picture": "https://google.com/users/images/aobidsl123",
   "first": "Alec",
   "last": "Springel",
@@ -111,12 +111,12 @@ This component handles setting up all of our MongoDB models so that each collect
       "course_name": "CIS 210",
       "nickname": null,
       "color": "#3e7aab",
-      "canPost": true,
-      "seePrivate": false,
-      "canPin": false,
-      "canRemove": false,
-      "canEndorse": false,
-      "viewAnonymous": false,
+      "can_post": true,
+      "see_private": false,
+      "can_pin": false,
+      "can_remove": false,
+      "can_endorse": false,
+      "view_anonymous": false,
       "admin": false
     }
   ]

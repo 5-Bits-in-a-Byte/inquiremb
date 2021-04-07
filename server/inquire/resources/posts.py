@@ -165,18 +165,18 @@ class Posts(Resource):
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
         # If the current user can see private posts and there's no search
-        elif current_course.seePrivate and (req is None):
+        elif current_course.see_private and (req is None):
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
 
         # If the current user can see private posts and there is a search
-        elif current_course.seePrivate and (req is not None):
+        elif current_course.see_private and (req is not None):
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
 
         # If the current user cannot see private posts and there is a search
-        elif (not current_course.seePrivate) and (req is not None):
+        elif (not current_course.see_private) and (req is not None):
             queryParams['$or'] = [{'isPrivate': False}, {'postedby._id': {
                 '$in': [current_user._id, current_user.anonymous_id]}}]
             queryParams['$text'] = {'$search': req}
@@ -330,7 +330,7 @@ class Posts(Resource):
                 post.title = args['title']
                 post.content = args['content']
                 post.updatedDate = datetime.datetime.now()
-                if current_course.canPin:
+                if current_course.can_pin:
                     post.isPinned = args['isPinned']
                 post.save()
                 result = self.serialize(post)

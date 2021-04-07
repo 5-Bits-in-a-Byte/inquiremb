@@ -48,32 +48,32 @@ UserCourse:
       type: string
       description: Accent color used in course specific ui
       example: "#ee55ee"
-    canPost:
+    can_post:
       type: boolean
       description: If the user can post in the course
       default: true
       example: true
-    seePrivate:
+    see_private:
       type: boolean
       description: If the user can see private posts in the course
       default: false
       example: false
-    canPin:
+    can_pin:
       type: boolean
       description: If the user user can pin posts
       default: false
       example: false
-    canRemove:
+    can_remove:
       type: boolean
       description: If the user can remove posts from the course
       default: false
       example: false
-    canEndorse:
+    can_endorse:
       type: boolean
       description: If the user can endorse posts in the course
       default: false
       example: true
-    viewAnonymous:
+    view_anonymous:
       type: boolean
       description: If the user can view the identity of anonymous posters
       default: false

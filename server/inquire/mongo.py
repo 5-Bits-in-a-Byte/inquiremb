@@ -48,12 +48,12 @@ class UserCourse(EmbeddedMongoModel):
     course_name = fields.CharField(required=True)
     nickname = fields.CharField(blank=True)
     color = fields.CharField(blank=True)
-    canPost = fields.BooleanField(default=True)
-    seePrivate = fields.BooleanField(default=False)
-    canPin = fields.BooleanField(default=False)
-    canRemove = fields.BooleanField(default=False)
-    canEndorse = fields.BooleanField(default=False)
-    viewAnonymous = fields.BooleanField(default=False)
+    can_post = fields.BooleanField(default=True)
+    see_private = fields.BooleanField(default=False)
+    can_pin = fields.BooleanField(default=False)
+    can_remove = fields.BooleanField(default=False)
+    can_endorse = fields.BooleanField(default=False)
+    view_anonymous = fields.BooleanField(default=False)
     admin = fields.BooleanField(default=False)
 
 
