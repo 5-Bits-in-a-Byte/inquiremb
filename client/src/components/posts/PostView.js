@@ -33,28 +33,28 @@ const PostView = ({ highlightedSection }) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
   useEffect(() => {
-    io.emit("join", { room: courseid, room_type: "course" });
+    io.emit("join", { room: courseId, room_type: "course" });
     io.on("Post/create", (post) => {
       // Ensure the user isn't the one who posted it
       console.log(post);
       if (
         post &&
-        post.postedby._id !== user._id &&
-        post.postedby._id !== user.anonymousId
+        post.postedBy._id !== user._id &&
+        post.postedBy._id !== user.anonymousId
       ) {
         setSocketPosts([post, ...socketPosts]);
       }
     });
     return () => {
-      io.emit("leave", { room: courseid });
+      io.emit("leave", { room: courseId });
     };
   }, []);
 
   const [isCondensed, setCondensedState] = useState(true);
   const [sortByMostRecent, toggleSort] = useState(true);
-  // Retrieves the courseid from the url parameters
-  const { courseid } = useParams();
-  let endpoint = "/api/courses/" + courseid + "/posts";
+  // Retrieves the courseId from the url parameters
+  const { courseId } = useParams();
+  let endpoint = "/api/courses/" + courseId + "/posts";
 
   switch (highlightedSection) {
     case "Instructor":
@@ -124,7 +124,7 @@ const PostView = ({ highlightedSection }) => {
               <PostGroupingHeader>All Posts</PostGroupingHeader>
             )}
             {posts.other}
-            <Options courseid={courseid} />
+            <Options courseId={courseId} />
           </CenterWrapper>
         </ScrollingDiv>
       </PostFeed>

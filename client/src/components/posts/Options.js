@@ -3,14 +3,14 @@ import styled from "styled-components";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
 
-const Options = ({ courseid }) => {
+const Options = ({ courseId }) => {
   return (
     <OptionsWrapper>
       <OptionsHeader>OPTIONS</OptionsHeader>
       <OptionsPanel>
         <Link
           style={{ width: "100%", textDecoration: "none" }}
-          to={"/course/" + courseid + "/post/new"}
+          to={"/course/" + courseId + "/post/new"}
         >
           <Button primary autoWidth>
             + New Post

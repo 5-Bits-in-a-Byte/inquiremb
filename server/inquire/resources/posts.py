@@ -74,14 +74,14 @@ class Posts(Resource):
         # Adding user info to dict
         anonymous = args['isAnonymous']
         if anonymous:
-            postedby = {"first": "Anonymous", "last": "",
+            postedBy = {"first": "Anonymous", "last": "",
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
-            postedby = {"first": current_user.first, "last": current_user.last,
+            postedBy = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add post to MongoDB
-        post = Post(courseid=courseId, postedby=postedby, title=args.title,
+        post = Post(courseId=courseId, postedBy=postedBy, title=args.title,
                     isPrivate=args.isPrivate, content=args.content, isInstructor=isInstructor).save()
 
         # Get the JSON format
@@ -147,7 +147,7 @@ class Posts(Resource):
         if sortby == "oldest":
             sort_date = 1
 
-        queryParams = {"courseid": courseId}
+        queryParams = {"courseId": courseId}
         # Filter by 'instructor'
         if filterby == 'instructor':
             queryParams["isInstructor"] = True
@@ -155,7 +155,7 @@ class Posts(Resource):
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
         # Filter by 'me'
         elif filterby == 'me':
-            queryParams["postedby._id"] = {
+            queryParams["postedBy._id"] = {
                 '$in': [current_user._id, current_user.anonymousId]}
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
@@ -177,7 +177,7 @@ class Posts(Resource):
 
         # If the current user cannot see private posts and there is a search
         elif (not current_course.seePrivate) and (req is not None):
-            queryParams['$or'] = [{'isPrivate': False}, {'postedby._id': {
+            queryParams['$or'] = [{'isPrivate': False}, {'postedBy._id': {
                 '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
@@ -185,7 +185,7 @@ class Posts(Resource):
 
         # If the current user cannot see private posts and there is not a search
         else:
-            queryParams["$or"] = [{'isPrivate': False}, {'postedby._id': {
+            queryParams["$or"] = [{'isPrivate': False}, {'postedBy._id': {
                 '$in': [current_user._id, current_user.anonymousId]}}]
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
@@ -260,7 +260,7 @@ class Posts(Resource):
             # Get the current course
             current_course = current_user.get_course(courseId)
             # Permission check
-            if current_user._id == post.postedby['_id'] or current_user.anonymousId == post.postedby['_id'] or current_course.admin:
+            if current_user._id == post.postedBy['_id'] or current_user.anonymousId == post.postedBy['_id'] or current_course.admin:
                 # Delete the post
                 post.delete()
                 return {'deleted': True}, 200
@@ -324,8 +324,8 @@ class Posts(Resource):
                 f'Duplicate post detected, multiple posts in database with id {args["_id"]}')
         elif count == 1:
             post = query.first()
-            id_match = current_user._id == post.postedby[
-                '_id'] or current_user.anonymousId == post.postedby['_id']
+            id_match = current_user._id == post.postedBy[
+                '_id'] or current_user.anonymousId == post.postedBy['_id']
             if id_match or current_course.admin:
                 post.title = args['title']
                 post.content = args['content']

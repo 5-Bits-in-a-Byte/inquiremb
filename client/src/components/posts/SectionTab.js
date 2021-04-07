@@ -9,7 +9,7 @@ const SectionTab = ({
   imageLocation,
   tabText,
 }) => {
-  const { courseid, postid } = useParams();
+  const { courseId, postid } = useParams();
 
   return (
     <Tab
@@ -18,7 +18,7 @@ const SectionTab = ({
         setHighlightedSection(tabText);
       }}
     >
-      {/* <Link to={"/course/" + courseid} style={{ textDecoration: "none" }}> */}
+      {/* <Link to={"/course/" + courseId} style={{ textDecoration: "none" }}> */}
       <Icon src={imageLocation} />
       <TabText>{tabText}</TabText>
       {/* </Link> */}

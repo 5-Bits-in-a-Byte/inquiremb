@@ -25,12 +25,12 @@ const CommentView = ({ classroomName }) => {
   // Stores comments fetched live from socketio
   const [newComments, setNewComments] = useState({ draft: false });
   const [commentData, setCommentData] = useState([]);
-  const { courseid, postid } = useParams();
+  const { courseId, postid } = useParams();
   const [highlightedSection, setHighlightedSection] = useState("");
 
   const redirect = (sectionFilter) => {
     history.push({
-      pathname: "/course/" + courseid,
+      pathname: "/course/" + courseId,
       state: { filter: sectionFilter },
     });
   };
@@ -66,8 +66,8 @@ const CommentView = ({ classroomName }) => {
       // Ensure the user isn't the one who posted it
       if (
         comment &&
-        comment.postedby._id !== user._id &&
-        comment.postedby._id !== user.anonymousId
+        comment.postedBy._id !== user._id &&
+        comment.postedBy._id !== user.anonymousId
       ) {
         console.log(commentData);
         setCommentData([
@@ -125,7 +125,7 @@ const CommentView = ({ classroomName }) => {
   let comments = [...commentData];
   if (newComments.draft) {
     const draft = {
-      postedby: {
+      postedBy: {
         first: user.first,
         last: user.last,
         _id: user._id,
@@ -155,7 +155,7 @@ const CommentView = ({ classroomName }) => {
             <MaxWidth>
               <OptionsContainer>
                 <Link
-                  to={"/course/" + courseid}
+                  to={"/course/" + courseId}
                   style={{ textDecoration: "none" }}
                 >
                   <Button secondary>Back to all Posts</Button>

@@ -25,8 +25,8 @@ This component handles setting up all of our MongoDB models so that each collect
 ```json
 {
   "_id": "oasif-jo12j-asdjf-asdf9",
-  "courseid": "vonqJNDJ07yPyiagvKlR",
-  "postedby": {
+  "courseId": "vonqJNDJ07yPyiagvKlR",
+  "postedBy": {
     "first": "Alec",
     "last": "Springel",
     "_id": "oasif-jo12j-asdjf-asdf9",
@@ -54,7 +54,7 @@ This component handles setting up all of our MongoDB models so that each collect
   "_id": "oasif-jo12j-asdjf-asdf9",
   "post_id": "oasif-jo12j-asdjf-asdf9",
   "content": "Your question is stupid",
-  "postedby": {
+  "postedBy": {
     "first": "Alec",
     "last": "Springel",
     "_id": "oasif-jo12j-asdjf-asdf9",

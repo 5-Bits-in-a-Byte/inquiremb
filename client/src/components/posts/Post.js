@@ -46,7 +46,7 @@ const generatePostContent = (
       isInstructor: false,
       isPinned: false,
       picture: user.picture,
-      postedby: user.first + " " + user.last,
+      postedBy: user.first + " " + user.last,
       meta: (
         <Button primary onClick={handleSubmit}>
           Submit
@@ -74,13 +74,13 @@ const generatePostContent = (
       title: post.title,
       content: post.content,
       to: {
-        pathname: "/course/" + post.courseid + "/post/" + post._id,
+        pathname: "/course/" + post.courseId + "/post/" + post._id,
         state: { post },
       },
       isInstructor: post.isInstructor,
       isPinned: post.isPinned,
-      picture: post.postedby.picture,
-      postedby: post.postedby.first + " " + post.postedby.last,
+      picture: post.postedBy.picture,
+      postedBy: post.postedBy.first + " " + post.postedBy.last,
       meta: <PostReactions post={post} postid={postid} />,
     };
   }
@@ -89,7 +89,7 @@ const generatePostContent = (
 const Post = ({ post, isCondensed, isDraft }) => {
   const history = useHistory();
   const user = useContext(UserContext);
-  const { courseid, postid } = useParams();
+  const { courseId, postid } = useParams();
 
   // State and handler for drafting posts
   const [draft, setDraft] = useState({
@@ -112,7 +112,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
   const handleSubmit = (e) => {
     LazyFetch({
       type: "post",
-      endpoint: "/api/courses/" + courseid + "/posts",
+      endpoint: "/api/courses/" + courseId + "/posts",
       data: {
         title: draft.title,
         content: draft.content,
@@ -125,7 +125,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
         data.new = true;
         // console.log(data);
         history.push({
-          pathname: "/course/" + data.courseid + "/post/" + data._id,
+          pathname: "/course/" + data.courseId + "/post/" + data._id,
           state: { post: data },
         });
       },
@@ -182,7 +182,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
             </span>
           )}
           <UserDescription isInstructor={render.isInstructor}>
-            Posted by {render.postedby}
+            Posted by {render.postedBy}
           </UserDescription>
         </NameWrapper>
         <MetaIconWrapper>

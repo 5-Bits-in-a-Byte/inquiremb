@@ -87,14 +87,14 @@ class Comments(Resource):
         # Adding user info to dict
         anonymous = args['isAnonymous']
         if anonymous:
-            postedby = {"first": "Anonymous", "last": "",
+            postedBy = {"first": "Anonymous", "last": "",
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
-            postedby = {"first": current_user.first, "last": current_user.last,
+            postedBy = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add post to MongoDB
-        comment = Comment(post_id=post_id, postedby=postedby,
+        comment = Comment(post_id=post_id, postedBy=postedBy,
                           content=args.content).save()
 
         # Incrementing post comment count, updating date
@@ -143,7 +143,7 @@ class Comments(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
-        current_course = current_user.get_course(post.courseid)
+        current_course = current_user.get_course(post.courseId)
         _id = ObjectId(args['_id'])
         query = Comment.objects.raw({'_id': _id})
         count = query.count()
@@ -152,8 +152,8 @@ class Comments(Resource):
                 f'Duplicate comment detected, multiple comments in database with id {args["_id"]}')
         elif count == 1:
             comment = query.first()
-            id_match = current_user._id == comment.postedby[
-                '_id'] or current_user.anonymousId == comment.postedby['_id']
+            id_match = current_user._id == comment.postedBy[
+                '_id'] or current_user.anonymousId == comment.postedBy['_id']
             if id_match or current_course.admin:
                 comment.content = args['content']
                 post.updatedDate = datetime.datetime.now()
@@ -223,8 +223,8 @@ class Comments(Resource):
             current_course = current_user.get_course(courseId)
             # Permission check
             comment = query.first()
-            id_match = current_user._id == comment.postedby[
-                '_id'] or current_user.anonymousId == comment.postedby['_id']
+            id_match = current_user._id == comment.postedBy[
+                '_id'] or current_user.anonymousId == comment.postedBy['_id']
             if id_match or current_course.admin:
                 post.comments -= 1
                 post.save()

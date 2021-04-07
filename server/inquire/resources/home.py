@@ -43,10 +43,10 @@ class Home(Resource):
         # TODO: how do we query for private posts in one course but not others?
 
         # Add all of the user's course ids to the query params from our list of course ids
-        queryParams = {"courseid": {"$in": courseIds}}
+        queryParams = {"courseId": {"$in": courseIds}}
 
         # Only showing private posts or posts you've created added to query params
-        queryParams["$or"] = [{'isPrivate': False}, {'postedby._id': {
+        queryParams["$or"] = [{'isPrivate': False}, {'postedBy._id': {
             '$in': [current_user._id, current_user.anonymousId]}}]
 
         # Query for desired posts using query params, order them by most recent, and limit it to 20 posts
@@ -71,7 +71,7 @@ class Home(Resource):
 
         # Loop through until we find the course id that matches with the course id for the post
         for course in courses:
-            if post.courseid == course.courseId:
+            if post.courseId == course.courseId:
                 break
 
         # Add the course name and color to the resulting json we'll send back to the client

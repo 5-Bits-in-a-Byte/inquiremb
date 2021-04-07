@@ -9,7 +9,7 @@ import { useLocation, useParams } from "react-router";
 import io from "../../services/socketio";
 
 const ClassView = ({ classroomName }) => {
-  const { courseid } = useParams();
+  const { courseId } = useParams();
 
   const location = useLocation();
   let defaultHighlight = "All Posts";
@@ -24,7 +24,7 @@ const ClassView = ({ classroomName }) => {
   );
   // console.log(hightlightedSection)
 
-  var classroomID = useParams().courseid;
+  var classroomID = useParams().courseId;
 
   var courseContext = useContext(UserContext).courses;
 

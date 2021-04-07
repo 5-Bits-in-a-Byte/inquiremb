@@ -50,7 +50,7 @@ def on_join(data):
     elif room_type == "post":
         post = Post.objects.raw({'_id': room}).first()
         if post is not None:
-            course = current_user.get_course(post.courseid)
+            course = current_user.get_course(post.courseId)
             if course:
                 status = True
     if status:

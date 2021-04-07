@@ -61,14 +61,14 @@ class Replies(Resource):
         # Adding user info to dict
         anonymous = args['isAnonymous']
         if anonymous:
-            postedby = {"first": "Anonymous", "last": "",
+            postedBy = {"first": "Anonymous", "last": "",
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
-            postedby = {"first": current_user.first, "last": current_user.last,
+            postedBy = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add reply to MongoDB and retrieve the comment
-        reply = Reply(postedby=postedby, content=args.content)
+        reply = Reply(postedBy=postedBy, content=args.content)
         comment = self.retrieve_comment(comment_id)
 
         # Append reply to the comment and save it to the database
@@ -127,7 +127,7 @@ class Replies(Resource):
             return {"errors": errors}, 400
 
         # Get the current course and retrieve the comment
-        current_course = current_user.get_course(post.courseid)
+        current_course = current_user.get_course(post.courseId)
         comment = self.retrieve_comment(comment_id)
 
         # Get the reply we're looking for
@@ -141,8 +141,8 @@ class Replies(Resource):
             return {'deleted': False}, 403
 
         # Permissions check
-        id_match = current_user._id == reply.postedby[
-            '_id'] or current_user.anonymousId == reply.postedby['_id']
+        id_match = current_user._id == reply.postedBy[
+            '_id'] or current_user.anonymousId == reply.postedBy['_id']
         if id_match or current_course.admin:
             reply.content = args['content']
             comment.save()
@@ -205,7 +205,7 @@ class Replies(Resource):
 
         comment = self.retrieve_comment(comment_id)
         # Get the current course
-        current_course = current_user.get_course(post.courseid)
+        current_course = current_user.get_course(post.courseId)
 
         # Get the reply we're looking for
         reply = None
@@ -218,8 +218,8 @@ class Replies(Resource):
             return {'deleted': False}, 403
 
         # Permission check
-        id_match = current_user._id == reply.postedby[
-            '_id'] or current_user.anonymousId == reply.postedby['_id']
+        id_match = current_user._id == reply.postedBy[
+            '_id'] or current_user.anonymousId == reply.postedBy['_id']
         if id_match or current_course.admin:
             comment.replies.remove(reply)
             comment.save()

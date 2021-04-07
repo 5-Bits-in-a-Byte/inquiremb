@@ -75,7 +75,7 @@ const Comment = ({ comment, isDraft, callback }) => {
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
           <UserDescription>
-            by {comment.postedby.first + " " + comment.postedby.last}
+            by {comment.postedBy.first + " " + comment.postedBy.last}
           </UserDescription>
 
           <MetaIconWrapper>

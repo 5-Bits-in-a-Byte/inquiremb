@@ -6,11 +6,11 @@ Post:
       type: string
       description: Id of the user who created the post
       example: abcde12345
-    courseid:
+    courseId:
       type: string
       description: Id of the course the post was created in
       example: oFAeuzdT4VwKf3dHUFGhwu
-    postedby:
+    postedBy:
       $ref: "#/definitions/PostedBy"
     title:
       type: string

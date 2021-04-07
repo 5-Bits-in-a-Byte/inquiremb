@@ -70,8 +70,8 @@ to modify/query multiple documents when updating classes or permissions.
 
 class Post(MongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
-    courseid = fields.CharField()
-    postedby = fields.DictField()
+    courseId = fields.CharField()
+    postedBy = fields.DictField()
     title = fields.CharField(required=True)
     content = fields.CharField(required=True)
     isInstructor = fields.BooleanField(default=False)
@@ -96,7 +96,7 @@ class Post(MongoModel):
 class Comment(MongoModel):
     post_id = fields.CharField(required=True)
     content = fields.CharField(required=True, default="")
-    postedby = fields.DictField()
+    postedBy = fields.DictField()
     endorsed = fields.BooleanField(default=False)
     replies = fields.EmbeddedDocumentListField('Reply', blank=True)
     reactions = fields.DictField(default={'likes': []})
@@ -109,7 +109,7 @@ class Comment(MongoModel):
 class Reply(EmbeddedMongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
     content = fields.CharField(required=True, default="")
-    postedby = fields.DictField()
+    postedBy = fields.DictField()
     reactions = fields.DictField(default={'likes': []})
 
 
