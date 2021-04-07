@@ -92,7 +92,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     api.add_resource(Courses, '/courses')
     api.add_resource(Reactions, '/reactions')
     api.add_resource(Home, '/home')
-    api.add_resource(Posts, '/courses/<string:course_id>/posts')
+    api.add_resource(Posts, '/courses/<string:courseId>/posts')
     api.add_resource(
         Comments, '/posts/<string:post_id>/comments')
     api.add_resource(

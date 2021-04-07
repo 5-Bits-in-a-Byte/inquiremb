@@ -26,7 +26,7 @@ const CourseConfirmation = ({ course, close }) => {
             <CopyIcon src={CopyImg} />
             <Input
               value={
-                process.env.REACT_APP_CLIENT_URL + "/join/" + course.course_id
+                process.env.REACT_APP_CLIENT_URL + "/join/" + course.courseId
               }
               readOnly
             />
@@ -36,7 +36,7 @@ const CourseConfirmation = ({ course, close }) => {
           <InputLabel margin="0 0 7px">Access Code</InputLabel>
           <CopyOverlay
             onClick={() => {
-              navigator.clipboard.writeText(course.course_id);
+              navigator.clipboard.writeText(course.courseId);
               triggerMessage(true);
               setTimeout(() => {
                 triggerMessage(false);
@@ -45,7 +45,7 @@ const CourseConfirmation = ({ course, close }) => {
           >
             <CopyIcon src={CopyImg} />
             <Input
-              value={course.course_id}
+              value={course.courseId}
               readOnly
               style={{ cursor: "pointer" }}
             />

@@ -36,14 +36,14 @@ class Home(Resource):
         if len(current_user.courses) == 0:
             return []
 
-        course_ids = []
+        courseIds = []
         for course in current_user.courses:
-            course_ids.append(course.course_id)
+            courseIds.append(course.courseId)
 
         # TODO: how do we query for private posts in one course but not others?
 
         # Add all of the user's course ids to the query params from our list of course ids
-        queryParams = {"courseid": {"$in": course_ids}}
+        queryParams = {"courseid": {"$in": courseIds}}
 
         # Only showing private posts or posts you've created added to query params
         queryParams["$or"] = [{'isPrivate': False}, {'postedby._id': {
@@ -71,11 +71,11 @@ class Home(Resource):
 
         # Loop through until we find the course id that matches with the course id for the post
         for course in courses:
-            if post.courseid == course.course_id:
+            if post.courseid == course.courseId:
                 break
 
         # Add the course name and color to the resulting json we'll send back to the client
-        result['course_name'] = course.course_name
+        result['courseName'] = course.courseName
         result['color'] = course.color
 
         # Convert datetime to a string

@@ -103,11 +103,7 @@ dist
 # TernJS port file
 .tern-port
 
-<<<<<<< HEAD
-## Server folders
-=======
 ## Server Folders
->>>>>>> b7faea87cfa6b39019aedb523e72efd50b00311d
 **.egg-info
 
 ## Server files
@@ -116,10 +112,6 @@ server/flask
 server/export_env.sh
 server/env.sh
 server/env-test.sh
-<<<<<<< HEAD
-
-=======
->>>>>>> b7faea87cfa6b39019aedb523e72efd50b00311d
 
 #vscode
 **.vscode

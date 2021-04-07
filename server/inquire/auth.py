@@ -94,9 +94,9 @@ def permission_layer(required_permissions: list, require_login=True):
 
             errors = []
             # Getting the current course
-            course_id = kwargs.get('course_id')
-            if course_id or required_permissions:
-                course = current_user.get_course(course_id)
+            courseId = kwargs.get('courseId')
+            if courseId or required_permissions:
+                course = current_user.get_course(courseId)
                 if course is None:
                     errors.append(
                         "Resource access restricted: invalid course id")

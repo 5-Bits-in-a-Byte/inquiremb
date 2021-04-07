@@ -31,10 +31,10 @@ const ClassView = ({ classroomName }) => {
   var temp;
 
   for (temp in courseContext) {
-    console.log(courseContext[temp].course_id);
-    console.log(courseContext[temp].course_name);
-    if (courseContext[temp].course_id === classroomID) {
-      classroomName = courseContext[temp].course_name;
+    console.log(courseContext[temp].courseId);
+    console.log(courseContext[temp].courseName);
+    if (courseContext[temp].courseId === classroomID) {
+      classroomName = courseContext[temp].courseName;
       break;
     }
   }

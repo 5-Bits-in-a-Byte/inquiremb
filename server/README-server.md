@@ -107,16 +107,16 @@ This component handles setting up all of our MongoDB models so that each collect
   "email": "alecspringel@gmail.com",
   "courses": [
     {
-      "course_id": "oasif-jo12j-asdjf-asdf9",
-      "course_name": "CIS 210",
+      "courseId": "oasif-jo12j-asdjf-asdf9",
+      "courseName": "CIS 210",
       "nickname": null,
       "color": "#3e7aab",
-      "can_post": true,
-      "see_private": false,
-      "can_pin": false,
-      "can_remove": false,
-      "can_endorse": false,
-      "view_anonymous": false,
+      "canPost": true,
+      "seePrivate": false,
+      "canPin": false,
+      "canRemove": false,
+      "canEndorse": false,
+      "viewAnonymous": false,
       "admin": false
     }
   ]

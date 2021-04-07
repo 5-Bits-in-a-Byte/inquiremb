@@ -30,8 +30,8 @@ const generateSections = (data) => {
 
     // Populate classes object with class names and colors
     data.forEach((post) => {
-      if (!classes.class.includes(post.course_name)) {
-        classes.class.push(post.course_name);
+      if (!classes.class.includes(post.courseName)) {
+        classes.class.push(post.courseName);
         classes.color.push(post.color);
       }
     });
@@ -46,8 +46,8 @@ const generateSections = (data) => {
 
     // Place posts in the Post Grouping dictionary
     data.forEach((post) => {
-      if (post.course_name in postG) {
-        postG[post.course_name].push(createPost(post));
+      if (post.courseName in postG) {
+        postG[post.courseName].push(createPost(post));
       }
     });
 

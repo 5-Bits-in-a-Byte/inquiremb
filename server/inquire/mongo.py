@@ -29,9 +29,9 @@ class User(MongoModel):
     courses = fields.EmbeddedDocumentListField(
         'UserCourse', blank=True, required=True)
 
-    def get_course(self, course_id):
+    def get_course(self, courseId):
         for course in self.courses:
-            if course.course_id == course_id:
+            if course.courseId == courseId:
                 return course
         return None
 
@@ -44,16 +44,16 @@ class User(MongoModel):
 
 
 class UserCourse(EmbeddedMongoModel):
-    course_id = fields.CharField()
-    course_name = fields.CharField(required=True)
+    courseId = fields.CharField()
+    courseName = fields.CharField(required=True)
     nickname = fields.CharField(blank=True)
     color = fields.CharField(blank=True)
-    can_post = fields.BooleanField(default=True)
-    see_private = fields.BooleanField(default=False)
-    can_pin = fields.BooleanField(default=False)
-    can_remove = fields.BooleanField(default=False)
-    can_endorse = fields.BooleanField(default=False)
-    view_anonymous = fields.BooleanField(default=False)
+    canPost = fields.BooleanField(default=True)
+    seePrivate = fields.BooleanField(default=False)
+    canPin = fields.BooleanField(default=False)
+    canRemove = fields.BooleanField(default=False)
+    canEndorse = fields.BooleanField(default=False)
+    viewAnonymous = fields.BooleanField(default=False)
     admin = fields.BooleanField(default=False)
 
 

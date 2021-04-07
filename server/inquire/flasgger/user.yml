@@ -32,11 +32,11 @@ User:
 UserCourse:
   type: object
   properties:
-    course_id:
+    courseId:
       type: string
       description: ID of the course the user joined
       example: vytxeTZskVKR7C7WgdSP3d
-    course_name:
+    courseName:
       type: string
       description: Name associated with the course
       example: "CIS499 Advanced Debugging"
@@ -48,32 +48,32 @@ UserCourse:
       type: string
       description: Accent color used in course specific ui
       example: "#ee55ee"
-    can_post:
+    canPost:
       type: boolean
       description: If the user can post in the course
       default: true
       example: true
-    see_private:
+    seePrivate:
       type: boolean
       description: If the user can see private posts in the course
       default: false
       example: false
-    can_pin:
+    canPin:
       type: boolean
       description: If the user user can pin posts
       default: false
       example: false
-    can_remove:
+    canRemove:
       type: boolean
       description: If the user can remove posts from the course
       default: false
       example: false
-    can_endorse:
+    canEndorse:
       type: boolean
       description: If the user can endorse posts in the course
       default: false
       example: true
-    view_anonymous:
+    viewAnonymous:
       type: boolean
       description: If the user can view the identity of anonymous posters
       default: false

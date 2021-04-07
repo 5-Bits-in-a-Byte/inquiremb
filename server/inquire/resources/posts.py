@@ -18,7 +18,7 @@ from inquire.socketio_app import io
 
 
 class Posts(Resource):
-    def post(self, course_id=None):
+    def post(self, courseId=None):
         """
         Creates a new post
         ---
@@ -26,7 +26,7 @@ class Posts(Resource):
           - Posts
         parameters:
           - in: path
-            name: course_id
+            name: courseId
             description: Id of the course to post to
             required: true   
           - name: body
@@ -49,7 +49,7 @@ class Posts(Resource):
             schema:
               $ref: '#/definitions/403Response'
         """
-        course = current_user.get_course(course_id)
+        course = current_user.get_course(courseId)
         if not course:
             return {"errors": ["You have not joined this course"]}, 403
 
@@ -81,16 +81,16 @@ class Posts(Resource):
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add post to MongoDB
-        post = Post(courseid=course_id, postedby=postedby, title=args.title,
+        post = Post(courseid=courseId, postedby=postedby, title=args.title,
                     isPrivate=args.isPrivate, content=args.content, isInstructor=isInstructor).save()
 
         # Get the JSON format
         result = self.serialize(post)
         if not result['isPrivate']:
-            current_app.socketio.emit('Post/create', result, room=course_id)
+            current_app.socketio.emit('Post/create', result, room=courseId)
         return result, 200
 
-    def get(self, course_id=None):
+    def get(self, courseId=None):
         """
         Retrieves all the posts in a course
         ---
@@ -98,7 +98,7 @@ class Posts(Resource):
           - Posts     
         parameters:
           - in: path
-            name: course_id
+            name: courseId
             required: true
             description: course id from which to retrieve posts
           - in: query
@@ -140,14 +140,14 @@ class Posts(Resource):
         # sorby options: 'newest', 'oldest'
         sortby = request.args.get('sortby', type=str, default="newest")
 
-        current_course = current_user.get_course(course_id)
+        current_course = current_user.get_course(courseId)
 
         # -1 sorts newest first
         sort_date = -1
         if sortby == "oldest":
             sort_date = 1
 
-        queryParams = {"courseid": course_id}
+        queryParams = {"courseid": courseId}
         # Filter by 'instructor'
         if filterby == 'instructor':
             queryParams["isInstructor"] = True
@@ -165,18 +165,18 @@ class Posts(Resource):
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
         # If the current user can see private posts and there's no search
-        elif current_course.see_private and (req is None):
+        elif current_course.seePrivate and (req is None):
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
 
         # If the current user can see private posts and there is a search
-        elif current_course.see_private and (req is not None):
+        elif current_course.seePrivate and (req is not None):
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
 
         # If the current user cannot see private posts and there is a search
-        elif (not current_course.see_private) and (req is not None):
+        elif (not current_course.seePrivate) and (req is not None):
             queryParams['$or'] = [{'isPrivate': False}, {'postedby._id': {
                 '$in': [current_user._id, current_user.anonymous_id]}}]
             queryParams['$text'] = {'$search': req}
@@ -195,7 +195,7 @@ class Posts(Resource):
 
         return result, 200
 
-    def delete(self, course_id=None):
+    def delete(self, courseId=None):
         """
         Deletes a post
         ---
@@ -203,7 +203,7 @@ class Posts(Resource):
           - Posts     
         parameters:
           - in: path
-            name: course_id
+            name: courseId
             required: true
             description: Id of a course
           - name: body
@@ -258,7 +258,7 @@ class Posts(Resource):
                 f'Duplicate post detected, multiple posts in database with id {_id}')
         elif count == 1:
             # Get the current course
-            current_course = current_user.get_course(course_id)
+            current_course = current_user.get_course(courseId)
             # Permission check
             if current_user._id == post.postedby['_id'] or current_user.anonymous_id == post.postedby['_id'] or current_course.admin:
                 # Delete the post
@@ -269,7 +269,7 @@ class Posts(Resource):
         else:
             raise Exception(f'No post with id')
 
-    def put(self, course_id):
+    def put(self, courseId):
         """
         Edits a post
         ---
@@ -277,7 +277,7 @@ class Posts(Resource):
           - Posts
         parameters:
           - in: path
-            name: course_id
+            name: courseId
             description: Id of the course to post to
             required: true   
           - name: body
@@ -315,7 +315,7 @@ class Posts(Resource):
 
         # Query for the post and get the current course
         query = Post.objects.raw({'_id': args["_id"]})
-        current_course = current_user.get_course(course_id)
+        current_course = current_user.get_course(courseId)
 
         # Count how many posts had same id for error checking and handle appropriately
         count = query.count()
@@ -330,7 +330,7 @@ class Posts(Resource):
                 post.title = args['title']
                 post.content = args['content']
                 post.updatedDate = datetime.datetime.now()
-                if current_course.can_pin:
+                if current_course.canPin:
                     post.isPinned = args['isPinned']
                 post.save()
                 result = self.serialize(post)

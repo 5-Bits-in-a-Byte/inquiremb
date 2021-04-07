@@ -220,7 +220,7 @@ class Comments(Resource):
                 f'Duplicate comment detected, multiple comments in database with id {args["_id"]}')
         elif count == 1:
             # Get the current course
-            current_course = current_user.get_course(course_id)
+            current_course = current_user.get_course(courseId)
             # Permission check
             comment = query.first()
             id_match = current_user._id == comment.postedby[
