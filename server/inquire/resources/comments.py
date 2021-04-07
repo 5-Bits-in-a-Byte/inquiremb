@@ -7,7 +7,7 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
-from flask import jsonify
+from flask import jsonify, current_app
 from flask_restful import Resource, abort, reqparse
 
 from inquire.auth import current_user, permission_layer
@@ -88,7 +88,7 @@ class Comments(Resource):
         anonymous = args['isAnonymous']
         if anonymous:
             postedby = {"first": "Anonymous", "last": "",
-                        "_id": current_user.anonymousId, "anonymous": anonymous}
+                        "_id": current_user.anonymous_id, "anonymous": anonymous}
         else:
             postedby = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
@@ -102,7 +102,7 @@ class Comments(Resource):
         post.comments += 1
         post.save()
         result = self.serialize(comment)
-        io.emit('Comment/create', result, room=post_id)
+        current_app.socketio.emit('Comment/create', result, room=post_id)
         return result, 200
 
     def put(self, post_id=None):
@@ -153,7 +153,7 @@ class Comments(Resource):
         elif count == 1:
             comment = query.first()
             id_match = current_user._id == comment.postedby[
-                '_id'] or current_user.anonymousId == comment.postedby['_id']
+                '_id'] or current_user.anonymous_id == comment.postedby['_id']
             if id_match or current_course.admin:
                 comment.content = args['content']
                 post.updatedDate = datetime.datetime.now()
@@ -224,7 +224,7 @@ class Comments(Resource):
             # Permission check
             comment = query.first()
             id_match = current_user._id == comment.postedby[
-                '_id'] or current_user.anonymousId == comment.postedby['_id']
+                '_id'] or current_user.anonymous_id == comment.postedby['_id']
             if id_match or current_course.admin:
                 post.comments -= 1
                 post.save()

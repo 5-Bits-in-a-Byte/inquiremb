@@ -5,7 +5,7 @@ User:
       type: string
       description: Unique user identifier
       example: abcde12345
-    anonymousId:
+    anonymous_id:
       type: string
       description: Secondary unique user identifier
       example: d1e2f3g4h5

@@ -21,7 +21,7 @@ from bson.objectid import ObjectId
 
 class User(MongoModel):
     _id = fields.CharField(primary_key=True)
-    anonymousId = fields.CharField(required=True, default=ObjectId)
+    anonymous_id = fields.CharField(required=True, default=ObjectId)
     email = fields.EmailField(blank=True)
     first = fields.CharField(default="Nofirstgiven", blank=True)
     last = fields.CharField(default="Nolastgiven", blank=True)
@@ -40,7 +40,7 @@ class User(MongoModel):
         connection_alias = 'my-app'
 
         indexes = [pymongo.IndexModel([('_id', pymongo.ASCENDING)]), pymongo.IndexModel([
-            ('anonymousId', pymongo.ASCENDING)], unique=True)]
+            ('anonymous_id', pymongo.ASCENDING)], unique=True)]
 
 
 class UserCourse(EmbeddedMongoModel):

@@ -102,6 +102,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
         # Wrapping flask app in socketio wrapper
         from socketio_app import io
         io.init_app(app)
+        app.socketio = io
         return io, app
     else:
         return app
@@ -109,4 +110,5 @@ def create_app(override_config=None, testing=False, include_socketio=True):
 
 if __name__ == '__main__':
     io, app = create_app()
+    print("id: ", id(io))
     io.run(app, host="0.0.0.0", debug=False, log_output=True)

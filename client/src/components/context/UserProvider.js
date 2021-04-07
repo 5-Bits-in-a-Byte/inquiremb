@@ -6,7 +6,7 @@ const UserDispatchContext = createContext(undefined);
 /* USER CONTEXT
 {
   "_id": "115987172556120960410",
-  "anonymousId": "7hzfKLnMhjCZn8UtjKJXGJy",
+  "anonymous_id": "7hzfKLnMhjCZn8UtjKJXGJy",
   "email": "user.email@email.com",
   "first": "First Name",
   "last": "Last Name",

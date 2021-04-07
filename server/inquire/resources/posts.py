@@ -7,7 +7,7 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
-from flask import jsonify, request
+from flask import jsonify, request, current_app
 from flask_restful import reqparse, Resource
 from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
@@ -75,7 +75,7 @@ class Posts(Resource):
         anonymous = args['isAnonymous']
         if anonymous:
             postedby = {"first": "Anonymous", "last": "",
-                        "_id": current_user.anonymousId, "anonymous": anonymous}
+                        "_id": current_user.anonymous_id, "anonymous": anonymous}
         else:
             postedby = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
@@ -87,7 +87,7 @@ class Posts(Resource):
         # Get the JSON format
         result = self.serialize(post)
         if not result['isPrivate']:
-            io.emit('Post/create', result, room=course_id)
+            current_app.socketio.emit('Post/create', result, room=course_id)
         return result, 200
 
     def get(self, course_id=None):
@@ -156,7 +156,7 @@ class Posts(Resource):
         # Filter by 'me'
         elif filterby == 'me':
             queryParams["postedby._id"] = {
-                '$in': [current_user._id, current_user.anonymousId]}
+                '$in': [current_user._id, current_user.anonymous_id]}
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
         # Filter by 'myupvoted'
@@ -178,7 +178,7 @@ class Posts(Resource):
         # If the current user cannot see private posts and there is a search
         elif (not current_course.seePrivate) and (req is not None):
             queryParams['$or'] = [{'isPrivate': False}, {'postedby._id': {
-                '$in': [current_user._id, current_user.anonymousId]}}]
+                '$in': [current_user._id, current_user.anonymous_id]}}]
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
                 [('isPinned', -1), ('createdDate', sort_date)])
@@ -186,7 +186,7 @@ class Posts(Resource):
         # If the current user cannot see private posts and there is not a search
         else:
             queryParams["$or"] = [{'isPrivate': False}, {'postedby._id': {
-                '$in': [current_user._id, current_user.anonymousId]}}]
+                '$in': [current_user._id, current_user.anonymous_id]}}]
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
 
@@ -260,7 +260,7 @@ class Posts(Resource):
             # Get the current course
             current_course = current_user.get_course(course_id)
             # Permission check
-            if current_user._id == post.postedby['_id'] or current_user.anonymousId == post.postedby['_id'] or current_course.admin:
+            if current_user._id == post.postedby['_id'] or current_user.anonymous_id == post.postedby['_id'] or current_course.admin:
                 # Delete the post
                 post.delete()
                 return {'deleted': True}, 200
@@ -325,7 +325,7 @@ class Posts(Resource):
         elif count == 1:
             post = query.first()
             id_match = current_user._id == post.postedby[
-                '_id'] or current_user.anonymousId == post.postedby['_id']
+                '_id'] or current_user.anonymous_id == post.postedby['_id']
             if id_match or current_course.admin:
                 post.title = args['title']
                 post.content = args['content']
