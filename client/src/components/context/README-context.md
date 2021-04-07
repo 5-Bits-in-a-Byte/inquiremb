@@ -7,7 +7,7 @@ This folder contains a single file pertaining to the use of the User context for
 ```json
 {
   "_id": "115987172556120960410",
-  "anonymous_id": "7hzfKLnMhjCZn8UtjKJXGJy",
+  "anonymousId": "7hzfKLnMhjCZn8UtjKJXGJy",
   "email": "user.email@email.com",
   "first": "First Name",
   "last": "Last Name",

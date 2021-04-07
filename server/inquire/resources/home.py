@@ -47,7 +47,7 @@ class Home(Resource):
 
         # Only showing private posts or posts you've created added to query params
         queryParams["$or"] = [{'isPrivate': False}, {'postedby._id': {
-            '$in': [current_user._id, current_user.anonymous_id]}}]
+            '$in': [current_user._id, current_user.anonymousId]}}]
 
         # Query for desired posts using query params, order them by most recent, and limit it to 20 posts
         query = Post.objects.raw(queryParams).order_by(

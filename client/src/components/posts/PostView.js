@@ -40,7 +40,7 @@ const PostView = ({ highlightedSection }) => {
       if (
         post &&
         post.postedby._id !== user._id &&
-        post.postedby._id !== user.anonymous_id
+        post.postedby._id !== user.anonymousId
       ) {
         setSocketPosts([post, ...socketPosts]);
       }

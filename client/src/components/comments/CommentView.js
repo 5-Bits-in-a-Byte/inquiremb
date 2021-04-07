@@ -67,7 +67,7 @@ const CommentView = ({ classroomName }) => {
       if (
         comment &&
         comment.postedby._id !== user._id &&
-        comment.postedby._id !== user.anonymous_id
+        comment.postedby._id !== user.anonymousId
       ) {
         console.log(commentData);
         setCommentData([

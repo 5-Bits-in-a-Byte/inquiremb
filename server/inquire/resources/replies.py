@@ -62,7 +62,7 @@ class Replies(Resource):
         anonymous = args['isAnonymous']
         if anonymous:
             postedby = {"first": "Anonymous", "last": "",
-                        "_id": current_user.anonymous_id, "anonymous": anonymous}
+                        "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
             postedby = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
@@ -142,7 +142,7 @@ class Replies(Resource):
 
         # Permissions check
         id_match = current_user._id == reply.postedby[
-            '_id'] or current_user.anonymous_id == reply.postedby['_id']
+            '_id'] or current_user.anonymousId == reply.postedby['_id']
         if id_match or current_course.admin:
             reply.content = args['content']
             comment.save()
@@ -219,7 +219,7 @@ class Replies(Resource):
 
         # Permission check
         id_match = current_user._id == reply.postedby[
-            '_id'] or current_user.anonymous_id == reply.postedby['_id']
+            '_id'] or current_user.anonymousId == reply.postedby['_id']
         if id_match or current_course.admin:
             comment.replies.remove(reply)
             comment.save()

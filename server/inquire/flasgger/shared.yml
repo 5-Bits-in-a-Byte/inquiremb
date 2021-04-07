@@ -20,7 +20,7 @@ PostedBy:
       example: Springel
     _id:
       type: string
-      description: _id or anonymous_id of user who posted the content
+      description: _id or anonymousId of user who posted the content
       example: abcde12345
     anonymous:
       type: boolean

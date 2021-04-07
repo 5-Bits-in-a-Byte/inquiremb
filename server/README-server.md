@@ -100,7 +100,7 @@ This component handles setting up all of our MongoDB models so that each collect
 ```json
 {
   "_id": "oasif-jo12j-asdjf-asdf9",
-  "anonymous_id": "cuk19-lzi91-soc01-cks83",
+  "anonymousId": "cuk19-lzi91-soc01-cks83",
   "picture": "https://google.com/users/images/aobidsl123",
   "first": "Alec",
   "last": "Springel",

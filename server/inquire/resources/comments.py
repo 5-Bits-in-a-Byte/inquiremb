@@ -88,7 +88,7 @@ class Comments(Resource):
         anonymous = args['isAnonymous']
         if anonymous:
             postedby = {"first": "Anonymous", "last": "",
-                        "_id": current_user.anonymous_id, "anonymous": anonymous}
+                        "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
             postedby = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
@@ -153,7 +153,7 @@ class Comments(Resource):
         elif count == 1:
             comment = query.first()
             id_match = current_user._id == comment.postedby[
-                '_id'] or current_user.anonymous_id == comment.postedby['_id']
+                '_id'] or current_user.anonymousId == comment.postedby['_id']
             if id_match or current_course.admin:
                 comment.content = args['content']
                 post.updatedDate = datetime.datetime.now()
@@ -224,7 +224,7 @@ class Comments(Resource):
             # Permission check
             comment = query.first()
             id_match = current_user._id == comment.postedby[
-                '_id'] or current_user.anonymous_id == comment.postedby['_id']
+                '_id'] or current_user.anonymousId == comment.postedby['_id']
             if id_match or current_course.admin:
                 post.comments -= 1
                 post.save()
