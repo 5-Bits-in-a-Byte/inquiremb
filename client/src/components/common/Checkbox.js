@@ -3,6 +3,15 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import Checkmark from "./Checkmark";
 
+/** Checkbox Component
+ * A simple generic checkbox component to be used project wide where necessary.
+ *
+ * @param {string} checkboxName the name for this checkbox.
+ * @param {string} labelText the text displayed with the checkbox.
+ * @param {function} onChange the event handler for state change of the checkbox.
+ * @param {bool} checkStatus holds the check status of the box.
+ * @returns A simple checkbox component.
+ */
 const Checkbox = ({ checkboxName, labelText, onChange, checkStatus }) => {
   return (
     <Wrapper>

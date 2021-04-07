@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 
+/** CommentTextBox component
+ * Styled textbox to hold plain text. Is styled to fit sitewide conventions
+ *
+ * @param {object} props holds all of the passed in properties of this component.
+ * @returns A textbox styled to match project wide style conventions. Holds plain text.
+ */
 class CommentTextBox extends Component {
   constructor(props) {
     super(props);

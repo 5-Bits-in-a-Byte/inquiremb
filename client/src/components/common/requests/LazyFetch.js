@@ -1,5 +1,16 @@
 import axios from "axios";
 
+/** LazyFetch Function
+ * A wrapper function for lazy fetching with axios.
+ *
+ * @param {string} type the axios type for this fetch.
+ * @param {string} url the url to fetch from.
+ * @param {string} endpoint the endpoint.
+ * @param {object} data json object with data?
+ * @param {function} onSuccess function handler for successful fetch.
+ * @param {function} onFailure function handler for unsuccesful fetch.
+ * @returns void
+ */
 const LazyFetch = ({
   type,
   url = process.env.REACT_APP_SERVER_URL,

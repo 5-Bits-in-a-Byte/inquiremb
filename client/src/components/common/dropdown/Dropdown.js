@@ -3,6 +3,12 @@ import styled, { css } from "styled-components";
 import ClickAway from "./ClickAway";
 import DropdownOption from "./DropdownOption";
 
+/** Dropdown Component
+ * A simple generic dropdown that holds DropdownOption components
+ *
+ * @param {object} props holds all of the passed in properties for this component
+ * @returns A dropdown list of "Dropdown" Options
+ */
 const Dropdown = (props) => {
   const [open, toggle] = useState(false);
   return (

@@ -1,6 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
+/** DropdownOption Component
+ * A simple contained clickable label acting an an option in a dropdown list of items.
+ *
+ * @param {object} props holds all of the props passed into this component.
+ * @returns An object representing an option of a simple dropdown menu.
+ */
 const DropdownOption = (props) => {
   return (
     <Option {...props}>
