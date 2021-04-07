@@ -94,7 +94,7 @@ class Post(MongoModel):
 
 
 class Comment(MongoModel):
-    post_id = fields.CharField(required=True)
+    postId = fields.CharField(required=True)
     content = fields.CharField(required=True, default="")
     postedBy = fields.DictField()
     endorsed = fields.BooleanField(default=False)

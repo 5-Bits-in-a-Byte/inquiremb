@@ -52,7 +52,7 @@ This component handles setting up all of our MongoDB models so that each collect
 ```json
 {
   "_id": "oasif-jo12j-asdjf-asdf9",
-  "post_id": "oasif-jo12j-asdjf-asdf9",
+  "postId": "oasif-jo12j-asdjf-asdf9",
   "content": "Your question is stupid",
   "postedBy": {
     "first": "Alec",

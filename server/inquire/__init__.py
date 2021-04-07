@@ -94,9 +94,9 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     api.add_resource(Home, '/home')
     api.add_resource(Posts, '/courses/<string:courseId>/posts')
     api.add_resource(
-        Comments, '/posts/<string:post_id>/comments')
+        Comments, '/posts/<string:postId>/comments')
     api.add_resource(
-        Replies, '/posts/<string:post_id>/comments/<string:comment_id>/replies')
+        Replies, '/posts/<string:postId>/comments/<string:comment_id>/replies')
     api.add_resource(Join, '/join')
     if include_socketio:
         # Wrapping flask app in socketio wrapper

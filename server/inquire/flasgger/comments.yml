@@ -2,7 +2,7 @@ Comment:
   type: object
   description: Comment on a post
   properties:
-    post_id:
+    postId:
       required: true
       type: string
       description: Id of the parent post

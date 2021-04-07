@@ -15,7 +15,7 @@ from inquire.socketio_app import io
 
 
 class Replies(Resource):
-    def post(self, post_id=None, comment_id=None):
+    def post(self, postId=None, comment_id=None):
         """
         Creates a new reply
         ---
@@ -24,7 +24,7 @@ class Replies(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - in: path
             description: Id of a comment
@@ -45,7 +45,7 @@ class Replies(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
         if post is None:
             return abort(400, errors=["Bad post id"])
         parser = reqparse.RequestParser()
@@ -80,10 +80,10 @@ class Replies(Resource):
         post.save()
         result = self.serialize(reply)
         current_app.socketio.emit(
-            'Reply/create', self.serialize(comment), room=post_id)
+            'Reply/create', self.serialize(comment), room=postId)
         return result, 200
 
-    def put(self, post_id=None, comment_id=None):
+    def put(self, postId=None, comment_id=None):
         """
         Updates a reply
         ---
@@ -92,7 +92,7 @@ class Replies(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - in: path
             description: Id of a comment
@@ -113,7 +113,7 @@ class Replies(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
 
         # Parse the request
         parser = reqparse.RequestParser()
@@ -149,7 +149,7 @@ class Replies(Resource):
             result = self.serialize(comment)
             return result, 200
 
-    def delete(self, post_id=None, comment_id=None):
+    def delete(self, postId=None, comment_id=None):
         """
         Deletes a reply
         ---
@@ -158,7 +158,7 @@ class Replies(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - in: path
             description: Id of a comment
@@ -193,7 +193,7 @@ class Replies(Resource):
                   type: bool
                   example: False
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
 
         # Grabbing comment id
         parser = reqparse.RequestParser()
@@ -233,8 +233,8 @@ class Replies(Resource):
             errors.append("Please give your comment content")
         return errors
 
-    def retrieve_post(self, post_id):
-        query = Post.objects.raw({'_id': post_id})
+    def retrieve_post(self, postId):
+        query = Post.objects.raw({'_id': postId})
         count = query.count()
         if count == 1:
             return query.first()
@@ -242,7 +242,7 @@ class Replies(Resource):
             return None
         else:
             raise Exception(
-                f'Multiple posts with the same id found, id: {post_id}')
+                f'Multiple posts with the same id found, id: {postId}')
 
     def retrieve_comment(self, comment_id):
         _id = ObjectId(comment_id)

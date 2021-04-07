@@ -16,14 +16,14 @@ from inquire.socketio_app import io
 
 
 class Comments(Resource):
-    def get(self, post_id=None):
+    def get(self, postId=None):
         """
         Retrieves all the comments responding to a specific post
         ---
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
         tags:
           - Comments         
@@ -38,13 +38,13 @@ class Comments(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
         if post is None:
             return abort(400, errors=["Bad post id"])
 
-        return [self.serialize(comment) for comment in Comment.objects.raw({'post_id': post_id})]
+        return [self.serialize(comment) for comment in Comment.objects.raw({'postId': postId})]
 
-    def post(self, post_id=None):
+    def post(self, postId=None):
         """
         Creates a new comment
         ---
@@ -53,7 +53,7 @@ class Comments(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - name: body
             in: body
@@ -71,7 +71,7 @@ class Comments(Resource):
               $ref: '#/definitions/400Response'
         """
         print("here")
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
         if post is None:
             return abort(400, errors=["Bad post id"])
         parser = reqparse.RequestParser()
@@ -94,7 +94,7 @@ class Comments(Resource):
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add post to MongoDB
-        comment = Comment(post_id=post_id, postedBy=postedBy,
+        comment = Comment(postId=postId, postedBy=postedBy,
                           content=args.content).save()
 
         # Incrementing post comment count, updating date
@@ -102,10 +102,10 @@ class Comments(Resource):
         post.comments += 1
         post.save()
         result = self.serialize(comment)
-        current_app.socketio.emit('Comment/create', result, room=post_id)
+        current_app.socketio.emit('Comment/create', result, room=postId)
         return result, 200
 
-    def put(self, post_id=None):
+    def put(self, postId=None):
         """
         Updates a comment
         ---
@@ -114,7 +114,7 @@ class Comments(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - name: body
             in: body
@@ -131,7 +131,7 @@ class Comments(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
 
         parser = reqparse.RequestParser()
         parser.add_argument('content')
@@ -164,7 +164,7 @@ class Comments(Resource):
         else:
             raise Exception(f'No comment with id')
 
-    def delete(self, post_id=None):
+    def delete(self, postId=None):
         """
         Deletes a comment
         ---
@@ -173,7 +173,7 @@ class Comments(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - name: body
             in: body
@@ -204,7 +204,7 @@ class Comments(Resource):
                   type: bool
                   example: False
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
         args = parser.parse_args()
@@ -241,8 +241,8 @@ class Comments(Resource):
             errors.append("Please give your comment content")
         return errors
 
-    def retrieve_post(self, post_id):
-        query = Post.objects.raw({'_id': post_id})
+    def retrieve_post(self, postId):
+        query = Post.objects.raw({'_id': postId})
         count = query.count()
         if count == 1:
             return query.first()
@@ -250,7 +250,7 @@ class Comments(Resource):
             return None
         else:
             raise Exception(
-                f'Multiple posts with the same id found, id: {post_id}')
+                f'Multiple posts with the same id found, id: {postId}')
 
     def serialize(self, comment):
         d = comment.to_son().to_dict()
