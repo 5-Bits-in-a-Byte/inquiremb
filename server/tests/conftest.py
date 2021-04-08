@@ -7,6 +7,7 @@ import pytest
 from flask import make_response, request
 from inquire import create_app
 import inquire.config as config
+import inquire.mongo
 from inquire.auth import create_user, encode_jwt
 import os
 
@@ -38,7 +39,11 @@ def test_user():
 def app():
     """Create and configure a new app instance for each test."""
     app = create_app(override_config=config, include_socketio=False)
-    print(app.config['TESTING'])
+    # Wiping the database between tests
+    app.db['user'].drop()
+    app.db['course'].drop()
+    app.db['post'].drop()
+    app.db['comment'].drop()
 
     @app.route('/test_user_login', methods=["POST"])
     def test_user_login():
