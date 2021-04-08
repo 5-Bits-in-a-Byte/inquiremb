@@ -40,8 +40,11 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     else:
         app.config.from_object(config)
 
-    from pymodm.connection import connect
-    connect(app.config['MONGO_URI'], alias="my-app")
+    import pymodm.connection
+    pymodm.connection.connect(app.config['MONGO_URI'], alias="my-app")
+    # Direct reference to db connection, used during testing to reset database between tests
+    if app.config['TESTING']:
+        app.db = pymodm.connection._get_db('my-app')
 
     # Importing blueprints
     from inquire.auth import auth_routes
@@ -70,16 +73,6 @@ def create_app(override_config=None, testing=False, include_socketio=True):
         client_kwargs={'scope': 'read:user user:email'},
     )
     from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home
-    # # Import API resources here:
-    # from resources.demo import Demo
-    # from resources.me import Me
-    # from resources.courses import Courses
-    # from resources.posts import Posts
-    # from resources.comments import Comments
-    # from resources.replies import Replies
-    # from resources.join import Join
-    # from resources.reactions import Reactions
-    # from resources.home import Home
 
     api = Api(app, prefix="/api")
 
@@ -110,5 +103,4 @@ def create_app(override_config=None, testing=False, include_socketio=True):
 
 if __name__ == '__main__':
     io, app = create_app()
-    print("id: ", id(io))
     io.run(app, host="0.0.0.0", debug=False, log_output=True)
