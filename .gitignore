@@ -112,6 +112,7 @@ server/flask
 server/export_env.sh
 server/env.sh
 server/env-test.sh
+server/tests/test-output.xml
 
 #vscode
 **.vscode

@@ -36,7 +36,7 @@ def app():
     @ app.route('/test_user_login', methods=["POST"])
     def test_user_login():
         user = request.get_json()
-        create_user(user)
+        # create_user(user)
         resp = make_response("test user logged in")
         resp.set_cookie(
             'userID', value=encode_jwt({'_id': user['sub']}), httponly=True, max_age=60)
