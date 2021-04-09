@@ -12,6 +12,7 @@ from pymodm.connection import connect
 from inquire.auth import create_user, encode_jwt
 import os
 
+from comments_fixture import test_comments
 from posts_fixture import test_posts
 from users_fixture import test_users
 from courses_fixture import test_courses
@@ -36,7 +37,7 @@ def app():
     @ app.route('/test_user_login', methods=["POST"])
     def test_user_login():
         user = request.get_json()
-        # create_user(user)
+        create_user(user)
         resp = make_response("test user logged in")
         resp.set_cookie(
             'userID', value=encode_jwt({'_id': user['sub']}), httponly=True, max_age=60)
@@ -52,7 +53,7 @@ def app():
 
 
 @ pytest.fixture
-def db(app, test_users, test_courses, test_posts):
+def db(app, test_users, test_courses, test_posts, test_comments):
     # Wiping the database between tests
     app.db['user'].drop()
     app.db['course'].drop()
@@ -70,6 +71,10 @@ def db(app, test_users, test_courses, test_posts):
 
     # Adding Post Objects
     id_dict['post_ids'] = [Post(**post).save()._id for post in test_posts]
+
+    # Adding Comment Objects
+    id_dict['comment_ids'] = [
+        Comment(**comment).save()._id for comment in test_comments]
 
     add_user_courses(id_dict['course_ids'], test_users, test_courses)
 
