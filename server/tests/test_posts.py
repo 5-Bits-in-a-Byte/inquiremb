@@ -1,4 +1,4 @@
-""" Contains tests for the Post resource """
+""" Contains tests for the Posts resource """
 import pytest
 
 
