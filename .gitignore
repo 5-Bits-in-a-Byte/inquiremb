@@ -108,6 +108,7 @@ dist
 server/flask
 server/export_env.sh
 server/env.sh
+server/inquire_backend.egg-info/
 
 #vscode
 **.vscode
