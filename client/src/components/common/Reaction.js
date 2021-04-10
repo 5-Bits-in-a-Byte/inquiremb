@@ -6,7 +6,7 @@ import { UserContext } from "../context/UserProvider";
 import LazyFetch from "./requests/LazyFetch";
 
 /**
- * Intented to be used above "Input" components to label them
+ * Intended to be used above "Input" components to label them
  */
 const Reaction = ({ reactions, type, id, postid }) => {
   const user = useContext(UserContext);
@@ -52,20 +52,20 @@ const Reaction = ({ reactions, type, id, postid }) => {
 
   return (
     <>
-      <Icon
+      <ReactImg
         src={reactClicked.liked ? LikedImg : UnlikedImg}
         onClick={handleLike}
         clicked={reactClicked.liked}
         postid={postid}
       />
-      <IconValue>{reactionState.likes.length}</IconValue>
+      <ReactValue>{reactionState.likes.length}</ReactValue>
     </>
   );
 };
 
 export default Reaction;
 
-const Icon = styled.img`
+const ReactImg = styled.img`
   float: left;
   width: 18px;
   height: 18px;
@@ -76,6 +76,6 @@ const Icon = styled.img`
   opacity: ${(props) => (!props.clicked && "100%") || "100%"};
 `;
 
-const IconValue = styled.h5`
+const ReactValue = styled.h5`
   color: #8c8c8c;
 `;
