@@ -4,6 +4,12 @@ import styled from "styled-components";
 import TopContent from "./TopContent";
 import CourseCard from "./CourseCard";
 
+/** generateCourseList (list)
+ * @brief Creates a list of CourseCards generated from the UserContext course list
+ *
+ * @param {list} userCourses the list of user courses from the UserContext
+ * @returns a list of CourseCard components
+ */
 const generateCourseList = (userCourses) => {
   let ret = [];
   userCourses.forEach((course, index) => {
@@ -20,10 +26,16 @@ const generateCourseList = (userCourses) => {
   return ret;
 };
 
+/** Courses Component
+ * @brief Contains the programmatically generated list of user course cards from the UserCourses list in the UserContext
+ *
+ * @returns Wrapper containing all generated user course components
+ */
 const Courses = () => {
   const user = useContext(UserContext);
   let currentCourseState = generateCourseList(user.courses);
   const [courseList, setCourseList] = useState(currentCourseState);
+
   // console.log(currentCourseState);
 
   return (

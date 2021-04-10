@@ -67,6 +67,10 @@ const generateSections = (data) => {
   return groups;
 };
 
+/** Home Component
+ * @brief The entire home page showcasing recent posts in user courses.
+ * @returns Home Component
+ */
 const Home = () => {
   let endpoint = "/api/home";
 

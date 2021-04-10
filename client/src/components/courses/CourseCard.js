@@ -6,6 +6,12 @@ import MessagesImg from "../../imgs/message-black.svg";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+/** Course Card
+ * @brief Component for displaying courses the user is a part of. Component is one of many courses
+ *
+ * @param props holds all of the properties for this component (contains: courseName, courseTerm, courseColor)
+ * @returns Course Card Component
+ */
 class CourseCard extends React.Component {
   constructor(props) {
     super(props);

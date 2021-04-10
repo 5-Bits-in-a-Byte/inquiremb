@@ -4,6 +4,13 @@ import Modal from "../common/Modal";
 import JoinConfirmation from "./joinCourse/JoinConfirmation";
 import JoinInfo from "./joinCourse/JoinInfo";
 
+/** JoinCourse
+ * @brief Overlay with modal background that allows the user to join a created course.
+ *
+ * @param {list} courseList React state variable containing list of CourseCards
+ * @param {function} setCourseList Method to update the courseList React State variable
+ * @returns JoinCourse component
+ */
 const JoinCourse = ({ courseList, setCourseList }) => {
   const [modalIsShown, toggleModal] = useState(false);
   const [course, joinCourse] = useState(null);
