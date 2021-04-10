@@ -40,6 +40,8 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     else:
         app.config.from_object(config)
 
+    app.config['include_socketio'] = include_socketio
+
     import pymodm.connection
     pymodm.connection.connect(app.config['MONGO_URI'], alias="my-app")
     # Direct reference to db connection, used during testing to reset database between tests

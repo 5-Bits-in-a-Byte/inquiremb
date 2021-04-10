@@ -79,8 +79,9 @@ class Replies(Resource):
         post.updatedDate = datetime.datetime.now()
         post.save()
         result = self.serialize(reply)
-        current_app.socketio.emit(
-            'Reply/create', self.serialize(comment), room=postId)
+        if current_app.config['include_socketio']:
+            current_app.socketio.emit(
+                'Reply/create', self.serialize(comment), room=postId)
         return result, 200
 
     def put(self, postId=None, comment_id=None):
