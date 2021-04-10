@@ -5,10 +5,11 @@ import { useParams } from "react-router-dom";
 import DraftTextArea from "../common/DraftTextArea";
 import { UserContext } from "../context/UserProvider";
 import { useHistory } from "react-router-dom";
-import PostReactions from "./PostReactions";
+import Reaction from "../common/Reaction";
 import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
 import InstructorIcon from "../../imgs/instructor.svg";
+import CommentImg from "../../imgs/comment.svg";
 import Checkbox from "../common/Checkbox";
 import Icon from "../common/Icon";
 
@@ -81,7 +82,28 @@ const generatePostContent = (
       isPinned: post.isPinned,
       picture: post.postedby.picture,
       postedby: post.postedby.first + " " + post.postedby.last,
-      meta: <PostReactions post={post} postid={postid} />,
+      meta: (
+        <>
+          <Reaction
+            reactions={post.reactions}
+            type="post"
+            id={post._id}
+            postid={postid}
+          />
+          <Icon
+            alt={"Number of comments"}
+            src={CommentImg}
+            width={"18px"}
+            style={{
+              float: "left",
+              "margin-right": "8px",
+              "margin-left": "20px",
+              "user-select": "none",
+            }}
+          />
+          <h5 style={{ color: "#8c8c8c" }}>{post.comments}</h5>
+        </>
+      ),
     };
   }
 };
