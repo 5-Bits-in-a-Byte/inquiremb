@@ -290,13 +290,13 @@ def create_test_reply(client, endpoint):
 
     # Return None if an error occurred, otherwise return the reponse data
     if resp.status_code != 200:
-        return None
+        raise NameError(f"Response status code is {resp.status_code}, not 20")
     elif resp.status_code == 200:
         if resp.is_json:
             response_data = resp.get_json()
             return response_data
         else:
-            return None
+            raise NameError("Response type is not json")
 
 
 def general_checker(resp, comment_id, endpoint, data, func_name):

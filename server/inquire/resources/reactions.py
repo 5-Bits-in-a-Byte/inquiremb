@@ -133,3 +133,7 @@ class Reactions(Resource):
             # Save the changes to the comment
             comment.save()
             return {"reactions": {"likes": likes}}, 200
+
+        # No id handler
+        else:
+            return {"errors": ["No id provided"]}, 400
