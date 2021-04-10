@@ -5,6 +5,7 @@ import EditImg from "../../imgs/create-black.svg";
 import MessagesImg from "../../imgs/message-black.svg";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Icon from "../common/Icon";
 
 class CourseCard extends React.Component {
   constructor(props) {
@@ -23,16 +24,21 @@ class CourseCard extends React.Component {
     return (
       <AlignedDiv>
         <ColorDiv color={this.state.courseColor}>
-          <MessageDiv
-            onClick={() =>
-              alert(
-                "You clicked the Unread Messages icon for " +
-                  this.props.courseName +
-                  ".\nThis feature is a work in progress."
-              )
-            }
-          >
-            <img src={MessagesImg} alt="Messages" width="25em" />
+          <MessageDiv>
+            <Icon
+              fader
+              clickable
+              src={MessagesImg}
+              alt={"Messages"}
+              width={"25em"}
+              onClick={() =>
+                alert(
+                  "You clicked the Unread Messages icon for " +
+                    this.props.courseName +
+                    ".\nThis feature is a work in progress."
+                )
+              }
+            ></Icon>
             {this.state.numMsgs > 0 && this.state.numMsgs}
           </MessageDiv>
         </ColorDiv>
@@ -41,7 +47,12 @@ class CourseCard extends React.Component {
           <CourseTerm>{this.props.courseTerm}</CourseTerm>
         </CourseInfo>
         <CourseFooter>
-          <IconButton
+          <Icon
+            fader
+            clickable
+            src={EditImg}
+            alt={"Edit"}
+            width={"20em"}
             onClick={() =>
               alert(
                 "You clicked the Edit option for " +
@@ -49,10 +60,13 @@ class CourseCard extends React.Component {
                   ".\nThis feature is a work in progress."
               )
             }
-          >
-            <img src={EditImg} alt="Create" width="20em" />
-          </IconButton>
-          <IconButton
+          ></Icon>
+          <Icon
+            fader
+            clickable
+            src={SettingsImg}
+            alt={"Settings"}
+            width={"20em"}
             onClick={() =>
               alert(
                 "You clicked the Settings option for " +
@@ -60,9 +74,7 @@ class CourseCard extends React.Component {
                   ".\nThis feature is a work in progress."
               )
             }
-          >
-            <img src={SettingsImg} alt="Settings" width="20em" />
-          </IconButton>
+          ></Icon>
         </CourseFooter>
       </AlignedDiv>
     );
@@ -116,9 +128,6 @@ const MessageDiv = styled.p`
   font-size: 1.2em;
   font-weight: 300;
   color: #ffffff;
-  &:hover {
-    opacity: 50%;
-  }
 `;
 
 const CourseInfo = styled(Link)`
@@ -150,7 +159,7 @@ const CourseFooter = styled.footer`
   padding: 0 0 1em 1.4em;
   display: flex;
   justify-content: space-between;
-  width: 33%;
+  width: 28%;
 `;
 
 const IconButton = styled.button`

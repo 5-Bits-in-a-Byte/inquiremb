@@ -2,11 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 
-const Icon = ({ clickable, iconImg, onClick, altMsg, width, ...props }) => {
-  const clickHandler = clickable ? onClick : undefined;
+const Icon = ({ src, onClick, msg, width, ...props }) => {
+  const clickHandler = props.clickable ? onClick : undefined;
   return (
     <IconDiv {...props} onClick={clickHandler}>
-      <img src={iconImg} alt={altMsg} width={width} />
+      <img src={src} alt={msg} width={width} />
     </IconDiv>
   );
 };
@@ -16,6 +16,8 @@ Icon.propTypes = {
   fader: PropTypes.bool,
   /* Makes the icon width === 100% */
   autoWidth: PropTypes.bool,
+  /* Enables clicking */
+  clickable: PropTypes.bool,
 };
 
 export default Icon;
