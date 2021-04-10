@@ -71,15 +71,4 @@ const TabText = styled.h3`
     cursor: pointer;
   }
 `;
-
-//const Icon = styled.img`
-//  float: left;
-
-//  width: 18px;
-//  height: 18px;
-//  margin-right: 1em;
-//  margin-left: 0.75em;
-
-//  user-select: none;
-//`;
 //#endregion

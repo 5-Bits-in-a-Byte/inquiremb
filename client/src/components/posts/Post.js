@@ -10,6 +10,7 @@ import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
 import InstructorIcon from "../../imgs/instructor.svg";
 import Checkbox from "../common/Checkbox";
+import Icon from "../common/Icon";
 
 // Checks props to determine if the post is a draft, isPinned, etc.
 const generatePostContent = (
@@ -180,10 +181,11 @@ const Post = ({ post, isCondensed, isDraft }) => {
         <NameWrapper>
           {render.isInstructor && (
             <span title="Instructor">
-              <img
+              <Icon
                 src={InstructorIcon}
-                alt="instructor icon"
-                style={{ height: 20, marginRight: 6 }}
+                width={"20px"}
+                alt={"instructor icon"}
+                style={{ "margin-right": "6px" }}
               />
             </span>
           )}
