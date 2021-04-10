@@ -13,7 +13,7 @@ from bson.objectid import ObjectId
 def test_normal_reply_post(client, test_user, db):
     '''
     This tests for creating a normal reply.
-    Content is specified and it's not anonymous.
+    This should not return an error.
     '''
     client.post('/test_user_login', json=test_user)
 
@@ -36,7 +36,7 @@ def test_normal_reply_post(client, test_user, db):
 def test_anonymous_reply_post(client, test_user, db):
     '''
     This tests for creating an anonymous reply.
-    Content is specified and it is anonymous.
+    This should not return an error.
     '''
     client.post('/test_user_login', json=test_user)
 
@@ -59,7 +59,7 @@ def test_anonymous_reply_post(client, test_user, db):
 def test_no_content_reply_post(client, test_user, db):
     '''
     This tests for creating a reply with no content.
-    Content is not specified and the reply is not anonymous.
+    This should return an error.
     '''
     client.post('/test_user_login', json=test_user)
 
@@ -79,6 +79,14 @@ def test_no_content_reply_post(client, test_user, db):
 
 
 def post_checker(resp, data, errors, comment_id):
+    '''
+    This is the main function used for testing POST requests for replies.
+    It tests to make sure:
+        - anonymous posting works
+        - if a post is not anonymous that the name isn't anonymous somehow
+        - the content is not None
+        - the reply is added to the comment's list of replies
+    '''
     # Grab the JSON
     response_data = resp.get_json()
 
@@ -174,7 +182,6 @@ def put_checker(resp, data, errors, comment_id):
     '''
     This function is the main function used for testing PUT requests for replies.
     It tests to:
-        - make sure the correct response code is sent 
         - see if the content is updated
     '''
     # Grab the JSON
@@ -201,7 +208,7 @@ WE SHOULD ADD:
 
 def test_normal_reply_delete(client, test_user, db):
     '''
-    This tests for updating a reply normally.
+    This tests for deleting a reply normally.
     There should be no errors.
     '''
     client.post('/test_user_login', json=test_user)
@@ -214,11 +221,11 @@ def test_normal_reply_delete(client, test_user, db):
     # Make a test reply
     test_reply_data = create_test_reply(client, endpoint)
 
-    # Set up PUT request data
+    # Set up DELETE request data
     _id = test_reply_data['_id']
     data = {"_id": _id}
 
-    # Check the put request for errors
+    # Check the delete request for errors
     resp = client.delete(endpoint, json=data)
     errors = general_checker(resp, comment_id, endpoint, data, delete_checker)
     assert not errors
@@ -226,7 +233,7 @@ def test_normal_reply_delete(client, test_user, db):
 
 def test_no_id_reply_delete(client, test_user, db):
     '''
-    This tests for updating a reply but providing no content.
+    This tests for deleting a reply but providing no _id.
     A 400 error should happen here.
     '''
     client.post('/test_user_login', json=test_user)
@@ -239,10 +246,10 @@ def test_no_id_reply_delete(client, test_user, db):
     # Make a test reply
     test_reply_data = create_test_reply(client, endpoint)
 
-    # Set up PUT request data
+    # Set up DELETE request data
     data = {}
 
-    # Check the put request for errors
+    # Check the delete request for errors
     resp = client.delete(endpoint, json=data)
     errors = general_checker(resp, comment_id, endpoint, data, delete_checker)
     assert len(errors) == 1
@@ -250,10 +257,9 @@ def test_no_id_reply_delete(client, test_user, db):
 
 def delete_checker(resp, data, errors, comment_id):
     '''
-    This function is the main function used for testing PUT requests for replies.
+    This function is the main function used for testing DELETE requests for replies.
     It tests to:
-        - make sure the correct response code is sent 
-        - see if the content is updated
+        - make sure the reply was deleted
     '''
     # Grab the JSON
     response_data = resp.get_json()
@@ -297,10 +303,10 @@ def create_test_reply(client, endpoint):
 
 def general_checker(resp, comment_id, endpoint, data, func_name):
     '''
-    This function is the main function used for testing PUT requests for replies.
+    This function is the general response status and JSON checker.
     It tests to:
-        - make sure the correct response code is sent 
-        - see if the content is updated
+        - make sure the correct response status codes are sent
+        - make sure the response sends JSON
     '''
     errors = []
     if resp.status_code != 200:
