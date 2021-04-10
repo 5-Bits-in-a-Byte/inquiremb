@@ -1,8 +1,6 @@
-""" Contains tests for the Courses resource """
+""" Contains tests for the Reply resource """
 import pytest
-import json
 from inquire.mongo import *
-from bson.objectid import ObjectId
 
 
 # ===============================

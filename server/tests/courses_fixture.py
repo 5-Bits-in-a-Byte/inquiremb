@@ -13,6 +13,11 @@ def test_courses():
         "course": "Prof. Testy's Course",
         "canJoinById": True,
         "instructorID": "987654321",
+    }, "join_tester_course": {
+        "_id": "course3",
+        "course": "Rob's Course",
+        "canJoinById": True,
+        "instructorID": "10101010110",
     }
     }
     return courses

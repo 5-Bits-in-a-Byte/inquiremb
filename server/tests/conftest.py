@@ -115,6 +115,13 @@ def add_user_courses(course_ids, test_users, test_courses):
     # Adding different instructor UserCourse to Prof. Testy
     add_user_course(test_users[1]['_id'], instructor_user_course)
 
+    course_id = course_ids['join_tester_course']
+    course_name = test_courses['join_tester_course']['course']
+    instructor_user_course = create_user_course_json(
+        course_id, course_name, False)
+    # Adding instructor UserCourse to Rob
+    add_user_course(test_users[2]['_id'], instructor_user_course)
+
     course_id = course_ids['instructor_course']
     course_name = test_courses['instructor_course']['course']
     student_user_course = create_user_course_json(
