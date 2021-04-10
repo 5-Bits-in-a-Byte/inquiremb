@@ -70,7 +70,6 @@ class Comments(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        print("here")
         post = self.retrieve_post(postId)
         if post is None:
             return abort(400, errors=["Bad post id"])
@@ -102,7 +101,8 @@ class Comments(Resource):
         post.comments += 1
         post.save()
         result = self.serialize(comment)
-        current_app.socketio.emit('Comment/create', result, room=postId)
+        if current_app.config['include_socketio']:
+            current_app.socketio.emit('Comment/create', result, room=postId)
         return result, 200
 
     def put(self, postId=None):
@@ -142,7 +142,7 @@ class Comments(Resource):
         errors = self.validate_comment(args)
         if(bool(errors)):
             return {"errors": errors}, 400
-
+        courseId = post.courseId
         current_course = current_user.get_course(post.courseId)
         _id = ObjectId(args['_id'])
         query = Comment.objects.raw({'_id': _id})
@@ -161,6 +161,8 @@ class Comments(Resource):
                 post.save()
                 result = self.serialize(comment)
                 return result, 200
+            else:
+                return {"errors": ['Insufficient permission to edit comment']}, 400
         else:
             raise Exception(f'No comment with id')
 
@@ -205,6 +207,7 @@ class Comments(Resource):
                   example: False
         """
         post = self.retrieve_post(postId)
+        courseId = post.courseId
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
         args = parser.parse_args()
@@ -237,7 +240,7 @@ class Comments(Resource):
 
     def validate_comment(self, args):
         errors = []
-        if args.content is None:
+        if args.content is None or len(args.content) == 0:
             errors.append("Please give your comment content")
         return errors
 
