@@ -2,6 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+/** MenuItem
+ * @brief Simple menu item component that routes to the main webpages of the webapp.
+ *
+ * @param {string} img Path to the icon used in the menu item
+ * @param {string} label Menu item text labeling the item
+ * @param {string} to Where to route. Goes into Link tag.
+ * @param {bool}   active sets the highlighted portion of the menu item based on evaluation of this bool
+ * @returns MenuItem Component
+ */
 const MenuItem = ({ img, label, to, active }) => {
   return (
     <Item active={active} data-testid={"menu-item-" + label}>

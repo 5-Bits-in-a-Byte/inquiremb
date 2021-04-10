@@ -7,6 +7,10 @@ import HomeImg from "../../imgs/home-white.svg";
 import CourseImg from "../../imgs/courses-white.svg";
 import MessagesImg from "../../imgs/messages-white.svg";
 
+/** LeftNavBar Component
+ * @brief Wrapper containing MenuItems routing the user to the main website pages
+ * @returns LeftNavBar component
+ */
 const LeftNavBar = () => {
   const location = useLocation();
   const active = location.pathname;

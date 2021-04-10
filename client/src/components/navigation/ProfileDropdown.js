@@ -4,9 +4,14 @@ import Arrow from "../../imgs/carrot-down-secondary.svg";
 import Dropdown from "../common/dropdown/Dropdown";
 import { UserContext } from "../context/UserProvider";
 
+/** ProfileDropdown Component
+ * @brief Dropdown container for link components for profile related tasks.
+ * @returns ProfileDropdown component
+ */
 const ProfileDropdown = () => {
   const user = useContext(UserContext);
 
+  /** @brief Wrapper for handling signout routing. */
   const handleSignOut = () => {
     const link = process.env.REACT_APP_SERVER_URL + "/logout";
     window.location.href = link;
