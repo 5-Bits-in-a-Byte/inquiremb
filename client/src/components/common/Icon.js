@@ -23,7 +23,7 @@ Icon.propTypes = {
 export default Icon;
 
 const IconDiv = styled.div`
-  cursor: ${(props) => (props.onClick === undefined ? "default" : "pointer")};
+  cursor: ${(props) => (props.onClick === undefined ? "inherit" : "pointer")};
   border: none;
   // padding: 9px 12px;
   // border-radius: 3px;
