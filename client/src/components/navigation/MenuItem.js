@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Icon from "../common/Icon";
 
 /** MenuItem
  * @brief Simple menu item component that routes to the main webpages of the webapp.
@@ -15,7 +16,7 @@ const MenuItem = ({ img, label, to, active }) => {
   return (
     <Item active={active} data-testid={"menu-item-" + label}>
       <Link to={to}>
-        <Icon src={img} />
+        <Icon fader src={img} />
         <Label>{label}</Label>
       </Link>
     </Item>
@@ -32,7 +33,7 @@ const Item = styled.li`
   border-radius: 3px;
 `;
 
-const Icon = styled.img``;
+//const Icon = styled.img``;
 
 const Label = styled.p`
   color: #fff;
