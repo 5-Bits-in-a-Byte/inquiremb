@@ -86,7 +86,7 @@ class Posts(Resource):
 
         # Get the JSON format
         result = self.serialize(post)
-        if not result['isPrivate']:
+        if not result['isPrivate'] and current_app.config['include_socketio']:
             current_app.socketio.emit('Post/create', result, room=courseId)
         return result, 200
 
