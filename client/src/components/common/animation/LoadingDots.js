@@ -1,6 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
+/** Dots Component
+ * An animation of divs bobbing up and down linearly.
+ *
+ * @param {number} size the number of dots in the loading animation.
+ * @param {string} color the color of the dots in the animation.
+ * @returns A wrapped linear series of circular divs that animate to indicate loading.
+ */
 const LoadingDots = ({ size = 8, color }) => {
   return (
     <Wrapper color={color}>

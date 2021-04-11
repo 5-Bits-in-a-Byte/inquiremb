@@ -1,6 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+/** Errors Component
+ * Componenet to display errors inside other components to the User.
+ *
+ * @param {array} errors array of strings containing error messages.
+ * @param {number} margin Styling margin for the text container.
+ * @returns Component with text describing an error.
+ */
 const Errors = ({ errors, margin }) => {
   //console.log(errors);
   if (!errors || errors.length < 1) {

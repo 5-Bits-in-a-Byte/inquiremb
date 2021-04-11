@@ -3,6 +3,14 @@ import FadeIn from "./animation/FadeIn";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
+/** Model Component
+ * Overlayed container that darkens and/or blurs out the background to display components on screen.
+ *
+ * @param {node} children holds children of the modal container.
+ * @param {function} close event handler called when the modal is closed.
+ * @param {object} props the rest of the properties for this component.
+ * @returns modal component.
+ */
 const Modal = ({ children, close, ...props }) => {
   return (
     <Background onClick={close} data-testid="modal-background">

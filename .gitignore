@@ -103,11 +103,15 @@ dist
 # TernJS port file
 .tern-port
 
+## Server folders
+**.egg-info
+
 ## Server files
 **/__pycache__
 server/flask
 server/export_env.sh
 server/env.sh
+server/env-test.sh
 
 #vscode
 **.vscode

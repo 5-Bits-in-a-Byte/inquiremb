@@ -1,11 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 import SearchImg from "../../imgs/search-gray.svg";
+import Icon from "../common/Icon";
 
+/** SearchBar Component
+ *
+ *
+ * @param {function} onChange event handler called when the textfield changes.
+ * @param {string} placeholder placeholder text in the search textfield
+ * @returns
+ */
 const SearchBar = ({ onChange, placeholder }) => {
   return (
     <SearchDiv className="secondary-btn flex-row">
-      <Icon src={SearchImg} />
+      <Icon
+        src={SearchImg}
+        style={{
+          height: "16px",
+          padding: "0 7px 0 11px",
+          "border-right": "1px solid #818181",
+        }}
+      />
       <TextInput type="text" onChange={onChange} placeholder={placeholder} />
     </SearchDiv>
   );
@@ -22,12 +37,6 @@ const SearchDiv = styled.div`
   &:focus-within {
     box-shadow: 0 0 0px 0.4px #818181;
   }
-`;
-
-const Icon = styled.img`
-  height: 16px;
-  padding: 0 7px 0 11px;
-  border-right: 1px solid #818181;
 `;
 
 const TextInput = styled.input`

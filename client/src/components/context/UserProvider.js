@@ -11,11 +11,17 @@ const UserDispatchContext = createContext(undefined);
   "first": "First Name",
   "last": "Last Name",
   "picture": "url to the user profile image",
-  "courses": [],
+  "courses": [list of user course resources],
   "_cls": "mongo.User"
 }
 */
 
+/** UserProvider
+ * Creates a user data DOM to get information about the user.
+ *
+ * @param {node} children Uncertain what this actually does... TODO: figure that out?
+ * @returns UserContext DOM to interface with user related data.
+ */
 function UserProvider({ children }) {
   const [userDetails, setUserDetails] = useState(null);
 

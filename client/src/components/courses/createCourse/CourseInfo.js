@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import Select from "../../common/Select";
-import axios from "axios";
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 import InputLabel from "../../common/InputLabel";
 import styled from "styled-components";
 import Errors from "../../common/Errors";
 import { UserContext, UserDispatchContext } from "../../context/UserProvider";
+import LazyFetch from "../../common/requests/LazyFetch";
 
 const INVITE_OPTIONS = [
   {
@@ -21,7 +21,6 @@ const CourseInfo = ({ setCourse }) => {
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
   const [form, setForm] = useState({
-    // university: null,
     course: null,
     canJoinById: true,
     loading: false,
@@ -35,36 +34,23 @@ const CourseInfo = ({ setCourse }) => {
     });
   };
 
-  // const selectUniversity = (option) => {
-  //   setForm({
-  //     ...form,
-  //     university: option.value,
-  //   });
-  // };
-
   const sendCourseRequest = () => {
     setForm({ ...form, loading: true });
     setTimeout(() => {
-      const endpoint = "/api/courses";
-      const data = {
-        // university: form.university,
-        course: form.course,
-        canJoinById: form.canJoinById,
-      };
-      axios
-        .post(process.env.REACT_APP_SERVER_URL + endpoint, data, {
-          withCredentials: true,
-        })
-        .then((res) => {
+      LazyFetch({
+        type: "post",
+        endpoint: "/api/courses",
+        data: { course: form.course, canJoinById: form.canJoinById },
+        onSuccess: (data) => {
           let userCopy = user;
-          console.log(userCopy, "user before update");
-          console.log(res.data, "request data");
-          userCopy.courses.push(res.data);
-          console.log(userCopy, "user after update");
+          // console.log(userCopy, "user before update");
+          // console.log(data, "request data");
+          userCopy.courses.push(data);
+          // console.log(userCopy, "user after update");
           setUser(userCopy);
-          setCourse(res.data);
-        })
-        .catch((err) => {
+          setCourse(data);
+        },
+        onFailure: (err) => {
           if (err.response && err.response.data) {
             // Set the errors provided by our API request
             console.log(err.response.data.errors);
@@ -82,7 +68,8 @@ const CourseInfo = ({ setCourse }) => {
               ],
             });
           }
-        });
+        },
+      });
     }, 1000);
   };
 
@@ -98,14 +85,7 @@ const CourseInfo = ({ setCourse }) => {
             onChange={handleChange}
           />
         </LeftColumn>
-        <RightColumn className="flex-col">
-          {/* <InputLabel>University Name</InputLabel>
-          <Select
-            placeholder="Select your university"
-            options={[{ label: "test", value: "test" }]}
-            onChange={selectUniversity}
-          /> */}
-        </RightColumn>
+        <RightColumn className="flex-col"></RightColumn>
       </TopSection>
       <HighlightedSection className="flex-row">
         <LeftColumn className="flex-col flex-1">

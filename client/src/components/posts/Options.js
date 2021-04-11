@@ -1,8 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
 
+/**
+ * Options Component ~ Button side panel for displaying buttons for the user
+ *
+ * @param {string} courseid given to the "+ New Post" button to route to the Post form page
+ */
 const Options = ({ courseid }) => {
   return (
     <OptionsWrapper>
@@ -16,15 +22,14 @@ const Options = ({ courseid }) => {
             + New Post
           </Button>
         </Link>
-        {/* <OptionsButton buttonText={"Message Instructor"} isPrimary={false} />
-        <OptionsButton buttonText={"Do a thing"} isPrimary={false} />
-        <OptionsButton buttonText={"Do another thing"} isPrimary={false} /> */}
       </OptionsPanel>
     </OptionsWrapper>
   );
 };
 
-Options.propTypes = {};
+Options.propTypes = {
+  courseid: PropTypes.string,
+};
 
 export default Options;
 

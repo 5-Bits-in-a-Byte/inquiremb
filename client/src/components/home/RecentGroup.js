@@ -2,6 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
+/** RecentGroup Component
+ * @brief A grouping of most recent posts from a given course id
+ *
+ * @param {list} postList list of posts and thier data associated with this course group
+ * @param {string} nameColor (deprecated) the color applied to the name of the course
+ * @param {string} classroomName the name of the course this group is associated with
+ * @returns RecentGroup component
+ */
 const RecentGroup = ({ postList, classroomName, nameColor }) => {
   return (
     <Wrapper barColor={nameColor}>

@@ -143,13 +143,6 @@ const MarginLeftRight = {
 };
 
 const PostFeed = styled.div`
-  /* overflow: scroll; */
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  // border: 1px solid orange;
-  flex-grow: 1; */
-  /* max-width: 900px; */
   width: 100%;
   position: relative;
   display: flex;
@@ -162,10 +155,6 @@ const ScrollingDiv = styled.div`
   width: 100%;
   padding: 0 40px;
   overflow: auto;
-  //::-webkit-scrollbar {
-  //width: 0; /* Remove scrollbar space */
-  //background: transparent; /* Optional: just make scrollbar invisible */
-  //}
 `;
 
 const CenterWrapper = styled.div`

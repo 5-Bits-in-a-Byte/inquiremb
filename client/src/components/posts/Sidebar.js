@@ -4,7 +4,6 @@ import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import UserImg from "../../imgs/user.svg";
 import { UserContext } from "../context/UserProvider";
-import BookmarkImg from "../../imgs/bookmark.svg";
 import GlassesImg from "../../imgs/glasses.svg";
 import NoteImg from "../../imgs/note.svg";
 import HeartImg from "../../imgs/heart.svg";
@@ -17,8 +16,6 @@ const Sidebar = ({ setHighlightedSection, highlightedSection }) => {
   var classroomID = useParams().courseid;
   var courseContext = useContext(UserContext).courses;
   var classroomName = " ";
-
-  console.log(courseContext, "COURSE CONTEXT");
 
   for (let temp in courseContext) {
     if (courseContext[temp].course_id === classroomID) {

@@ -3,6 +3,12 @@ import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 import LoadingDots from "./animation/LoadingDots";
 
+/**
+ * The one true button to rule them all
+ *
+ * @version 1.0.0
+ * @author [Alec Springel](https://github.com/alecspringel)
+ */
 const Button = ({ children, loading, onClick, ...props }) => {
   const clickHandler = loading ? undefined : onClick;
   return (
@@ -71,4 +77,17 @@ const Btn = styled.button`
         background-color: #407df3;
       }
     `}
+
+  // If signin prop === true
+    ${(props) =>
+    props.signin &&
+    css`
+        background-color: transparent;
+        color: #fff;
+        width: 10%;
+        &:hover {
+          background-color: white;
+          opacity: 0.85;
+          color: black;
+      `}
 `;

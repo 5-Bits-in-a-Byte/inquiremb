@@ -1,24 +1,27 @@
-import axios from "axios";
 import React, { useContext } from "react";
 import styled from "styled-components";
 import Arrow from "../../imgs/carrot-down-secondary.svg";
 import Dropdown from "../common/dropdown/Dropdown";
 import { UserContext } from "../context/UserProvider";
-import DropdownOptions from "./DropdownOptions";
 
+/** ProfileDropdown Component
+ * @brief Dropdown container for link components for profile related tasks.
+ * @returns ProfileDropdown component
+ */
 const ProfileDropdown = () => {
   const user = useContext(UserContext);
 
-  const signOut = () => {
-    axios
-      .get(process.env.REACT_APP_SERVER_URL + "/logout")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+  /** @brief Wrapper for handling signout routing. */
+  const handleSignOut = () => {
+    const link = process.env.REACT_APP_SERVER_URL + "/logout";
+    window.location.href = link;
   };
+
+  const options = [{ onClick: handleSignOut, label: "Sign Out" }];
 
   return (
     <Wrapper>
-      <Dropdown content={<DropdownOptions />}>
+      <Dropdown options={options}>
         <DropdownWrapper className="flex-row align">
           <Name className="font-regular">
             {user.first} {user.last}

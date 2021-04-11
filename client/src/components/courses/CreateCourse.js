@@ -6,7 +6,14 @@ import CourseConfirmation from "./createCourse/CourseConfirmation";
 import CourseInfo from "./createCourse/CourseInfo";
 import CourseCard from "./CourseCard";
 
-const AddNewCourseToList = (newCourse, courseList) => {
+/** addNewCourseToList (object, list)
+ * @brief takes the new course info from the newCourse object and creates a course to append onto the courseList React State
+ *
+ * @param {object} newCourse object containing information needed to make a new course card
+ * @param {list} courseList the react state list containing all of the React CourseCards
+ * @returns new list of courseCards to be updated in React State
+ */
+const addNewCourseToList = (newCourse, courseList) => {
   // console.log("Course to add: ", newCourse);
   // console.log("Example from list: ", courseList[0]);
   // console.log("Before: ", "\nCourseList: ", courseList);
@@ -39,6 +46,13 @@ const AddNewCourseToList = (newCourse, courseList) => {
   return ret;
 };
 
+/** CreateCourse
+ * @brief Overlay with modal background that allows the user to create a new course.
+ *
+ * @param {list} courseList React state variable containing list of CourseCards
+ * @param {function} setCourseList Method to update the courseList React State variable
+ * @returns CreateCourse component
+ */
 const CreateCourse = ({ courseList, setCourseList }) => {
   const [modalIsShown, toggleModal] = useState(false);
   // Course is set by the CourseInfo component when instructors create the course
@@ -70,7 +84,7 @@ const CreateCourse = ({ courseList, setCourseList }) => {
             <CourseConfirmation
               course={course}
               close={() => {
-                let newCourseList = AddNewCourseToList(course, courseList);
+                let newCourseList = addNewCourseToList(course, courseList);
                 setCourseList(newCourseList);
                 toggleModal(false);
                 setCourse(null);
@@ -84,5 +98,3 @@ const CreateCourse = ({ courseList, setCourseList }) => {
 };
 
 export default CreateCourse;
-
-const AnimationSlider = styled.div``;
