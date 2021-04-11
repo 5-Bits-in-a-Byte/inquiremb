@@ -5,8 +5,14 @@ import LikedImg from "../../imgs/like_blue.svg";
 import { UserContext } from "../context/UserProvider";
 import LazyFetch from "./requests/LazyFetch";
 
-/**
- * Intended to be used above "Input" components to label them
+/** Reaction Component
+ * @brief Intended to be used above "Input" components to label them
+ *
+ * @param {object} reactions Reactions object model from the backend.
+ * @param {string} type denotes the type of this reaction.
+ * @param {number} id the id associated with this reaction
+ * @param {number} postid id associated with the post this reaction falls within
+ * @returns Reaction Component
  */
 const Reaction = ({ reactions, type, id, postid }) => {
   const user = useContext(UserContext);
