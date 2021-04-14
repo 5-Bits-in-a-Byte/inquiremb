@@ -65,7 +65,7 @@ const JoinConfirmation = ({
       LazyFetch({
         type: "put",
         endpoint: "/api/join",
-        data: { course_id: course.course_id },
+        data: { courseId: course.courseId },
         onSuccess: (data) => {
           let newCourseList = AddNewCourseToList(data.course, courseList);
           if (newCourseList != null) setCourseList(newCourseList);
