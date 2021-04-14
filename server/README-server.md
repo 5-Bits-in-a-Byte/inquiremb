@@ -25,8 +25,8 @@ This component handles setting up all of our MongoDB models so that each collect
 ```json
 {
   "_id": "oasif-jo12j-asdjf-asdf9",
-  "courseid": "vonqJNDJ07yPyiagvKlR",
-  "postedby": {
+  "courseId": "vonqJNDJ07yPyiagvKlR",
+  "postedBy": {
     "first": "Alec",
     "last": "Springel",
     "_id": "oasif-jo12j-asdjf-asdf9",
@@ -52,9 +52,9 @@ This component handles setting up all of our MongoDB models so that each collect
 ```json
 {
   "_id": "oasif-jo12j-asdjf-asdf9",
-  "post_id": "oasif-jo12j-asdjf-asdf9",
+  "postId": "oasif-jo12j-asdjf-asdf9",
   "content": "Your question is stupid",
-  "postedby": {
+  "postedBy": {
     "first": "Alec",
     "last": "Springel",
     "_id": "oasif-jo12j-asdjf-asdf9",
@@ -107,8 +107,8 @@ This component handles setting up all of our MongoDB models so that each collect
   "email": "alecspringel@gmail.com",
   "courses": [
     {
-      "course_id": "oasif-jo12j-asdjf-asdf9",
-      "course_name": "CIS 210",
+      "courseId": "oasif-jo12j-asdjf-asdf9",
+      "courseName": "CIS 210",
       "nickname": null,
       "color": "#3e7aab",
       "canPost": true,

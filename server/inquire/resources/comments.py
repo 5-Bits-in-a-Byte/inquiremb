@@ -7,22 +7,23 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
-from flask import jsonify
+from flask import jsonify, current_app
 from flask_restful import Resource, abort, reqparse
-from auth import current_user, permission_layer
-from mongo import *
-from socketio_app import io
+
+from inquire.auth import current_user, permission_layer
+from inquire.mongo import *
+from inquire.socketio_app import io
 
 
 class Comments(Resource):
-    def get(self, post_id=None):
+    def get(self, postId=None):
         """
         Retrieves all the comments responding to a specific post
         ---
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
         tags:
           - Comments         
@@ -37,13 +38,13 @@ class Comments(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
         if post is None:
             return abort(400, errors=["Bad post id"])
 
-        return [self.serialize(comment) for comment in Comment.objects.raw({'post_id': post_id})]
+        return [self.serialize(comment) for comment in Comment.objects.raw({'postId': postId})]
 
-    def post(self, post_id=None):
+    def post(self, postId=None):
         """
         Creates a new comment
         ---
@@ -52,7 +53,7 @@ class Comments(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - name: body
             in: body
@@ -69,8 +70,7 @@ class Comments(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        print("here")
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
         if post is None:
             return abort(400, errors=["Bad post id"])
         parser = reqparse.RequestParser()
@@ -86,14 +86,14 @@ class Comments(Resource):
         # Adding user info to dict
         anonymous = args['isAnonymous']
         if anonymous:
-            postedby = {"first": "Anonymous", "last": "",
+            postedBy = {"first": "Anonymous", "last": "",
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
-            postedby = {"first": current_user.first, "last": current_user.last,
+            postedBy = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add post to MongoDB
-        comment = Comment(post_id=post_id, postedby=postedby,
+        comment = Comment(postId=postId, postedBy=postedBy,
                           content=args.content).save()
 
         # Incrementing post comment count, updating date
@@ -101,10 +101,11 @@ class Comments(Resource):
         post.comments += 1
         post.save()
         result = self.serialize(comment)
-        io.emit('Comment/create', result, room=post_id)
+        if current_app.config['include_socketio']:
+            current_app.socketio.emit('Comment/create', result, room=postId)
         return result, 200
 
-    def put(self, post_id=None):
+    def put(self, postId=None):
         """
         Updates a comment
         ---
@@ -113,7 +114,7 @@ class Comments(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - name: body
             in: body
@@ -130,7 +131,7 @@ class Comments(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
 
         parser = reqparse.RequestParser()
         parser.add_argument('content')
@@ -141,8 +142,8 @@ class Comments(Resource):
         errors = self.validate_comment(args)
         if(bool(errors)):
             return {"errors": errors}, 400
-
-        current_course = current_user.get_course(post.courseid)
+        courseId = post.courseId
+        current_course = current_user.get_course(post.courseId)
         _id = ObjectId(args['_id'])
         query = Comment.objects.raw({'_id': _id})
         count = query.count()
@@ -151,8 +152,8 @@ class Comments(Resource):
                 f'Duplicate comment detected, multiple comments in database with id {args["_id"]}')
         elif count == 1:
             comment = query.first()
-            id_match = current_user._id == comment.postedby[
-                '_id'] or current_user.anonymousId == comment.postedby['_id']
+            id_match = current_user._id == comment.postedBy[
+                '_id'] or current_user.anonymousId == comment.postedBy['_id']
             if id_match or current_course.admin:
                 comment.content = args['content']
                 post.updatedDate = datetime.datetime.now()
@@ -160,10 +161,12 @@ class Comments(Resource):
                 post.save()
                 result = self.serialize(comment)
                 return result, 200
+            else:
+                return {"errors": ['Insufficient permission to edit comment']}, 400
         else:
             raise Exception(f'No comment with id')
 
-    def delete(self, post_id=None):
+    def delete(self, postId=None):
         """
         Deletes a comment
         ---
@@ -172,7 +175,7 @@ class Comments(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - name: body
             in: body
@@ -203,7 +206,8 @@ class Comments(Resource):
                   type: bool
                   example: False
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
+        courseId = post.courseId
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
         args = parser.parse_args()
@@ -219,11 +223,11 @@ class Comments(Resource):
                 f'Duplicate comment detected, multiple comments in database with id {args["_id"]}')
         elif count == 1:
             # Get the current course
-            current_course = current_user.get_course(course_id)
+            current_course = current_user.get_course(courseId)
             # Permission check
             comment = query.first()
-            id_match = current_user._id == comment.postedby[
-                '_id'] or current_user.anonymousId == comment.postedby['_id']
+            id_match = current_user._id == comment.postedBy[
+                '_id'] or current_user.anonymousId == comment.postedBy['_id']
             if id_match or current_course.admin:
                 post.comments -= 1
                 post.save()
@@ -236,12 +240,12 @@ class Comments(Resource):
 
     def validate_comment(self, args):
         errors = []
-        if args.content is None:
+        if args.content is None or len(args.content) == 0:
             errors.append("Please give your comment content")
         return errors
 
-    def retrieve_post(self, post_id):
-        query = Post.objects.raw({'_id': post_id})
+    def retrieve_post(self, postId):
+        query = Post.objects.raw({'_id': postId})
         count = query.count()
         if count == 1:
             return query.first()
@@ -249,7 +253,7 @@ class Comments(Resource):
             return None
         else:
             raise Exception(
-                f'Multiple posts with the same id found, id: {post_id}')
+                f'Multiple posts with the same id found, id: {postId}')
 
     def serialize(self, comment):
         d = comment.to_son().to_dict()

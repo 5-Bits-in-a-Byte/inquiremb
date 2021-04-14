@@ -15,9 +15,10 @@ Steps:
 4. Check jwt on api requests
 5. lookup user using jwt details on api requests
 """
+from inquire.mongo import *
+from inquire.config import HS_256_KEY, CLIENT_URL
+
 from werkzeug.local import LocalProxy
-from mongo import *
-from config import HS_256_KEY, CLIENT_URL
 from functools import wraps
 import sys
 import logging
@@ -93,9 +94,9 @@ def permission_layer(required_permissions: list, require_login=True):
 
             errors = []
             # Getting the current course
-            course_id = kwargs.get('course_id')
-            if course_id or required_permissions:
-                course = current_user.get_course(course_id)
+            courseId = kwargs.get('courseId')
+            if courseId or required_permissions:
+                course = current_user.get_course(courseId)
                 if course is None:
                     errors.append(
                         "Resource access restricted: invalid course id")

@@ -44,7 +44,7 @@ return (
     {!isCondensed && <hr style={HRStyle} />}
     <PostMetaContentWrapper className="meta">
       {render.picture ? <UserIcon src={render.picture} /> : null}
-      <UserDescription>Posted by {render.postedby}</UserDescription>
+      <UserDescription>Posted by {render.postedBy}</UserDescription>
       <MetaIconWrapper>
         {render.isAnonymous}
         {render.isPrivate}

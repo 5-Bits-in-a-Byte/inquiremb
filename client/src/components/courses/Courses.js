@@ -15,9 +15,9 @@ const generateCourseList = (userCourses) => {
   userCourses.forEach((course, index) => {
     ret.push(
       <CourseCard
-        key={course.course_id}
-        id={course.course_id}
-        courseName={course.course_name}
+        key={course.courseId}
+        id={course.courseId}
+        courseName={course.courseName}
         courseTerm="Winter 2021"
         color={course.color || "#121212"}
       />

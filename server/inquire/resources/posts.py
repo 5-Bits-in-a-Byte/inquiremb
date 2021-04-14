@@ -7,18 +7,18 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
-from flask import jsonify, request
+from flask import jsonify, request, current_app
 from flask_restful import reqparse, Resource
-from auth import current_user, permission_layer
-from mongo import *
-from utils.argparser_types import str2bool
+from inquire.auth import current_user, permission_layer
+from inquire.mongo import *
+from inquire.utils.argparser_types import str2bool
 from bson.json_util import dumps
 from bson.objectid import ObjectId
-from socketio_app import io
+from inquire.socketio_app import io
 
 
 class Posts(Resource):
-    def post(self, course_id=None):
+    def post(self, courseId=None):
         """
         Creates a new post
         ---
@@ -26,7 +26,7 @@ class Posts(Resource):
           - Posts
         parameters:
           - in: path
-            name: course_id
+            name: courseId
             description: Id of the course to post to
             required: true   
           - name: body
@@ -49,7 +49,7 @@ class Posts(Resource):
             schema:
               $ref: '#/definitions/403Response'
         """
-        course = current_user.get_course(course_id)
+        course = current_user.get_course(courseId)
         if not course:
             return {"errors": ["You have not joined this course"]}, 403
 
@@ -74,23 +74,23 @@ class Posts(Resource):
         # Adding user info to dict
         anonymous = args['isAnonymous']
         if anonymous:
-            postedby = {"first": "Anonymous", "last": "",
+            postedBy = {"first": "Anonymous", "last": "",
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
-            postedby = {"first": current_user.first, "last": current_user.last,
+            postedBy = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add post to MongoDB
-        post = Post(courseid=course_id, postedby=postedby, title=args.title,
+        post = Post(courseId=courseId, postedBy=postedBy, title=args.title,
                     isPrivate=args.isPrivate, content=args.content, isInstructor=isInstructor).save()
 
         # Get the JSON format
         result = self.serialize(post)
-        if not result['isPrivate']:
-            io.emit('Post/create', result, room=course_id)
+        if not result['isPrivate'] and current_app.config['include_socketio']:
+            current_app.socketio.emit('Post/create', result, room=courseId)
         return result, 200
 
-    def get(self, course_id=None):
+    def get(self, courseId=None):
         """
         Retrieves all the posts in a course
         ---
@@ -98,7 +98,7 @@ class Posts(Resource):
           - Posts     
         parameters:
           - in: path
-            name: course_id
+            name: courseId
             required: true
             description: course id from which to retrieve posts
           - in: query
@@ -140,14 +140,14 @@ class Posts(Resource):
         # sorby options: 'newest', 'oldest'
         sortby = request.args.get('sortby', type=str, default="newest")
 
-        current_course = current_user.get_course(course_id)
+        current_course = current_user.get_course(courseId)
 
         # -1 sorts newest first
         sort_date = -1
         if sortby == "oldest":
             sort_date = 1
 
-        queryParams = {"courseid": course_id}
+        queryParams = {"courseId": courseId}
         # Filter by 'instructor'
         if filterby == 'instructor':
             queryParams["isInstructor"] = True
@@ -155,7 +155,7 @@ class Posts(Resource):
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
         # Filter by 'me'
         elif filterby == 'me':
-            queryParams["postedby._id"] = {
+            queryParams["postedBy._id"] = {
                 '$in': [current_user._id, current_user.anonymousId]}
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
@@ -177,7 +177,7 @@ class Posts(Resource):
 
         # If the current user cannot see private posts and there is a search
         elif (not current_course.seePrivate) and (req is not None):
-            queryParams['$or'] = [{'isPrivate': False}, {'postedby._id': {
+            queryParams['$or'] = [{'isPrivate': False}, {'postedBy._id': {
                 '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
@@ -185,7 +185,7 @@ class Posts(Resource):
 
         # If the current user cannot see private posts and there is not a search
         else:
-            queryParams["$or"] = [{'isPrivate': False}, {'postedby._id': {
+            queryParams["$or"] = [{'isPrivate': False}, {'postedBy._id': {
                 '$in': [current_user._id, current_user.anonymousId]}}]
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
@@ -195,7 +195,7 @@ class Posts(Resource):
 
         return result, 200
 
-    def delete(self, course_id=None):
+    def delete(self, courseId=None):
         """
         Deletes a post
         ---
@@ -203,7 +203,7 @@ class Posts(Resource):
           - Posts     
         parameters:
           - in: path
-            name: course_id
+            name: courseId
             required: true
             description: Id of a course
           - name: body
@@ -258,9 +258,18 @@ class Posts(Resource):
                 f'Duplicate post detected, multiple posts in database with id {_id}')
         elif count == 1:
             # Get the current course
-            current_course = current_user.get_course(course_id)
+            current_course = current_user.get_course(courseId)
             # Permission check
-            if current_user._id == post.postedby['_id'] or current_user.anonymousId == post.postedby['_id'] or current_course.admin:
+            if current_user._id == post.postedBy['_id'] or current_user.anonymousId == post.postedBy['_id'] or current_course.admin:
+                # Get all comments associated with a post
+                comment_query = Comment.objects.raw({"postId": str(post._id)})
+                comments = list(comment_query)
+
+                # Loop throught and delete all associated comments
+                for comment in comments:
+                    post.comments -= 1
+                    comment.delete()
+
                 # Delete the post
                 post.delete()
                 return {'deleted': True}, 200
@@ -269,7 +278,7 @@ class Posts(Resource):
         else:
             raise Exception(f'No post with id')
 
-    def put(self, course_id):
+    def put(self, courseId):
         """
         Edits a post
         ---
@@ -277,7 +286,7 @@ class Posts(Resource):
           - Posts
         parameters:
           - in: path
-            name: course_id
+            name: courseId
             description: Id of the course to post to
             required: true   
           - name: body
@@ -315,7 +324,7 @@ class Posts(Resource):
 
         # Query for the post and get the current course
         query = Post.objects.raw({'_id': args["_id"]})
-        current_course = current_user.get_course(course_id)
+        current_course = current_user.get_course(courseId)
 
         # Count how many posts had same id for error checking and handle appropriately
         count = query.count()
@@ -324,8 +333,8 @@ class Posts(Resource):
                 f'Duplicate post detected, multiple posts in database with id {args["_id"]}')
         elif count == 1:
             post = query.first()
-            id_match = current_user._id == post.postedby[
-                '_id'] or current_user.anonymousId == post.postedby['_id']
+            id_match = current_user._id == post.postedBy[
+                '_id'] or current_user.anonymousId == post.postedBy['_id']
             if id_match or current_course.admin:
                 post.title = args['title']
                 post.content = args['content']

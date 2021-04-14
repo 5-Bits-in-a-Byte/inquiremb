@@ -17,7 +17,7 @@ const CommentReply = ({ reply, isDraft, submitReply, postid }) => {
     reply = {
       _id: null,
       content: <DraftTextArea onChange={handleChange} value={draft} />,
-      postedby: { first: user.first, last: user.last, _id: user._id },
+      postedBy: { first: user.first, last: user.last, _id: user._id },
       reactions: { likes: [] },
     };
   }
@@ -29,8 +29,8 @@ const CommentReply = ({ reply, isDraft, submitReply, postid }) => {
         <UserDescription>
           by{" "}
           {reply &&
-            reply.postedby &&
-            reply.postedby.first + " " + reply.postedby.last}
+            reply.postedBy &&
+            reply.postedBy.first + " " + reply.postedBy.last}
         </UserDescription>
 
         <MetaIconWrapper>

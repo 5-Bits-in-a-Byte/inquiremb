@@ -37,12 +37,12 @@ function App() {
           <Route path="/login" exact>
             <Login />
           </Route>
-          <PrivateRoute path="/course/:courseid" exact>
+          <PrivateRoute path="/course/:courseId" exact>
             <NavigationWrapper>
               <ClassView />
             </NavigationWrapper>
           </PrivateRoute>
-          <PrivateRoute path="/course/:courseid/post/:postid" exact>
+          <PrivateRoute path="/course/:courseId/post/:postid" exact>
             <NavigationWrapper>
               <CommentView />
             </NavigationWrapper>

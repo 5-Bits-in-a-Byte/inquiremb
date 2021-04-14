@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
 
+
 /**
  * Options Component ~ Button side panel for displaying buttons for the user
  *
@@ -16,7 +17,7 @@ const Options = ({ courseid }) => {
       <OptionsPanel>
         <Link
           style={{ width: "100%", textDecoration: "none" }}
-          to={"/course/" + courseid + "/post/new"}
+          to={"/course/" + courseId + "/post/new"}
         >
           <Button primary autoWidth>
             + New Post

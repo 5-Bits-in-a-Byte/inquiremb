@@ -22,7 +22,8 @@ const ClassView = () => {
   const [highlightedSection, setHighlightedSection] = useState(
     defaultHighlight
   );
-  var classroomID = useParams().courseid;
+
+  var classroomID = useParams().courseId;
   var courseContext = useContext(UserContext).courses;
 
   // console.log("Course Context", courseContext);
@@ -30,8 +31,8 @@ const ClassView = () => {
   var classroomName;
 
   for (var item in courseContext) {
-    if (courseContext[item].course_id === classroomID) {
-      classroomName = courseContext[item].course_name;
+    if (courseContext[item].courseId === classroomID) {
+      classroomName = courseContext[item].courseName;
       break;
     }
   }

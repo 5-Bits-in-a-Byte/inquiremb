@@ -32,11 +32,11 @@ User:
 UserCourse:
   type: object
   properties:
-    course_id:
+    courseId:
       type: string
       description: ID of the course the user joined
       example: vytxeTZskVKR7C7WgdSP3d
-    course_name:
+    courseName:
       type: string
       description: Name associated with the course
       example: "CIS499 Advanced Debugging"

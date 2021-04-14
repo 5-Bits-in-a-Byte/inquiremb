@@ -2,7 +2,7 @@ Comment:
   type: object
   description: Comment on a post
   properties:
-    post_id:
+    postId:
       required: true
       type: string
       description: Id of the parent post
@@ -12,7 +12,7 @@ Comment:
       type: string
       description: Comment content
       example: I also have that question!
-    postedby:
+    postedBy:
       required: true
       $ref: "#/definitions/PostedBy"
     endorsed:

@@ -10,16 +10,16 @@ import HeartImg from "../../imgs/heart.svg";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
 const Sidebar = ({ setHighlightedSection, highlightedSection }) => {
-  const { courseid, postid } = useParams();
+  const { courseId, postid } = useParams();
 
   // Extracting the course name from the user context and current course ID
-  var classroomID = useParams().courseid;
+  var classroomID = useParams().courseId;
   var courseContext = useContext(UserContext).courses;
   var classroomName = " ";
 
   for (let temp in courseContext) {
-    if (courseContext[temp].course_id === classroomID) {
-      classroomName = courseContext[temp].course_name;
+    if (courseContext[temp].courseId === classroomID) {
+      classroomName = courseContext[temp].courseName;
       break;
     }
   }
@@ -31,7 +31,7 @@ const Sidebar = ({ setHighlightedSection, highlightedSection }) => {
   return (
     <FlexWrapper>
       <Container>
-        <Link to={"/course/" + courseid} style={{ textDecoration: "none" }}>
+        <Link to={"/course/" + courseId} style={{ textDecoration: "none" }}>
           <ClassTitle nameFit={nameRatio}>{classroomName}</ClassTitle>
         </Link>
 

@@ -5,7 +5,7 @@
     errors:
       type: list
       description: List of errors related to failed request
-      example: ["Invalid courseid"]
+      example: ["Invalid courseId"]
 403Response:
   type: object
   description: Response to unauthorized requests

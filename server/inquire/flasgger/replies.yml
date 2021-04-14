@@ -12,7 +12,7 @@ Reply:
       required: true
       description: Comment content
       example: That is a great comment. Wow!
-    postedby:
+    postedBy:
       required: true
       $ref: "#/definitions/PostedBy"
     reactions:

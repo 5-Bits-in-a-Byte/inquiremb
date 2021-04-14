@@ -10,18 +10,18 @@ const JoinCourse = ({ joinCourse }) => {
   const [disabledAccess, toggleDisabledAccess] = useState(false);
 
   const [form, setForm] = useState({
-    course_name: null,
-    access_code: null,
+    courseName: null,
+    accessCode: null,
     loading: false,
     errors: null,
   });
 
   const handleChange = (e) => {
-    if (e.target.name == "course_name" && e.target.value != "") {
+    if (e.target.name == "courseName" && e.target.value != "") {
       toggleDisabledAccess(true);
-    } else if (e.target.name == "course_name" && e.target.value == "") {
+    } else if (e.target.name == "courseName" && e.target.value == "") {
       toggleDisabledAccess(false);
-    } else if (e.target.name == "access_code" && e.target.value != "") {
+    } else if (e.target.name == "accessCode" && e.target.value != "") {
       toggleDisabledCourse(true);
     } else {
       toggleDisabledCourse(false);
@@ -71,7 +71,7 @@ const JoinCourse = ({ joinCourse }) => {
       <InputLabel>Course Name</InputLabel>
       <Input
         placeholder="ex, CIS 210"
-        name="course_name"
+        name="courseName"
         disabled={disabledCourse}
         style={disabledCourse ? { opacity: "50%" } : { opacity: "100%" }}
         onChange={handleChange}
@@ -80,7 +80,7 @@ const JoinCourse = ({ joinCourse }) => {
       <InputLabel>Access Code</InputLabel>
       <Input
         placeholder="ex, AcK21k"
-        name="access_code"
+        name="accessCode"
         disabled={disabledAccess}
         style={disabledAccess ? { opacity: "50%" } : { opacity: "100%" }}
         onChange={handleChange}

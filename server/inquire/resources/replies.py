@@ -7,15 +7,15 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
-from flask import jsonify
+from flask import jsonify, current_app
 from flask_restful import Resource, abort, reqparse
-from auth import current_user, permission_layer
-from mongo import *
-from socketio_app import io
+from inquire.auth import current_user, permission_layer
+from inquire.mongo import *
+from inquire.socketio_app import io
 
 
 class Replies(Resource):
-    def post(self, post_id=None, comment_id=None):
+    def post(self, postId=None, comment_id=None):
         """
         Creates a new reply
         ---
@@ -24,7 +24,7 @@ class Replies(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - in: path
             description: Id of a comment
@@ -45,7 +45,7 @@ class Replies(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
         if post is None:
             return abort(400, errors=["Bad post id"])
         parser = reqparse.RequestParser()
@@ -61,14 +61,14 @@ class Replies(Resource):
         # Adding user info to dict
         anonymous = args['isAnonymous']
         if anonymous:
-            postedby = {"first": "Anonymous", "last": "",
+            postedBy = {"first": "Anonymous", "last": "",
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
-            postedby = {"first": current_user.first, "last": current_user.last,
+            postedBy = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add reply to MongoDB and retrieve the comment
-        reply = Reply(postedby=postedby, content=args.content)
+        reply = Reply(postedBy=postedBy, content=args.content)
         comment = self.retrieve_comment(comment_id)
 
         # Append reply to the comment and save it to the database
@@ -79,10 +79,12 @@ class Replies(Resource):
         post.updatedDate = datetime.datetime.now()
         post.save()
         result = self.serialize(reply)
-        io.emit('Reply/create', self.serialize(comment), room=post_id)
+        if current_app.config['include_socketio']:
+            current_app.socketio.emit(
+                'Reply/create', self.serialize(comment), room=postId)
         return result, 200
 
-    def put(self, post_id=None, comment_id=None):
+    def put(self, postId=None, comment_id=None):
         """
         Updates a reply
         ---
@@ -91,7 +93,7 @@ class Replies(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - in: path
             description: Id of a comment
@@ -112,7 +114,7 @@ class Replies(Resource):
             schema:
               $ref: '#/definitions/400Response'
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
 
         # Parse the request
         parser = reqparse.RequestParser()
@@ -126,7 +128,7 @@ class Replies(Resource):
             return {"errors": errors}, 400
 
         # Get the current course and retrieve the comment
-        current_course = current_user.get_course(post.courseid)
+        current_course = current_user.get_course(post.courseId)
         comment = self.retrieve_comment(comment_id)
 
         # Get the reply we're looking for
@@ -140,15 +142,15 @@ class Replies(Resource):
             return {'deleted': False}, 403
 
         # Permissions check
-        id_match = current_user._id == reply.postedby[
-            '_id'] or current_user.anonymousId == reply.postedby['_id']
+        id_match = current_user._id == reply.postedBy[
+            '_id'] or current_user.anonymousId == reply.postedBy['_id']
         if id_match or current_course.admin:
             reply.content = args['content']
             comment.save()
             result = self.serialize(comment)
             return result, 200
 
-    def delete(self, post_id=None, comment_id=None):
+    def delete(self, postId=None, comment_id=None):
         """
         Deletes a reply
         ---
@@ -157,7 +159,7 @@ class Replies(Resource):
         parameters:
           - in: path
             description: Id of a post
-            name: post_id
+            name: postId
             required: true
           - in: path
             description: Id of a comment
@@ -192,7 +194,7 @@ class Replies(Resource):
                   type: bool
                   example: False
         """
-        post = self.retrieve_post(post_id)
+        post = self.retrieve_post(postId)
 
         # Grabbing comment id
         parser = reqparse.RequestParser()
@@ -204,7 +206,7 @@ class Replies(Resource):
 
         comment = self.retrieve_comment(comment_id)
         # Get the current course
-        current_course = current_user.get_course(post.courseid)
+        current_course = current_user.get_course(post.courseId)
 
         # Get the reply we're looking for
         reply = None
@@ -217,8 +219,8 @@ class Replies(Resource):
             return {'deleted': False}, 403
 
         # Permission check
-        id_match = current_user._id == reply.postedby[
-            '_id'] or current_user.anonymousId == reply.postedby['_id']
+        id_match = current_user._id == reply.postedBy[
+            '_id'] or current_user.anonymousId == reply.postedBy['_id']
         if id_match or current_course.admin:
             comment.replies.remove(reply)
             comment.save()
@@ -232,8 +234,8 @@ class Replies(Resource):
             errors.append("Please give your comment content")
         return errors
 
-    def retrieve_post(self, post_id):
-        query = Post.objects.raw({'_id': post_id})
+    def retrieve_post(self, postId):
+        query = Post.objects.raw({'_id': postId})
         count = query.count()
         if count == 1:
             return query.first()
@@ -241,7 +243,7 @@ class Replies(Resource):
             return None
         else:
             raise Exception(
-                f'Multiple posts with the same id found, id: {post_id}')
+                f'Multiple posts with the same id found, id: {postId}')
 
     def retrieve_comment(self, comment_id):
         _id = ObjectId(comment_id)

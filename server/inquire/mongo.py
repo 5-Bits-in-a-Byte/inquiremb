@@ -7,16 +7,16 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
+from inquire.config import MONGO_URI
+
 from pymodm import MongoModel, fields, EmbeddedMongoModel
 from pymongo.write_concern import WriteConcern
 from pymodm.connection import connect
 import pymongo
-from config import MONGO_URI
 import json
 import shortuuid
 import datetime
 from bson.objectid import ObjectId
-connect(MONGO_URI, alias="my-app")
 
 
 class User(MongoModel):
@@ -29,9 +29,9 @@ class User(MongoModel):
     courses = fields.EmbeddedDocumentListField(
         'UserCourse', blank=True, required=True)
 
-    def get_course(self, course_id):
+    def get_course(self, courseId):
         for course in self.courses:
-            if course.course_id == course_id:
+            if course.courseId == courseId:
                 return course
         return None
 
@@ -44,8 +44,8 @@ class User(MongoModel):
 
 
 class UserCourse(EmbeddedMongoModel):
-    course_id = fields.CharField()
-    course_name = fields.CharField(required=True)
+    courseId = fields.CharField()
+    courseName = fields.CharField(required=True)
     nickname = fields.CharField(blank=True)
     color = fields.CharField(blank=True)
     canPost = fields.BooleanField(default=True)
@@ -70,8 +70,8 @@ to modify/query multiple documents when updating classes or permissions.
 
 class Post(MongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
-    courseid = fields.CharField()
-    postedby = fields.DictField()
+    courseId = fields.CharField()
+    postedBy = fields.DictField()
     title = fields.CharField(required=True)
     content = fields.CharField(required=True)
     isInstructor = fields.BooleanField(default=False)
@@ -94,9 +94,9 @@ class Post(MongoModel):
 
 
 class Comment(MongoModel):
-    post_id = fields.CharField(required=True)
+    postId = fields.CharField(required=True)
     content = fields.CharField(required=True, default="")
-    postedby = fields.DictField()
+    postedBy = fields.DictField()
     endorsed = fields.BooleanField(default=False)
     replies = fields.EmbeddedDocumentListField('Reply', blank=True)
     reactions = fields.DictField(default={'likes': []})
@@ -109,7 +109,7 @@ class Comment(MongoModel):
 class Reply(EmbeddedMongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
     content = fields.CharField(required=True, default="")
-    postedby = fields.DictField()
+    postedBy = fields.DictField()
     reactions = fields.DictField(default={'likes': []})
 
 
