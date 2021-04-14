@@ -261,6 +261,15 @@ class Posts(Resource):
             current_course = current_user.get_course(courseId)
             # Permission check
             if current_user._id == post.postedBy['_id'] or current_user.anonymousId == post.postedBy['_id'] or current_course.admin:
+                # Get all comments associated with a post
+                comment_query = Comment.objects.raw({"postId": str(post._id)})
+                comments = list(comment_query)
+
+                # Loop throught and delete all associated comments
+                for comment in comments:
+                    post.comments -= 1
+                    comment.delete()
+
                 # Delete the post
                 post.delete()
                 return {'deleted': True}, 200
