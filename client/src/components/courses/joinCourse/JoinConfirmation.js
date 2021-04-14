@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import Button from "../../common/Button";
-import axios from "axios";
 import CheckMarkBlue from "../../../imgs/checkmark_blue.svg";
 import CheckMarkGreen from "../../../imgs/checkmark_green.svg";
 import Errors from "../../common/Errors";
 import CourseCard from "../CourseCard";
 import { UserContext, UserDispatchContext } from "../../context/UserProvider";
+import LazyFetch from "../../common/requests/LazyFetch";
 
 const AddNewCourseToList = (newCourse, courseList) => {
   if (newCourse === null) return;
@@ -62,29 +62,25 @@ const JoinConfirmation = ({
   const confirmJoinRequest = () => {
     toggleLoading(true);
     setTimeout(() => {
-      const endpoint = "/api/join";
-      const data = {
-        courseId: course.courseId,
-      };
-      axios
-        .put(process.env.REACT_APP_SERVER_URL + endpoint, data, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          let newCourseList = AddNewCourseToList(res.data.course, courseList);
+      LazyFetch({
+        type: "put",
+        endpoint: "/api/join",
+        data: { course_id: course.course_id },
+        onSuccess: (data) => {
+          let newCourseList = AddNewCourseToList(data.course, courseList);
           if (newCourseList != null) setCourseList(newCourseList);
-          joinCourse(res.data.course);
+          joinCourse(data.course);
 
           // have to update the user model in order to correct get the course page
           let temp = user;
-          temp.courses.push(res.data.course);
+          temp.courses.push(data.course);
           setUser(temp);
 
-          toggleSuccess(res.data.success);
+          toggleSuccess(data.success);
           toggleLoading(false);
           toggleDisplay("none");
-        })
-        .catch((err) => {
+        },
+        onFailure: (err) => {
           if (err.response && err.response.data) {
             // Set the errors provided by our API request
             console.log(err.response.data.errors);
@@ -96,7 +92,8 @@ const JoinConfirmation = ({
               "There was an error joining the course. Please try again.",
             ]);
           }
-        });
+        },
+      });
     }, 1000);
   };
 

@@ -1,7 +1,9 @@
 import React, { Children } from "react";
 import styled from "styled-components";
 
-/* Intented to be used above "Input" components to label them */
+/**
+ * Intented to be used above "Input" components to label them
+ */
 const InputLabel = ({ children, margin }) => {
   return <Label margin={margin}>{children}</Label>;
 };

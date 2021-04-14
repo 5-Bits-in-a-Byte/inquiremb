@@ -64,10 +64,6 @@ const CourseConfirmation = ({ course, close }) => {
 
 export default CourseConfirmation;
 
-const LeftColumn = styled.div`
-  margin-right: 5px;
-`;
-
 const RightColumn = styled.div`
   margin-left: 5px;
 `;

@@ -4,7 +4,7 @@ import Courses from "./components/courses/Courses";
 import SignUp from "./components/signUp/SignUp";
 import Login from "./components/signUp/Login";
 import "./fonts/fonts.css";
-import Messages from "./components/messages/Messages";
+// import Messages from "./components/messages/Messages";
 import Home from "./components/home/Home";
 import ClassView from "./components/posts/ClassView";
 import CommentView from "./components/comments/CommentView";
@@ -26,11 +26,11 @@ function App() {
               <Courses />
             </NavigationWrapper>
           </PrivateRoute>
-          <PrivateRoute path="/messages" exact>
+          {/* <PrivateRoute path="/messages" exact>
             <NavigationWrapper>
               <Messages />
             </NavigationWrapper>
-          </PrivateRoute>
+          </PrivateRoute> */}
           <Route path="/signup" exact>
             <SignUp />
           </Route>

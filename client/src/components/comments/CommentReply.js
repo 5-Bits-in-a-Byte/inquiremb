@@ -5,8 +5,6 @@ import DraftTextArea from "../common/DraftTextArea";
 import Button from "../common/Button";
 import Reaction from "../common/Reaction";
 
-var dummy_reaction_IDs = [];
-
 const CommentReply = ({ reply, isDraft, submitReply, postid }) => {
   const user = useContext(UserContext);
   const [draft, setDraft] = useState("");
@@ -102,19 +100,4 @@ const MetaIconWrapper = styled.div`
   display: flex;
   margin-left: auto;
   align-items: center;
-`;
-
-const Icon = styled.img`
-  float: left;
-
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
-  margin-left: 20px;
-
-  user-select: none;
-`;
-
-const IconValue = styled.h5`
-  color: #8c8c8c;
 `;

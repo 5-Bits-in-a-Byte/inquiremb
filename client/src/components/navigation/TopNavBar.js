@@ -5,6 +5,10 @@ import Logo from "../../imgs/inquire-logo.png";
 import SearchBar from "../common/SearchBar";
 import ProfileDropdown from "./ProfileDropdown";
 
+/** TopNavBar Component
+ * @brief Wrapper the top content of the website such as profile icon / menu, etc etc
+ * @returns TopNavBar component
+ */
 const TopNavBar = () => {
   return (
     <Nav>

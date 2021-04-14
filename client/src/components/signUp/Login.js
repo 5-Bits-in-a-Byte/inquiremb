@@ -13,14 +13,31 @@ import SignInLogo from "../../imgs/inquire-signin-logo.png";
 import Logo from "../../imgs/inquire-logo.png";
 import GoogleLogo from "../../imgs/g-icon.png";
 import GithubLogo from "../../imgs/github-logo.svg";
+import Button from "../common/Button";
 
 const SignUp = () => {
+  const handleSignIn = () => {
+    const url = process.env.REACT_APP_CLIENT_URL + "/login";
+    window.location.href = url;
+  };
+
+  const handleSignUp = () => {
+    const url = process.env.REACT_APP_CLIENT_URL + "/signup";
+    window.location.href = url;
+  };
   return (
     /* Wrapper for the entire page so we can have the background image */
     <Page>
-      {/* Wrapper for the top left section of the page to help align the Inquire logo */}
+      {/* Wrapper for the top section of the page */}
       <Nav>
         <SignInLogoImg src={SignInLogo} />
+        <div style={{ flex: 1 }}></div>
+        <Button signin onClick={handleSignIn}>
+          Sign In
+        </Button>
+        <Button primary onClick={handleSignUp} style={{ width: "10%" }}>
+          Sign Up
+        </Button>
       </Nav>
 
       {/* Wrapper for the center sign in block to help styling */}
@@ -33,7 +50,7 @@ const SignUp = () => {
           <Icon src={GoogleLogo} />
           <BtnText>Sign in with Google</BtnText>
         </Buttons>
-        
+
         {/* Github Login Button */}
         <Buttons href={process.env.REACT_APP_SERVER_URL + "/github-login"}>
           <Icon src={GithubLogo} />
@@ -46,12 +63,6 @@ const SignUp = () => {
           <a href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign up</a>
         </Message>
       </CenterBlock>
-
-      {/* Wrapper for the top right section of the page to help align the sign in and sign up buttons */}
-      <RightNav>
-        <In href={process.env.REACT_APP_CLIENT_URL + "/login"}>Sign In</In>
-        <Up href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign Up</Up>
-      </RightNav>
 
       {/* Copyright message */}
       <Footer>Copyright© 5 Bits in a Byte</Footer>
@@ -145,56 +156,6 @@ const Message = styled.div`
   align-items: center;
 `;
 
-/* Styling for the top right alignment */
-const RightNav = styled.nav`
-  width: 100vw;
-  height: 55px;
-  position: fixed;
-  left: 0;
-  top: 0;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`;
-
-/* Styling for the top right sign-in button */
-const In = styled.a`
-  display: flex;
-  align-items: center;
-  background-color: Transparent;
-  background-repeat: no-repeat;
-  padding: 15px 40px;
-  width: 140px;
-  height: 20px;
-  color: white;
-  cursor: pointer;
-  text-decoration: none;
-  &:hover {
-    background-color: #ffffff;
-    opacity: 0.85;
-    color: black;
-  }
-`;
-
-/* Styling for the top right sign-up button */
-const Up = styled.a`
-  display: flex;
-  align-items: center;
-  padding: 15px 40px;
-  background: #4a86fa;
-  border-radius: 3px;
-  width: 140px;
-  height: 20px;
-  color: white;
-  cursor: pointer;
-  text-decoration: none;
-  &:hover {
-    background-color: #4a86fa;
-    opacity: 0.85;
-    color: black;
-  }
-`;
-
 /* Styling for the copyright message */
 const Footer = styled.footer`
   text-align: center;
@@ -204,5 +165,5 @@ const Footer = styled.footer`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 20px;
+  height: 3vh;
 `;

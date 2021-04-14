@@ -1,7 +1,8 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
+import Icon from "../common/Icon";
+import LazyFetch from "../common/requests/LazyFetch";
 
 const SectionTab = ({
   setHighlightedSection,
@@ -9,8 +10,6 @@ const SectionTab = ({
   imageLocation,
   tabText,
 }) => {
-  const { courseId, postid } = useParams();
-
   return (
     <Tab
       highlight={highlightedSection === tabText}
@@ -18,10 +17,17 @@ const SectionTab = ({
         setHighlightedSection(tabText);
       }}
     >
-      {/* <Link to={"/course/" + courseId} style={{ textDecoration: "none" }}> */}
-      <Icon src={imageLocation} />
+      <Icon
+        src={imageLocation}
+        width={"18px"}
+        style={{
+          float: "left",
+          "margin-right": "1em",
+          "margin-left": "0.75em",
+          "user-select": "none",
+        }}
+      />
       <TabText>{tabText}</TabText>
-      {/* </Link> */}
     </Tab>
   );
 };
@@ -64,16 +70,5 @@ const TabText = styled.h3`
   :hover {
     cursor: pointer;
   }
-`;
-
-const Icon = styled.img`
-  float: left;
-
-  width: 18px;
-  height: 18px;
-  margin-right: 1em;
-  margin-left: 0.75em;
-
-  user-select: none;
 `;
 //#endregion

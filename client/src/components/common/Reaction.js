@@ -5,7 +5,15 @@ import LikedImg from "../../imgs/like_blue.svg";
 import { UserContext } from "../context/UserProvider";
 import LazyFetch from "./requests/LazyFetch";
 
-// Post and User to connect to backend
+/** Reaction Component
+ * @brief Intended to be used above "Input" components to label them
+ *
+ * @param {object} reactions Reactions object model from the backend.
+ * @param {string} type denotes the type of this reaction.
+ * @param {number} id the id associated with this reaction
+ * @param {number} postid id associated with the post this reaction falls within
+ * @returns Reaction Component
+ */
 const Reaction = ({ reactions, type, id, postid }) => {
   const user = useContext(UserContext);
   const [reactionState, setReactions] = useState(reactions);
@@ -50,20 +58,20 @@ const Reaction = ({ reactions, type, id, postid }) => {
 
   return (
     <>
-      <Icon
+      <ReactImg
         src={reactClicked.liked ? LikedImg : UnlikedImg}
         onClick={handleLike}
         clicked={reactClicked.liked}
         postid={postid}
       />
-      <IconValue>{reactionState.likes.length}</IconValue>
+      <ReactValue>{reactionState.likes.length}</ReactValue>
     </>
   );
 };
 
 export default Reaction;
 
-const Icon = styled.img`
+const ReactImg = styled.img`
   float: left;
   width: 18px;
   height: 18px;
@@ -74,6 +82,6 @@ const Icon = styled.img`
   opacity: ${(props) => (!props.clicked && "100%") || "100%"};
 `;
 
-const IconValue = styled.h5`
+const ReactValue = styled.h5`
   color: #8c8c8c;
 `;

@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 
+/** FadIn Component
+ * A component to hold children, acts as a fade-in transition / overlay to
+ * smoothly fade-in all children of this component.
+ *
+ * @param {object} children all child components of this fade-in component
+ * @param {number} delay the time delay for the fade-in animation
+ * @param {number} speed the animation speed of the fade-in transition
+ * @param {?} rest I have no idea what this does?
+ * @returns Animated set of components that fade-in to the screen
+ */
 const FadeIn = ({ children, delay, speed, ...rest }) => {
   const [isFaded, activate] = useState(false);
   useEffect(() => {

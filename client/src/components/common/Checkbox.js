@@ -1,21 +1,26 @@
 import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import PinImg from "../../imgs/pin.svg";
-import BlueCheckmark from "../../imgs/bluecheck.svg";
-import GreyCheckmark from "../../imgs/greycheck.svg";
+import Checkmark from "./Checkmark";
 
+/** Checkbox Component
+ * A simple generic checkbox component to be used project wide where necessary.
+ *
+ * @param {string} checkboxName the name for this checkbox.
+ * @param {string} labelText the text displayed with the checkbox.
+ * @param {function} onChange the event handler for state change of the checkbox.
+ * @param {bool} checkStatus holds the check status of the box.
+ * @returns A simple checkbox component.
+ */
 const Checkbox = ({ checkboxName, labelText, onChange, checkStatus }) => {
   return (
     <Wrapper>
       <CheckLabel>
-        <Box>
-          <CheckMark
-            className="checkMark"
-            id="Checkmark"
-            src={checkStatus == true ? BlueCheckmark : GreyCheckmark}
-          />
-        </Box>
+        <Checkmark
+          checkSize={"18px"}
+          checkFloat={"left"}
+          checkStatus={checkStatus}
+        />
         <SpecialInput
           name={checkboxName}
           type="checkbox"
@@ -32,7 +37,12 @@ const Checkbox = ({ checkboxName, labelText, onChange, checkStatus }) => {
   );
 };
 
-Checkbox.propTypes = {};
+Checkbox.propTypes = {
+  checkboxName: PropTypes.string,
+  labelText: PropTypes.string,
+  onChange: PropTypes.func,
+  checkStatus: PropTypes.bool,
+};
 
 export default Checkbox;
 
@@ -47,20 +57,6 @@ const Wrapper = styled.div`
   background-color: #f1f1f1;
   /* border: 2px solid red; */
   border-radius: 4px;
-`;
-
-const Box = styled.div`
-  float: left;
-  width: 18px;
-  height: 18px;
-  margin: 0 0.5em;
-`;
-
-const CheckMark = styled.img`
-  width: 18px;
-  height: 18px;
-
-  transition: 150ms ease-in-out;
 `;
 
 const CheckLabel = styled.label`

@@ -103,7 +103,7 @@ dist
 # TernJS port file
 .tern-port
 
-## Server Folders
+## Server folders
 **.egg-info
 
 ## Server files

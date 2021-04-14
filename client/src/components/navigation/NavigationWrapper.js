@@ -3,6 +3,12 @@ import styled from "styled-components";
 import LeftNavBar from "./LeftNavBar";
 import TopNavBar from "./TopNavBar";
 
+/** MenuMargin
+ * @brief DEPRECATED ~ but will consider refactoring some webpages to incorporate.
+ * @param {idk?} children container of child components.
+ * @returns
+ * @deprecated This component is unused and has since been deprecated.
+ */
 const MenuMargin = ({ children }) => {
   return (
     <>
