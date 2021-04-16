@@ -84,6 +84,48 @@ This component handles setting up all of our MongoDB models so that each collect
 }
 ```
 
+### Our Role-Model
+
+```json
+{
+  "_id": "role id goes here",
+  "roleName": "the name of the role goes here",
+  "permissions": {
+    "publish": {
+      "postComment": true,
+      "reply": true,
+      "poll": true
+    },
+    "delete": {
+      "postComment": true,
+      "reply": true,
+      "poll": true
+    },
+    "participation": {
+      "reactions": true,
+      "voteInPoll": true,
+      "pin": true
+    },
+    "edit": {
+      "postComment": true,
+      "reply": true,
+      "poll": true
+    },
+    "privacy": {
+      "private": true,
+      "anonymous": true
+    },
+    "admin": {
+      "banUsers": true,
+      "removeUsers": true,
+      "announce": true,
+      "configure": true,
+      "highlightPost": true
+    }
+  }
+}
+```
+
 ### Course Model
 
 ```json
@@ -91,11 +133,35 @@ This component handles setting up all of our MongoDB models so that each collect
   "_id": "shortId_abJl3S",
   "course": "CIS 210",
   "canJoinById": true,
-  "instructorID": "oasif-jo12j-asdjf-asdf9"
+  "instructorID": "oasif-jo12j-asdjf-asdf9",
+  "roles": ["roleId1", "roleId2"]
 }
 ```
 
 ### User Model
+
+#### Refactored Permissions Model
+
+```json
+{
+  "_id": "oasif-jo12j-asdjf-asdf9",
+  "anonymousId": "cuk19-lzi91-soc01-cks83",
+  "picture": "https://google.com/users/images/aobidsl123",
+  "first": "Seth",
+  "last": "Tal",
+  "email": "stal@someEmail.com",
+  "courses": [
+    {
+      "courseId": "oasif-jo12j-asdjf-asdf9",
+      "color": "#ffffff",
+      "nickname": null,
+      "role": "name of the role"
+    }
+  ]
+}
+```
+
+#### Deprecated Model
 
 ```json
 {
