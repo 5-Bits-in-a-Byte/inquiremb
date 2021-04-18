@@ -126,10 +126,12 @@ class Course(MongoModel):
 
         indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
 
+always_false = lambda x: False
 
 class Roles(MongoModel):
     roleName = fields.CharField(required=True)
-    permissions = fields.DictField()
+    permissions = fields.DictField(validators=[always_false])
+
 
 def role_validator(d, example):
     """For use with the Roles Model"""
@@ -139,10 +141,10 @@ def role_validator(d, example):
 
     for key, item in example.items:
         if key in d:
-            if type(item) is dict and type(d[key]) is dict:
-                if not role_validator(item, example[key])
+            if type(item) == dict and type(d[key]) == dict:
+                if not role_validator(item, example[key]):
                     return False
-            elif type(item) not bool or type(d[key]) not bool:
+            elif type(item) != bool or type(d[key]) != bool:
                 return False
 
     return True
