@@ -20,6 +20,40 @@ The config component handles linking all of our environment variables and genera
 
 This component handles setting up all of our MongoDB models so that each collection has the correct fields and default values. The model format is as follows:
 
+### User Model
+
+#### Refactored Permissions Model
+
+```json
+{
+  "_id": "oasif-jo12j-asdjf-asdf9",
+  "anonymousId": "cuk19-lzi91-soc01-cks83",
+  "email": "stal@someEmail.com",
+  "first": "Seth",
+  "last": "Tal",
+  "picture": "https://google.com/users/images/aobidsl123",
+  "courses": [
+    {
+      "courseId": "oasif-jo12j-asdjf-asdf9",
+      "color": "#ffffff",
+      "nickname": null,
+      "role": "name of the role" // NEW (04.18.21)
+    }
+  ]
+}
+```
+
+#### User Course Model (Also shown above inside a user resource)
+
+```json
+{
+  "courseId": "oasif-jo12j-asdjf-asdf9",
+  "color": "#ffffff",
+  "nickname": null,
+  "role": "name of the role" // NEW (04.18.21)
+}
+```
+
 ### Post Model
 
 ```json
@@ -35,8 +69,9 @@ This component handles setting up all of our MongoDB models so that each collect
   },
   "title": "example",
   "content": "example content",
-  "isPrivate": false,
+  "isInstructor": false,
   "isPinned": false,
+  "isPrivate": false,
   "instructorCommented": false,
   "reactions": {
     "likes": ["userid123"]
@@ -84,7 +119,19 @@ This component handles setting up all of our MongoDB models so that each collect
 }
 ```
 
-### Our Role-Model (NEW 04.18.21)
+### Course Model
+
+```json
+{
+  "_id": "shortId_abJl3S",
+  "course": "CIS 210",
+  "canJoinById": true,
+  "instructorID": "oasif-jo12j-asdjf-asdf9",
+  "roles": ["roleId1", "roleId2"] // NEW (04.18.21)
+}
+```
+
+### Roles Model (NEW 04.18.21)
 
 ```json
 {
@@ -123,41 +170,6 @@ This component handles setting up all of our MongoDB models so that each collect
       "highlightPost": true
     }
   }
-}
-```
-
-### Course Model
-
-```json
-{
-  "_id": "shortId_abJl3S",
-  "course": "CIS 210",
-  "canJoinById": true,
-  "instructorID": "oasif-jo12j-asdjf-asdf9",
-  "roles": ["roleId1", "roleId2"] // NEW (04.18.21)
-}
-```
-
-### User Model
-
-#### Refactored Permissions Model
-
-```json
-{
-  "_id": "oasif-jo12j-asdjf-asdf9",
-  "anonymousId": "cuk19-lzi91-soc01-cks83",
-  "picture": "https://google.com/users/images/aobidsl123",
-  "first": "Seth",
-  "last": "Tal",
-  "email": "stal@someEmail.com",
-  "courses": [
-    {
-      "courseId": "oasif-jo12j-asdjf-asdf9",
-      "color": "#ffffff",
-      "nickname": null,
-      "role": "name of the role" // NEW (04.18.21)
-    }
-  ]
 }
 ```
 
