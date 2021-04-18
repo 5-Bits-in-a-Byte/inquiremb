@@ -125,3 +125,24 @@ class Course(MongoModel):
         connection_alias = 'my-app'
 
         indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
+
+
+class Roles(MongoModel):
+    roleName = fields.CharField(required=True)
+    permissions = fields.DictField()
+
+def role_validator(d, example):
+    """For use with the Roles Model"""
+    # Loop through each field
+    #   if field exists:
+    #       role_validator(field, example_field)
+
+    for key, item in example.items:
+        if key in d:
+            if type(item) is dict and type(d[key]) is dict:
+                if not role_validator(item, example[key])
+                    return False
+            elif type(item) not bool or type(d[key]) not bool:
+                return False
+
+    return True
