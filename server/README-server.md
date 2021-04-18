@@ -84,7 +84,7 @@ This component handles setting up all of our MongoDB models so that each collect
 }
 ```
 
-### Our Role-Model
+### Our Role-Model (NEW 04.18.21)
 
 ```json
 {
@@ -134,7 +134,7 @@ This component handles setting up all of our MongoDB models so that each collect
   "course": "CIS 210",
   "canJoinById": true,
   "instructorID": "oasif-jo12j-asdjf-asdf9",
-  "roles": ["roleId1", "roleId2"]
+  "roles": ["roleId1", "roleId2"] // NEW (04.18.21)
 }
 ```
 
@@ -155,13 +155,15 @@ This component handles setting up all of our MongoDB models so that each collect
       "courseId": "oasif-jo12j-asdjf-asdf9",
       "color": "#ffffff",
       "nickname": null,
-      "role": "name of the role"
+      "role": "name of the role" // NEW (04.18.21)
     }
   ]
 }
 ```
 
-#### Deprecated Model
+### Deprecated Models
+
+#### Old User Model
 
 ```json
 {
