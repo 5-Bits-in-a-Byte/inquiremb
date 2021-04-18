@@ -20,9 +20,17 @@ The config component handles linking all of our environment variables and genera
 
 This component handles setting up all of our MongoDB models so that each collection has the correct fields and default values. The model format is as follows:
 
-### User Model
+---
 
-#### Refactored Permissions Model
+## Structure of Backend Resources
+
+- [User Specific Models](#user-specific-models)
+- [User Interaction Models](#user-interaction-models)
+- [Other](#other)
+
+## User Specific Models
+
+### User Model (Refactored Permissions Model)
 
 ```json
 {
@@ -43,7 +51,7 @@ This component handles setting up all of our MongoDB models so that each collect
 }
 ```
 
-#### User Course Model (Also shown above inside a user resource)
+### User Course Model (Also shown above inside a user resource)
 
 ```json
 {
@@ -53,6 +61,8 @@ This component handles setting up all of our MongoDB models so that each collect
   "role": "name of the role" // NEW (04.18.21)
 }
 ```
+
+## User Interaction Models
 
 ### Post Model
 
@@ -118,6 +128,27 @@ This component handles setting up all of our MongoDB models so that each collect
   }
 }
 ```
+
+### Reply Model (Also shown above inside a comment resource)
+
+```json
+{
+  "_id": "oasif-jo12j-asdjf-asdf9",
+  "content": "",
+  "postedBy": {
+    "first": "Alec",
+    "last": "Springel",
+    "_id": "oasif-jo12j-asdjf-asdf9",
+    "anonymous": false,
+    "picture": "profile-picture-url.com"
+  },
+  "reactions": {
+    "likes": ["userid123"]
+  }
+}
+```
+
+## Other
 
 ### Course Model
 
