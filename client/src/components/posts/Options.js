@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
+import CogIcon from "../../imgs/settings 1.svg";
 
 /**
  * Options Component ~ Button side panel for displaying buttons for the user
@@ -15,11 +16,49 @@ const Options = ({ courseId }) => {
       <OptionsHeader>OPTIONS</OptionsHeader>
       <OptionsPanel>
         <Link
-          style={{ width: "100%", textDecoration: "none" }}
+          style={{
+            width: "100%",
+            textDecoration: "none",
+            display: "flex",
+          }}
           to={"/course/" + courseId + "/post/new"}
         >
-          <Button primary autoWidth>
-            + New Post
+          <Button primary autoWidth enableMargin={"0.5em"}>
+            Draft Post
+          </Button>
+        </Link>
+        <Link
+          style={{
+            width: "100%",
+            textDecoration: "none",
+            display: "flex",
+          }}
+          to={"#"}
+        >
+          <Button
+            primary
+            autoWidth
+            enableMargin={"0.5em"}
+            onClick={() => alert("The feature has not yet been implemented...")}
+          >
+            Draft Poll
+          </Button>
+        </Link>
+        <Link
+          style={{
+            width: "100%",
+            textDecoration: "none",
+            display: "flex",
+          }}
+          to={"#"}
+        >
+          <Button
+            outlineSecondary
+            autoWidth
+            enableMargin={"0.5em"}
+            onClick={() => alert("This webpage has not yet been set up...")}
+          >
+            <img src={CogIcon} alt="Config Page Button Icon" />
           </Button>
         </Link>
       </OptionsPanel>
