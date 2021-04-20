@@ -71,13 +71,13 @@ const Options = ({ courseId }) => {
               textDecoration: "none",
               display: "flex",
             }}
-            to={"#"}
+            to={"/config"}
           >
             <Button
               outlineSecondary
               autoWidth
               enableMargin={"0.5em"}
-              onClick={() => alert("This webpage has not yet been set up...")}
+              // onClick={() => alert("This webpage has not yet been set up...")}
             >
               <img src={CogIcon} alt="Config Page Button Icon" />
             </Button>
