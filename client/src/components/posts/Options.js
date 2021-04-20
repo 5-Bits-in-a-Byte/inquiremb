@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../context/UserProvider";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Button from "../common/Button";
@@ -11,6 +12,22 @@ import CogIcon from "../../imgs/settings 1.svg";
  * @param {string} courseId given to the "+ New Post" button to route to the Post form page
  */
 const Options = ({ courseId }) => {
+  const user = useContext(UserContext);
+  console.log("User Object: ", user);
+
+  // Will be used to conditionally render the config page button
+  var userIsAdmin = false;
+
+  // Checks the current user course for Admin privledge status
+  // sets the above 'userIsAdmin' variable accordingly
+  for (let i = 0; i < user.courses.length; i++) {
+    if (user?.courses[i].courseId == courseId) {
+      userIsAdmin = user.courses[i].admin;
+    }
+  }
+
+  // console.log(userIsAdmin);
+
   return (
     <OptionsWrapper>
       <OptionsHeader>OPTIONS</OptionsHeader>
@@ -44,23 +61,28 @@ const Options = ({ courseId }) => {
             Draft Poll
           </Button>
         </Link>
-        <Link
-          style={{
-            width: "100%",
-            textDecoration: "none",
-            display: "flex",
-          }}
-          to={"#"}
-        >
-          <Button
-            outlineSecondary
-            autoWidth
-            enableMargin={"0.5em"}
-            onClick={() => alert("This webpage has not yet been set up...")}
+
+        {/* The Config page conditionally renders based on whether or not
+            the user has ADMIN priviledges for this course */}
+        {userIsAdmin && (
+          <Link
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+            }}
+            to={"#"}
           >
-            <img src={CogIcon} alt="Config Page Button Icon" />
-          </Button>
-        </Link>
+            <Button
+              outlineSecondary
+              autoWidth
+              enableMargin={"0.5em"}
+              onClick={() => alert("This webpage has not yet been set up...")}
+            >
+              <img src={CogIcon} alt="Config Page Button Icon" />
+            </Button>
+          </Link>
+        )}
       </OptionsPanel>
     </OptionsWrapper>
   );
