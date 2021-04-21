@@ -105,7 +105,7 @@ class Courses(Resource):
         elif count == 0:
             return {"errors": [f"No course with id {courseId}"]}, 400
         # Get the course to delete
-        course = query.first()
+        courseToDelete = query.first()
         # Check permissions
         if current_user._id != course.instructorID:
             return {"errors": ["Access denied"]}, 400
@@ -140,7 +140,7 @@ class Courses(Resource):
             post.delete()
 
         # Delete the course itself
-        course.delete()
+        courseToDelete.delete()
         return {"success": "successful delete"}
 
     def validate_post(self, args):
