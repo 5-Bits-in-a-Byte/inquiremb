@@ -38,10 +38,10 @@ const ConfigView = ({ props }) => {
                 "Are you sure you want to delete this course?"
               );
               if (c == true) {
-                alert("YOU ARE DELETING COURSE NOW!");
+                // alert("YOU ARE DELETING COURSE NOW!");
                 // LazyFetch({
                 //   type: "delete",
-                //   endpoint: "/api/courses?courseId=" + "",
+                //   endpoint: "/api/courses?courseId=kjYea2trLrbaqKoHAKVwEm",
                 //   onSuccess: (data) => {
                 //     alert("delete request success.");
                 //   },
