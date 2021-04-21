@@ -119,7 +119,7 @@ const ColorDiv = styled.div`
   background-color: ${(props) => props.color || "#0000ff"};
 `;
 
-const MessageDiv = styled.p`
+const MessageDiv = styled.div`
   padding: 0.6em 0 0 0;
   margin: 0 0 0 0.75em;
 
@@ -166,16 +166,4 @@ const CourseFooter = styled.footer`
   display: flex;
   justify-content: space-between;
   width: 28%;
-`;
-
-const IconButton = styled.button`
-  cursor: pointer;
-  border: none;
-  background-color: #ffffff;
-  overflow: hidden;
-  border-radius: 0.5em;
-
-  &:hover {
-    opacity: 50%;
-  }
 `;

@@ -18,7 +18,7 @@ const JoinCourse = ({ courseList, setCourseList }) => {
 
   return (
     <>
-      <Button secondary onClick={() => toggleModal(true)}>
+      <Button secondary={true} onClick={() => toggleModal(true)}>
         Join a Course
       </Button>
       {modalIsShown && (

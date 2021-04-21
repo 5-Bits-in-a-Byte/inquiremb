@@ -96,9 +96,9 @@ const generatePostContent = (
             width={"18px"}
             style={{
               float: "left",
-              "margin-right": "8px",
-              "margin-left": "20px",
-              "user-select": "none",
+              marginRight: "8px",
+              marginLeft: "20px",
+              userSelect: "none",
             }}
           />
           <h5 style={{ color: "#8c8c8c" }}>{post.comments}</h5>
@@ -207,7 +207,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
                 src={InstructorIcon}
                 width={"20px"}
                 alt={"instructor icon"}
-                style={{ "margin-right": "6px" }}
+                style={{ marginRight: "6px" }}
               />
             </span>
           )}

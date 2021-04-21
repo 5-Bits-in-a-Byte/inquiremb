@@ -62,7 +62,7 @@ const CreateCourse = ({ courseList, setCourseList }) => {
   return (
     <>
       <Button
-        secondary
+        secondary={true}
         style={{ marginLeft: 10 }}
         onClick={() => {
           toggleModal(true);
