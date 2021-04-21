@@ -41,9 +41,10 @@ const ConfigView = ({ props }) => {
                 // alert("YOU ARE DELETING COURSE NOW!");
                 LazyFetch({
                   type: "delete",
-                  endpoint: "/api/courses?courseId=ZXXMVjwQ6jGi25Pevj99BN",
+                  endpoint: "/api/courses?courseId=9kVBQbygoV5sZpX29xw8f9",
                   onSuccess: (data) => {
                     alert("delete request success.");
+                    // TODO: Update User Context on frontend
                   },
                   onFailure: (err) => {
                     alert("delete request failed.", err.response);

@@ -107,7 +107,7 @@ class Courses(Resource):
         # Get the course to delete
         courseToDelete = query.first()
         # Check permissions
-        if current_user._id != course.instructorID:
+        if current_user._id != courseToDelete.instructorID:
             return {"errors": ["Access denied"]}, 400
 
         # Query for user's with matching courseId in their course list
