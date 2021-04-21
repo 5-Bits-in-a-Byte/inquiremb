@@ -48,7 +48,7 @@ function App() {
               <CommentView />
             </NavigationWrapper>
           </PrivateRoute>
-          <PrivateRoute path="/config">
+          <PrivateRoute path="/course/:courseId/config">
             <NavigationWrapper>
               <ConfigView />
             </NavigationWrapper>

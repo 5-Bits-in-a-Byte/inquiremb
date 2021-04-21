@@ -71,7 +71,7 @@ const Options = ({ courseId }) => {
               textDecoration: "none",
               display: "flex",
             }}
-            to={"/config"}
+            to={"/course/" + courseId + "/config"}
           >
             <Button
               outlineSecondary

@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import styled, { css } from "styled-components";
 import ConfigPanel from "./ConfigButtonPanel";
 import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
+import { UserContext, UserDispatchContext } from "../context/UserProvider";
+import { DeleteUserCourse } from "../common/stateManagement/UpdateUser.js";
 
+/** ConfigView
+ * @brief The webpage for the config panel of each course
+ *
+ * @param {any} props catches all of the component props
+ * @returns ConfigView Component
+ */
 const ConfigView = ({ props }) => {
+  let history = useHistory();
+  const { courseId } = useParams();
+  const user = useContext(UserContext);
+  const setUser = useContext(UserDispatchContext);
+
+  // let userCopy = user;
+  // DeleteUserCourse(userCopy, courseId);
+
+  // console.log("Course ID: ", courseId);
+
+  const GoHome = () => {
+    history.push("/");
+  };
+
   return (
     <ConfigWrapper>
       <ScrollingDiv>
@@ -38,16 +61,30 @@ const ConfigView = ({ props }) => {
                 "Are you sure you want to delete this course?"
               );
               if (c == true) {
-                // alert("YOU ARE DELETING COURSE NOW!");
                 LazyFetch({
                   type: "delete",
-                  endpoint: "/api/courses?courseId=9kVBQbygoV5sZpX29xw8f9",
+                  endpoint: "/api/courses?courseId=" + courseId,
                   onSuccess: (data) => {
                     alert("delete request success.");
+                    // LazyFetch({
+                    //   type: "get",
+                    //   endpoint: "/",
+                    //   onSuccess: (data) => {
+                    //     alert("Redirect Success.");
+                    //   },
+                    //   onFailure: (err) => {
+                    //     alert("Redirect Fail.");
+                    //   },
+                    // });
+
                     // TODO: Update User Context on frontend
+                    let userCopy = user;
+                    DeleteUserCourse(userCopy, courseId);
+                    setUser(userCopy);
+                    GoHome();
                   },
                   onFailure: (err) => {
-                    alert("delete request failed.", err.response);
+                    alert("delete request failed, ", err?.response);
                   },
                 });
               } else {
