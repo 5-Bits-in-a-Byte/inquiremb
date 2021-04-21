@@ -26,8 +26,6 @@ const ClassView = () => {
   var classroomID = useParams().courseId;
   var courseContext = useContext(UserContext).courses;
 
-  // console.log("Course Context", courseContext);
-
   var classroomName;
 
   for (var item in courseContext) {

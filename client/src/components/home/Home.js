@@ -82,7 +82,6 @@ const Home = () => {
     type: "get",
     endpoint: endpoint,
   });
-  // console.log("Data: ", data);
 
   let groups =
     data != null && data.length == 0 ? (

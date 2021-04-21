@@ -36,8 +36,6 @@ const Courses = () => {
   let currentCourseState = generateCourseList(user.courses);
   const [courseList, setCourseList] = useState(currentCourseState);
 
-  // console.log(currentCourseState);
-
   return (
     <WrapAll>
       <ScrollDiv>
