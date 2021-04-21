@@ -38,7 +38,8 @@ const Btn = styled.button`
   border-radius: 3px;
 
   font-size: 16px;
-  width: ${(props) => props.autoWidth && "100%"};
+  width: ${(props) => (props.autoWidth ? "100%" : props.buttonWidth)};
+  height: ${(props) => (props.buttonHeight ? props.buttonHeight : "")};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,10 +91,18 @@ const Btn = styled.button`
     ${(props) =>
     props.primary &&
     css`
-      background-color: #4a86fa;
+      background-color: ${(props) =>
+        props.buttonColor ? props.buttonColor : css`#4a86fa`};
       color: #fff;
       &:hover {
-        background-color: #407df3;
+        background-color: ${(props) =>
+          props.buttonColor ? props.buttonColor : css`#407df3`};
+        transform: translateY(-0.5px);
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+      }
+      &:active {
+        transform: translateY(1px);
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0);
       }
     `}
 

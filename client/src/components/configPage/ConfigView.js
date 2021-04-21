@@ -1,11 +1,44 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import ConfigPanel from "./ConfigButtonPanel";
+import Button from "../common/Button";
 
 const ConfigView = ({ props }) => {
   return (
     <ConfigWrapper>
       <ScrollingDiv>
         <h1>THIS IS THE CONFIG PAGE</h1>
+
+        <ConfigPanel
+          panelText={
+            "Click here to delete the course. WARNING once deleted there is no undoing."
+          }
+        >
+          <Button
+            primary
+            buttonColor={"#DC2B2B"}
+            buttonWidth={"200px"}
+            buttonHeight={"2.2rem"}
+            onClick={() => {
+              alert("OH MY GOSH U JUST DELETED THE WHOLE BACKEND !!!");
+            }}
+          >
+            Delete Course
+          </Button>
+        </ConfigPanel>
+
+        <ConfigPanel panelText="This is the button description for the 'other' button. It does nothing.">
+          <Button
+            secondary
+            buttonWidth={"200px"}
+            buttonHeight={"2.2rem"}
+            onClick={() => {
+              alert("This literally doesn't do anything...");
+            }}
+          >
+            Other Button
+          </Button>
+        </ConfigPanel>
 
         {/* KEEP THE OVERFLOW COUNTER IT HELPS WITH OVERFLOW
             at the bottom of the scrolling div. */}
