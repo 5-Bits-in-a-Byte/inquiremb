@@ -19,6 +19,15 @@ const ConfigView = ({ props }) => {
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
 
+  var userIsAdmin = false;
+  var count = 0;
+
+  for (let i = 0; i < user.courses.length; i++) {
+    if (user?.courses[i].courseId == courseId) {
+      userIsAdmin = user.courses[i].admin;
+    }
+  }
+
   // let userCopy = user;
   // DeleteUserCourse(userCopy, courseId);
 
@@ -31,70 +40,105 @@ const ConfigView = ({ props }) => {
   return (
     <ConfigWrapper>
       <ScrollingDiv>
-        <h1>THIS IS THE CONFIG PAGE</h1>
+        {userIsAdmin && <h1>THIS IS THE CONFIG PAGE</h1>}
 
-        <ConfigPanel panelText="This is the button description for the 'other' button. It does nothing.">
-          <Button
-            primary
-            buttonWidth={"200px"}
-            buttonHeight={"2.2rem"}
-            onClick={() => {
-              alert("This literally doesn't do anything...");
-            }}
+        {userIsAdmin && (
+          <ConfigPanel panelText="This is the button description for the 'other' button. It does nothing.">
+            <Button
+              primary
+              buttonWidth={"200px"}
+              buttonHeight={"2.2rem"}
+              onClick={() => {
+                alert("This literally doesn't do anything...");
+              }}
+            >
+              Other Button
+            </Button>
+          </ConfigPanel>
+        )}
+
+        {userIsAdmin && (
+          <ConfigPanel
+            panelText={
+              "Click here to delete the course. WARNING once deleted there is no undoing."
+            }
           >
-            Other Button
-          </Button>
-        </ConfigPanel>
+            <Button
+              primary
+              buttonColor={"#DC2B2B"}
+              buttonWidth={"200px"}
+              buttonHeight={"2.2rem"}
+              onClick={() => {
+                let c = window.confirm(
+                  "Are you sure you want to delete this course?"
+                );
+                if (c == true) {
+                  LazyFetch({
+                    type: "delete",
+                    endpoint: "/api/courses?courseId=" + courseId,
+                    onSuccess: (data) => {
+                      alert("delete request success.");
+                      // LazyFetch({
+                      //   type: "get",
+                      //   endpoint: "/",
+                      //   onSuccess: (data) => {
+                      //     alert("Redirect Success.");
+                      //   },
+                      //   onFailure: (err) => {
+                      //     alert("Redirect Fail.");
+                      //   },
+                      // });
 
-        <ConfigPanel
-          panelText={
-            "Click here to delete the course. WARNING once deleted there is no undoing."
-          }
-        >
-          <Button
-            primary
-            buttonColor={"#DC2B2B"}
-            buttonWidth={"200px"}
-            buttonHeight={"2.2rem"}
-            onClick={() => {
-              let c = window.confirm(
-                "Are you sure you want to delete this course?"
-              );
-              if (c == true) {
-                LazyFetch({
-                  type: "delete",
-                  endpoint: "/api/courses?courseId=" + courseId,
-                  onSuccess: (data) => {
-                    alert("delete request success.");
-                    // LazyFetch({
-                    //   type: "get",
-                    //   endpoint: "/",
-                    //   onSuccess: (data) => {
-                    //     alert("Redirect Success.");
-                    //   },
-                    //   onFailure: (err) => {
-                    //     alert("Redirect Fail.");
-                    //   },
-                    // });
+                      // TODO: Update User Context on frontend
+                      let userCopy = user;
+                      DeleteUserCourse(userCopy, courseId);
+                      setUser(userCopy);
+                      GoHome();
+                    },
+                    onFailure: (err) => {
+                      alert("delete request failed, ", err?.response);
+                    },
+                  });
+                } else {
+                  alert("You canceled the delete request.");
+                }
+              }}
+            >
+              Delete Course
+            </Button>
+          </ConfigPanel>
+        )}
 
-                    // TODO: Update User Context on frontend
-                    let userCopy = user;
-                    DeleteUserCourse(userCopy, courseId);
-                    setUser(userCopy);
-                    GoHome();
-                  },
-                  onFailure: (err) => {
-                    alert("delete request failed, ", err?.response);
-                  },
-                });
-              } else {
-                alert("You canceled the delete request.");
-              }
-            }}
-          >
-            Delete Course
-          </Button>
-        </ConfigPanel>
+        {!userIsAdmin && <h1>ACCESS DENIED</h1>}
+
+        {!userIsAdmin && (
+          <ConfigPanel panelText="You're not authorized to view this page.">
+            <Button
+              primary
+              buttonWidth={"200px"}
+              buttonHeight={"2.2rem"}
+              onClick={() => {
+                let c = true;
+                count++;
+                while (c) {
+                  c = window.confirm(
+                    "Number of times you clicked something after being told not to: " +
+                      count.toString()
+                  );
+                  count++;
+                }
+
+                alert(
+                  "You'll have illegally clicked " +
+                    (++count).toString() +
+                    " times after you dismiss this alert"
+                );
+              }}
+            >
+              Don't click ANYTHING
+            </Button>
+          </ConfigPanel>
+        )}
 
         {/* KEEP THE OVERFLOW COUNTER IT HELPS WITH OVERFLOW
             at the bottom of the scrolling div. */}
