@@ -2,6 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import ConfigPanel from "./ConfigButtonPanel";
 import Button from "../common/Button";
+import LazyFetch from "../common/requests/LazyFetch";
 
 const ConfigView = ({ props }) => {
   return (
@@ -33,7 +34,21 @@ const ConfigView = ({ props }) => {
             buttonWidth={"200px"}
             buttonHeight={"2.2rem"}
             onClick={() => {
-              alert("OH MY GOSH U JUST DELETED THE WHOLE BACKEND !!!");
+              let c = window.confirm(
+                "Are you sure you want to delete this course?"
+              );
+              if (c == true) {
+                alert("YOU ARE DELETING COURSE NOW!");
+                // LazyFetch({
+                //   type: "delete",
+                //   endpoint: "/api/courses?courseId=" + "",
+                //   onSuccess: (data) => {
+                //     alert("delete request success.");
+                //   },
+                // });
+              } else {
+                alert("You canceled the delete request.");
+              }
             }}
           >
             Delete Course
