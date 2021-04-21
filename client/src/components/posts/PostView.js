@@ -98,6 +98,7 @@ const PostView = ({ highlightedSection }) => {
                 secondary={true}
                 onClick={() => {
                   setCondensedState(!isCondensed);
+                  alert("This feature is a work in progress.");
                 }}
               >
                 <img src={LineWidthImg} />

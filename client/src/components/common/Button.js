@@ -7,7 +7,7 @@ import LoadingDots from "./animation/LoadingDots";
  * The one true button to rule them all
  *
  * @version 1.0.0
- * @author [Alec Springel](https://github.com/alecspringel)
+ * @author [Alec Springel](https://github.com/alecspringel) , [Seth Tal](https://github.com/Sephta)
  */
 const Button = ({ children, loading, onClick, ...props }) => {
   const clickHandler = loading ? undefined : onClick;
@@ -38,10 +38,13 @@ const Btn = styled.button`
   border-radius: 3px;
 
   font-size: 16px;
-  width: ${(props) => props.autoWidth && "100%"};
+  width: ${(props) => (props.autoWidth ? "100%" : props.buttonWidth)};
+  height: ${(props) => (props.buttonHeight ? props.buttonHeight : "")};
   display: flex;
   justify-content: center;
   align-items: center;
+
+  transition: ease-in-out 100ms;
 
   // If secondary prop === true
   ${(props) =>
@@ -53,6 +56,25 @@ const Btn = styled.button`
       color: #162b55;
       &:hover {
         background-color: #dedede;
+      }
+    `}
+  ${(props) =>
+    props.outlineSecondary &&
+    css`
+      border: 2px solid #4a86fa;
+      border-radius: 4px;
+      padding: 5px 12px;
+      background-color: #e7e7e700;
+      color: #162b55;
+      &:hover {
+        transform: ${(props) =>
+          props.animatedHover ? css`translateY(-0.5px);` : ""};
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+      }
+      &:active {
+        transform: ${(props) =>
+          props.animatedHover ? css`translateY(1px);` : ""};
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0);
       }
     `}
 
@@ -71,10 +93,20 @@ const Btn = styled.button`
     ${(props) =>
     props.primary &&
     css`
-      background-color: #4a86fa;
+      background-color: ${(props) =>
+        props.buttonColor ? props.buttonColor : css`#4a86fa`};
       color: #fff;
       &:hover {
-        background-color: #407df3;
+        background-color: ${(props) =>
+          props.buttonColor ? props.buttonColor : css`#407df3`};
+        transform: ${(props) =>
+          props.animatedHover ? css`translateY(-0.5px);` : ""};
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+      }
+      &:active {
+        transform: ${(props) =>
+          props.animatedHover ? css`translateY(1px);` : ""};
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0);
       }
     `}
 
@@ -90,4 +122,9 @@ const Btn = styled.button`
           opacity: 0.85;
           color: black;
       `}
+    ${(props) =>
+    props.enableMargin &&
+    css`
+      margin: ${props.enableMargin};
+    `}
 `;
