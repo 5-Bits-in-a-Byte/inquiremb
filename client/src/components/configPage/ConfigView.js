@@ -39,13 +39,17 @@ const ConfigView = ({ props }) => {
               );
               if (c == true) {
                 // alert("YOU ARE DELETING COURSE NOW!");
-                // LazyFetch({
-                //   type: "delete",
-                //   endpoint: "/api/courses?courseId=kjYea2trLrbaqKoHAKVwEm",
-                //   onSuccess: (data) => {
-                //     alert("delete request success.");
-                //   },
-                // });
+                LazyFetch({
+                  type: "delete",
+                  endpoint: "/api/courses?courseId=9kVBQbygoV5sZpX29xw8f9",
+                  onSuccess: (data) => {
+                    alert("delete request success.");
+                    // TODO: Update User Context on frontend
+                  },
+                  onFailure: (err) => {
+                    alert("delete request failed.", err.response);
+                  },
+                });
               } else {
                 alert("You canceled the delete request.");
               }
