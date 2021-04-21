@@ -82,7 +82,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     swagger = Swagger(app, config=config.swagger_config)
 
     # register endpoints from /resources folder here:
-    api.add_resource(Roles, '/roles')
+    api.add_resource(Roles, '/courses/<string:courseId>/roles')
     api.add_resource(Demo, '/demo')
     api.add_resource(Me, '/me')
     api.add_resource(Courses, '/courses')
@@ -105,5 +105,9 @@ def create_app(override_config=None, testing=False, include_socketio=True):
 
 
 if __name__ == '__main__':
-    io, app = create_app()
-    io.run(app, host="0.0.0.0", debug=True, log_output=True)
+    if False:
+        io, app = create_app()
+        io.run(app, host="0.0.0.0", debug=True, log_output=True)
+    else:
+        app = create_app(include_socketio=False)
+        app.run(host="0.0.0.0", debug=True)

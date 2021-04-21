@@ -8,6 +8,22 @@ from bson.objectid import ObjectId
 from inquire.socketio_app import io
 
 class Roles(Resource):
-    def get(self):
-        Roles(roleName="test", permissions={"a"}).save()
 
+    def post(self, courseId):
+        parser = reqparse.RequestParser()
+        parser.add_argument('permissions', type=dict)
+        parser.add_argument('name')
+        args = parser.parse_args()
+        try:
+            new_role = Role(roleName="test", permissions=args['permissions']).save()
+            return {"status": "success", "role": self._serialize(new_role)}
+        except Exception as exc:
+            if type(exc) == list:
+                return {"errors": [str(e) for e in exc]}
+            else:
+                return {"errors": str(exc)}
+
+    def _serialize(self, role):
+        j = role.to_son()
+        j["_id"] = str(j["_id"])
+        return j

@@ -12,6 +12,7 @@ from inquire.config import MONGO_URI
 from pymodm import MongoModel, fields, EmbeddedMongoModel
 from pymongo.write_concern import WriteConcern
 from pymodm.connection import connect
+from pymodm.errors import ValidationError
 import pymongo
 import json
 import shortuuid
@@ -126,25 +127,34 @@ class Course(MongoModel):
 
         indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
 
-always_false = lambda x: False
-
-class Roles(MongoModel):
-    roleName = fields.CharField(required=True)
-    permissions = fields.DictField(validators=[always_false])
-
-
-def role_validator(d, example):
+def role_validator(d, example=None):
     """For use with the Roles Model"""
     # Loop through each field
     #   if field exists:
     #       role_validator(field, example_field)
-
-    for key, item in example.items:
+    if example == None:
+        with open("roles/example_roles.json", "r") as f:
+            example = json.load(f)
+    print(example)
+    print(d)
+    for key, item in example.items():
+        print(key, key in d)
         if key in d:
             if type(item) == dict and type(d[key]) == dict:
-                if not role_validator(item, example[key]):
-                    return False
+                if not role_validator(d[key], example=item):
+                    raise ValidationError("Missing key")
             elif type(item) != bool or type(d[key]) != bool:
-                return False
+                raise ValidationError(f"Wrong type in permission field: {key}")
+        else:
+            raise ValidationError(f"Missing permission field: {key}")
 
     return True
+
+class Role(MongoModel):
+    roleName = fields.CharField(required=True)
+    permissions = fields.DictField(default=False, validators=[role_validator])
+    class Meta:
+        write_concern = WriteConcern(j=True)
+        connection_alias = 'my-app'
+
+
