@@ -78,18 +78,6 @@ const ConfigView = ({ props }) => {
                     endpoint: "/api/courses?courseId=" + courseId,
                     onSuccess: (data) => {
                       alert("delete request success.");
-                      // LazyFetch({
-                      //   type: "get",
-                      //   endpoint: "/",
-                      //   onSuccess: (data) => {
-                      //     alert("Redirect Success.");
-                      //   },
-                      //   onFailure: (err) => {
-                      //     alert("Redirect Fail.");
-                      //   },
-                      // });
-
-                      // TODO: Update User Context on frontend
                       let userCopy = user;
                       DeleteUserCourse(userCopy, courseId);
                       setUser(userCopy);
