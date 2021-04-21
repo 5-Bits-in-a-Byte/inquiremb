@@ -67,11 +67,13 @@ const Btn = styled.button`
       background-color: #e7e7e700;
       color: #162b55;
       &:hover {
-        transform: translateY(-0.5px);
+        transform: ${(props) =>
+          props.animatedHover ? css`translateY(-0.5px);` : ""};
         box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
       }
       &:active {
-        transform: translateY(1px);
+        transform: ${(props) =>
+          props.animatedHover ? css`translateY(1px);` : ""};
         box-shadow: 2px 2px 6px rgba(0, 0, 0, 0);
       }
     `}
@@ -97,11 +99,13 @@ const Btn = styled.button`
       &:hover {
         background-color: ${(props) =>
           props.buttonColor ? props.buttonColor : css`#407df3`};
-        transform: translateY(-0.5px);
+        transform: ${(props) =>
+          props.animatedHover ? css`translateY(-0.5px);` : ""};
         box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
       }
       &:active {
-        transform: translateY(1px);
+        transform: ${(props) =>
+          props.animatedHover ? css`translateY(1px);` : ""};
         box-shadow: 2px 2px 6px rgba(0, 0, 0, 0);
       }
     `}

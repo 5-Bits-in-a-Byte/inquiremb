@@ -9,6 +9,19 @@ const ConfigView = ({ props }) => {
       <ScrollingDiv>
         <h1>THIS IS THE CONFIG PAGE</h1>
 
+        <ConfigPanel panelText="This is the button description for the 'other' button. It does nothing.">
+          <Button
+            primary
+            buttonWidth={"200px"}
+            buttonHeight={"2.2rem"}
+            onClick={() => {
+              alert("This literally doesn't do anything...");
+            }}
+          >
+            Other Button
+          </Button>
+        </ConfigPanel>
+
         <ConfigPanel
           panelText={
             "Click here to delete the course. WARNING once deleted there is no undoing."
@@ -24,19 +37,6 @@ const ConfigView = ({ props }) => {
             }}
           >
             Delete Course
-          </Button>
-        </ConfigPanel>
-
-        <ConfigPanel panelText="This is the button description for the 'other' button. It does nothing.">
-          <Button
-            secondary
-            buttonWidth={"200px"}
-            buttonHeight={"2.2rem"}
-            onClick={() => {
-              alert("This literally doesn't do anything...");
-            }}
-          >
-            Other Button
           </Button>
         </ConfigPanel>
 
