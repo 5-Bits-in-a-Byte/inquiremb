@@ -18,7 +18,7 @@ const JoinCourse = ({ courseList, setCourseList }) => {
 
   return (
     <>
-      <Button secondary onClick={() => toggleModal(true)}>
+      <Button secondary={true} onClick={() => toggleModal(true)}>
         Join a Course
       </Button>
       {modalIsShown && (
@@ -28,8 +28,8 @@ const JoinCourse = ({ courseList, setCourseList }) => {
             toggleDisplay("flex");
             joinCourse(null);
           }}
-          width="724px"
-          data-testid="join-course-modal"
+          width={"724px"}
+          data-testid={"join-course-modal"}
         >
           {!course ? (
             <JoinInfo joinCourse={joinCourse} />

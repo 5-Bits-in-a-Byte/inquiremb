@@ -62,7 +62,7 @@ const CommentView = ({ classroomName }) => {
 
   useEffect(() => {
     io.on("Comment/create", (comment) => {
-      console.log(comment);
+      //console.log(comment);
       // Ensure the user isn't the one who posted it
       if (
         comment &&
@@ -119,7 +119,7 @@ const CommentView = ({ classroomName }) => {
       });
     }
   };
-  console.log(commentData);
+  //console.log(commentData);
 
   let comments = [...commentData];
   if (newComments.draft) {

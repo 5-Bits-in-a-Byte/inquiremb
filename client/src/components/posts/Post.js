@@ -96,9 +96,9 @@ const generatePostContent = (
             width={"18px"}
             style={{
               float: "left",
-              "margin-right": "8px",
-              "margin-left": "20px",
-              "user-select": "none",
+              marginRight: "8px",
+              marginLeft: "20px",
+              userSelect: "none",
             }}
           />
           <h5 style={{ color: "#8c8c8c" }}>{post.comments}</h5>
@@ -136,8 +136,6 @@ const Post = ({ post, isCondensed, isDraft }) => {
     });
   };
 
-  // console.log(draft);
-
   const handleSubmit = (e) => {
     LazyFetch({
       type: "post",
@@ -152,7 +150,6 @@ const Post = ({ post, isCondensed, isDraft }) => {
         /* data.new is used after the redirect to prevent 
         a request for comments (new posts have 0 comments)*/
         data.new = true;
-        // console.log(data);
         history.push({
           pathname: "/course/" + data.courseId + "/post/" + data._id,
           state: { post: data },
@@ -207,7 +204,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
                 src={InstructorIcon}
                 width={"20px"}
                 alt={"instructor icon"}
-                style={{ "margin-right": "6px" }}
+                style={{ marginRight: "6px" }}
               />
             </span>
           )}
@@ -233,7 +230,6 @@ const HRStyle = {
   margin: "16px 0",
 };
 
-//#region Post Stylings
 const PostWrapper = styled.div`
   position: relative;
   padding: 23px 30px;
@@ -312,5 +308,3 @@ const MetaIconWrapper = styled.div`
   margin-left: auto;
   height: 100%;
 `;
-
-//#endregion

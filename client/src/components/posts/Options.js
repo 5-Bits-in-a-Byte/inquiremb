@@ -33,7 +33,6 @@ Options.propTypes = {
 
 export default Options;
 
-//#region Options Stylings
 const OptionsWrapper = styled.div`
   width: 280px; // Need to make same width as nav + menu bar
   flex-grow: 1;
@@ -56,10 +55,7 @@ const OptionsPanel = styled.div`
   background: #fff;
   width: 220px;
   padding: 14px;
-
-  // border: 1px solid black;
   border-radius: 5px;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
 `;
-//#endregion

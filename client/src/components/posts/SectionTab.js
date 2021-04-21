@@ -22,9 +22,9 @@ const SectionTab = ({
         width={"18px"}
         style={{
           float: "left",
-          "margin-right": "1em",
-          "margin-left": "0.75em",
-          "user-select": "none",
+          marginRight: "1em",
+          marginLeft: "0.75em",
+          userSelect: "none",
         }}
       />
       <TabText>{tabText}</TabText>

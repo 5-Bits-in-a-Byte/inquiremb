@@ -54,7 +54,9 @@ const Comment = ({ comment, isDraft, callback }) => {
   let replies = [];
   if (comment.replies && comment.replies.length > 0) {
     comment.replies.forEach((reply) => {
-      replies.push(<CommentReply reply={reply} postid={postid} />);
+      replies.push(
+        <CommentReply reply={reply} postid={postid} key={reply._id} />
+      );
     });
   }
   // Insert new replies that were created from state
@@ -63,7 +65,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   // If the user clicks reply, insert a drafted reply
   if (isReplying) {
     replies.push(
-      <CommentReply isDraft submitReply={submitReply} postid={postid} />
+      <CommentReply isDraft submitReply={submitReply} postid={postid} key={0} />
     );
   }
 

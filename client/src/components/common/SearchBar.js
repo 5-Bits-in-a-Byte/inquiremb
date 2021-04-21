@@ -18,7 +18,7 @@ const SearchBar = ({ onChange, placeholder }) => {
         style={{
           height: "16px",
           padding: "0 7px 0 11px",
-          "border-right": "1px solid #818181",
+          borderRight: "1px solid #818181",
         }}
       />
       <TextInput type="text" onChange={onChange} placeholder={placeholder} />

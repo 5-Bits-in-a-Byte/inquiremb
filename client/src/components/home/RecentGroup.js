@@ -43,13 +43,9 @@ const Wrapper = styled.div`
 const GroupWrapper = styled.div`
   width: 100%;
   min-height: 85px;
-
-  /* border: 1px solid black; */
 `;
 
 const GroupTitle = styled.h1`
-  /* color: ${(props) => props.nameColor}; */
-
   text-align: center;
   text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
 `;
