@@ -93,6 +93,56 @@ class Courses(Resource):
                 "can_remove": True, "canEndorse": True, "viewAnonymous": True,
                 "admin": True, "color": color}, 200
 
+    def delete(self):
+        # Parse argument
+        courseId = request.args.get('courseId')
+        # Query for courses matching the courseid
+        query = Course.objects.raw({"_id": courseId})
+        # Error checking even though these shouldn't happen
+        count = query.count()
+        if count > 1:
+            return {"errors": [f"More than one course with id {courseId}"]}, 400
+        elif count == 0:
+            return {"errors": [f"No course with id {courseId}"]}, 400
+        # Get the course to delete
+        course = query.first()
+        # Check permissions
+        if current_user._id != course.instructorID:
+            return {"errors": ["Access denied"]}, 400
+
+        # Query for user's with matching courseId in their course list
+        user_query = User.objects.raw(
+            {"courses": {"$elemMatch": {"courseId": courseId}}})
+        user_count = user_query.count()
+        # Error check the count of user query
+        if user_count > 0:
+          # Loop through user's in the course and their courses
+            for user in user_query:
+                for course in user.courses:
+                    # Remove the course from the user's course list
+                    if course.courseId == courseId:
+                        pop_idx = user.courses.index(course)
+                        user.courses.pop(pop_idx)
+                user.save()
+        else:
+            return {"errors": ["No users with this course"]}, 400
+
+        # Delete all posts associated with the course
+        post_query = Post.objects.raw({"courseId": courseId})
+        posts = list(post_query)
+        for post in posts:
+            # Delete all comments associated with each post in the course
+            comment_query = Comment.objects.raw({"postId": post._id})
+            count = comment_query.count()
+            comments = list(comment_query)
+            for comment in comments:
+                comment.delete()
+            post.delete()
+
+        # Delete the course itself
+        course.delete()
+        return {"success": "successful delete"}
+
     def validate_post(self, args):
         errors = []
         # if args.university is None:
