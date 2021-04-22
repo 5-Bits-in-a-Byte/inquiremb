@@ -5,26 +5,30 @@ import Button from "../common/Button";
 import ConfigPanelGroup from "./ConfigPanelGroup";
 import RolePanel from "./roleConfigComponents/RolePanel";
 
-const TestCourseRoleList = [
-  <RolePanel key={"0"} roleName={"Student"}></RolePanel>,
-  <RolePanel key={"1"} roleName={"TA 0"}></RolePanel>,
-];
-
-const CreateRolePanel = (name) => {
-  return <RolePanel roleName={name} />;
+/**
+ * Creates a Role Component and passes the role object to said component.
+ */
+const CreateRolePanel = (role, name) => {
+  return <RolePanel key={role?._id} roleObject={role} roleName={name} />;
 };
 
-const ConfigPanel = ({ props }) => {
-  const [roleList, setRoleList] = useState(TestCourseRoleList);
+/**
+ * Generates a list of Role Components for State Management
+ */
+const GenerateRoleList = (roles) => {
+  let roleComponentList = [];
+  for (let i = 0; i < roles.length; i++) {
+    roleComponentList.push(CreateRolePanel(roles[i], roles[i]?.roleName));
+  }
+  return roleComponentList;
+};
 
-  // const UpdateRoleList = (roles) => {
-  //   let rolesCopy = roles;
-  //   rolesCopy.push(CreateRolePanel("Test Role"));
+const ConfigPanel = ({ courseRoles, setCourseRoles, ...props }) => {
+  let realRoleList = GenerateRoleList(courseRoles);
 
-  //   console.log("Roles Copy: ", rolesCopy);
-  //   console.log("Role list after: ", roleList);
-  //   return rolesCopy;
-  // };
+  console.log("RealRolesList: ", realRoleList);
+
+  const [roleList, setRoleList] = useState(realRoleList);
 
   return (
     <PanelWrapper>
@@ -36,7 +40,10 @@ const ConfigPanel = ({ props }) => {
           buttonHeight={"48px"}
           onClick={() => {
             setRoleList(
-              [...roleList, CreateRolePanel("Test Role")]
+              [
+                ...roleList,
+                CreateRolePanel(courseRoles[0], courseRoles[0]?.roleName),
+              ]
               // UpdateRoleList(roleList)
             );
           }}

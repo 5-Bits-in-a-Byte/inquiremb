@@ -27,6 +27,7 @@ const Dropdown = (props) => {
                   <DropdownOption
                     onClick={option.onClick}
                     key={option.key || index}
+                    extras={option.extra}
                   >
                     {option.label}
                   </DropdownOption>

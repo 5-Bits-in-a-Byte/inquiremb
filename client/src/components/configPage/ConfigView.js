@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import styled, { css } from "styled-components";
 import ConfigPanel from "./ConfigPanel";
@@ -7,6 +7,42 @@ import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import { DeleteUserCourse } from "../common/stateManagement/UpdateUser.js";
+
+const adminPerms = {
+  _id: "oasif-jo12j-asdjf-asdf9",
+  roleName: "Admin Role",
+  publish: {
+    postComment: true,
+    reply: true,
+    poll: true,
+  },
+  delete: {
+    postComment: true,
+    reply: true,
+    poll: true,
+  },
+  participation: {
+    reactions: true,
+    voteInPoll: true,
+    pin: true,
+  },
+  edit: {
+    postComment: true,
+    reply: true,
+    poll: true,
+  },
+  privacy: {
+    private: true,
+    anonymous: true,
+  },
+  admin: {
+    banUsers: true,
+    removeUsers: true,
+    announce: true,
+    configure: true,
+    highlightPost: true,
+  },
+};
 
 /** ConfigView
  * @brief The webpage for the config panel of each course
@@ -20,8 +56,27 @@ const ConfigView = ({ props }) => {
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
 
+  // State ------------------------------------------------------
+  // var fetchedCourseRoles = null;
+  // LazyFetch({
+  //   type: "get",
+  //   endpoint: "/api/courses/" + courseId + "/roles",
+  //   onSuccess: (data) => {
+  //     console.log("Successfully fetched Course Roles.");
+  //     fetchedCourseRoles = data;
+  //   },
+  //   onFailure: (err) => {
+  //     console.log("Failed to fetch Course Roles.");
+  //   },
+  // });
+
+  const [courseRoles, setCourseRoles] = useState([adminPerms]);
+  // console.log("Course Roles", courseRoles);
+  // ------------------------------------------------------------
+
   var userIsAdmin = false;
 
+  // ------------------------------------------------------------
   // Checks if the user has admin level privledge in this course.
   // TODO: Refactor with the introduction of Roles
   for (let i = 0; i < user.courses.length; i++) {
@@ -48,7 +103,14 @@ const ConfigView = ({ props }) => {
             <h1>ACCESS DENIED</h1>
           )}
 
-          {userIsAdmin ? <ConfigPanel></ConfigPanel> : <></>}
+          {userIsAdmin ? (
+            <ConfigPanel
+              courseRoles={courseRoles}
+              setCourseRoles={setCourseRoles}
+            ></ConfigPanel>
+          ) : (
+            <></>
+          )}
 
           {userIsAdmin ? (
             <ConfigButtonPanel panelText="This is the button description for the 'other' button. It does nothing.">
