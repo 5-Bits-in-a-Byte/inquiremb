@@ -1,1 +1,2 @@
-from .default_student import student
+from .student import student
+from .admin import admin

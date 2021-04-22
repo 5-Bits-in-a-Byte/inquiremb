@@ -8,7 +8,7 @@ Group Name: 5 Bits in a Byte
 Last Modified Date: 03/12/2021
 '''
 from inquire.config import MONGO_URI
-
+from inquire.roles import student
 from pymodm import MongoModel, fields, EmbeddedMongoModel
 from pymongo.write_concern import WriteConcern
 from pymodm.connection import connect
@@ -47,17 +47,11 @@ class User(MongoModel):
 
 
 class UserCourse(EmbeddedMongoModel):
-    courseId = fields.CharField()
+    courseId = fields.CharField(required=True)
     courseName = fields.CharField(required=True)
     nickname = fields.CharField(blank=True)
     color = fields.CharField(blank=True)
-    canPost = fields.BooleanField(default=True)
-    seePrivate = fields.BooleanField(default=False)
-    canPin = fields.BooleanField(default=False)
-    canRemove = fields.BooleanField(default=False)
-    canEndorse = fields.BooleanField(default=False)
-    viewAnonymous = fields.BooleanField(default=False)
-    admin = fields.BooleanField(default=False)
+    role = fields.CharField(required=True)
 
 
 '''
@@ -121,6 +115,8 @@ class Course(MongoModel):
     course = fields.CharField()
     canJoinById = fields.BooleanField()
     instructorID = fields.CharField()
+    roles = fields.ListField(required=True)
+    default_role = fields.ObjectIdField(required=True)
     _id = fields.CharField(primary_key=True, default=shortuuid.uuid)
 
     class Meta:
@@ -149,7 +145,7 @@ def role_validator(d, example=None):
     return True
 
 class Role(MongoModel):
-    roleName = fields.CharField(required=True)
+    name = fields.CharField(required=True)
     permissions = fields.DictField(default=False, validators=[role_validator])
     class Meta:
         write_concern = WriteConcern(j=True)

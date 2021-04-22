@@ -170,7 +170,7 @@ This component handles setting up all of our MongoDB models so that each collect
 ```json
 {
   "_id": "role id goes here",
-  "roleName": "the name of the role goes here",
+  "name": "the name of the role goes here",
   "permissions": {
     "publish": {
       "postComment": true,
