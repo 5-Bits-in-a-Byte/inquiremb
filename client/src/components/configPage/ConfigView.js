@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import styled, { css } from "styled-components";
-import ConfigPanel from "./ConfigButtonPanel";
+import ConfigPanel from "./ConfigPanel";
+import ConfigButtonPanel from "./ConfigButtonPanel";
 import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext, UserDispatchContext } from "../context/UserProvider";
@@ -20,19 +21,19 @@ const ConfigView = ({ props }) => {
   const setUser = useContext(UserDispatchContext);
 
   var userIsAdmin = false;
-  var count = 0;
 
+  // Checks if the user has admin level privledge in this course.
+  // TODO: Refactor with the introduction of Roles
   for (let i = 0; i < user.courses.length; i++) {
     if (user?.courses[i].courseId == courseId) {
       userIsAdmin = user.courses[i].admin;
     }
   }
+  // ------------------------------------------------------------
 
-  // let userCopy = user;
-  // DeleteUserCourse(userCopy, courseId);
-
-  // console.log("Course ID: ", courseId);
-
+  /**
+   * Redirects the user to the landing page
+   */
   const GoHome = () => {
     history.push("/");
   };
@@ -40,97 +41,76 @@ const ConfigView = ({ props }) => {
   return (
     <ConfigWrapper>
       <ScrollingDiv>
-        {userIsAdmin && <h1>THIS IS THE CONFIG PAGE</h1>}
+        <CenterContent>
+          {userIsAdmin ? (
+            <h1 style={{ margin: `0 0 1rem 0` }}>THIS IS THE CONFIG PAGE</h1>
+          ) : (
+            <h1>ACCESS DENIED</h1>
+          )}
 
-        {userIsAdmin && (
-          <ConfigPanel panelText="This is the button description for the 'other' button. It does nothing.">
-            <Button
-              primary
-              buttonWidth={"200px"}
-              buttonHeight={"2.2rem"}
-              onClick={() => {
-                alert("This literally doesn't do anything...");
-              }}
+          {userIsAdmin ? <ConfigPanel></ConfigPanel> : <></>}
+
+          {userIsAdmin ? (
+            <ConfigButtonPanel panelText="This is the button description for the 'other' button. It does nothing.">
+              <Button
+                primary
+                buttonWidth={"200px"}
+                buttonHeight={"2.2rem"}
+                onClick={() => {
+                  alert("This literally doesn't do anything...");
+                }}
+              >
+                Other Button
+              </Button>
+            </ConfigButtonPanel>
+          ) : (
+            <></>
+          )}
+
+          {userIsAdmin && (
+            <ConfigButtonPanel
+              panelText={
+                "Click here to delete the course. WARNING once deleted there is no undoing."
+              }
             >
-              Other Button
-            </Button>
-          </ConfigPanel>
-        )}
-
-        {userIsAdmin && (
-          <ConfigPanel
-            panelText={
-              "Click here to delete the course. WARNING once deleted there is no undoing."
-            }
-          >
-            <Button
-              primary
-              buttonColor={"#DC2B2B"}
-              buttonWidth={"200px"}
-              buttonHeight={"2.2rem"}
-              onClick={() => {
-                let c = window.confirm(
-                  "Are you sure you want to delete this course?"
-                );
-                if (c == true) {
-                  LazyFetch({
-                    type: "delete",
-                    endpoint: "/api/courses?courseId=" + courseId,
-                    onSuccess: (data) => {
-                      alert("delete request success.");
-                      let userCopy = user;
-                      DeleteUserCourse(userCopy, courseId);
-                      setUser(userCopy);
-                      GoHome();
-                    },
-                    onFailure: (err) => {
-                      alert("delete request failed, ", err?.response);
-                    },
-                  });
-                } else {
-                  alert("You canceled the delete request.");
-                }
-              }}
-            >
-              Delete Course
-            </Button>
-          </ConfigPanel>
-        )}
-
-        {!userIsAdmin && <h1>ACCESS DENIED</h1>}
-
-        {!userIsAdmin && (
-          <ConfigPanel panelText="You're not authorized to view this page.">
-            <Button
-              primary
-              buttonWidth={"200px"}
-              buttonHeight={"2.2rem"}
-              onClick={() => {
-                let c = true;
-                count++;
-                while (c) {
-                  c = window.confirm(
-                    "Number of times you clicked something after being told not to: " +
-                      count.toString()
+              <Button
+                primary
+                buttonColor={"#DC2B2B"}
+                buttonWidth={"200px"}
+                buttonHeight={"2.2rem"}
+                onClick={() => {
+                  let c = window.confirm(
+                    "Are you sure you want to delete this course?"
                   );
-                  count++;
-                }
+                  if (c == true) {
+                    LazyFetch({
+                      type: "delete",
+                      endpoint: "/api/courses?courseId=" + courseId,
+                      onSuccess: (data) => {
+                        alert("delete request success.");
+                        let userCopy = user;
+                        DeleteUserCourse(userCopy, courseId);
+                        setUser(userCopy);
+                        GoHome();
+                      },
+                      onFailure: (err) => {
+                        alert("delete request failed, ", err?.response);
+                      },
+                    });
+                  } else {
+                    alert("You canceled the delete request.");
+                  }
+                }}
+              >
+                Delete Course
+              </Button>
+            </ConfigButtonPanel>
+          )}
 
-                alert(
-                  "You'll have illegally clicked " +
-                    (++count).toString() +
-                    " times after you dismiss this alert"
-                );
-              }}
-            >
-              Don't click ANYTHING
-            </Button>
-          </ConfigPanel>
-        )}
-
-        {/* KEEP THE OVERFLOW COUNTER IT HELPS WITH OVERFLOW
+          {/* KEEP THE OVERFLOW COUNTER IT HELPS WITH OVERFLOW
             at the bottom of the scrolling div. */}
-        <OverflowCounter offsetAmount={"30px"}></OverflowCounter>
+          <OverflowCounter offsetAmount={"30px"}></OverflowCounter>
+        </CenterContent>
       </ScrollingDiv>
     </ConfigWrapper>
   );
@@ -151,6 +131,12 @@ const ScrollingDiv = styled.div`
   padding: 2rem 4rem 0 4rem;
 
   overflow: auto;
+`;
+
+const CenterContent = styled.div`
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
 `;
 
 /** THIS ACCOUNTS FOR WEIRD SCROLLING DIV STUFF */
