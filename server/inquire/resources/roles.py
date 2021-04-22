@@ -1,4 +1,4 @@
-from flask import jsonify, request, current_app
+from flask import request, current_app
 from flask_restful import reqparse, Resource
 from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
@@ -8,6 +8,9 @@ from bson.objectid import ObjectId
 from inquire.socketio_app import io
 
 class Roles(Resource):
+    @permission_layer(required_permissions=["publish-reply","privacy-private"])
+    def get(self, courseId):
+        return current_user.permissions
 
     def post(self, courseId):
         parser = reqparse.RequestParser()
@@ -15,7 +18,7 @@ class Roles(Resource):
         parser.add_argument('name')
         args = parser.parse_args()
         try:
-            new_role = Role(roleName="test", permissions=args['permissions']).save()
+            new_role = Role(name="test", permissions=args['permissions']).save()
             return {"status": "success", "role": self._serialize(new_role)}
         except Exception as exc:
             if type(exc) == list:

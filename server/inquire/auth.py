@@ -82,18 +82,42 @@ def teardown_current_user(exception):
     user = g.pop('current_user', None)
 
 
+def _deep_access(d, keys):
+    for key in keys:
+        try:
+            d = d[key]
+        except:
+            return None
+    return d
 
+def _permission_comparison(user_permissions: dict, required_permissions: list):
+    """ 
+    Checks if the values in the user_permissions dict are true for the keys specified in the required_permissions list.
+    For nested values specify keys in the following format "level1key-level2key-level3key".
+    
+    Required_permissions can contain a subset of permissions to check.
+
+    Example: _permission_comparison({"a":True, b:False, c:{d:True, e:True}}, ["a", "c-e"]) == True
+    """
+    missing_permissions = []
+    for key in required_permissions:
+        val = _deep_access(user_permissions, key.split("-"))
+        if val == None:
+            app.logger.error(f"Tried to check nonexistant permission: {key}")
+            missing_permissions.append(key)
+        elif val == False:
+            missing_permissions.append(key)
+        elif val == True:
+            pass
+        else:
+            app.logger.error(f"Non-bool val stored in role permission dict")
+
+    return missing_permissions
 
 
 def permission_layer(required_permissions: list, require_login=True):
     """
-    Checks if the current_user has the correct permissions to access the endpoint
-    for the given course
-
-    Args:
-        required_permissions (list): List of permissions required to access the endpoint
-        require_login (bool, optional): [description]. If the user is required
-        to be logged in. Defaults to True.
+    Retricts access to an endpoint based on the user's permissions in the course
     """
     def actual_decorator(func):
         @wraps(func)
@@ -102,33 +126,14 @@ def permission_layer(required_permissions: list, require_login=True):
             if current_user == None and (required_permissions or require_login):
                 abort(401, errors=[
                       "Resource access restricted: unauthenticated client"])
-
-            errors = []
-            # Getting the current course
-            courseId = kwargs.get('courseId')
-            if courseId or required_permissions:
-                course = current_user.get_course(courseId)
-                if course is None:
-                    errors.append(
-                        "Resource access restricted: invalid course id")
-
-            # Checking if the user has the required course specific permissions
-            if required_permissions and course:
-                missing = []
-                for permission in required_permissions:
-                    user_perm = getattr(
-                        course, permission, False)
-                    if not user_perm:
-                        missing.append(permission)
-                if missing:
-                    errors.append(
-                        f'Resource access restricted: missing course permission(s) {", ".join(missing)}')
-            # If there are any errors, we return a 403
-            if errors:
-                return abort(403, errors=errors)
-            # If there are no errors, we return the result of executing the resource function
-            else:
-                return func(*args, **kwargs)
+            if required_permissions:
+                if not current_user.permissions:
+                    missing_permissions = required_permissions
+                else:
+                    missing_permissions = _permission_comparison(current_user.permissions, required_permissions)
+                if missing_permissions:
+                    abort(401, errors=[f'Resource access restricted: missing course permission(s) {", ".join(missing_permissions)}'])
+            return func(*args, **kwargs)
         return wrapper
     return actual_decorator
 
