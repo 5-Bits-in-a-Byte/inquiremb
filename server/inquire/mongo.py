@@ -18,7 +18,9 @@ import json
 import shortuuid
 import datetime
 from bson.objectid import ObjectId
-
+import os
+import sys
+script_dir = os.path.dirname(__file__) 
 
 class User(MongoModel):
     _id = fields.CharField(primary_key=True)
@@ -133,12 +135,8 @@ def role_validator(d, example=None):
     #   if field exists:
     #       role_validator(field, example_field)
     if example == None:
-        with open("roles/example_roles.json", "r") as f:
-            example = json.load(f)
-    print(example)
-    print(d)
+        example = student
     for key, item in example.items():
-        print(key, key in d)
         if key in d:
             if type(item) == dict and type(d[key]) == dict:
                 if not role_validator(d[key], example=item):
