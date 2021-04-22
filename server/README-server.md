@@ -43,9 +43,10 @@ This component handles setting up all of our MongoDB models so that each collect
   "courses": [
     {
       "courseId": "oasif-jo12j-asdjf-asdf9",
+      "courseName" : "Test course",
       "color": "#ffffff",
       "nickname": null,
-      "role": "name of the role" // NEW (04.18.21)
+      "role": "id of the role" // NEW (04.18.21)
     }
   ]
 }
@@ -56,9 +57,10 @@ This component handles setting up all of our MongoDB models so that each collect
 ```json
 {
   "courseId": "oasif-jo12j-asdjf-asdf9",
+  "courseName" : "Test course",
   "color": "#ffffff",
   "nickname": null,
-  "role": "name of the role" // NEW (04.18.21)
+  "role": "id of the role" // NEW (04.18.21)
 }
 ```
 
@@ -158,7 +160,8 @@ This component handles setting up all of our MongoDB models so that each collect
   "course": "CIS 210",
   "canJoinById": true,
   "instructorID": "oasif-jo12j-asdjf-asdf9",
-  "roles": ["roleId1", "roleId2"] // NEW (04.18.21)
+  "roles": ["roleId1", "roleId2"], // NEW (04.18.21)
+  "defaultRole": "roleId1"
 }
 ```
 
