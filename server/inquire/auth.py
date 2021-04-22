@@ -54,6 +54,14 @@ def get_current_user():
             payload = decode_jwt(cookie)
             _id = payload['_id']
             user = retrieve_user(_id)
+            user.permissions = None
+            if user and 'courseId' in request.view_args:
+                courseId = request.view_args['courseId']
+                user_course = user.get_course(courseId)
+                if user_course:
+                    role = retrieve_role(user_course.role)
+                    if role:
+                        user.permissions = role.permissions
         g.current_user = user
 
     return g.current_user
@@ -72,6 +80,9 @@ def teardown_current_user(exception):
         exception (Exception): Any exception that might occur while executing a route function
     """
     user = g.pop('current_user', None)
+
+
+
 
 
 def permission_layer(required_permissions: list, require_login=True):
@@ -194,16 +205,29 @@ def decode_jwt(s):
 
 
 def retrieve_user(_id):
-    '''Retrieves the user from the database using the google "sub" field as _id'''
+    '''Retrieves the user from the database using the _id field'''
     query = User.objects.raw({'_id': _id})
     count = query.count()
     if count > 1:
         raise Exception(
-            f'Duplicate user detected, multiple users in database with id {sub}')
+            f'Duplicate user detected, multiple users in database with id {_id}')
     elif count == 1:
         return query.first()
     else:
         return None
+
+def retrieve_role(_id):
+    '''Retrieves the role object from the database'''
+    query = Role.objects.raw({'_id': ObjectId(_id)})
+    count = query.count()
+    if count > 1:
+        raise Exception(
+            f'Duplicate roles detected, multiple roles in database with id {_id}')
+    elif count == 1:
+        return query.first()
+    else:
+        return None
+
 
 
 def create_user(data, mode="google"):

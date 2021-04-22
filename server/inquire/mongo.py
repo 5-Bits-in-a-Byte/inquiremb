@@ -32,6 +32,7 @@ class User(MongoModel):
     courses = fields.EmbeddedDocumentListField(
         'UserCourse', blank=True, required=True)
 
+
     def get_course(self, courseId):
         for course in self.courses:
             if course.courseId == courseId:
