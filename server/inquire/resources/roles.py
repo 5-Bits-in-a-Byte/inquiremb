@@ -52,6 +52,60 @@ class Roles(Resource):
             else:
                 return {"errors": str(exc)}
 
+    def put(self, courseId):
+        # Get the request since it's json
+        data = request.get_json()
+        # Check for default
+        if "default" in data:
+            # Query for courseId
+            course_query = Course.objects.raw({"_id": courseId})
+            # Error check
+            course_count = course_query.count()
+            if course_count > 1:
+                return {"error": [f"Multiple courses with id: {courseId}"]}, 400
+            elif course_count == 0:
+                return {"error": [f"No courses with id: {courseId}"]}, 400
+            else:
+                course = course_query.first()
+                default = data['default']
+                if default in course.roles:
+                    course.default_role = default
+                    course.save()
+        updated_list = []
+        # Loop through all roles in the request
+        for role in data['roles']:
+            # Query for a matching role
+            _id = ObjectId(role["_id"])
+            role_query = Role.objects.raw({"_id": _id})
+            # Error check to make sure we find a role
+            role_count = role_query.count()
+            if role_count > 1:
+                return {"error": [f"Multiple roles found with id: {_id}"]}, 400
+            elif role_count == 0:
+                return {"error": [f"No roles found with id: {_id}"]}, 400
+            else:
+                # Save the role we queried for in a variable
+                saved = role_query.first()
+                # Convert the role to a dict for comparison
+                db_role = self._serialize(role_query.first())
+                db_role = dict(db_role)
+                if db_role == role:
+                    continue
+                else:
+                    # Update the name and permissions
+                    saved.name = role['name']
+                    saved.permissions = role['permissions']
+                    # Append the updated role to the updated list
+                    updated_list.append(saved)
+        # Make sure update is valid
+        for updated_role in updated_list:
+            if(not updated_role.is_valid()):
+                return {"error": [f"Update to the role with id {updated_role._id} is invalid"]}, 400
+        else:
+            for updated_role in updated_list:
+                updated_role.save()
+        return {"roles": [self._serialize(role) for role in updated_list]}, 200
+
     def _serialize(self, role):
         j = role.to_son()
         j["_id"] = str(j["_id"])
