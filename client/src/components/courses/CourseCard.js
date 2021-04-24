@@ -6,6 +6,7 @@ import MessagesImg from "../../imgs/message-black.svg";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Icon from "../common/Icon";
+import { ChromePicker } from "react-color";
 
 /** Course Card
  * @brief Component for displaying courses the user is a part of. Component is one of many courses
@@ -16,8 +17,22 @@ import Icon from "../common/Icon";
 class CourseCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { numMsgs: 0, courseColor: props.color };
+    this.state = {
+      numMsgs: 0,
+      courseColor: props.color,
+      displayColorSelector: false,
+    };
   }
+
+  handleClick = () => {
+    console.log("Before: " + this.state.displayColorSelector);
+    this.state.displayColorSelector = !this.state.displayColorSelector;
+    console.log("After: " + this.state.displayColorSelector);
+  };
+
+  handleClose = () => {
+    this.state.displayColorSelector = !this.state.displayColorSelector;
+  };
 
   // Track when new messages come in
   componentDidMount() {
@@ -28,61 +43,67 @@ class CourseCard extends React.Component {
 
   render() {
     return (
-      <AlignedDiv>
-        <ColorDiv color={this.state.courseColor}>
-          <MessageDiv>
+      <>
+        <AlignedDiv>
+          <ColorDiv color={this.state.courseColor}>
+            <MessageDiv>
+              <Icon
+                fader
+                clickable
+                src={MessagesImg}
+                alt={"Messages"}
+                width={"25em"}
+                onClick={() =>
+                  alert(
+                    "You clicked the Unread Messages icon for " +
+                      this.props.courseName +
+                      ".\nThis feature is a work in progress."
+                  )
+                }
+              ></Icon>
+              {this.state.numMsgs > 0 && this.state.numMsgs}
+            </MessageDiv>
+          </ColorDiv>
+          <CourseInfo to={"/course/" + this.props.id}>
+            <CourseName>{this.props.courseName}</CourseName>
+            <CourseTerm>{this.props.courseTerm}</CourseTerm>
+          </CourseInfo>
+          <CourseFooter>
             <Icon
               fader
               clickable
-              src={MessagesImg}
-              alt={"Messages"}
-              width={"25em"}
+              src={EditImg}
+              alt={"Edit"}
+              width={"20em"}
               onClick={() =>
                 alert(
-                  "You clicked the Unread Messages icon for " +
+                  "You clicked the Edit option for " +
                     this.props.courseName +
                     ".\nThis feature is a work in progress."
                 )
               }
             ></Icon>
-            {this.state.numMsgs > 0 && this.state.numMsgs}
-          </MessageDiv>
-        </ColorDiv>
-        <CourseInfo to={"/course/" + this.props.id}>
-          <CourseName>{this.props.courseName}</CourseName>
-          <CourseTerm>{this.props.courseTerm}</CourseTerm>
-        </CourseInfo>
-        <CourseFooter>
-          <Icon
-            fader
-            clickable
-            src={EditImg}
-            alt={"Edit"}
-            width={"20em"}
-            onClick={() =>
-              alert(
-                "You clicked the Edit option for " +
-                  this.props.courseName +
-                  ".\nThis feature is a work in progress."
-              )
-            }
-          ></Icon>
-          <Icon
-            fader
-            clickable
-            src={SettingsImg}
-            alt={"Settings"}
-            width={"20em"}
-            onClick={() =>
-              alert(
-                "You clicked the Settings option for " +
-                  this.props.courseName +
-                  ".\nThis feature is a work in progress."
-              )
-            }
-          ></Icon>
-        </CourseFooter>
-      </AlignedDiv>
+            <Icon
+              fader
+              clickable
+              src={SettingsImg}
+              alt={"Settings"}
+              width={"20em"}
+              // Use handleChangeComplete for backend request if you use ChromePicker
+              // alert(
+              //   "You clicked the Settings option for " +
+              //     this.props.courseName +
+              //     ".\nThis feature is a work in progress."
+              // )
+              // <ChromePicker disableAlpha={true} />
+              onClick={this.handleClick}
+            ></Icon>
+          </CourseFooter>
+        </AlignedDiv>
+        {this.displayColorSelector && (
+          <ChromePicker color={this.props.courseColor} />
+        )}
+      </>
     );
   }
 }
@@ -166,4 +187,17 @@ const CourseFooter = styled.footer`
   display: flex;
   justify-content: space-between;
   width: 28%;
+`;
+
+const PopOver = styled.div`
+  position: "absolute";
+  z-index: "2";
+`;
+
+const Cover = styled.div`
+  position: "fixed";
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
 `;
