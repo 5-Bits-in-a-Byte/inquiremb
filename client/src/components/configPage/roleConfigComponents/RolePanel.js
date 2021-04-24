@@ -65,7 +65,9 @@ const RolePanel = ({ roleObject, roleName, ...props }) => {
               console.log(e.target.value);
               setNameField(e.target.value);
             }}
-          />
+          >
+            {nameField}
+          </DraftTextArea>
         )}
 
         <Button
