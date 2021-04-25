@@ -24,14 +24,12 @@ class CourseCard extends React.Component {
     };
   }
 
-  handleClick = () => {
-    console.log("Before: " + this.state.displayColorSelector);
-    this.state.displayColorSelector = !this.state.displayColorSelector;
-    console.log("After: " + this.state.displayColorSelector);
+  handleColorChange = (colors) => {
+    this.setState({ courseColor: colors.hex });
   };
 
-  handleClose = () => {
-    this.state.displayColorSelector = !this.state.displayColorSelector;
+  handleColorClose = () => {
+    this.setState({ displayColorSelector: !this.state.displayColorSelector });
   };
 
   // Track when new messages come in
@@ -89,19 +87,20 @@ class CourseCard extends React.Component {
               src={SettingsImg}
               alt={"Settings"}
               width={"20em"}
-              // Use handleChangeComplete for backend request if you use ChromePicker
-              // alert(
-              //   "You clicked the Settings option for " +
-              //     this.props.courseName +
-              //     ".\nThis feature is a work in progress."
-              // )
-              // <ChromePicker disableAlpha={true} />
-              onClick={this.handleClick}
+              onClick={() => {
+                this.setState({
+                  displayColorSelector: !this.state.displayColorSelector,
+                });
+              }}
             ></Icon>
           </CourseFooter>
         </AlignedDiv>
-        {this.displayColorSelector && (
-          <ChromePicker color={this.props.courseColor} />
+        {this.state.displayColorSelector && (
+          <ChromePicker
+            onChange={this.handleColorChange}
+            color={this.state.courseColor}
+            disableAlpha={true}
+          />
         )}
       </>
     );
