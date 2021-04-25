@@ -32,7 +32,6 @@ const publishTest = {
 const RolePanel = ({ roleObject, roleName, ...props }) => {
   // MATERIAL UI --------------------------------
   const styleClasses = useStyles();
-  // const [];
 
   const [publishAnchorEl, setPublishAnchorEl] = useState(null);
 
@@ -48,8 +47,7 @@ const RolePanel = ({ roleObject, roleName, ...props }) => {
   const [nameField, setNameField] = useState(roleName);
   const [nameFieldState, setNameFieldState] = useState(true);
 
-  // console.log("Name Field = ", nameField);
-  // console.log("Role Object Info: ", roleObject);
+  // console.log("This role id: ", props.value);
 
   return (
     <RolePanelWrapper>
@@ -57,12 +55,14 @@ const RolePanel = ({ roleObject, roleName, ...props }) => {
         {nameFieldState ? (
           <RoleName style={{ margin: `0 1rem 0 0` }}>{nameField}</RoleName>
         ) : (
-          // <Input placeholder={"Enter new name..."} />
           <DraftTextArea
             minRows={1}
-            style={{ width: `150px` }}
+            style={{ width: `150px`, marginRight: `1em` }}
             onChange={(e) => {
-              console.log(e.target.value);
+              // console.log(e.target.value);
+              if (e.target.value != roleObject.roleName) {
+                roleObject.roleName = e.target.value;
+              }
               setNameField(e.target.value);
             }}
           >
@@ -75,55 +75,64 @@ const RolePanel = ({ roleObject, roleName, ...props }) => {
           buttonColor={"rgba(0, 0, 0, 0.0)"}
           onClick={() => {
             setNameFieldState(!nameFieldState);
-            // alert(
-            //   "This feature is work in progress. This will allow the user to change the name of the Role."
-            // );
           }}
         >
           <ChangeNameIcon src={PencilIcon} />
         </Button>
-
-        {/* <Dropdown options={optionsTest}>
-          <DropdownWrapper
-            style={{ margin: `0 0.5rem` }}
-            className="flex-row align justify"
-          >
-            <p>Test</p>
-            <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
-          </DropdownWrapper>
-        </Dropdown> */}
-
-        <DropdownWrapper>
-          <Button
-            primary
-            buttonWidth={"110px"}
-            buttonHeight={"28px"}
-            onClick={publishHandleClick}
-          >
-            Publish
-          </Button>
-          <Menu
-            id="Publish Menu"
-            anchorEl={publishAnchorEl}
-            keepMounted
-            open={Boolean(publishAnchorEl)}
-            onClose={publishHandleClose}
-          >
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    onChange={() => {
-                      console.log("Post / Comment Changed");
-                    }}
-                  />
-                }
-                label={"Post / Comment"}
-              />
-            </FormGroup>
-          </Menu>
-        </DropdownWrapper>
       </RoleNameWrapper>
+      <DropdownWrapper>
+        <Button
+          primary
+          buttonWidth={"110px"}
+          buttonHeight={"28px"}
+          onClick={publishHandleClick}
+        >
+          Publish
+        </Button>
+        <Menu
+          id="Publish Menu"
+          anchorEl={publishAnchorEl}
+          keepMounted
+          open={Boolean(publishAnchorEl)}
+          onClose={publishHandleClose}
+        >
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={(e) => {
+                    console.log("Post / Comment Changed: ", e.target.checked);
+                    roleObject.publish.postComment = e.target.checked;
+                  }}
+                />
+              }
+              label={"Post / Comment"}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={(e) => {
+                    console.log("Reply Changed: ", e.target.checked);
+                    roleObject.publish.reply = e.target.checked;
+                  }}
+                />
+              }
+              label={"Reply"}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={(e) => {
+                    console.log("Poll Changed: ", e.target.checked);
+                    roleObject.publish.poll = e.target.checked;
+                  }}
+                />
+              }
+              label={"Poll"}
+            />
+          </FormGroup>
+        </Menu>
+      </DropdownWrapper>
     </RolePanelWrapper>
   );
 };
@@ -131,6 +140,8 @@ const RolePanel = ({ roleObject, roleName, ...props }) => {
 export default RolePanel;
 
 const RolePanelWrapper = styled.div`
+  display: flex;
+  align-items: center;
   margin: 1rem 0;
   padding: 0.25rem;
 

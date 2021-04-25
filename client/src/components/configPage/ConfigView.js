@@ -9,7 +9,7 @@ import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import { DeleteUserCourse } from "../common/stateManagement/UpdateUser.js";
 
 const adminPerms = {
-  _id: "oasif-jo12j-asdjf-asdf9",
+  _id: "1",
   roleName: "Admin Role",
   publish: {
     postComment: true,
@@ -70,6 +70,7 @@ const ConfigView = ({ props }) => {
   //   },
   // });
 
+  const [roleIdCounter, setRoleIdCounter] = useState(2);
   const [courseRoles, setCourseRoles] = useState([adminPerms]);
   // console.log("Course Roles", courseRoles);
   // ------------------------------------------------------------
@@ -107,6 +108,8 @@ const ConfigView = ({ props }) => {
             <ConfigPanel
               courseRoles={courseRoles}
               setCourseRoles={setCourseRoles}
+              roleIdCounter={roleIdCounter}
+              setRoleIdCounter={setRoleIdCounter}
             ></ConfigPanel>
           ) : (
             <></>

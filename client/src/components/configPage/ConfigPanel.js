@@ -6,24 +6,71 @@ import ConfigPanelGroup from "./ConfigPanelGroup";
 import RolePanel from "./roleConfigComponents/RolePanel";
 
 /**
- * Creates a Role Component and passes the role object to said component.
+ * Creates a json object of new role permissions
+ * @param {number} itemId the new id to pupulate into the new role object
+ * @returns JSON object modeling the Roles Model
  */
-const CreateRolePanel = (role, name) => {
-  return <RolePanel key={role?._id} roleObject={role} roleName={name} />;
+const createRoleObject = (itemId) => {
+  let newPerms = {
+    _id: itemId.toString(),
+    roleName: "New Role " + itemId.toString(),
+    publish: {
+      postComment: false,
+      reply: false,
+      poll: false,
+    },
+    delete: {
+      postComment: false,
+      reply: false,
+      poll: false,
+    },
+    participation: {
+      reactions: false,
+      voteInPoll: false,
+      pin: false,
+    },
+    edit: {
+      postComment: false,
+      reply: false,
+      poll: false,
+    },
+    privacy: {
+      private: false,
+      anonymous: false,
+    },
+    admin: {
+      banUsers: false,
+      removeUsers: false,
+      announce: false,
+      configure: false,
+      highlightPost: false,
+    },
+  };
+
+  return newPerms;
 };
 
 /**
  * Generates a list of Role Components for State Management
  */
 const GenerateRoleList = (roles) => {
-  let roleComponentList = [];
-  for (let i = 0; i < roles.length; i++) {
-    roleComponentList.push(CreateRolePanel(roles[i], roles[i]?.roleName));
-  }
-  return roleComponentList;
+  return roles.map((role, index) => (
+    <RolePanel
+      key={index}
+      value={index}
+      roleObject={role}
+      roleName={role?.roleName}
+    />
+  ));
 };
 
-const ConfigPanel = ({ courseRoles, setCourseRoles, ...props }) => {
+const ConfigPanel = ({
+  courseRoles,
+  setCourseRoles,
+  roleIdCounter,
+  setRoleIdCounter,
+  ...props
+}) => {
   let realRoleList = GenerateRoleList(courseRoles);
 
   console.log("RealRolesList: ", realRoleList);
@@ -39,13 +86,15 @@ const ConfigPanel = ({ courseRoles, setCourseRoles, ...props }) => {
           buttonWidth={"207px"}
           buttonHeight={"48px"}
           onClick={() => {
-            setRoleList(
-              [
-                ...roleList,
-                CreateRolePanel(courseRoles[0], courseRoles[0]?.roleName),
-              ]
-              // UpdateRoleList(roleList)
-            );
+            setRoleIdCounter(roleIdCounter + 1);
+            let newPerms = createRoleObject(roleIdCounter);
+
+            // console.log("NEW PERMS: ", newPerms);
+
+            let newCourseRoles = [...courseRoles, newPerms];
+            setRoleList(GenerateRoleList(newCourseRoles));
+
+            setCourseRoles(newCourseRoles);
           }}
         >
           + Add a New Role
@@ -72,6 +121,13 @@ const ConfigPanel = ({ courseRoles, setCourseRoles, ...props }) => {
           buttonHeight={"2.2rem"}
           onClick={() => {
             alert("Feature is work in progress.");
+            // alert("Role Name: ", roleList[0].props.roleObject.roleName);
+            for (let i = 0; i < roleList.length; i++) {
+              console.log(
+                roleList[i].props.roleObject?.roleName + " ",
+                roleList[i].props.roleObject
+              );
+            }
           }}
         >
           Confirm
