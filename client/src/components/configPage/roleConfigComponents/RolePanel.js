@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import Button from "../../common/Button";
 import PencilIcon from "../../../imgs/pencil.svg";
+import CloseButtonIcon from "../../../imgs/close.svg";
 import Input from "../../common/Input";
 import DraftTextArea from "../../common/DraftTextArea";
 import Dropdown from "../../common/dropdown/Dropdown";
@@ -389,6 +390,17 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
           ],
         }}
       ></MaterialDropDownGroup>
+
+      <Button
+        style={{ color: `red` }}
+        primary
+        buttonColor={"rgba(0, 0, 0, 0.0)"}
+        onClick={() => {
+          alert("This feature is work in progress.");
+        }}
+      >
+        <ChangeNameIcon src={CloseButtonIcon} />
+      </Button>
     </RolePanelWrapper>
   );
 };
