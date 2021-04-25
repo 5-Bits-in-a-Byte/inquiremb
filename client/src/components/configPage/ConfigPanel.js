@@ -177,6 +177,7 @@ export default ConfigPanel;
 
 const PanelWrapper = styled.div`
   max-width: 1200px;
+  /* margin-bottom: 10em; */
   padding: 2rem;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);

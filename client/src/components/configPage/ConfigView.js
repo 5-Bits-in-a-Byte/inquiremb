@@ -97,85 +97,89 @@ const ConfigView = ({ props }) => {
   return (
     <ConfigWrapper>
       <ScrollingDiv>
-        <CenterContent>
-          {userIsAdmin ? (
-            <h1 style={{ margin: `0 0 1rem 0` }}>THIS IS THE CONFIG PAGE</h1>
-          ) : (
-            <h1>ACCESS DENIED</h1>
-          )}
+        {/* <CenterContent> */}
+        {userIsAdmin ? (
+          <h1 style={{ margin: `0 0 2rem 0` }}>
+            Manage and Edit Course Configurations:
+          </h1>
+        ) : (
+          <h1>ACCESS DENIED</h1>
+        )}
 
-          {userIsAdmin ? (
-            <ConfigPanel
-              courseRoles={courseRoles}
-              setCourseRoles={setCourseRoles}
-              roleIdCounter={roleIdCounter}
-              setRoleIdCounter={setRoleIdCounter}
-            ></ConfigPanel>
-          ) : (
-            <></>
-          )}
+        {userIsAdmin ? (
+          // <CenterContent>
+          <ConfigPanel
+            courseRoles={courseRoles}
+            setCourseRoles={setCourseRoles}
+            roleIdCounter={roleIdCounter}
+            setRoleIdCounter={setRoleIdCounter}
+          ></ConfigPanel>
+        ) : (
+          // </CenterContent>
+          <></>
+        )}
 
-          {userIsAdmin ? (
-            <ConfigButtonPanel panelText="This is the button description for the 'other' button. It does nothing.">
-              <Button
-                primary
-                buttonWidth={"200px"}
-                buttonHeight={"2.2rem"}
-                onClick={() => {
-                  alert("This literally doesn't do anything...");
-                }}
-              >
-                Other Button
-              </Button>
-            </ConfigButtonPanel>
-          ) : (
-            <></>
-          )}
-
-          {userIsAdmin && (
-            <ConfigButtonPanel
-              panelText={
-                "Click here to delete the course. WARNING once deleted there is no undoing."
-              }
+        {userIsAdmin ? (
+          <ConfigButtonPanel panelText="This is the button description for the 'other' button. It does nothing.">
+            <Button
+              primary
+              buttonWidth={"200px"}
+              buttonHeight={"2.2rem"}
+              onClick={() => {
+                alert("This literally doesn't do anything...");
+              }}
             >
-              <Button
-                primary
-                buttonColor={"#DC2B2B"}
-                buttonWidth={"200px"}
-                buttonHeight={"2.2rem"}
-                onClick={() => {
-                  let c = window.confirm(
-                    "Are you sure you want to delete this course?"
-                  );
-                  if (c == true) {
-                    LazyFetch({
-                      type: "delete",
-                      endpoint: "/api/courses?courseId=" + courseId,
-                      onSuccess: (data) => {
-                        alert("delete request success.");
-                        let userCopy = user;
-                        DeleteUserCourse(userCopy, courseId);
-                        setUser(userCopy);
-                        GoHome();
-                      },
-                      onFailure: (err) => {
-                        alert("delete request failed, ", err?.response);
-                      },
-                    });
-                  } else {
-                    alert("You canceled the delete request.");
-                  }
-                }}
-              >
-                Delete Course
-              </Button>
-            </ConfigButtonPanel>
-          )}
+              Other Button
+            </Button>
+          </ConfigButtonPanel>
+        ) : (
+          <></>
+        )}
 
-          {/* KEEP THE OVERFLOW COUNTER IT HELPS WITH OVERFLOW
+        {userIsAdmin && (
+          <ConfigButtonPanel
+            panelText={
+              "Click here to delete the course. WARNING once deleted there is no undoing."
+            }
+          >
+            <Button
+              primary
+              buttonColor={"#DC2B2B"}
+              buttonWidth={"200px"}
+              buttonHeight={"2.2rem"}
+              onClick={() => {
+                let c = window.confirm(
+                  "Are you sure you want to delete this course?"
+                );
+                if (c == true) {
+                  LazyFetch({
+                    type: "delete",
+                    endpoint: "/api/courses?courseId=" + courseId,
+                    onSuccess: (data) => {
+                      alert("delete request success.");
+                      let userCopy = user;
+                      DeleteUserCourse(userCopy, courseId);
+                      setUser(userCopy);
+                      GoHome();
+                    },
+                    onFailure: (err) => {
+                      alert("delete request failed, ", err?.response);
+                    },
+                  });
+                } else {
+                  alert("You canceled the delete request.");
+                }
+              }}
+            >
+              Delete Course
+            </Button>
+          </ConfigButtonPanel>
+        )}
+
+        {/* KEEP THE OVERFLOW COUNTER IT HELPS WITH OVERFLOW
             at the bottom of the scrolling div. */}
-          <OverflowCounter offsetAmount={"30px"}></OverflowCounter>
-        </CenterContent>
+        <OverflowCounter offsetAmount={"30px"}></OverflowCounter>
+        {/* </CenterContent> */}
       </ScrollingDiv>
     </ConfigWrapper>
   );
@@ -199,9 +203,10 @@ const ScrollingDiv = styled.div`
 `;
 
 const CenterContent = styled.div`
-  /* display: flex;
+  width: 100%;
+  display: flex;
   flex-direction: column;
-  align-items: center; */
+  align-items: center;
 `;
 
 /** THIS ACCOUNTS FOR WEIRD SCROLLING DIV STUFF */

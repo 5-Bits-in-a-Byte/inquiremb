@@ -7,7 +7,12 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
-const MaterialDropDownGroup = ({ roleObject, matDropShape, ...props }) => {
+const MaterialDropDownGroup = ({
+  initialState,
+  roleObject,
+  matDropShape,
+  ...props
+}) => {
   const [anchorEl, setanchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -43,6 +48,7 @@ const MaterialDropDownGroup = ({ roleObject, matDropShape, ...props }) => {
                 style={{ margin: `0`, padding: `0 1em` }}
                 control={
                   <Checkbox
+                    checked={initialState[formLabels.stateLabel]}
                     onChange={(e) => {
                       console.log(
                         formLabels?.itemLabel + " value changed: ",

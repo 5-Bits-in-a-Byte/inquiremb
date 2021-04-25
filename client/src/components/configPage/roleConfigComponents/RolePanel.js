@@ -24,12 +24,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 // -----------------------------------------------------------------------
 
-const publishTest = {
-  postComment: true,
-  reply: true,
-  poll: true,
-};
-
 const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
   // MATERIAL UI --------------------------------
   const styleClasses = useStyles();
@@ -43,6 +37,45 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
   const publishHandleClose = () => {
     setPublishAnchorEl(null);
   };
+
+  const [publishCheckedState, setPublishCheckedState] = useState({
+    postComment: roleObject.publish.postComment,
+    reply: roleObject.publish.reply,
+    poll: roleObject.publish.poll,
+  });
+
+  // console.log("Publish init state: ", publishCheckedState);
+
+  const [deleteCheckedState, setDeleteCheckedState] = useState({
+    postComment: roleObject.delete.postComment,
+    reply: roleObject.delete.reply,
+    poll: roleObject.delete.poll,
+  });
+
+  const [editCheckedState, setEditCheckedState] = useState({
+    postComment: roleObject.edit.postComment,
+    reply: roleObject.edit.reply,
+    poll: roleObject.edit.poll,
+  });
+
+  const [participationCheckedState, setParticipationCheckedState] = useState({
+    reactions: roleObject.participation.reactions,
+    voteInPoll: roleObject.participation.voteInPoll,
+    pin: roleObject.participation.pin,
+  });
+
+  const [privacyCheckedState, setPrivacyCheckedState] = useState({
+    private: roleObject.privacy.private,
+    anonymous: roleObject.privacy.anonymous,
+  });
+
+  const [adminCheckedState, setAdminCheckedState] = useState({
+    banUsers: roleObject.admin.banUsers,
+    removeUsers: roleObject.admin.removeUsers,
+    announce: roleObject.admin.announce,
+    configure: roleObject.admin.configure,
+    highlightPost: roleObject.admin.highlightPost,
+  });
   // --------------------------------------------
 
   const [nameField, setNameField] = useState(roleName);
@@ -84,26 +117,42 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
 
       {/* PUBLISH DROPDOWN */}
       <MaterialDropDownGroup
+        initialState={publishCheckedState}
         roleObject={roleObject}
         matDropShape={{
           name: "Publish",
           items: [
             {
+              stateLabel: "postComment",
               itemLabel: "Draft Posts / Comments",
               changeRoleVal: (val) => {
                 roleObject.publish.postComment = val;
+                setPublishCheckedState({
+                  ...publishCheckedState,
+                  postComment: val,
+                });
               },
             },
             {
-              itemLabel: "Reply",
+              stateLabel: "reply",
+              itemLabel: "Draft Replies",
               changeRoleVal: (val) => {
                 roleObject.publish.reply = val;
+                setPublishCheckedState({
+                  ...publishCheckedState,
+                  reply: val,
+                });
               },
             },
             {
-              itemLabel: "Poll",
+              stateLabel: "poll",
+              itemLabel: "Draft Polls",
               changeRoleVal: (val) => {
                 roleObject.publish.poll = val;
+                setPublishCheckedState({
+                  ...publishCheckedState,
+                  poll: val,
+                });
               },
             },
           ],
@@ -112,26 +161,42 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
 
       {/* DELETE DROPDOWN */}
       <MaterialDropDownGroup
+        initialState={deleteCheckedState}
         roleObject={roleObject}
         matDropShape={{
           name: "Delete",
           items: [
             {
-              itemLabel: "Draft Posts / Comments",
+              stateLabel: "postComment",
+              itemLabel: "Delete Posts / Comments",
               changeRoleVal: (val) => {
                 roleObject.delete.postComment = val;
+                setDeleteCheckedState({
+                  ...deleteCheckedState,
+                  postComment: val,
+                });
               },
             },
             {
-              itemLabel: "Reply",
+              stateLabel: "reply",
+              itemLabel: "Delete Replies",
               changeRoleVal: (val) => {
                 roleObject.delete.reply = val;
+                setDeleteCheckedState({
+                  ...deleteCheckedState,
+                  reply: val,
+                });
               },
             },
             {
-              itemLabel: "Poll",
+              stateLabel: "poll",
+              itemLabel: "Delete Polls",
               changeRoleVal: (val) => {
                 roleObject.delete.poll = val;
+                setDeleteCheckedState({
+                  ...deleteCheckedState,
+                  poll: val,
+                });
               },
             },
           ],
@@ -140,26 +205,42 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
 
       {/* EDIT DROPDOWN */}
       <MaterialDropDownGroup
+        initialState={editCheckedState}
         roleObject={roleObject}
         matDropShape={{
           name: "Edit",
           items: [
             {
-              itemLabel: "Draft Posts / Comments",
+              stateLabel: "postComment",
+              itemLabel: "Edit Posts / Comments",
               changeRoleVal: (val) => {
                 roleObject.edit.postComment = val;
+                setEditCheckedState({
+                  ...editCheckedState,
+                  postComment: val,
+                });
               },
             },
             {
-              itemLabel: "Reply",
+              stateLabel: "reply",
+              itemLabel: "Edit Replies",
               changeRoleVal: (val) => {
                 roleObject.edit.reply = val;
+                setEditCheckedState({
+                  ...editCheckedState,
+                  reply: val,
+                });
               },
             },
             {
-              itemLabel: "Poll",
+              stateLabel: "poll",
+              itemLabel: "Edit Polls",
               changeRoleVal: (val) => {
                 roleObject.edit.poll = val;
+                setEditCheckedState({
+                  ...editCheckedState,
+                  poll: val,
+                });
               },
             },
           ],
@@ -168,26 +249,42 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
 
       {/* PARTICIPATION DROPDOWN */}
       <MaterialDropDownGroup
+        initialState={participationCheckedState}
         roleObject={roleObject}
         matDropShape={{
           name: "Participation",
           items: [
             {
+              stateLabel: "reactions",
               itemLabel: "React to Posts",
               changeRoleVal: (val) => {
                 roleObject.participation.reactions = val;
+                setParticipationCheckedState({
+                  ...participationCheckedState,
+                  reactions: val,
+                });
               },
             },
             {
-              itemLabel: "Vote in Poll",
+              stateLabel: "voteInPoll",
+              itemLabel: "Vote in Polls",
               changeRoleVal: (val) => {
                 roleObject.participation.voteInPoll = val;
+                setParticipationCheckedState({
+                  ...participationCheckedState,
+                  voteInPoll: val,
+                });
               },
             },
             {
+              stateLabel: "pin",
               itemLabel: "Pin Posts",
               changeRoleVal: (val) => {
                 roleObject.participation.pin = val;
+                setParticipationCheckedState({
+                  ...participationCheckedState,
+                  pin: val,
+                });
               },
             },
           ],
@@ -196,20 +293,31 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
 
       {/* PRIVACY DROPDOWN */}
       <MaterialDropDownGroup
+        initialState={privacyCheckedState}
         roleObject={roleObject}
         matDropShape={{
           name: "Privacy",
           items: [
             {
+              stateLabel: "private",
               itemLabel: "Post Privately",
               changeRoleVal: (val) => {
                 roleObject.privacy.private = val;
+                setPrivacyCheckedState({
+                  ...privacyCheckedState,
+                  private: val,
+                });
               },
             },
             {
+              stateLabel: "anonymous",
               itemLabel: "Post Anonymously",
               changeRoleVal: (val) => {
                 roleObject.privacy.anonymous = val;
+                setPrivacyCheckedState({
+                  ...privacyCheckedState,
+                  anonymous: val,
+                });
               },
             },
           ],
@@ -218,38 +326,64 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
 
       {/* ADMIN DROPDOWN */}
       <MaterialDropDownGroup
+        initialState={adminCheckedState}
         roleObject={roleObject}
         matDropShape={{
           name: "Admin",
           items: [
             {
+              stateLabel: "banUsers",
               itemLabel: "Ban Users",
               changeRoleVal: (val) => {
                 roleObject.admin.banUsers = val;
+                setAdminCheckedState({
+                  ...adminCheckedState,
+                  banUsers: val,
+                });
               },
             },
             {
+              stateLabel: "removeUsers",
               itemLabel: "Remove Users",
               changeRoleVal: (val) => {
                 roleObject.admin.removeUsers = val;
+                setAdminCheckedState({
+                  ...adminCheckedState,
+                  removeUsers: val,
+                });
               },
             },
             {
-              itemLabel: "Announce",
+              stateLabel: "announce",
+              itemLabel: "Draft Announcements",
               changeRoleVal: (val) => {
                 roleObject.admin.announce = val;
+                setAdminCheckedState({
+                  ...adminCheckedState,
+                  announce: val,
+                });
               },
             },
             {
-              itemLabel: "Configure",
+              stateLabel: "configure",
+              itemLabel: "Edit Course Configurations",
               changeRoleVal: (val) => {
                 roleObject.admin.configure = val;
+                setAdminCheckedState({
+                  ...adminCheckedState,
+                  configure: val,
+                });
               },
             },
             {
-              itemLabel: "Highlight Post",
+              stateLabel: "highlightPost",
+              itemLabel: "Highlight Posts",
               changeRoleVal: (val) => {
                 roleObject.admin.highlightPost = val;
+                setAdminCheckedState({
+                  ...adminCheckedState,
+                  highlightPost: val,
+                });
               },
             },
           ],
