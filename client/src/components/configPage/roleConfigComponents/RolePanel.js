@@ -89,7 +89,7 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
           name: "Publish",
           items: [
             {
-              itemLabel: "Post / Comment",
+              itemLabel: "Draft Posts / Comments",
               changeRoleVal: (val) => {
                 roleObject.publish.postComment = val;
               },
@@ -117,7 +117,7 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
           name: "Delete",
           items: [
             {
-              itemLabel: "Post / Comment",
+              itemLabel: "Draft Posts / Comments",
               changeRoleVal: (val) => {
                 roleObject.delete.postComment = val;
               },
@@ -138,34 +138,6 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
         }}
       ></MaterialDropDownGroup>
 
-      {/* PARTICIPATION DROPDOWN */}
-      <MaterialDropDownGroup
-        roleObject={roleObject}
-        matDropShape={{
-          name: "Participation",
-          items: [
-            {
-              itemLabel: "Reactions",
-              changeRoleVal: (val) => {
-                roleObject.participation.reactions = val;
-              },
-            },
-            {
-              itemLabel: "Vote in Poll",
-              changeRoleVal: (val) => {
-                roleObject.participation.voteInPoll = val;
-              },
-            },
-            {
-              itemLabel: "Pin",
-              changeRoleVal: (val) => {
-                roleObject.participation.pin = val;
-              },
-            },
-          ],
-        }}
-      ></MaterialDropDownGroup>
-
       {/* EDIT DROPDOWN */}
       <MaterialDropDownGroup
         roleObject={roleObject}
@@ -173,7 +145,7 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
           name: "Edit",
           items: [
             {
-              itemLabel: "Post / Comment",
+              itemLabel: "Draft Posts / Comments",
               changeRoleVal: (val) => {
                 roleObject.edit.postComment = val;
               },
@@ -188,6 +160,34 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
               itemLabel: "Poll",
               changeRoleVal: (val) => {
                 roleObject.edit.poll = val;
+              },
+            },
+          ],
+        }}
+      ></MaterialDropDownGroup>
+
+      {/* PARTICIPATION DROPDOWN */}
+      <MaterialDropDownGroup
+        roleObject={roleObject}
+        matDropShape={{
+          name: "Participation",
+          items: [
+            {
+              itemLabel: "React to Posts",
+              changeRoleVal: (val) => {
+                roleObject.participation.reactions = val;
+              },
+            },
+            {
+              itemLabel: "Vote in Poll",
+              changeRoleVal: (val) => {
+                roleObject.participation.voteInPoll = val;
+              },
+            },
+            {
+              itemLabel: "Pin Posts",
+              changeRoleVal: (val) => {
+                roleObject.participation.pin = val;
               },
             },
           ],

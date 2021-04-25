@@ -102,13 +102,15 @@ const ConfigPanel = ({
 }) => {
   let realRoleList = GenerateRoleList(courseRoles);
 
+  console.log("Course Roles: ", courseRoles);
   console.log("RealRolesList: ", realRoleList);
 
   const [roleList, setRoleList] = useState(realRoleList);
+  const [cachedRoleList, setCachedRoleList] = useState(roleList);
 
   return (
     <PanelWrapper>
-      <ConfigPanelGroup panelHeader={"List of Roles"}>
+      <ConfigPanelGroup panelHeader={"Edit the permissions of each role here."}>
         {roleList}
         <Button
           secondary
@@ -129,7 +131,9 @@ const ConfigPanel = ({
           + Add a New Role
         </Button>
       </ConfigPanelGroup>
-      <ConfigPanelGroup panelHeader={"Assigned Roles"}></ConfigPanelGroup>
+      <ConfigPanelGroup
+        panelHeader={"Assign roles to participants of this course here."}
+      ></ConfigPanelGroup>
 
       <ButtonContainer>
         <Button
@@ -139,6 +143,9 @@ const ConfigPanel = ({
           buttonHeight={"2.2rem"}
           onClick={() => {
             alert("Feature is work in progress.");
+            setRoleList(cachedRoleList);
+            setCourseRoles(cachedRoleList);
+            setRoleIdCounter(2);
           }}
         >
           Cancel
