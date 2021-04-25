@@ -5,6 +5,33 @@ import Button from "../common/Button";
 import ConfigPanelGroup from "./ConfigPanelGroup";
 import RolePanel from "./roleConfigComponents/RolePanel";
 
+const colorTest = [
+  "#dd0000",
+  "#dd7700",
+  "#eedd00",
+  "#00cc00",
+  "#2a2aff",
+  "#7337ee",
+  "#ee55ee",
+  "#00cccc",
+  "#f76b60",
+  "#8a5c07",
+  "#c8d14d",
+  "#4d8a0c",
+  "#0c8a4b",
+  "#27cdd6",
+  "#454dba",
+  "#3d1e85",
+  "#710c7a",
+  "#d7c3d9",
+  "#c21d85",
+  "#474747",
+  "#edead5",
+  "#d9edd5",
+  "#a8e0dc",
+  "#2b3659",
+];
+
 /**
  * Creates a json object of new role permissions
  * @param {number} itemId the new id to pupulate into the new role object
@@ -14,6 +41,7 @@ const createRoleObject = (itemId) => {
   let newPerms = {
     _id: itemId.toString(),
     roleName: "New Role " + itemId.toString(),
+    roleColor: colorTest[Math.floor(Math.random() * colorTest.length)],
     publish: {
       postComment: false,
       reply: false,
@@ -60,6 +88,7 @@ const GenerateRoleList = (roles) => {
       value={index}
       roleObject={role}
       roleName={role?.roleName}
+      panelOutlineColor={role?.roleColor}
     />
   ));
 };

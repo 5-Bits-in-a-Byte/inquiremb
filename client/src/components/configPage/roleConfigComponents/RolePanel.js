@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Button from "../../common/Button";
 import PencilIcon from "../../../imgs/pencil.svg";
 import Input from "../../common/Input";
 import DraftTextArea from "../../common/DraftTextArea";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Arrow from "../../../imgs/carrot-down-secondary.svg";
+import MaterialDropDownGroup from "./MaterialDropDownGroup";
 
 // MATERIAL UI -----------------------------------------------------------
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -29,7 +30,7 @@ const publishTest = {
   poll: true,
 };
 
-const RolePanel = ({ roleObject, roleName, ...props }) => {
+const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
   // MATERIAL UI --------------------------------
   const styleClasses = useStyles();
 
@@ -50,7 +51,7 @@ const RolePanel = ({ roleObject, roleName, ...props }) => {
   // console.log("This role id: ", props.value);
 
   return (
-    <RolePanelWrapper>
+    <RolePanelWrapper panelOutlineColor={panelOutlineColor}>
       <RoleNameWrapper>
         {nameFieldState ? (
           <RoleName style={{ margin: `0 1rem 0 0` }}>{nameField}</RoleName>
@@ -80,59 +81,180 @@ const RolePanel = ({ roleObject, roleName, ...props }) => {
           <ChangeNameIcon src={PencilIcon} />
         </Button>
       </RoleNameWrapper>
-      <DropdownWrapper>
-        <Button
-          primary
-          buttonWidth={"110px"}
-          buttonHeight={"28px"}
-          onClick={publishHandleClick}
-        >
-          Publish
-        </Button>
-        <Menu
-          id="Publish Menu"
-          anchorEl={publishAnchorEl}
-          keepMounted
-          open={Boolean(publishAnchorEl)}
-          onClose={publishHandleClose}
-        >
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={(e) => {
-                    console.log("Post / Comment Changed: ", e.target.checked);
-                    roleObject.publish.postComment = e.target.checked;
-                  }}
-                />
-              }
-              label={"Post / Comment"}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={(e) => {
-                    console.log("Reply Changed: ", e.target.checked);
-                    roleObject.publish.reply = e.target.checked;
-                  }}
-                />
-              }
-              label={"Reply"}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={(e) => {
-                    console.log("Poll Changed: ", e.target.checked);
-                    roleObject.publish.poll = e.target.checked;
-                  }}
-                />
-              }
-              label={"Poll"}
-            />
-          </FormGroup>
-        </Menu>
-      </DropdownWrapper>
+
+      {/* PUBLISH DROPDOWN */}
+      <MaterialDropDownGroup
+        roleObject={roleObject}
+        matDropShape={{
+          name: "Publish",
+          items: [
+            {
+              itemLabel: "Post / Comment",
+              changeRoleVal: (val) => {
+                roleObject.publish.postComment = val;
+              },
+            },
+            {
+              itemLabel: "Reply",
+              changeRoleVal: (val) => {
+                roleObject.publish.reply = val;
+              },
+            },
+            {
+              itemLabel: "Poll",
+              changeRoleVal: (val) => {
+                roleObject.publish.poll = val;
+              },
+            },
+          ],
+        }}
+      ></MaterialDropDownGroup>
+
+      {/* DELETE DROPDOWN */}
+      <MaterialDropDownGroup
+        roleObject={roleObject}
+        matDropShape={{
+          name: "Delete",
+          items: [
+            {
+              itemLabel: "Post / Comment",
+              changeRoleVal: (val) => {
+                roleObject.delete.postComment = val;
+              },
+            },
+            {
+              itemLabel: "Reply",
+              changeRoleVal: (val) => {
+                roleObject.delete.reply = val;
+              },
+            },
+            {
+              itemLabel: "Poll",
+              changeRoleVal: (val) => {
+                roleObject.delete.poll = val;
+              },
+            },
+          ],
+        }}
+      ></MaterialDropDownGroup>
+
+      {/* PARTICIPATION DROPDOWN */}
+      <MaterialDropDownGroup
+        roleObject={roleObject}
+        matDropShape={{
+          name: "Participation",
+          items: [
+            {
+              itemLabel: "Reactions",
+              changeRoleVal: (val) => {
+                roleObject.participation.reactions = val;
+              },
+            },
+            {
+              itemLabel: "Vote in Poll",
+              changeRoleVal: (val) => {
+                roleObject.participation.voteInPoll = val;
+              },
+            },
+            {
+              itemLabel: "Pin",
+              changeRoleVal: (val) => {
+                roleObject.participation.pin = val;
+              },
+            },
+          ],
+        }}
+      ></MaterialDropDownGroup>
+
+      {/* EDIT DROPDOWN */}
+      <MaterialDropDownGroup
+        roleObject={roleObject}
+        matDropShape={{
+          name: "Edit",
+          items: [
+            {
+              itemLabel: "Post / Comment",
+              changeRoleVal: (val) => {
+                roleObject.edit.postComment = val;
+              },
+            },
+            {
+              itemLabel: "Reply",
+              changeRoleVal: (val) => {
+                roleObject.edit.reply = val;
+              },
+            },
+            {
+              itemLabel: "Poll",
+              changeRoleVal: (val) => {
+                roleObject.edit.poll = val;
+              },
+            },
+          ],
+        }}
+      ></MaterialDropDownGroup>
+
+      {/* PRIVACY DROPDOWN */}
+      <MaterialDropDownGroup
+        roleObject={roleObject}
+        matDropShape={{
+          name: "Privacy",
+          items: [
+            {
+              itemLabel: "Post Privately",
+              changeRoleVal: (val) => {
+                roleObject.privacy.private = val;
+              },
+            },
+            {
+              itemLabel: "Post Anonymously",
+              changeRoleVal: (val) => {
+                roleObject.privacy.anonymous = val;
+              },
+            },
+          ],
+        }}
+      ></MaterialDropDownGroup>
+
+      {/* ADMIN DROPDOWN */}
+      <MaterialDropDownGroup
+        roleObject={roleObject}
+        matDropShape={{
+          name: "Admin",
+          items: [
+            {
+              itemLabel: "Ban Users",
+              changeRoleVal: (val) => {
+                roleObject.admin.banUsers = val;
+              },
+            },
+            {
+              itemLabel: "Remove Users",
+              changeRoleVal: (val) => {
+                roleObject.admin.removeUsers = val;
+              },
+            },
+            {
+              itemLabel: "Announce",
+              changeRoleVal: (val) => {
+                roleObject.admin.announce = val;
+              },
+            },
+            {
+              itemLabel: "Configure",
+              changeRoleVal: (val) => {
+                roleObject.admin.configure = val;
+              },
+            },
+            {
+              itemLabel: "Highlight Post",
+              changeRoleVal: (val) => {
+                roleObject.admin.highlightPost = val;
+              },
+            },
+          ],
+        }}
+      ></MaterialDropDownGroup>
     </RolePanelWrapper>
   );
 };
@@ -142,11 +264,14 @@ export default RolePanel;
 const RolePanelWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
   margin: 1rem 0;
   padding: 0.25rem;
 
   /* box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07); */
-  border: 2px solid #e7e7e7;
+  border: 2px solid
+    ${(props) =>
+      props.panelOutlineColor ? props.panelOutlineColor : css`#e7e7e7`};
   border-radius: 5px;
 `;
 
@@ -167,17 +292,17 @@ const ChangeNameIcon = styled.img`
   height: 10px;
 `;
 
-const DropdownWrapper = styled.div`
-  width: 110px;
-  height: 28px;
-  /* padding: 0.25rem; */
+// const DropdownWrapper = styled.div`
+//   width: 110px;
+//   height: 28px;
+//   /* padding: 0.25rem; */
 
-  background: #e7e7e7;
-  /* border: 1px solid black; */
-  border-radius: 4px;
-`;
+//   background: #e7e7e7;
+//   /* border: 1px solid black; */
+//   border-radius: 4px;
+// `;
 
-const ArrowImg = styled.img`
-  height: 7px;
-  margin-left: 7px;
-`;
+// const ArrowImg = styled.img`
+//   height: 7px;
+//   margin-left: 7px;
+// `;
