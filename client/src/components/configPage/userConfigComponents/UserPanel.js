@@ -14,7 +14,6 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
   //const user = useContext(UserContext);
 
   // Dummy roles
-
   const dummy_all_roles = ["Administrator", "Student", "Assistant"];
 
   /* Handle Role selection in the dropdown */
@@ -49,8 +48,9 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
       <AdminActionsWrapper>
         {UserPerms.canBan && (
           <Button
-            primary
-            buttonColor={"#DC7B00"}
+            style={{ margin: `0 0.5em`, color: `#DC2B2B`, fontWeight: `600` }}
+            outlineSecondary
+            buttonColor={"#DC2B2B"}
             buttonWidth={"125px"}
             buttonHeight={"2rem"}
             onClick={() => {
