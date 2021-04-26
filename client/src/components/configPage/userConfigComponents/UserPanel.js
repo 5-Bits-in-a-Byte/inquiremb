@@ -13,12 +13,23 @@ const UserPerms = { canBan: true, canRemove: true };
 const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
   //const user = useContext(UserContext);
 
+  // Dummy roles
+
+  const dummy_all_roles = ["Administrator", "Student", "Assistant"];
+
   /* Handle Role selection in the dropdown */
-  const handleRoleSelect = () => {
-    alert("Default Role selected");
+  const generateRoleOptions = (roles) => {
+    return roles.map((role) => ({
+      onClick: () => {
+        alert(role.toString() + " Role selected");
+      },
+      label: role,
+    }));
   };
 
-  const options = [{ onClick: handleRoleSelect, label: "Default Role" }];
+  const options = generateRoleOptions(dummy_all_roles);
+
+  console.log(options);
 
   return (
     <UserPanelWrapper>
