@@ -25,8 +25,6 @@ class CourseCard extends React.Component {
       numMsgs: 0,
       courseColor: props.color,
       displayColorSelector: false,
-      open: false,
-      type: "",
     };
   }
 
@@ -35,11 +33,6 @@ class CourseCard extends React.Component {
   };
 
   toggleColorDisplay = () => {
-    // if (this.state.type == "button") {
-    //   this.setState({ displayColorSelector: !this.state.displayColorSelector });
-    // } else {
-    //   this.setState({ displayColorSelector: !this.state.displayColorSelector });
-    // }
     this.setState({ displayColorSelector: !this.state.displayColorSelector });
   };
 
@@ -129,14 +122,13 @@ class CourseCard extends React.Component {
           <ColorWrapper
             ref={this.colorFocus}
             tabIndex="0"
-            // onBlur={this.toggleColorDisplay("focus")}
             onBlur={this.toggleColorDisplay}
           >
             <ChromePicker
               onChange={this.handleColorChange}
               onChangeComplete={this.handleColorChangeComplete}
               color={this.state.courseColor}
-              disableAlpha={true}
+              disableAlpha
             />
           </ColorWrapper>
         )}
