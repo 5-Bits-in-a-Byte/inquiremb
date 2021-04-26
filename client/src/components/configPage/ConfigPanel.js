@@ -5,6 +5,7 @@ import Button from "../common/Button";
 import ConfigPanelGroup from "./ConfigPanelGroup";
 import RolePanel from "./roleConfigComponents/RolePanel";
 import UserPanel from "./userConfigComponents/UserPanel";
+import TempIcon from "../../imgs/temporary-user-icon.png";
 
 const usersTest = [
   "Amelia Ambassador",
@@ -130,7 +131,12 @@ const GenerateRoleList = (roles) => {
  */
 const GenerateUserList = (users) => {
   return users.map((user, index) => (
-    <UserPanel key={index} userName={user} userRole={"Default Role"} />
+    <UserPanel
+      key={index}
+      userName={user}
+      userImg={TempIcon}
+      userRole={"Default"}
+    />
   ));
 };
 

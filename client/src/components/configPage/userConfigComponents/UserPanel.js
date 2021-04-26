@@ -4,17 +4,14 @@ import styled, { css } from "styled-components";
 import Button from "../../common/Button";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Arrow from "../../../imgs/carrot-down-secondary.svg";
-import TempIcon from "../../../imgs/temporary-user-icon.png";
 import { UserContext } from "../../context/UserProvider";
 
-// Hardcoded, temporary
+// Hardcoded dummy values
 const UserPerms = { canBan: true, canRemove: true };
+const dummy_all_roles = ["Administrator", "Student", "Assistant"];
 
 const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
   //const user = useContext(UserContext);
-
-  // Dummy roles
-  const dummy_all_roles = ["Administrator", "Student", "Assistant"];
 
   /* Handle Role selection in the dropdown */
   const generateRoleOptions = (roles) => {
@@ -26,13 +23,12 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
     }));
   };
 
+  // This will need to generate options using the allRoles prop
   const options = generateRoleOptions(dummy_all_roles);
-
-  console.log(options);
 
   return (
     <UserPanelWrapper>
-      <UserIcon src={TempIcon} />
+      <UserIcon src={userImg} />
       <UserNameWrapper>
         <UserName>{userName}</UserName>
       </UserNameWrapper>
