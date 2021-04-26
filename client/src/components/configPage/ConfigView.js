@@ -78,7 +78,7 @@ const ConfigView = ({ props }) => {
   var userIsAdmin = false;
 
   // ------------------------------------------------------------
-  // Checks if the user has admin level privledge in this course.
+  // Checks if the user has admin level privilege in this course.
   // TODO: Refactor with the introduction of Roles
   for (let i = 0; i < user.courses.length; i++) {
     if (user?.courses[i].courseId == courseId) {
