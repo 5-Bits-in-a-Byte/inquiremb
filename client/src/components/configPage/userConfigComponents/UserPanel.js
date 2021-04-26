@@ -3,12 +3,22 @@ import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import Button from "../../common/Button";
 import Dropdown from "../../common/dropdown/Dropdown";
+import Arrow from "../../../imgs/carrot-down-secondary.svg";
 import TempIcon from "../../../imgs/temporary-user-icon.png";
+import { UserContext } from "../../context/UserProvider";
 
+// Hardcoded, temporary
 const UserPerms = { canBan: true, canRemove: true };
 
-const UserPanel = ({ userName, userRole, ...props }) => {
-  // --------------------------------------------
+const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
+  //const user = useContext(UserContext);
+
+  /* Handle Role selection in the dropdown */
+  const handleRoleSelect = () => {
+    alert("Default Role selected");
+  };
+
+  const options = [{ onClick: handleRoleSelect, label: "Default Role" }];
 
   return (
     <UserPanelWrapper>
@@ -16,7 +26,14 @@ const UserPanel = ({ userName, userRole, ...props }) => {
       <UserNameWrapper>
         <UserName>{userName}</UserName>
       </UserNameWrapper>
-      <UserRoleWrapper>{userRole}</UserRoleWrapper>
+      <UserRoleWrapper>
+        <Dropdown options={options}>
+          <DropdownWrapper className="flex-row align">
+            <RoleDisplay className="font-regular">{userRole}</RoleDisplay>
+            <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
+          </DropdownWrapper>
+        </Dropdown>
+      </UserRoleWrapper>
 
       <AdminActionsWrapper>
         {UserPerms.canBan && (
@@ -90,7 +107,29 @@ const UserRoleWrapper = styled.div`
   display: flex;
   align-items: left;
   margin: 1rem;
-  width: 35%;
+  border: 2px solid #e7e7e7;
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+  border-radius: 5px;
+`;
+
+const DropdownWrapper = styled.div`
+  &:hover {
+    .profile-arrow {
+      opacity: 0.5;
+    }
+    .profile-circle {
+      box-shadow: 0 0 3px #4a4a4a;
+    }
+  }
+`;
+
+const RoleDisplay = styled.h4`
+  white-space: nowrap;
+`;
+
+const ArrowImg = styled.img`
+  height: 7px;
+  margin-left: 7px;
 `;
 
 const AdminActionsWrapper = styled.div`

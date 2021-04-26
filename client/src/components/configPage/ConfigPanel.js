@@ -130,7 +130,7 @@ const GenerateRoleList = (roles) => {
  */
 const GenerateUserList = (users) => {
   return users.map((user, index) => (
-    <UserPanel key={index} userName={user} userRole={"DEFAULT_ROLE"} />
+    <UserPanel key={index} userName={user} userRole={"Default Role"} />
   ));
 };
 
