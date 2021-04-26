@@ -4,6 +4,36 @@ import styled from "styled-components";
 import Button from "../common/Button";
 import ConfigPanelGroup from "./ConfigPanelGroup";
 import RolePanel from "./roleConfigComponents/RolePanel";
+import UserPanel from "./userConfigComponents/UserPanel";
+
+const usersTest = [
+  "Amelia Ambassador",
+  "Bob Barbeque",
+  "Cameron Castle",
+  "Devon Detective",
+  "Emmet Earl",
+  "Fatima Forlorn",
+  "Giuseppa Geothermic",
+  "Hamlet Hyper",
+  "Isabelle Intercontinental",
+  "Jillian Jabberwocky",
+  "Kerwin Kettle",
+  "Lily Lactose",
+  "Mark Majestic",
+  "Nestor Nasturtium",
+  "Olivia Orthogonal",
+  "Penelope Pineapple",
+  "Quentin Querulous",
+  "Robert Redacted",
+  "Sharalynn Sombre",
+  "Tulio Thermostat",
+  "Ursa Ultracentrifuge",
+  "Violet Vivisection",
+  "Wallace Walrus",
+  "X Æ A-XII Xylophone",
+  "Yusuf Year",
+  "Zainab Zapper",
+];
 
 const colorTest = [
   "#dd0000",
@@ -37,6 +67,7 @@ const colorTest = [
  * @param {number} itemId the new id to pupulate into the new role object
  * @returns JSON object modeling the Roles Model
  */
+
 const createRoleObject = (itemId) => {
   let newPerms = {
     _id: itemId.toString(),
@@ -94,6 +125,15 @@ const GenerateRoleList = (roles) => {
   ));
 };
 
+/**
+ * Generates a list of User Components for State Management
+ */
+const GenerateUserList = (users) => {
+  return users.map((user, index) => (
+    <UserPanel key={index} userName={user} userRole={"DEFAULT_ROLE"} />
+  ));
+};
+
 const ConfigPanel = ({
   courseRoles,
   setCourseRoles,
@@ -102,12 +142,17 @@ const ConfigPanel = ({
   ...props
 }) => {
   let realRoleList = GenerateRoleList(courseRoles);
+  //let realUserList = GenerateUserList(courseUsers);
+  let realUserList = GenerateUserList(usersTest);
 
   console.log("Course Roles: ", courseRoles);
   console.log("RealRolesList: ", realRoleList);
 
   const [roleList, setRoleList] = useState(realRoleList);
   const [cachedRoleList, setCachedRoleList] = useState(roleList);
+
+  const [userList, setUserList] = useState(realUserList);
+  const [cachedUserList, setCachedUserList] = useState(userList);
 
   return (
     <PanelWrapper>
@@ -134,7 +179,9 @@ const ConfigPanel = ({
       </ConfigPanelGroup>
       <ConfigPanelGroup
         panelHeader={"Assign roles to participants of this course here."}
-      ></ConfigPanelGroup>
+      >
+        <UserContainer>{userList}</UserContainer>
+      </ConfigPanelGroup>
 
       <ButtonContainer>
         <Button
@@ -194,4 +241,11 @@ const ButtonContainer = styled.div`
   padding: 0.5rem;
 
   /* border: 1px solid black; */
+`;
+
+const UserContainer = styled.div`
+  height: 300px;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: auto;
 `;
