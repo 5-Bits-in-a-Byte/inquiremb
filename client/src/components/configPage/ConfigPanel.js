@@ -32,7 +32,7 @@ const usersTest = [
   "Wallace Walrus",
   "X Æ A-XII Xylophone",
   "Yusuf Year",
-  "Zainab Zapper",
+  "Zainab Zipper",
 ];
 
 const colorTest = [

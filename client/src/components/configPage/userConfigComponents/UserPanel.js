@@ -6,6 +6,8 @@ import Dropdown from "../../common/dropdown/Dropdown";
 import Arrow from "../../../imgs/carrot-down-secondary.svg";
 import TempIcon from "../../../imgs/temporary-user-icon.png";
 
+const UserPerms = { canBan: true, canRemove: true };
+
 const UserPanel = ({ userName, userRole, ...props }) => {
   // --------------------------------------------
 
@@ -18,6 +20,36 @@ const UserPanel = ({ userName, userRole, ...props }) => {
       <UserNameWrapper>
         <UserName>{userName}</UserName>
       </UserNameWrapper>
+      <UserRoleWrapper>{userRole}</UserRoleWrapper>
+
+      <AdminActionsWrapper>
+        {UserPerms.canBan && (
+          <Button
+            primary
+            buttonColor={"#DC7B00"}
+            buttonWidth={"125px"}
+            buttonHeight={"2rem"}
+            onClick={() => {
+              alert("Feature is work in progress.");
+            }}
+          >
+            Ban User
+          </Button>
+        )}
+        {UserPerms.canRemove && (
+          <Button
+            primary
+            buttonColor={"#DC2B2B"}
+            buttonWidth={"125px"}
+            buttonHeight={"2rem"}
+            onClick={() => {
+              alert("Feature is work in progress.");
+            }}
+          >
+            Remove User
+          </Button>
+        )}
+      </AdminActionsWrapper>
     </UserPanelWrapper>
   );
 };
@@ -56,6 +88,19 @@ const UserNameWrapper = styled.div`
   align-items: left;
   margin: 1rem;
   width: 150px;
+`;
+
+const UserRoleWrapper = styled.div`
+  display: flex;
+  align-items: left;
+  margin: 1rem;
+  width: 35%;
+`;
+
+const AdminActionsWrapper = styled.div`
+  display: flex;
+  align-items: left;
+  margin: 1rem;
 `;
 
 const UserName = styled.p`
