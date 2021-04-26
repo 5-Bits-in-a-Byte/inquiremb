@@ -1,12 +1,16 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import SettingsImg from "../../imgs/settings-black.svg";
+// import ColorImg from "../../imgs/color-picker-icon.svg";
+import ColorImg from "../../imgs/color-palette.svg";
 import EditImg from "../../imgs/create-black.svg";
 import MessagesImg from "../../imgs/message-black.svg";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Icon from "../common/Icon";
 import { ChromePicker } from "react-color";
+import LazyFetch from "../common/requests/LazyFetch";
+import ClickAway from "../common/dropdown/ClickAway";
 
 /** Course Card
  * @brief Component for displaying courses the user is a part of. Component is one of many courses
@@ -21,6 +25,8 @@ class CourseCard extends React.Component {
       numMsgs: 0,
       courseColor: props.color,
       displayColorSelector: false,
+      open: false,
+      type: "",
     };
   }
 
@@ -28,8 +34,36 @@ class CourseCard extends React.Component {
     this.setState({ courseColor: colors.hex });
   };
 
-  handleColorClose = () => {
+  toggleColorDisplay = () => {
+    // if (this.state.type == "button") {
+    //   this.setState({ displayColorSelector: !this.state.displayColorSelector });
+    // } else {
+    //   this.setState({ displayColorSelector: !this.state.displayColorSelector });
+    // }
     this.setState({ displayColorSelector: !this.state.displayColorSelector });
+  };
+
+  colorFocus = (div) => {
+    if (div) {
+      div.focus();
+    }
+  };
+
+  handleColorChangeComplete = (colors) => {
+    // Get rid of # so we can send to backend properly
+    let spl = colors.hex.split("#");
+    // Add code for # part and then the actual color
+    let new_color = "%23" + spl[1];
+    // Send to backend
+    LazyFetch({
+      type: "put",
+      endpoint:
+        "/api/courses?courseId=" + this.props.id + "&color=" + new_color,
+      onSuccess: (data) => {
+        console.log(data.success);
+        this.setState({ courseColor: colors.hex });
+      },
+    });
   };
 
   // Track when new messages come in
@@ -71,7 +105,7 @@ class CourseCard extends React.Component {
               fader
               clickable
               src={EditImg}
-              alt={"Edit"}
+              alt={"Nickname"}
               width={"20em"}
               onClick={() =>
                 alert(
@@ -84,23 +118,27 @@ class CourseCard extends React.Component {
             <Icon
               fader
               clickable
-              src={SettingsImg}
-              alt={"Settings"}
-              width={"20em"}
-              onClick={() => {
-                this.setState({
-                  displayColorSelector: !this.state.displayColorSelector,
-                });
-              }}
+              src={ColorImg}
+              alt={"Color"}
+              width={"16em"}
+              onClick={this.toggleColorDisplay}
             ></Icon>
           </CourseFooter>
         </AlignedDiv>
         {this.state.displayColorSelector && (
-          <ChromePicker
-            onChange={this.handleColorChange}
-            color={this.state.courseColor}
-            disableAlpha={true}
-          />
+          <ColorWrapper
+            ref={this.colorFocus}
+            tabIndex="0"
+            // onBlur={this.toggleColorDisplay("focus")}
+            onBlur={this.toggleColorDisplay}
+          >
+            <ChromePicker
+              onChange={this.handleColorChange}
+              onChangeComplete={this.handleColorChangeComplete}
+              color={this.state.courseColor}
+              disableAlpha={true}
+            />
+          </ColorWrapper>
         )}
       </>
     );
@@ -188,15 +226,6 @@ const CourseFooter = styled.footer`
   width: 28%;
 `;
 
-const PopOver = styled.div`
-  position: "absolute";
-  z-index: "2";
-`;
-
-const Cover = styled.div`
-  position: "fixed";
-  top: 0px;
-  right: 0px;
-  left: 0px;
-  bottom: 0px;
+const ColorWrapper = styled.div`
+  outline: none !important;
 `;
