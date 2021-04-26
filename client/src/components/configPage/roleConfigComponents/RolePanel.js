@@ -25,7 +25,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 // -----------------------------------------------------------------------
 
-const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
+// const removeRoleFromList = (roleNameToRemove, roleList) => {
+//   roleList.filter((role) => {
+//     return role.roleName != roleNameToRemove;
+//   });
+
+//   return roleList;
+// };
+
+const RolePanel = ({
+  roleObject,
+  roleName,
+  panelOutlineColor,
+  courseRoles,
+  ...props
+}) => {
   // MATERIAL UI --------------------------------
   const styleClasses = useStyles();
 
@@ -392,7 +406,6 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
       ></MaterialDropDownGroup>
 
       <Button
-        style={{ color: `red` }}
         primary
         buttonColor={"rgba(0, 0, 0, 0.0)"}
         onClick={() => {
@@ -403,6 +416,13 @@ const RolePanel = ({ roleObject, roleName, panelOutlineColor, ...props }) => {
       </Button>
     </RolePanelWrapper>
   );
+};
+
+RolePanel.propTypes = {
+  roleObject: PropTypes.object,
+  roleName: PropTypes.string,
+  panelOutlineColor: PropTypes.string,
+  courseRoles: PropTypes.array,
 };
 
 export default RolePanel;

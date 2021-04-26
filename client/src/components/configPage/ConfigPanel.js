@@ -89,6 +89,7 @@ const GenerateRoleList = (roles) => {
       roleObject={role}
       roleName={role?.roleName}
       panelOutlineColor={role?.roleColor}
+      courseRoles={roles}
     />
   ));
 };
