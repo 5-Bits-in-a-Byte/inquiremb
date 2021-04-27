@@ -18,6 +18,7 @@ const generateCourseList = (userCourses) => {
         key={course.courseId}
         id={course.courseId}
         courseName={course.courseName}
+        nickname={course.nickname}
         courseTerm="Winter 2021"
         color={course.color || "#121212"}
       />
