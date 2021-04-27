@@ -17,14 +17,14 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
   const generateRoleOptions = (roles) => {
     return roles.map((role) => ({
       onClick: () => {
-        alert(role.toString() + " Role selected");
+        alert(role.roleName + " Role selected");
       },
-      label: role,
+      label: role.roleName,
     }));
   };
 
   // This will need to generate options using the allRoles prop
-  const options = generateRoleOptions(dummy_all_roles);
+  const options = generateRoleOptions(allRoles);
 
   return (
     <UserPanelWrapper>

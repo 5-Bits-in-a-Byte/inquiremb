@@ -129,13 +129,23 @@ const GenerateRoleList = (roles) => {
 /**
  * Generates a list of User Components for State Management
  */
-const GenerateUserList = (users) => {
+const GenerateUserList = (users, roles) => {
+  //console.log(roles);
+
+  var simpleRoles = roles.map((role) => ({
+    roleName: role?.roleName,
+    roleColor: role?.roleColor,
+  }));
+
+  console.log("Simplified roles: ", simpleRoles);
+
   return users.map((user, index) => (
     <UserPanel
       key={index}
       userName={user}
       userImg={TempIcon}
       userRole={"Default"}
+      allRoles={simpleRoles}
     />
   ));
 };
@@ -149,13 +159,14 @@ const ConfigPanel = ({
 }) => {
   let realRoleList = GenerateRoleList(courseRoles);
   //let realUserList = GenerateUserList(courseUsers);
-  let realUserList = GenerateUserList(usersTest);
 
   console.log("Course Roles: ", courseRoles);
   console.log("RealRolesList: ", realRoleList);
 
   const [roleList, setRoleList] = useState(realRoleList);
   const [cachedRoleList, setCachedRoleList] = useState(roleList);
+
+  let realUserList = GenerateUserList(usersTest, courseRoles);
 
   const [userList, setUserList] = useState(realUserList);
   const [cachedUserList, setCachedUserList] = useState(userList);
