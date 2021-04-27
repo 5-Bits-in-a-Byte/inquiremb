@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Button from "../common/Button";
 import ConfigPanelGroup from "./ConfigPanelGroup";
 import RolePanel from "./roleConfigComponents/RolePanel";
+import UserPanel from "./userConfigComponents/UserPanel";
 
 const colorTest = [
   "#dd0000",
@@ -37,6 +38,7 @@ const colorTest = [
  * @param {number} itemId the new id to pupulate into the new role object
  * @returns JSON object modeling the Roles Model
  */
+
 const createRoleObject = (itemId) => {
   let newPerms = {
     _id: itemId.toString(),
@@ -94,20 +96,45 @@ const GenerateRoleList = (roles) => {
   ));
 };
 
+/**
+ * Generates a list of User Components for State Management
+ */
+const GenerateUserList = (users, roles) => {
+  var test_simple_role = { roleName: "Regular User", roleColor: "#55cc88" };
+
+  return users.map((user, index) => (
+    <UserPanel
+      key={index}
+      userName={user.userName}
+      userImg={user.userImg}
+      userRole={test_simple_role}
+      allRoles={roles}
+    />
+  ));
+};
+
 const ConfigPanel = ({
+  courseUsers,
   courseRoles,
   setCourseRoles,
   roleIdCounter,
   setRoleIdCounter,
   ...props
 }) => {
+  // State for roles
   let realRoleList = GenerateRoleList(courseRoles);
 
-  console.log("Course Roles: ", courseRoles);
-  console.log("RealRolesList: ", realRoleList);
+  //console.log("Course Roles: ", courseRoles);
+  //console.log("RealRolesList: ", realRoleList);
 
   const [roleList, setRoleList] = useState(realRoleList);
   const [cachedRoleList, setCachedRoleList] = useState(roleList);
+
+  // State for users
+  let realUserList = GenerateUserList(courseUsers, courseRoles);
+
+  const [userList, setUserList] = useState(realUserList);
+  //const [cachedUserList, setCachedUserList] = useState(userList);
 
   return (
     <PanelWrapper>
@@ -125,6 +152,7 @@ const ConfigPanel = ({
 
             let newCourseRoles = [...courseRoles, newPerms];
             setRoleList(GenerateRoleList(newCourseRoles));
+            setUserList(GenerateUserList(courseUsers, newCourseRoles));
 
             setCourseRoles(newCourseRoles);
           }}
@@ -134,7 +162,9 @@ const ConfigPanel = ({
       </ConfigPanelGroup>
       <ConfigPanelGroup
         panelHeader={"Assign roles to participants of this course here."}
-      ></ConfigPanelGroup>
+      >
+        <UserContainer>{userList}</UserContainer>
+      </ConfigPanelGroup>
 
       <ButtonContainer>
         <Button
@@ -194,4 +224,11 @@ const ButtonContainer = styled.div`
   padding: 0.5rem;
 
   /* border: 1px solid black; */
+`;
+
+const UserContainer = styled.div`
+  height: 300px;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: auto;
 `;

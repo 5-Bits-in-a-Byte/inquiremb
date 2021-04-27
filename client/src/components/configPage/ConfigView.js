@@ -7,6 +7,41 @@ import Button from "../common/Button";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import { DeleteUserCourse } from "../common/stateManagement/UpdateUser.js";
+import TempIcon from "../../imgs/temporary-user-icon.png";
+
+const dummy_usernames = [
+  "Amelia Ambassador",
+  "Bob Barbeque",
+  "Cameron Castle",
+  "Devon Detective",
+  "Emmet Earl",
+  "Fatima Forlorn",
+  "Giuseppa Geothermic",
+  "Hamlet Hyper",
+  "Isabelle Intercontinental",
+  "Jillian Jabberwocky",
+  "Kerwin Kettle",
+  "Lily Lactose",
+  "Mark Majestic",
+  "Nestor Nasturtium",
+  "Olivia Orthogonal",
+  "Penelope Pineapple",
+  "Quentin Querulous",
+  "Robert Redacted",
+  "Sharalynn Sombre",
+  "Tulio Thermostat",
+  "Ursa Ultracentrifuge",
+  "Violet Vivisection",
+  "Wallace Walrus",
+  "X Æ A-XII Xylophone",
+  "Yusuf Year",
+  "Zainab Zipper",
+];
+
+const dummy_users = dummy_usernames.map((username) => ({
+  userName: username,
+  userImg: TempIcon,
+}));
 
 const adminPerms = {
   _id: "1",
@@ -70,6 +105,8 @@ const ConfigView = ({ props }) => {
   //   },
   // });
 
+  const [courseUsers, setCourseUsers] = useState(dummy_users);
+
   const [roleIdCounter, setRoleIdCounter] = useState(2);
   const [courseRoles, setCourseRoles] = useState([adminPerms]);
   // console.log("Course Roles", courseRoles);
@@ -78,7 +115,7 @@ const ConfigView = ({ props }) => {
   var userIsAdmin = false;
 
   // ------------------------------------------------------------
-  // Checks if the user has admin level privledge in this course.
+  // Checks if the user has admin level privilege in this course.
   // TODO: Refactor with the introduction of Roles
   for (let i = 0; i < user.courses.length; i++) {
     if (user?.courses[i].courseId == courseId) {
@@ -116,6 +153,7 @@ const ConfigView = ({ props }) => {
         {userIsAdmin ? (
           // <CenterContent>
           <ConfigPanel
+            courseUsers={courseUsers}
             courseRoles={courseRoles}
             setCourseRoles={setCourseRoles}
             roleIdCounter={roleIdCounter}

@@ -61,7 +61,8 @@ const Btn = styled.button`
   ${(props) =>
     props.outlineSecondary &&
     css`
-      border: 2px solid #4a86fa;
+      border: 2px solid
+        ${(props) => (props.buttonColor ? props.buttonColor : css`#4a86fa`)};
       border-radius: 4px;
       padding: 5px 12px;
       background-color: #e7e7e700;
