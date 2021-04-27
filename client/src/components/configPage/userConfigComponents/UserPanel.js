@@ -10,21 +10,28 @@ import { UserContext } from "../../context/UserProvider";
 const UserPerms = { canBan: true, canRemove: true };
 const dummy_all_roles = ["Administrator", "Student", "Assistant"];
 
+/* Handle Role selection in the dropdown */
+const GenerateRoleOptions = (roles) => {
+  return roles.map((role) => ({
+    onClick: () => {
+      alert(role.roleName + " Role selected");
+    },
+    label: role.roleName,
+  }));
+};
+
 const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
   //const user = useContext(UserContext);
 
-  /* Handle Role selection in the dropdown */
-  const generateRoleOptions = (roles) => {
-    return roles.map((role) => ({
-      onClick: () => {
-        alert(role.roleName + " Role selected");
-      },
-      label: role.roleName,
-    }));
-  };
+  let roleOptionsState = GenerateRoleOptions(allRoles);
+
+  console.log("Role state: ", roleOptionsState);
+
+  const [roleOptions, setRoleOptions] = useState(roleOptionsState);
+  //const [cachedRoleList, setCachedRoleList] = useState(roleList);
 
   // This will need to generate options using the allRoles prop
-  const options = generateRoleOptions(allRoles);
+  //const options = generateRoleOptions(allRoles);
 
   return (
     <UserPanelWrapper>
@@ -32,10 +39,15 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
       <UserNameWrapper>
         <UserName>{userName}</UserName>
       </UserNameWrapper>
-      <UserRoleWrapper>
-        <Dropdown options={options}>
+      <UserRoleWrapper borderColor={userRole.roleColor}>
+        <Dropdown options={roleOptions}>
           <DropdownWrapper className="flex-row align">
-            <RoleDisplay className="font-regular">{userRole}</RoleDisplay>
+            <RoleDisplay
+              className="font-regular"
+              /*textColor={userRole.roleColor}*/
+            >
+              {userRole.roleName}
+            </RoleDisplay>
             <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
           </DropdownWrapper>
         </Dropdown>
@@ -114,7 +126,7 @@ const UserRoleWrapper = styled.div`
   display: flex;
   align-items: left;
   margin: 1rem;
-  border: 2px solid #e7e7e7;
+  border: 2px solid ${(props) => props.borderColor || "#e7e7e7"};
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
   border-radius: 5px;
 `;
@@ -132,6 +144,7 @@ const DropdownWrapper = styled.div`
 
 const RoleDisplay = styled.h4`
   white-space: nowrap;
+  color: ${(props) => props.textColor || "#000000"};
 `;
 
 const ArrowImg = styled.img`

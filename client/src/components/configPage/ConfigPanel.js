@@ -129,26 +129,6 @@ const GenerateRoleList = (roles) => {
 /**
  * Generates a list of User Components for State Management
  */
-const GenerateUserList = (users, roles) => {
-  //console.log(roles);
-
-  var simpleRoles = roles.map((role) => ({
-    roleName: role?.roleName,
-    roleColor: role?.roleColor,
-  }));
-
-  console.log("Simplified roles: ", simpleRoles);
-
-  return users.map((user, index) => (
-    <UserPanel
-      key={index}
-      userName={user}
-      userImg={TempIcon}
-      userRole={"Default"}
-      allRoles={simpleRoles}
-    />
-  ));
-};
 
 const ConfigPanel = ({
   courseRoles,
@@ -166,10 +146,35 @@ const ConfigPanel = ({
   const [roleList, setRoleList] = useState(realRoleList);
   const [cachedRoleList, setCachedRoleList] = useState(roleList);
 
-  let realUserList = GenerateUserList(usersTest, courseRoles);
+  const GenerateUserList = (users) => {
+    //console.log(roles);
+
+    /*
+    var simpleRoles = roles.map((role) => ({
+      roleName: role?.roleName,
+      roleColor: role?.roleColor,
+    }));
+    */
+
+    //console.log("Simplified roles: ", simpleRoles);
+
+    var test_simple_role = { roleName: "Regular User", roleColor: "#0033ee" };
+
+    return users.map((user, index) => (
+      <UserPanel
+        key={index}
+        userName={user}
+        userImg={TempIcon}
+        userRole={test_simple_role}
+        allRoles={courseRoles}
+      />
+    ));
+  };
+
+  let realUserList = GenerateUserList(usersTest);
 
   const [userList, setUserList] = useState(realUserList);
-  const [cachedUserList, setCachedUserList] = useState(userList);
+  //const [cachedUserList, setCachedUserList] = useState(userList);
 
   return (
     <PanelWrapper>
