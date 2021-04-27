@@ -26,13 +26,8 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
 
   let roleOptionsState = GenerateRoleOptions(allRoles);
 
-  //console.log("Role state: ", roleOptionsState);
-
   const [roleOptions, setRoleOptions] = useState(roleOptionsState);
   //const [cachedRoleList, setCachedRoleList] = useState(roleList);
-
-  // This will need to generate options using the allRoles prop
-  //const options = generateRoleOptions(allRoles);
 
   return (
     <UserPanelWrapper>
@@ -43,10 +38,7 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
       <UserRoleWrapper borderColor={userRole.roleColor}>
         <Dropdown options={roleOptions}>
           <DropdownWrapper className="flex-row align">
-            <RoleDisplay
-              className="font-regular"
-              /*textColor={userRole.roleColor}*/
-            >
+            <RoleDisplay className="font-regular">
               {userRole.roleName}
             </RoleDisplay>
             <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
@@ -145,7 +137,6 @@ const DropdownWrapper = styled.div`
 
 const RoleDisplay = styled.h4`
   white-space: nowrap;
-  color: ${(props) => props.textColor || "#000000"};
 `;
 
 const ArrowImg = styled.img`

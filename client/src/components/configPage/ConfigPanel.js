@@ -100,7 +100,7 @@ const GenerateRoleList = (roles) => {
  * Generates a list of User Components for State Management
  */
 const GenerateUserList = (users, roles) => {
-  var test_simple_role = { roleName: "Regular User", roleColor: "#0033ee" };
+  var test_simple_role = { roleName: "Regular User", roleColor: "#55cc88" };
 
   return users.map((user, index) => (
     <UserPanel
