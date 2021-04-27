@@ -24,9 +24,13 @@ const GenerateRoleOptions = (roles) => {
 const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
   //const user = useContext(UserContext);
 
+  // console.log("All Roles: ", allRoles);
+
   let roleOptionsState = GenerateRoleOptions(allRoles);
 
-  const [roleOptions, setRoleOptions] = useState(roleOptionsState);
+  // console.log("Role Dropdown List: ", roleOptionsState);
+
+  // const [roleOptions, setRoleOptions] = useState(roleOptionsState);
   //const [cachedRoleList, setCachedRoleList] = useState(roleList);
 
   return (
@@ -36,7 +40,7 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
         <UserName>{userName}</UserName>
       </UserNameWrapper>
       <UserRoleWrapper borderColor={userRole.roleColor}>
-        <Dropdown options={roleOptions}>
+        <Dropdown options={roleOptionsState}>
           <DropdownWrapper className="flex-row align">
             <RoleDisplay className="font-regular">
               {userRole.roleName}

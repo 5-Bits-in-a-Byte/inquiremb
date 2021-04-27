@@ -152,6 +152,7 @@ const ConfigPanel = ({
 
             let newCourseRoles = [...courseRoles, newPerms];
             setRoleList(GenerateRoleList(newCourseRoles));
+            setUserList(GenerateUserList(courseUsers, newCourseRoles));
 
             setCourseRoles(newCourseRoles);
           }}
