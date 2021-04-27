@@ -7,8 +7,9 @@ import Arrow from "../../../imgs/carrot-down-secondary.svg";
 import { UserContext } from "../../context/UserProvider";
 
 // Hardcoded dummy values
+// Ultimately the goal is to pull these from the permissions object in the user context
 const UserPerms = { canBan: true, canRemove: true };
-const dummy_all_roles = ["Administrator", "Student", "Assistant"];
+//const dummy_all_roles = ["Administrator", "Student", "Assistant"];
 
 /* Handle Role selection in the dropdown */
 const GenerateRoleOptions = (roles) => {
@@ -25,7 +26,7 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
 
   let roleOptionsState = GenerateRoleOptions(allRoles);
 
-  console.log("Role state: ", roleOptionsState);
+  //console.log("Role state: ", roleOptionsState);
 
   const [roleOptions, setRoleOptions] = useState(roleOptionsState);
   //const [cachedRoleList, setCachedRoleList] = useState(roleList);
