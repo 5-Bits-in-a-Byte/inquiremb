@@ -39,6 +39,7 @@ const HeaderText = styled.p`
 
   font-size: 16px;
   font-weight: 600;
+  text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
 `;
 
 const HeaderInfoIcon = styled.img`

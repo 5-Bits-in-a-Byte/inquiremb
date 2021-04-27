@@ -99,11 +99,18 @@ const ConfigView = ({ props }) => {
       <ScrollingDiv>
         {/* <CenterContent> */}
         {userIsAdmin ? (
-          <h1 style={{ margin: `0 0 2rem 0` }}>
+          <h1
+            style={{
+              margin: `0 0 2rem 0`,
+              // textShadow: `0px 1px 4px rgba(0, 0, 0, 0.25)`,
+            }}
+          >
             Manage and Edit Course Configurations:
           </h1>
         ) : (
-          <h1>ACCESS DENIED</h1>
+          <h1 /* style={{ textShadow: `0px 1px 4px rgba(0, 0, 0, 0.25)` }} */>
+            ACCESS DENIED
+          </h1>
         )}
 
         {userIsAdmin ? (
