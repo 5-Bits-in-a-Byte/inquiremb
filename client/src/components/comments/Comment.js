@@ -108,7 +108,7 @@ const Comment = ({ comment, isDraft, callback }) => {
         <CommentContent>{renderContent()}</CommentContent>
         {!isDraft && (
           <Dropdown options={options} style={{ paddingRight: "10px" }}>
-            <Icon src={OptionDots} />
+            <Icon src={OptionDots} style={{ cursor: "pointer" }} />
           </Dropdown>
         )}
       </Content>

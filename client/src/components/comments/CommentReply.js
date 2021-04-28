@@ -59,7 +59,7 @@ const CommentReply = ({ reply, isDraft, submitReply, postid, commentid }) => {
         <CommentReplyContent>{reply.content}</CommentReplyContent>
         {!isDraft && (
           <Dropdown options={options} style={{ paddingRight: "10px" }}>
-            <Icon src={OptionDots} />
+            <Icon src={OptionDots} style={{ cursor: "pointer" }} />
           </Dropdown>
         )}
       </Content>

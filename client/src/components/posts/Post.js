@@ -219,7 +219,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
         <PostTitle isCondensed={isCondensed}>{render.title}</PostTitle>
         {!isDraft && (
           <Dropdown options={options}>
-            <Icon src={OptionDots} />
+            <Icon src={OptionDots} style={{ cursor: "pointer" }} />
           </Dropdown>
         )}
       </TopSection>
