@@ -4,10 +4,18 @@ import { UserContext } from "../context/UserProvider";
 import DraftTextArea from "../common/DraftTextArea";
 import Button from "../common/Button";
 import Reaction from "../common/Reaction";
+import LazyFetch from "../common/requests/LazyFetch";
+import Dropdown from "../common/dropdown/Dropdown";
+import Icon from "../common/Icon";
+import OptionDots from "../../imgs/option-dots.svg";
 
-const CommentReply = ({ reply, isDraft, submitReply, postid }) => {
+const CommentReply = ({ reply, isDraft, submitReply, postid, commentid }) => {
   const user = useContext(UserContext);
   const [draft, setDraft] = useState("");
+
+  // '/posts/<string:postId>/comments/<string:comment_id>/replies'
+  const endpoint =
+    "/api/posts/" + postid + "/comments/" + commentid + "/replies";
 
   const handleChange = (e) => {
     setDraft(e.target.value);
@@ -22,9 +30,39 @@ const CommentReply = ({ reply, isDraft, submitReply, postid }) => {
     };
   }
 
+  const handleDelete = () => {
+    LazyFetch({
+      type: "delete",
+      endpoint: endpoint,
+      data: { _id: reply._id },
+      onSuccess: () => {
+        window.location.reload();
+      },
+      onFailure: (err) => {
+        alert(err.response);
+      },
+    });
+  };
+
+  const handleEdit = () => {
+    alert("This feature is still a work in progress. Check back soon!");
+  };
+
+  const options = [
+    { onClick: handleDelete, label: "Delete reply" },
+    { onClick: handleEdit, label: "Edit reply" },
+  ];
+
   return (
     <CommentReplyWrapper>
-      <CommentReplyContent>{reply.content}</CommentReplyContent>
+      <Content>
+        <CommentReplyContent>{reply.content}</CommentReplyContent>
+        {!isDraft && (
+          <Dropdown options={options} style={{ paddingRight: "10px" }}>
+            <Icon src={OptionDots} />
+          </Dropdown>
+        )}
+      </Content>
       <ReplyMetaContentWrapper className="meta">
         <UserDescription>
           by{" "}
@@ -78,6 +116,7 @@ const CommentReplyContent = styled.p`
   margin: 0 2.2em 1em 2.2em;
   padding-top: 1em;
   font-size: 16px;
+  flex: 1;
 `;
 
 const ReplyMetaContentWrapper = styled.div`
@@ -100,4 +139,10 @@ const MetaIconWrapper = styled.div`
   display: flex;
   margin-left: auto;
   align-items: center;
+`;
+
+const Content = styled.div`
+  display: flex;
+  background-color: #fff;
+  padding: 10px 10px 0px 0px;
 `;

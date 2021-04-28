@@ -60,7 +60,12 @@ const Comment = ({ comment, isDraft, callback }) => {
   if (comment.replies && comment.replies.length > 0) {
     comment.replies.forEach((reply) => {
       replies.push(
-        <CommentReply reply={reply} postid={postid} key={reply._id} />
+        <CommentReply
+          reply={reply}
+          postid={postid}
+          key={reply._id}
+          commentid={comment._id}
+        />
       );
     });
   }
@@ -75,7 +80,6 @@ const Comment = ({ comment, isDraft, callback }) => {
   }
 
   const handleDelete = () => {
-    console.log("handleDelete");
     LazyFetch({
       type: "delete",
       endpoint: endpoint,
@@ -215,11 +219,6 @@ const ReplyContainer = styled.div`
 
 const Content = styled.div`
   display: flex;
-  /* justify-content: flex-end; */
   background-color: #fff;
   padding: 10px 10px 0px 0px;
 `;
-
-// const Placeholder = styled.div`
-//   flex: 1;
-// `;
