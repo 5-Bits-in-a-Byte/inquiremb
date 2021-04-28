@@ -9,7 +9,7 @@ from inquire.socketio_app import io
 
 
 class Roles(Resource):
-    @permission_layer(required_permissions=["publish-reply", "privacy-private"])
+    @permission_layer(required_permissions=["admin-configure"])
     def get(self, courseId):
         # Query for courseId
         course_query = Course.objects.raw({"_id": courseId})
@@ -37,6 +37,7 @@ class Roles(Resource):
                     role_list.append(role)
             return role_list
 
+    @permission_layer(required_permissions=["admin-configure"])
     def post(self, courseId):
         parser = reqparse.RequestParser()
         parser.add_argument('permissions', type=dict)
@@ -44,7 +45,7 @@ class Roles(Resource):
         args = parser.parse_args()
         try:
             new_role = Role(
-                name="test", permissions=args['permissions']).save()
+                name=args['name'], permissions=args['permissions']).save()
             return {"status": "success", "role": self._serialize(new_role)}
         except Exception as exc:
             if type(exc) == list:
@@ -52,6 +53,7 @@ class Roles(Resource):
             else:
                 return {"errors": str(exc)}
 
+    @permission_layer(required_permissions=["admin-configure"])
     def put(self, courseId):
         # Get the request since it's json
         data = request.get_json()
@@ -69,7 +71,7 @@ class Roles(Resource):
                 course = course_query.first()
                 default = data['default']
                 if default in course.roles:
-                    course.default_role = default
+                    course.defaultRole = default
                     course.save()
         updated_list = []
         # Loop through all roles in the request
@@ -105,6 +107,30 @@ class Roles(Resource):
             for updated_role in updated_list:
                 updated_role.save()
         return {"roles": [self._serialize(role) for role in updated_list]}, 200
+
+    @permission_layer(required_permissions=["admin-configure"])
+    def delete(self, courseId):
+        data = request.get_json()
+        try:
+            course = Course.objects.get({"_id": courseId})
+        except Course.DoesNotExit:
+            return {"deleted": False, "error": f"Course does not exist"}
+
+        roleId = ObjectId(data["roleId"])
+        role_users = User.objects.raw({'courses.role': str(roleId)})
+        count = role_users.count()
+        return count
+        if roleId not in course.roles:
+            return {"deleted": False, "error": f"Role with id {str(roleId)} does not exit"}
+        elif course.defaultRole == roleId:
+            return {"deleted": False, "error": f"Cannot delete default role"}
+        elif count > 0:
+            return {"deleted": False, "error": f"Cannot delete role while it's in use"}
+        else:
+            course.roles.remove(roleId)
+            course.save()
+            return {"deleted": True}
+        
 
     def _serialize(self, role):
         j = role.to_son()

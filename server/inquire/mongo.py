@@ -117,7 +117,7 @@ class Course(MongoModel):
     canJoinById = fields.BooleanField()
     instructorID = fields.CharField()
     roles = fields.ListField(required=True)
-    default_role = fields.ObjectIdField(required=True)
+    defaultRole = fields.ObjectIdField(required=True)
     _id = fields.CharField(primary_key=True, default=shortuuid.uuid)
 
     class Meta:
