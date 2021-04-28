@@ -1,23 +1,87 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
-import SettingsImg from "../../imgs/settings-black.svg";
+import ColorImg from "../../imgs/color-palette.svg";
 import EditImg from "../../imgs/create-black.svg";
 import MessagesImg from "../../imgs/message-black.svg";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Icon from "../common/Icon";
+import { ChromePicker } from "react-color";
+import LazyFetch from "../common/requests/LazyFetch";
+import Button from "../common/Button";
+import Input from "../common/Input";
 
 /** Course Card
  * @brief Component for displaying courses the user is a part of. Component is one of many courses
  *
- * @param props holds all of the properties for this component (contains: courseName, courseTerm, courseColor)
+ * @param props holds all of the properties for this component (contains: courseName, nickname, courseTerm, courseColor)
  * @returns Course Card Component
  */
 class CourseCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { numMsgs: 0, courseColor: props.color };
+    this.state = {
+      numMsgs: 0,
+      courseColor: props.color,
+      displayColorSelector: false,
+      nicknameActive: false,
+      nickname: this.props.nickname,
+    };
+    this.endpoint = "/api/courses?courseId=" + this.props.id;
   }
+
+  handleColorChange = (colors) => {
+    this.setState({ courseColor: colors.hex });
+  };
+
+  toggleColorDisplay = () => {
+    this.setState({ displayColorSelector: !this.state.displayColorSelector });
+  };
+
+  toggleNickname = () => {
+    this.setState({ nicknameActive: !this.state.nicknameActive });
+  };
+
+  colorFocus = (div) => {
+    if (div) {
+      div.focus();
+    }
+  };
+
+  handleCancel = () => {
+    this.setState({ nicknameActive: false, nickname: this.props.nickname });
+  };
+
+  sendColorRequest = (colors) => {
+    // Get rid of # so we can send to backend properly
+    let spl = colors.hex.split("#");
+    // Add code for # part and then the actual color
+    let new_color = "%23" + spl[1];
+    // Send to backend
+    LazyFetch({
+      type: "put",
+      endpoint: this.endpoint + "&color=" + new_color,
+      onSuccess: (data) => {
+        console.log(data.success);
+        this.setState({ courseColor: colors.hex });
+      },
+    });
+  };
+
+  sendNicknameRequest = () => {
+    LazyFetch({
+      type: "put",
+      endpoint: this.endpoint + "&nickname=" + this.state.nickname,
+      onSuccess: (data) => {
+        console.log(data.success);
+        this.setState({ nicknameActive: false });
+      },
+    });
+  };
+
+  handleNicknameChange = (e) => {
+    console.log(e.target.value);
+    this.setState({ nickname: e.target.value });
+  };
 
   // Track when new messages come in
   componentDidMount() {
@@ -28,61 +92,115 @@ class CourseCard extends React.Component {
 
   render() {
     return (
-      <AlignedDiv>
-        <ColorDiv color={this.state.courseColor}>
-          <MessageDiv>
+      <>
+        <AlignedDiv>
+          <ColorDiv color={this.state.courseColor}>
+            <MessageDiv>
+              <Icon
+                fader
+                clickable
+                src={MessagesImg}
+                alt={"Messages"}
+                width={"25em"}
+                onClick={() =>
+                  alert(
+                    "You clicked the Unread Messages icon for " +
+                      this.props.courseName +
+                      ".\nThis feature is a work in progress."
+                  )
+                }
+              ></Icon>
+              {this.state.numMsgs > 0 && this.state.numMsgs}
+            </MessageDiv>
+          </ColorDiv>
+          <CourseInfo>
+            <div style={{ padding: "0px 20px 0px 0px" }}>
+              {this.state.nicknameActive ? (
+                <div>
+                  <Input
+                    placeholder="Enter a nickname"
+                    onChange={this.handleNicknameChange}
+                  />
+                </div>
+              ) : (
+                <Link
+                  to={"/course/" + this.props.id}
+                  style={{ textDecoration: "none" }}
+                >
+                  <CourseName>
+                    {this.state.nickname
+                      ? this.state.nickname
+                      : this.props.courseName}
+                  </CourseName>
+                </Link>
+              )}
+              {this.state.nickname ? (
+                <Link
+                  to={"/course/" + this.props.id}
+                  style={{ textDecoration: "none" }}
+                >
+                  <CourseTitle>{this.props.courseName}</CourseTitle>
+                </Link>
+              ) : (
+                <></>
+              )}
+            </div>
+          </CourseInfo>
+          <CourseFooter>
             <Icon
               fader
               clickable
-              src={MessagesImg}
-              alt={"Messages"}
-              width={"25em"}
-              onClick={() =>
-                alert(
-                  "You clicked the Unread Messages icon for " +
-                    this.props.courseName +
-                    ".\nThis feature is a work in progress."
-                )
-              }
+              src={EditImg}
+              alt={"Nickname"}
+              width={"20em"}
+              style={{ padding: "5px 5px 8px 0px" }}
+              onClick={this.toggleNickname}
             ></Icon>
-            {this.state.numMsgs > 0 && this.state.numMsgs}
-          </MessageDiv>
-        </ColorDiv>
-        <CourseInfo to={"/course/" + this.props.id}>
-          <CourseName>{this.props.courseName}</CourseName>
-          <CourseTerm>{this.props.courseTerm}</CourseTerm>
-        </CourseInfo>
-        <CourseFooter>
-          <Icon
-            fader
-            clickable
-            src={EditImg}
-            alt={"Edit"}
-            width={"20em"}
-            onClick={() =>
-              alert(
-                "You clicked the Edit option for " +
-                  this.props.courseName +
-                  ".\nThis feature is a work in progress."
-              )
-            }
-          ></Icon>
-          <Icon
-            fader
-            clickable
-            src={SettingsImg}
-            alt={"Settings"}
-            width={"20em"}
-            onClick={() =>
-              alert(
-                "You clicked the Settings option for " +
-                  this.props.courseName +
-                  ".\nThis feature is a work in progress."
-              )
-            }
-          ></Icon>
-        </CourseFooter>
-      </AlignedDiv>
+            <Icon
+              fader
+              clickable
+              src={ColorImg}
+              alt={"Color"}
+              width={"16em"}
+              style={{ padding: "5px 5px 8px 5px" }}
+              onClick={this.toggleColorDisplay}
+            ></Icon>
+            <Placeholder></Placeholder>
+            {this.state.nicknameActive && (
+              <ButtonWrapper>
+                <Button
+                  secondary
+                  style={{ padding: "6px" }}
+                  onClick={this.handleCancel}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  primary
+                  style={{ padding: "6px", margin: "0 0 0 0.5em" }}
+                  onClick={this.sendNicknameRequest}
+                >
+                  Submit
+                </Button>
+              </ButtonWrapper>
+            )}
+          </CourseFooter>
+        </AlignedDiv>
+        {this.state.displayColorSelector && (
+          <ColorWrapper
+            ref={this.colorFocus}
+            tabIndex="0"
+            onBlur={this.toggleColorDisplay}
+          >
+            <ChromePicker
+              onChange={this.handleColorChange}
+              onChangeComplete={this.sendColorRequest}
+              color={this.state.courseColor}
+              disableAlpha
+            />
+          </ColorWrapper>
+        )}
+      </>
     );
   }
 }
@@ -155,7 +273,7 @@ const CourseName = styled.h1`
   color: #162b55;
 `;
 
-const CourseTerm = styled.h3`
+const CourseTitle = styled.h3`
   font-size: 0.75em;
   color: #979797;
   flex-grow: 1;
@@ -164,6 +282,22 @@ const CourseTerm = styled.h3`
 const CourseFooter = styled.footer`
   padding: 0 0 1em 1.4em;
   display: flex;
+  justify-content: center;
+  /* justify-content: space-between; */
+  /* width: 28%; */
+`;
+
+const ColorWrapper = styled.div`
+  outline: none !important;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  padding: 5px 10px 5px 5px;
+  align-items: flex-end;
   justify-content: space-between;
-  width: 28%;
+`;
+
+const Placeholder = styled.div`
+  flex: 1;
 `;
