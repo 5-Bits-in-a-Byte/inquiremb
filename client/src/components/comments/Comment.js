@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
 import DraftTextBox from "../common/DraftTextArea";
@@ -6,6 +7,9 @@ import Button from "../common/Button";
 import { useParams } from "react-router";
 import LazyFetch from "../common/requests/LazyFetch";
 import Reaction from "../common/Reaction";
+import Dropdown from "../common/dropdown/Dropdown";
+import Icon from "../common/Icon";
+import OptionDots from "../../imgs/option-dots.svg";
 
 const Comment = ({ comment, isDraft, callback }) => {
   const { postid } = useParams();
@@ -13,6 +17,8 @@ const Comment = ({ comment, isDraft, callback }) => {
 
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
+
+  const endpoint = "/api/posts/" + postid + "/comments";
 
   const renderContent = () => {
     if (isDraft) {
@@ -31,8 +37,7 @@ const Comment = ({ comment, isDraft, callback }) => {
     } else {
       LazyFetch({
         type: "post",
-        endpoint:
-          "/api/posts/" + postid + "/comments/" + comment._id + "/replies",
+        endpoint: endpoint + "/" + comment._id + "/replies",
         data: { content, isAnonymous: false },
         onSuccess: (data) => {
           toggleReply(false);
@@ -69,15 +74,45 @@ const Comment = ({ comment, isDraft, callback }) => {
     );
   }
 
+  const handleDelete = () => {
+    console.log("handleDelete");
+    LazyFetch({
+      type: "delete",
+      endpoint: endpoint,
+      data: { _id: comment._id },
+      onSuccess: () => {
+        window.location.reload();
+      },
+      onFailure: (err) => {
+        alert(err.response);
+      },
+    });
+  };
+
+  const handleEdit = () => {
+    alert("This feature is still a work in progress. Check back soon!");
+  };
+
+  const options = [
+    { onClick: handleDelete, label: "Delete comment" },
+    { onClick: handleEdit, label: "Edit comment" },
+  ];
+
   return (
     <CommentWrapper>
-      <CommentContent>{renderContent()}</CommentContent>
+      <Content>
+        <CommentContent>{renderContent()}</CommentContent>
+        {!isDraft && (
+          <Dropdown options={options} style={{ paddingRight: "10px" }}>
+            <Icon src={OptionDots} />
+          </Dropdown>
+        )}
+      </Content>
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
           <UserDescription>
             by {comment.postedBy.first + " " + comment.postedBy.last}
           </UserDescription>
-
           <MetaIconWrapper>
             {isDraft ? (
               <>
@@ -138,6 +173,7 @@ const CommentWrapper = styled.div`
 
 const CommentContent = styled.p`
   padding: 1em 2.2em 1em 2.2em;
+  flex: 1;
   font-size: 16px;
   background-color: #fff;
   border-radius: 5px 5px 0 0;
@@ -176,3 +212,14 @@ const ReplyContainer = styled.div`
   min-height: 40px;
   border-radius: 0 0 0.3em 0.3em;
 `;
+
+const Content = styled.div`
+  display: flex;
+  /* justify-content: flex-end; */
+  background-color: #fff;
+  padding: 10px 10px 0px 0px;
+`;
+
+// const Placeholder = styled.div`
+//   flex: 1;
+// `;
