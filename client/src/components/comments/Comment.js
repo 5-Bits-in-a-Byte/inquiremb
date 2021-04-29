@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
 import DraftTextBox from "../common/DraftTextArea";
@@ -6,13 +7,20 @@ import Button from "../common/Button";
 import { useParams } from "react-router";
 import LazyFetch from "../common/requests/LazyFetch";
 import Reaction from "../common/Reaction";
+import Dropdown from "../common/dropdown/Dropdown";
+import Icon from "../common/Icon";
+import OptionDots from "../../imgs/option-dots.svg";
+import { UserContext } from "../context/UserProvider";
 
 const Comment = ({ comment, isDraft, callback }) => {
-  const { postid } = useParams();
+  const { courseId, postid } = useParams();
   const [content, setContent] = useState("");
+  const user = useContext(UserContext);
 
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
+
+  const endpoint = "/api/posts/" + postid + "/comments";
 
   const renderContent = () => {
     if (isDraft) {
@@ -31,8 +39,7 @@ const Comment = ({ comment, isDraft, callback }) => {
     } else {
       LazyFetch({
         type: "post",
-        endpoint:
-          "/api/posts/" + postid + "/comments/" + comment._id + "/replies",
+        endpoint: endpoint + "/" + comment._id + "/replies",
         data: { content, isAnonymous: false },
         onSuccess: (data) => {
           toggleReply(false);
@@ -55,7 +62,12 @@ const Comment = ({ comment, isDraft, callback }) => {
   if (comment.replies && comment.replies.length > 0) {
     comment.replies.forEach((reply) => {
       replies.push(
-        <CommentReply reply={reply} postid={postid} key={reply._id} />
+        <CommentReply
+          reply={reply}
+          postid={postid}
+          key={reply._id}
+          commentid={comment._id}
+        />
       );
     });
   }
@@ -69,15 +81,61 @@ const Comment = ({ comment, isDraft, callback }) => {
     );
   }
 
+  const handleDelete = () => {
+    LazyFetch({
+      type: "delete",
+      endpoint: endpoint,
+      data: { _id: comment._id },
+      onSuccess: () => {
+        window.location.reload();
+      },
+      onFailure: (err) => {
+        alert(err.response);
+      },
+    });
+  };
+
+  const handleEdit = () => {
+    alert("This feature is still a work in progress. Check back soon!");
+  };
+
+  const options = [
+    { onClick: handleDelete, label: "Delete comment" },
+    { onClick: handleEdit, label: "Edit comment" },
+  ];
+
+  // Initialize viewOptions to see if a user should be able to see dropdown options
+  var viewOptions = false;
+  // Check to see if the user is an admin
+  for (let i = 0; i < user.courses.length; i++) {
+    if (user?.courses[i].courseId == courseId) {
+      viewOptions = user.courses[i].admin;
+    }
+  }
+  // Check to see if the user made the post
+  if (
+    !isDraft &&
+    (comment.postedBy._id == user._id ||
+      comment.postedBy._id == user.anonymousId)
+  ) {
+    viewOptions = true;
+  }
+
   return (
     <CommentWrapper>
-      <CommentContent>{renderContent()}</CommentContent>
+      <Content>
+        <CommentContent>{renderContent()}</CommentContent>
+        {!isDraft && viewOptions && (
+          <Dropdown options={options} style={{ paddingRight: "10px" }}>
+            <Icon src={OptionDots} style={{ cursor: "pointer" }} />
+          </Dropdown>
+        )}
+      </Content>
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
           <UserDescription>
             by {comment.postedBy.first + " " + comment.postedBy.last}
           </UserDescription>
-
           <MetaIconWrapper>
             {isDraft ? (
               <>
@@ -138,6 +196,7 @@ const CommentWrapper = styled.div`
 
 const CommentContent = styled.p`
   padding: 1em 2.2em 1em 2.2em;
+  flex: 1;
   font-size: 16px;
   background-color: #fff;
   border-radius: 5px 5px 0 0;
@@ -175,4 +234,10 @@ const ReplyContainer = styled.div`
   width: 100%;
   min-height: 40px;
   border-radius: 0 0 0.3em 0.3em;
+`;
+
+const Content = styled.div`
+  display: flex;
+  background-color: #fff;
+  padding: 10px 10px 0px 0px;
 `;

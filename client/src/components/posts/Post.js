@@ -12,6 +12,8 @@ import InstructorIcon from "../../imgs/instructor.svg";
 import CommentImg from "../../imgs/comment.svg";
 import Checkbox from "../common/Checkbox";
 import Icon from "../common/Icon";
+import OptionDots from "../../imgs/option-dots.svg";
+import Dropdown from "../common/dropdown/Dropdown";
 
 // Checks props to determine if the post is a draft, isPinned, etc.
 const generatePostContent = (
@@ -119,6 +121,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
   const history = useHistory();
   const user = useContext(UserContext);
   const { courseId, postid } = useParams();
+  let endpoint = "/api/courses/" + courseId + "/posts";
 
   // State and handler for drafting posts
   const [draft, setDraft] = useState({
@@ -139,7 +142,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
   const handleSubmit = (e) => {
     LazyFetch({
       type: "post",
-      endpoint: "/api/courses/" + courseId + "/posts",
+      endpoint: endpoint,
       data: {
         title: draft.title,
         content: draft.content,
@@ -185,13 +188,57 @@ const Post = ({ post, isCondensed, isDraft }) => {
     }
   };
 
+  const handleDelete = () => {
+    LazyFetch({
+      type: "delete",
+      endpoint: endpoint,
+      data: { _id: postid },
+      onSuccess: (data) => {
+        let path = "/course/" + courseId;
+        history.push(path);
+      },
+    });
+  };
+
+  const handleEdit = () => {
+    alert("This feature is still a work in progress. Check back soon!");
+  };
+
+  const options = [
+    { onClick: handleDelete, label: "Delete post" },
+    { onClick: handleEdit, label: "Edit post" },
+  ];
+
+  // Initialize viewOptions to see if a user should be able to see dropdown options
+  var viewOptions = false;
+  // Check to see if the user is an admin
+  for (let i = 0; i < user.courses.length; i++) {
+    if (user?.courses[i].courseId == courseId) {
+      viewOptions = user.courses[i].admin;
+    }
+  }
+  // Check to see if the user made the post
+  if (
+    !isDraft &&
+    (post.postedBy._id == user._id || post.postedBy._id == user.anonymousId)
+  ) {
+    viewOptions = true;
+  }
+
   return (
     <PostWrapper
       isCondensed={isCondensed}
       isFocused={postid}
       onClick={navigateToPost}
     >
-      <PostTitle isCondensed={isCondensed}>{render.title} </PostTitle>
+      <TopSection>
+        <PostTitle isCondensed={isCondensed}>{render.title}</PostTitle>
+        {!isDraft && viewOptions && (
+          <Dropdown options={options}>
+            <Icon src={OptionDots} style={{ cursor: "pointer" }} />
+          </Dropdown>
+        )}
+      </TopSection>
       <PinIcon isPinned={render.isPinned} src={PinImg} />
       {!isCondensed && <PostContent>{render.content}</PostContent>}
       {!isCondensed && <hr style={HRStyle} />}
@@ -256,7 +303,8 @@ const PostWrapper = styled.div`
 const PostTitle = styled.h2`
   /* margin: 1em 0 0.5em 2em; */
   font-size: ${(props) => (!props.isCondensed && "18px") || "14px"};
-
+  flex: 1;
+  padding-right: 3px;
   ${(props) =>
     !props.isCondensed ? "&:hover {text-decoration: underline}" : ""};
 `;
@@ -307,4 +355,9 @@ const MetaIconWrapper = styled.div`
   display: inline-flex;
   margin-left: auto;
   height: 100%;
+`;
+
+const TopSection = styled.div`
+  display: flex;
+  align-items: center;
 `;

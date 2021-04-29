@@ -246,6 +246,8 @@ class Posts(Resource):
         parser.add_argument('_id')
         args = parser.parse_args()
 
+        print("_id:", args['_id'])
+
         # Get the post you want to delete
         query = Post.objects.raw({'_id': args['_id']})
         post = query.first()
