@@ -140,7 +140,7 @@ class Posts(Resource):
         # sorby options: 'newest', 'oldest'
         sortby = request.args.get('sortby', type=str, default="newest")
 
-        current_course = current_user.get_course(courseId)
+        user_perms = current_user.permissions
 
         # -1 sorts newest first
         sort_date = -1
@@ -165,18 +165,18 @@ class Posts(Resource):
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
         # If the current user can see private posts and there's no search
-        elif current_course.seePrivate and (req is None):
+        elif user_perms["privacy"]["private"] and (req is None):
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
 
         # If the current user can see private posts and there is a search
-        elif current_course.seePrivate and (req is not None):
+        elif user_perms["privacy"]["private"] and (req is not None):
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
 
         # If the current user cannot see private posts and there is a search
-        elif (not current_course.seePrivate) and (req is not None):
+        elif (not user_perms["privacy"]["private"]) and (req is not None):
             queryParams['$or'] = [{'isPrivate': False}, {'postedBy._id': {
                 '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams['$text'] = {'$search': req}

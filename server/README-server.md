@@ -43,8 +43,7 @@ This component handles setting up all of our MongoDB models so that each collect
   "courses": [
     {
       "courseId": "oasif-jo12j-asdjf-asdf9",
-
-      "courseName" : "Test course",
+      "courseName": "Test course",
       "color": "#ffffff",
       "nickname": null,
       "role": "id of the role" // NEW (04.18.21)
