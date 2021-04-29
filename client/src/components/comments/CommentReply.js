@@ -76,8 +76,11 @@ const CommentReply = ({ reply, isDraft, submitReply, postid, commentid }) => {
       <Content>
         <CommentReplyContent>{reply.content}</CommentReplyContent>
         {!isDraft && viewOptions && (
-          <Dropdown options={options} style={{ paddingRight: "10px" }}>
-            <Icon src={OptionDots} style={{ cursor: "pointer" }} />
+          <Dropdown options={options}>
+            <Icon
+              src={OptionDots}
+              style={{ padding: "0 1rem 0 0", cursor: "pointer" }}
+            />
           </Dropdown>
         )}
       </Content>
@@ -125,9 +128,9 @@ const CommentReplyWrapper = styled.div`
   background-color: #fff;
   width: 100%;
   margin: 18px 0;
-  border-radius: 0.3em;
+  border-radius: 5px;
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
-  border-left: 4px solid gainsboro;
+  /* border-left: 4px solid gainsboro; */
 `;
 
 const CommentReplyContent = styled.p`
@@ -145,7 +148,7 @@ const ReplyMetaContentWrapper = styled.div`
   width: 100%;
   min-height: 1.5em;
   background-color: #f9f9f9;
-  border-radius: 0 0 0.3em 0.3em;
+  border-radius: 5px;
 `;
 
 const UserDescription = styled.h5`
@@ -163,4 +166,5 @@ const Content = styled.div`
   display: flex;
   background-color: #fff;
   padding: 10px 10px 0px 0px;
+  border-radius: 5px;
 `;

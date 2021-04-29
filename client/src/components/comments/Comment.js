@@ -126,8 +126,11 @@ const Comment = ({ comment, isDraft, callback }) => {
       <Content>
         <CommentContent>{renderContent()}</CommentContent>
         {!isDraft && viewOptions && (
-          <Dropdown options={options} style={{ paddingRight: "10px" }}>
-            <Icon src={OptionDots} style={{ cursor: "pointer" }} />
+          <Dropdown options={options}>
+            <Icon
+              src={OptionDots}
+              style={{ padding: "0 1rem 0 0", cursor: "pointer" }}
+            />
           </Dropdown>
         )}
       </Content>
@@ -190,7 +193,7 @@ const CommentWrapper = styled.div`
   width: 100%;
   min-height: 85px;
   margin: 17px 0;
-  border-radius: 0.3em;
+  border-radius: 5px;
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
 `;
 
@@ -199,14 +202,14 @@ const CommentContent = styled.p`
   flex: 1;
   font-size: 16px;
   background-color: #fff;
-  border-radius: 5px 5px 0 0;
+  border-radius: 5px;
 `;
 
 const PostMetaContentWrapper = styled.div`
   display: flex;
   flex-direction: row;
   height: 100%;
-  padding: 0.5em 0;
+  padding: 0.5em 0 0 0;
   align-items: center;
 `;
 
@@ -240,4 +243,5 @@ const Content = styled.div`
   display: flex;
   background-color: #fff;
   padding: 10px 10px 0px 0px;
+  border-radius: 5px;
 `;
