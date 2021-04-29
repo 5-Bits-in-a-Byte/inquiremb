@@ -29,6 +29,11 @@ const Dropdown = (props) => {
                     key={option.key || index}
                     extras={option.extra}
                   >
+                    {option.color ? (
+                      <CustomCircle color={option.color}></CustomCircle>
+                    ) : (
+                      <></>
+                    )}
                     {option.label}
                   </DropdownOption>
                 ))}
@@ -76,4 +81,13 @@ const Options = styled.div`
       height: auto;
       box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.32);
     `}
+`;
+
+const CustomCircle = styled.div`
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: ${(props) => (props.color ? props.color : css`#000000`)};
+  float: left;
+  margin: 2px 1em 2px 0;
 `;
