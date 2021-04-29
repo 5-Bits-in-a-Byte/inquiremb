@@ -65,6 +65,7 @@ class Posts(Resource):
 
         
         # Controls whether
+        # FIX ME
         highlighted = current_user.permissions["admin"]["highlightPost"]
 
         # Adding user info to dict
@@ -86,6 +87,7 @@ class Posts(Resource):
             current_app.socketio.emit('Post/create', result, room=courseId)
         return result, 200
 
+    @permission_layer(require_joined_course=True)
     def get(self, courseId=None):
         """
         Retrieves all the posts in a course
@@ -190,7 +192,8 @@ class Posts(Resource):
         result = [self.serialize(post) for post in query]
 
         return result, 200
-
+    
+    @permission_layer(required_permissions=["delete-postComment"])
     def delete(self, courseId=None):
         """
         Deletes a post
@@ -242,8 +245,6 @@ class Posts(Resource):
         parser.add_argument('_id')
         args = parser.parse_args()
 
-        print("_id:", args['_id'])
-
         # Get the post you want to delete
         query = Post.objects.raw({'_id': args['_id']})
         post = query.first()
@@ -255,26 +256,23 @@ class Posts(Resource):
             raise Exception(
                 f'Duplicate post detected, multiple posts in database with id {_id}')
         elif count == 1:
-            # Get the current course
-            current_course = current_user.get_course(courseId)
             # Permission check
-            if current_user._id == post.postedBy['_id'] or current_user.anonymousId == post.postedBy['_id'] or current_course.admin:
+            # FIX ME: Switch to using something other than "admin-configure" as the admin permission for deleting posts
+            if current_user._id == post.postedBy['_id'] or current_user.anonymousId == post.postedBy['_id'] or current_user.permissions["admin"]["configure"]:
                 # Get all comments associated with a post
                 comment_query = Comment.objects.raw({"postId": str(post._id)})
                 comments = list(comment_query)
-
                 # Loop throught and delete all associated comments
                 for comment in comments:
                     post.comments -= 1
                     comment.delete()
-
                 # Delete the post
                 post.delete()
                 return {'deleted': True}, 200
             else:
                 return {'deleted': False}, 403
         else:
-            raise Exception(f'No post with id')
+            return {'deleted': False, 'errors': f"No post with id {args['_id']}"}, 403
 
     def put(self, courseId):
         """
@@ -322,7 +320,6 @@ class Posts(Resource):
 
         # Query for the post and get the current course
         query = Post.objects.raw({'_id': args["_id"]})
-        current_course = current_user.get_course(courseId)
 
         # Count how many posts had same id for error checking and handle appropriately
         count = query.count()
@@ -333,11 +330,11 @@ class Posts(Resource):
             post = query.first()
             id_match = current_user._id == post.postedBy[
                 '_id'] or current_user.anonymousId == post.postedBy['_id']
-            if id_match or current_course.admin:
+            if id_match:
                 post.title = args['title']
                 post.content = args['content']
                 post.updatedDate = datetime.datetime.now()
-                if current_course.canPin:
+                if current_user.permissions['participation']['pin']:
                     post.isPinned = args['isPinned']
                 post.save()
                 result = self.serialize(post)
