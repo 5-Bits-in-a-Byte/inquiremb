@@ -18,6 +18,7 @@ from inquire.socketio_app import io
 
 
 class Posts(Resource):
+    @permission_layer(required_permissions=["publish-postComment"], require_joined_course=True)
     def post(self, courseId=None):
         """
         Creates a new post
@@ -49,10 +50,6 @@ class Posts(Resource):
             schema:
               $ref: '#/definitions/403Response'
         """
-        course = current_user.get_course(courseId)
-        if not course:
-            return {"errors": ["You have not joined this course"]}, 403
-
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('title')
@@ -66,10 +63,9 @@ class Posts(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
-        # Check if user is instructor
-        isInstructor = False
-        if course.admin:
-            isInstructor = True
+        
+        # Controls whether
+        highlighted = current_user.permissions["admin"]["highlightPost"]
 
         # Adding user info to dict
         anonymous = args['isAnonymous']
@@ -82,7 +78,7 @@ class Posts(Resource):
 
         # Add post to MongoDB
         post = Post(courseId=courseId, postedBy=postedBy, title=args.title,
-                    isPrivate=args.isPrivate, content=args.content, isInstructor=isInstructor).save()
+                    isPrivate=args.isPrivate, content=args.content, isInstructor=highlighted).save()
 
         # Get the JSON format
         result = self.serialize(post)
