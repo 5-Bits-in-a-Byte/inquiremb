@@ -10,6 +10,7 @@ import ClassView from "./components/posts/ClassView";
 import CommentView from "./components/comments/CommentView";
 import { UserProvider } from "./components/context/UserProvider";
 import PrivateRoute from "./PrivateRoute";
+import ConfigView from "./components/configPage/ConfigView";
 
 function App() {
   return (
@@ -45,6 +46,11 @@ function App() {
           <PrivateRoute path="/course/:courseId/post/:postid" exact>
             <NavigationWrapper>
               <CommentView />
+            </NavigationWrapper>
+          </PrivateRoute>
+          <PrivateRoute path="/course/:courseId/config">
+            <NavigationWrapper>
+              <ConfigView />
             </NavigationWrapper>
           </PrivateRoute>
         </Switch>

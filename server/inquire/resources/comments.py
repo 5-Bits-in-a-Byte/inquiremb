@@ -213,6 +213,8 @@ class Comments(Resource):
         parser.add_argument('_id')
         args = parser.parse_args()
 
+        print("args['_id']:", args['_id'])
+
         if args['_id'] is None:
             return abort(400, errors=["No comment id"])
 

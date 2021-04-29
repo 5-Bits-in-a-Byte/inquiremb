@@ -18,6 +18,7 @@ const generateCourseList = (userCourses) => {
         key={course.courseId}
         id={course.courseId}
         courseName={course.courseName}
+        nickname={course.nickname}
         courseTerm="Winter 2021"
         color={course.color || "#121212"}
       />
@@ -35,8 +36,6 @@ const Courses = () => {
   const user = useContext(UserContext);
   let currentCourseState = generateCourseList(user.courses);
   const [courseList, setCourseList] = useState(currentCourseState);
-
-  // console.log(currentCourseState);
 
   return (
     <WrapAll>

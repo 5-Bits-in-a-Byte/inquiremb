@@ -25,10 +25,6 @@ export default Icon;
 const IconDiv = styled.div`
   cursor: ${(props) => (props.onClick === undefined ? "inherit" : "pointer")};
   border: none;
-  // padding: 9px 12px;
-  // border-radius: 3px;
-
-  // font-size: 16px;
   width: ${(props) => props.autoWidth && "100%"};
   display: flex;
   justify-content: center;

@@ -10,12 +10,13 @@ const createPost = (post) => {
 };
 
 // Create a group of posts with the RecentGroup component
-const createGroup = (postList, classroomName, nameColor) => {
+const createGroup = (postList, classroomName, nameColor, groupKey) => {
   return (
     <RecentGroup
       postList={postList}
       classroomName={classroomName}
       nameColor={nameColor}
+      key={groupKey}
     />
   );
 };
@@ -58,12 +59,14 @@ const generateSections = (data) => {
           createGroup(
             postG[classes.class[i]],
             classes.class[i],
-            classes.color[i]
+            classes.color[i],
+            i //The counter maps to the key of the react elements
           )
         );
       }
     }
   }
+
   return groups;
 };
 
@@ -79,7 +82,6 @@ const Home = () => {
     type: "get",
     endpoint: endpoint,
   });
-  console.log("Data: ", data);
 
   let groups =
     data != null && data.length == 0 ? (

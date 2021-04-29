@@ -10,7 +10,7 @@ import PostView from "./PostView";
 /**
  * ClassView Component ~ Blueprint for displaying a specific course post feed, as well as
  */
-const ClassView = () => {
+const ClassView = ({ props }) => {
   const location = useLocation();
   let defaultHighlight = "All Posts";
 
@@ -25,8 +25,6 @@ const ClassView = () => {
 
   var classroomID = useParams().courseId;
   var courseContext = useContext(UserContext).courses;
-
-  // console.log("Course Context", courseContext);
 
   var classroomName;
 

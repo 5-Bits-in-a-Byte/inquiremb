@@ -98,6 +98,7 @@ const PostView = ({ highlightedSection }) => {
                 secondary={true}
                 onClick={() => {
                   setCondensedState(!isCondensed);
+                  alert("This feature is a work in progress.");
                 }}
               >
                 <img src={LineWidthImg} />
@@ -181,4 +182,3 @@ const PostGroupingHeader = styled.div`
   font-size: 1.25em;
   font-weight: 500;
 `;
-//#endregion

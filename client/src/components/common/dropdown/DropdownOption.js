@@ -7,10 +7,11 @@ import styled from "styled-components";
  * @param {object} props holds all of the props passed into this component.
  * @returns An object representing an option of a simple dropdown menu.
  */
-const DropdownOption = (props) => {
+const DropdownOption = ({ extra, ...props }) => {
   return (
     <Option {...props}>
       <Label>{props.children}</Label>
+      {extra}
     </Option>
   );
 };

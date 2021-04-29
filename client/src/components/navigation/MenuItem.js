@@ -33,8 +33,6 @@ const Item = styled.li`
   border-radius: 3px;
 `;
 
-//const Icon = styled.img``;
-
 const Label = styled.p`
   color: #fff;
   font-size: 13px;

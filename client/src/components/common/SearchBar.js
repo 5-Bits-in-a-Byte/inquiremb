@@ -18,7 +18,7 @@ const SearchBar = ({ onChange, placeholder }) => {
         style={{
           height: "16px",
           padding: "0 7px 0 11px",
-          "border-right": "1px solid #818181",
+          borderRight: "1px solid #818181",
         }}
       />
       <TextInput type="text" onChange={onChange} placeholder={placeholder} />
@@ -32,8 +32,8 @@ const SearchDiv = styled.div`
   height: 32px;
   align-items: center;
   border-radius: 3px;
+  width: 100%;
   max-width: 360px;
-  margin: auto;
   &:focus-within {
     box-shadow: 0 0 0px 0.4px #818181;
   }
