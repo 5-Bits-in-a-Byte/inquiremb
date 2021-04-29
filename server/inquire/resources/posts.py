@@ -87,7 +87,7 @@ class Posts(Resource):
             current_app.socketio.emit('Post/create', result, room=courseId)
         return result, 200
 
-    @permission_layer(require_joined_course=True)
+    @permission_layer(required_permissions=[], require_joined_course=True)
     def get(self, courseId=None):
         """
         Retrieves all the posts in a course
