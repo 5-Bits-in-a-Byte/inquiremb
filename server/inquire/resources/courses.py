@@ -16,7 +16,7 @@ import random
 from inquire.mongo import *
 from inquire.auth import permission_layer, current_user
 from inquire.config import DEFAULT_COLORS
-
+from inquire.roles import student, admin
 # Courses
 # POST - Handles course creation
 # Access - Instructor Only
@@ -77,21 +77,22 @@ class Courses(Resource):
             color = pick_color(DEFAULT_COLORS)
         else:
             color = args['color']
-        print(color, args['color'])
+        # Creating initial roles available in course
+        student_role = Role(name="student", permissions=student).save()
+        admin_role = Role(name="admin", permissions=admin).save()
+        roles = [student_role._id, admin_role._id]
+
         # Add the course to the user's course list and create the course
         course = Course(course=args.course,
-                        canJoinById=args.canJoinById, instructorID=current_user._id).save()
+                        canJoinById=args.canJoinById, instructorID=current_user._id, roles=roles, defaultRole=student_role._id).save()
 
         # Appends the course with permissions to the user who created it
-        User.objects.raw({'_id': current_user._id}).update({"$push": {"courses":
-                                                                      {"courseId": course._id, "courseName": args.course,
-                                                                       "canPost": True, "seePrivate": True, "canPin": True,
-                                                                       "canRemove": True, "canEndorse": True, "viewAnonymous": True,
-                                                                       "admin": True, "color": color}}})
+        user_course = UserCourse(courseId=course._id, courseName=args.course, color=color, role=admin_role._id)
+        current_user.courses.append(user_course)
+        current_user.save()
+
         return {"courseId": course._id, "courseName": args.course,
-                "canPost": True, "seePrivate": True, "canPin": True,
-                "can_remove": True, "canEndorse": True, "viewAnonymous": True,
-                "admin": True, "color": color}, 200
+                "color": color}, 200
 
     def delete(self):
         # Parse argument

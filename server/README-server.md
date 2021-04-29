@@ -43,10 +43,11 @@ This component handles setting up all of our MongoDB models so that each collect
   "courses": [
     {
       "courseId": "oasif-jo12j-asdjf-asdf9",
-      "courseName": "course name",
+
+      "courseName" : "Test course",
       "color": "#ffffff",
       "nickname": null,
-      "role": "roleId" // NEW (04.18.21)
+      "role": "id of the role" // NEW (04.18.21)
     }
   ]
 }
@@ -160,7 +161,8 @@ This component handles setting up all of our MongoDB models so that each collect
   "course": "CIS 210",
   "canJoinById": true,
   "instructorID": "oasif-jo12j-asdjf-asdf9",
-  "roles": ["roleId1", "roleId2"] // NEW (04.18.21)
+  "roles": ["roleId1", "roleId2"], // NEW (04.18.21)
+  "defaultRole": "roleId1"
 }
 ```
 
@@ -169,7 +171,7 @@ This component handles setting up all of our MongoDB models so that each collect
 ```json
 {
   "_id": "role id goes here",
-  "roleName": "the name of the role goes here",
+  "name": "the name of the role goes here",
   "permissions": {
     "publish": {
       "postComment": true,

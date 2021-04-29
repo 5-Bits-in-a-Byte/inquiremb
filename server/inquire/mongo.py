@@ -8,16 +8,19 @@ Group Name: 5 Bits in a Byte
 Last Modified Date: 03/12/2021
 '''
 from inquire.config import MONGO_URI
-
+from inquire.roles import student
 from pymodm import MongoModel, fields, EmbeddedMongoModel
 from pymongo.write_concern import WriteConcern
 from pymodm.connection import connect
+from pymodm.errors import ValidationError
 import pymongo
 import json
 import shortuuid
 import datetime
 from bson.objectid import ObjectId
-
+import os
+import sys
+script_dir = os.path.dirname(__file__) 
 
 class User(MongoModel):
     _id = fields.CharField(primary_key=True)
@@ -28,6 +31,7 @@ class User(MongoModel):
     picture = fields.URLField()
     courses = fields.EmbeddedDocumentListField(
         'UserCourse', blank=True, required=True)
+
 
     def get_course(self, courseId):
         for course in self.courses:
@@ -44,17 +48,11 @@ class User(MongoModel):
 
 
 class UserCourse(EmbeddedMongoModel):
-    courseId = fields.CharField()
+    courseId = fields.CharField(required=True)
     courseName = fields.CharField(required=True)
     nickname = fields.CharField(blank=True)
     color = fields.CharField(blank=True)
-    canPost = fields.BooleanField(default=True)
-    seePrivate = fields.BooleanField(default=False)
-    canPin = fields.BooleanField(default=False)
-    canRemove = fields.BooleanField(default=False)
-    canEndorse = fields.BooleanField(default=False)
-    viewAnonymous = fields.BooleanField(default=False)
-    admin = fields.BooleanField(default=False)
+    role = fields.CharField(required=True)
 
 
 '''
@@ -118,6 +116,8 @@ class Course(MongoModel):
     course = fields.CharField()
     canJoinById = fields.BooleanField()
     instructorID = fields.CharField()
+    roles = fields.ListField(required=True)
+    defaultRole = fields.ObjectIdField(required=True)
     _id = fields.CharField(primary_key=True, default=shortuuid.uuid)
 
     class Meta:
@@ -125,3 +125,31 @@ class Course(MongoModel):
         connection_alias = 'my-app'
 
         indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
+
+def role_validator(d, example=None):
+    """For use with the Roles Model"""
+    # Loop through each field
+    #   if field exists:
+    #       role_validator(field, example_field)
+    if example == None:
+        example = student
+    for key, item in example.items():
+        if key in d:
+            if type(item) == dict and type(d[key]) == dict:
+                if not role_validator(d[key], example=item):
+                    raise ValidationError("Missing key")
+            elif type(item) != bool or type(d[key]) != bool:
+                raise ValidationError(f"Wrong type in permission field: {key}")
+        else:
+            raise ValidationError(f"Missing permission field: {key}")
+
+    return True
+
+class Role(MongoModel):
+    name = fields.CharField(required=True)
+    permissions = fields.DictField(default=False, validators=[role_validator])
+    class Meta:
+        write_concern = WriteConcern(j=True)
+        connection_alias = 'my-app'
+
+

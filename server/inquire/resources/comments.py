@@ -44,6 +44,7 @@ class Comments(Resource):
 
         return [self.serialize(comment) for comment in Comment.objects.raw({'postId': postId})]
 
+    @permission_layer(required_permissions=["publish-postComment"])
     def post(self, postId=None):
         """
         Creates a new comment
