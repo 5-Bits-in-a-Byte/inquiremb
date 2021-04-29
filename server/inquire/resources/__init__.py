@@ -8,3 +8,4 @@ from .posts import Posts
 from .reactions import Reactions
 from .replies import Replies
 from .roles import Roles
+from .me_role import MeRole

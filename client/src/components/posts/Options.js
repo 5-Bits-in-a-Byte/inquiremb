@@ -11,20 +11,21 @@ import CogIcon from "../../imgs/settings 1.svg";
  *
  * @param {string} courseId given to the "+ New Post" button to route to the Post form page
  */
-const Options = ({ courseId }) => {
+const Options = ({ userRole, courseId }) => {
   const user = useContext(UserContext);
-  console.log("User Object: ", user);
+  // console.log("User Object: ", user);
 
   // Will be used to conditionally render the config page button
   var userIsAdmin = false;
+  if (userRole) userIsAdmin = userRole.admin.configure;
 
   // Checks the current user course for Admin privledge status
   // sets the above 'userIsAdmin' variable accordingly
-  for (let i = 0; i < user.courses.length; i++) {
-    if (user?.courses[i].courseId == courseId) {
-      userIsAdmin = user.courses[i].admin;
-    }
-  }
+  // for (let i = 0; i < user.courses.length; i++) {
+  //   if (user?.courses[i].courseId == courseId) {
+  //     userIsAdmin = user.courses[i].admin;
+  //   }
+  // }
 
   // console.log(userIsAdmin);
 
