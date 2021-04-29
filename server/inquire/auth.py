@@ -115,7 +115,7 @@ def _permission_comparison(user_permissions: dict, required_permissions: list):
     return missing_permissions
 
 
-def permission_layer(required_permissions: list, require_login=True):
+def permission_layer(required_permissions: list, require_login=True, require_joined_course=False):
     """
     Retricts access to an endpoint based on the user's permissions in the course
     """
@@ -126,6 +126,9 @@ def permission_layer(required_permissions: list, require_login=True):
             if current_user == None and (required_permissions or require_login):
                 abort(401, errors=[
                       "Resource access restricted: unauthenticated client"])
+            if type(current_user.permissions) == None and require_joined_course:
+                abort(401, errors=[
+                      "Resource access restricted: requesting resource from unjoined course"])
             if required_permissions:
                 if not current_user.permissions:
                     missing_permissions = required_permissions
