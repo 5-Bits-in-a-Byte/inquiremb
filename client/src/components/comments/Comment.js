@@ -10,10 +10,12 @@ import Reaction from "../common/Reaction";
 import Dropdown from "../common/dropdown/Dropdown";
 import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
+import { UserContext } from "../context/UserProvider";
 
 const Comment = ({ comment, isDraft, callback }) => {
-  const { postid } = useParams();
+  const { courseId, postid } = useParams();
   const [content, setContent] = useState("");
+  const user = useContext(UserContext);
 
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
@@ -102,11 +104,28 @@ const Comment = ({ comment, isDraft, callback }) => {
     { onClick: handleEdit, label: "Edit comment" },
   ];
 
+  // Initialize viewOptions to see if a user should be able to see dropdown options
+  var viewOptions = false;
+  // Check to see if the user is an admin
+  for (let i = 0; i < user.courses.length; i++) {
+    if (user?.courses[i].courseId == courseId) {
+      viewOptions = user.courses[i].admin;
+    }
+  }
+  // Check to see if the user made the post
+  if (
+    !isDraft &&
+    (comment.postedBy._id == user._id ||
+      comment.postedBy._id == user.anonymousId)
+  ) {
+    viewOptions = true;
+  }
+
   return (
     <CommentWrapper>
       <Content>
         <CommentContent>{renderContent()}</CommentContent>
-        {!isDraft && (
+        {!isDraft && viewOptions && (
           <Dropdown options={options} style={{ paddingRight: "10px" }}>
             <Icon src={OptionDots} style={{ cursor: "pointer" }} />
           </Dropdown>

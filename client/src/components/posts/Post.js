@@ -209,6 +209,22 @@ const Post = ({ post, isCondensed, isDraft }) => {
     { onClick: handleEdit, label: "Edit post" },
   ];
 
+  // Initialize viewOptions to see if a user should be able to see dropdown options
+  var viewOptions = false;
+  // Check to see if the user is an admin
+  for (let i = 0; i < user.courses.length; i++) {
+    if (user?.courses[i].courseId == courseId) {
+      viewOptions = user.courses[i].admin;
+    }
+  }
+  // Check to see if the user made the post
+  if (
+    !isDraft &&
+    (post.postedBy._id == user._id || post.postedBy._id == user.anonymousId)
+  ) {
+    viewOptions = true;
+  }
+
   return (
     <PostWrapper
       isCondensed={isCondensed}
@@ -217,7 +233,7 @@ const Post = ({ post, isCondensed, isDraft }) => {
     >
       <TopSection>
         <PostTitle isCondensed={isCondensed}>{render.title}</PostTitle>
-        {!isDraft && (
+        {!isDraft && viewOptions && (
           <Dropdown options={options}>
             <Icon src={OptionDots} style={{ cursor: "pointer" }} />
           </Dropdown>
