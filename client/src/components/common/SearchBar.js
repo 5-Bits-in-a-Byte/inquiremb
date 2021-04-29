@@ -32,8 +32,8 @@ const SearchDiv = styled.div`
   height: 32px;
   align-items: center;
   border-radius: 3px;
+  width: 100%;
   max-width: 360px;
-  margin: auto;
   &:focus-within {
     box-shadow: 0 0 0px 0.4px #818181;
   }
