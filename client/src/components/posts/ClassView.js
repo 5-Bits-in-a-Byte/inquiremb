@@ -65,7 +65,7 @@ const ClassView = ({ props }) => {
   };
 
   useEffect(() => {
-    console.log("rendered");
+    // console.log("rendered");
     if (!userRole) {
       attemptGetUserRole(urlParams.courseId);
     }

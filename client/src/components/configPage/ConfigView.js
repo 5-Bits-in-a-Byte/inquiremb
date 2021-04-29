@@ -118,45 +118,38 @@ const ConfigView = ({ props }) => {
   };
 
   useEffect(() => {
-    console.log("rendered");
+    // console.log("rendered");
     if (!userRole) {
       attemptGetUserRole(courseId);
     }
   });
 
   // State ------------------------------------------------------
-  // var fetchedCourseRoles = null;
-  // LazyFetch({
-  //   type: "get",
-  //   endpoint: "/api/courses/" + courseId + "/roles",
-  //   onSuccess: (data) => {
-  //     console.log("Successfully fetched Course Roles.");
-  //     fetchedCourseRoles = data;
-  //   },
-  //   onFailure: (err) => {
-  //     console.log("Failed to fetch Course Roles.");
-  //   },
-  // });
+  var fetchedCourseRoles = null;
+
+  LazyFetch({
+    type: "get",
+    endpoint: "/api/courses/" + courseId + "/roles",
+    onSuccess: (roles) => {
+      console.log("Successfully fetched Course Roles.");
+      fetchedCourseRoles = roles;
+    },
+    onFailure: (err) => {
+      console.log("Failed to fetch Course Roles. ", err);
+    },
+  });
+
+  console.log("CourseRoles: ", fetchedCourseRoles);
 
   const [courseUsers, setCourseUsers] = useState(dummy_users);
 
-  const [roleIdCounter, setRoleIdCounter] = useState(2);
-  const [courseRoles, setCourseRoles] = useState([adminPerms]);
+  const [roleIdCounter, setRoleIdCounter] = useState(1);
+  const [courseRoles, setCourseRoles] = useState(fetchedCourseRoles);
   // console.log("Course Roles", courseRoles);
   // ------------------------------------------------------------
 
   var userIsAdmin = false;
   if (userRole) userIsAdmin = userRole.admin.configure;
-
-  // ------------------------------------------------------------
-  // Checks if the user has admin level privilege in this course.
-  // TODO: Refactor with the introduction of Roles
-  // for (let i = 0; i < user.courses.length; i++) {
-  //   if (user?.courses[i].courseId == courseId) {
-  //     userIsAdmin = user.courses[i].admin;
-  //   }
-  // }
-  // ------------------------------------------------------------
 
   /**
    * Redirects the user to the landing page
