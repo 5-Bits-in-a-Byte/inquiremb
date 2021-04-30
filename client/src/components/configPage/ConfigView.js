@@ -1,4 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  UserRoleContext,
+  UserRoleDispatchContext,
+} from "../context/UserRoleProvider";
 import { useParams, useHistory } from "react-router-dom";
 import styled, { css } from "styled-components";
 import ConfigPanel from "./ConfigPanel";
@@ -91,38 +95,61 @@ const ConfigView = ({ props }) => {
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
 
+  const setUserRole = useContext(UserRoleDispatchContext);
+  const userRole = useContext(UserRoleContext);
+
+  const attemptGetUserRole = (courseId) => {
+    LazyFetch({
+      type: "get",
+      endpoint: "/api/userRole/" + courseId,
+      onSuccess: (role) => {
+        if (role) {
+          setUserRole(role);
+        }
+      },
+      onFailure: (err) => {
+        console.log(
+          "Error getting user role object from {" + courseId + "}:",
+          err
+        );
+        setUserRole(false);
+      },
+    });
+  };
+
+  useEffect(() => {
+    // console.log("rendered");
+    if (!userRole) {
+      attemptGetUserRole(courseId);
+    }
+  });
+
   // State ------------------------------------------------------
-  // var fetchedCourseRoles = null;
-  // LazyFetch({
-  //   type: "get",
-  //   endpoint: "/api/courses/" + courseId + "/roles",
-  //   onSuccess: (data) => {
-  //     console.log("Successfully fetched Course Roles.");
-  //     fetchedCourseRoles = data;
-  //   },
-  //   onFailure: (err) => {
-  //     console.log("Failed to fetch Course Roles.");
-  //   },
-  // });
+  var fetchedCourseRoles = null;
+
+  LazyFetch({
+    type: "get",
+    endpoint: "/api/courses/" + courseId + "/roles",
+    onSuccess: (roles) => {
+      console.log("Successfully fetched Course Roles.");
+      fetchedCourseRoles = roles;
+    },
+    onFailure: (err) => {
+      console.log("Failed to fetch Course Roles. ", err);
+    },
+  });
+
+  console.log("CourseRoles: ", fetchedCourseRoles);
 
   const [courseUsers, setCourseUsers] = useState(dummy_users);
 
-  const [roleIdCounter, setRoleIdCounter] = useState(2);
-  const [courseRoles, setCourseRoles] = useState([adminPerms]);
+  const [roleIdCounter, setRoleIdCounter] = useState(1);
+  const [courseRoles, setCourseRoles] = useState(fetchedCourseRoles);
   // console.log("Course Roles", courseRoles);
   // ------------------------------------------------------------
 
   var userIsAdmin = false;
-
-  // ------------------------------------------------------------
-  // Checks if the user has admin level privilege in this course.
-  // TODO: Refactor with the introduction of Roles
-  for (let i = 0; i < user.courses.length; i++) {
-    if (user?.courses[i].courseId == courseId) {
-      userIsAdmin = user.courses[i].admin;
-    }
-  }
-  // ------------------------------------------------------------
+  if (userRole) userIsAdmin = userRole.admin.configure;
 
   /**
    * Redirects the user to the landing page

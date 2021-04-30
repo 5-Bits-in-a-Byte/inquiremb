@@ -10,26 +10,28 @@ import Fetch from "../common/requests/Fetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
 
-const createPost = (post) => {
-  return <Post post={post} key={post._id} isCondensed={false} />;
+const createPost = (post, userRole) => {
+  return (
+    <Post userRole={userRole} post={post} key={post._id} isCondensed={false} />
+  );
 };
 
 // Sorts the posts by pinned/date
-const generateSections = (data) => {
+const generateSections = (data, userRole) => {
   let posts = { pinned: [], other: [] };
   if (data) {
     data.forEach((post) => {
       if (post.isPinned) {
-        posts.pinned.push(createPost(post));
+        posts.pinned.push(createPost(post, userRole));
       } else {
-        posts.other.push(createPost(post));
+        posts.other.push(createPost(post, userRole));
       }
     });
   }
   return posts;
 };
 
-const PostView = ({ highlightedSection }) => {
+const PostView = ({ userRole, highlightedSection }) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
   useEffect(() => {
@@ -86,7 +88,7 @@ const PostView = ({ highlightedSection }) => {
   if (data) {
     data = [...socketPosts, ...data];
   }
-  let posts = generateSections(data);
+  let posts = generateSections(data, userRole);
 
   return (
     <>
@@ -125,7 +127,7 @@ const PostView = ({ highlightedSection }) => {
               <PostGroupingHeader>All Posts</PostGroupingHeader>
             )}
             {posts.other}
-            <Options courseId={courseId} />
+            <Options userRole={userRole} courseId={courseId} />
           </CenterWrapper>
         </ScrollingDiv>
       </PostFeed>

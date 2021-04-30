@@ -117,7 +117,7 @@ const generatePostContent = (
  * @param {bool} isCondensed tells the post whether to display completely or condensed
  * @param {bool} isDraft tells the post whether to display as a form to fill out or not
  */
-const Post = ({ post, isCondensed, isDraft }) => {
+const Post = ({ userRole, post, isCondensed, isDraft }) => {
   const history = useHistory();
   const user = useContext(UserContext);
   const { courseId, postid } = useParams();

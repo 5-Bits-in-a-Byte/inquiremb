@@ -4,11 +4,18 @@ import {
   UserDispatchContext,
   UserContext,
 } from "./components/context/UserProvider";
+import {
+  UserRoleDispatchContext,
+  UserRoleContext,
+} from "./components/context/UserRoleProvider";
 import LazyFetch from "./components/common/requests/LazyFetch";
 
 const PrivateRoute = (props) => {
   const setUser = useContext(UserDispatchContext);
   const user = useContext(UserContext);
+
+  const setUserRole = useContext(UserRoleDispatchContext);
+  const userRole = useContext(UserRoleContext);
 
   const attemptSignIn = (token) => {
     LazyFetch({

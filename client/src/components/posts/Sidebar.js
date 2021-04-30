@@ -9,7 +9,7 @@ import NoteImg from "../../imgs/note.svg";
 import HeartImg from "../../imgs/heart.svg";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
-const Sidebar = ({ setHighlightedSection, highlightedSection }) => {
+const Sidebar = ({ userRole, setHighlightedSection, highlightedSection }) => {
   const { courseId, postid } = useParams();
 
   // Extracting the course name from the user context and current course ID

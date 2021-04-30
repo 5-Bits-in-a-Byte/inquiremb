@@ -122,7 +122,8 @@ const ConfigPanel = ({
   ...props
 }) => {
   // State for roles
-  let realRoleList = GenerateRoleList(courseRoles);
+  let realRoleList =
+    courseRoles != null ? GenerateRoleList(courseRoles) : <></>;
 
   //console.log("Course Roles: ", courseRoles);
   //console.log("RealRolesList: ", realRoleList);
@@ -150,7 +151,8 @@ const ConfigPanel = ({
 
             // console.log("NEW PERMS: ", newPerms);
 
-            let newCourseRoles = [...courseRoles, newPerms];
+            let newCourseRoles =
+              courseRoles != null ? [...courseRoles, newPerms] : [newPerms];
             setRoleList(GenerateRoleList(newCourseRoles));
             setUserList(GenerateUserList(courseUsers, newCourseRoles));
 

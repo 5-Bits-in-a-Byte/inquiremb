@@ -26,7 +26,17 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
 
   // console.log("All Roles: ", allRoles);
 
-  let roleOptionsState = GenerateRoleOptions(allRoles);
+  let roleOptionsState =
+    allRoles != null
+      ? GenerateRoleOptions(allRoles)
+      : [
+          {
+            onClick: () => {
+              alert("NULL Role selected");
+            },
+            label: "NULL",
+          },
+        ];
 
   // console.log("Role Dropdown List: ", roleOptionsState);
 
