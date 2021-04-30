@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Suspense } from "react";
 import { useLocation, useParams } from "react-router";
 import { UserContext } from "../context/UserProvider";
 import {
@@ -9,8 +9,10 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import Sidebar from "./Sidebar";
-import PostView from "./PostView";
 import LazyFetch from "../common/requests/LazyFetch";
+import LoadingDots from "../common/animation/LoadingDots";
+
+const PostView = React.lazy(() => import("./PostView"));
 
 /**
  * ClassView Component ~ Blueprint for displaying a specific course post feed, as well as
@@ -80,7 +82,20 @@ const ClassView = ({ props }) => {
         setHighlightedSection={setHighlightedSection}
         highlightedSection={highlightedSection}
       />
-      <PostView userRole={userRole} highlightedSection={highlightedSection} />
+      <Suspense
+        fallback={
+          <div
+            style={{
+              width: `100%`,
+              margin: `calc(50vh - 64px) 0 0 calc(50vw - 225px)`,
+            }}
+          >
+            <LoadingDots size={48} color={"#4a86fa"} />
+          </div>
+        }
+      >
+        <PostView userRole={userRole} highlightedSection={highlightedSection} />
+      </Suspense>
     </ClassViewWrapper>
   );
 };

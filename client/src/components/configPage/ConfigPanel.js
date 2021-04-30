@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Button from "../common/Button";
@@ -6,6 +6,7 @@ import ConfigPanelGroup from "./ConfigPanelGroup";
 import RolePanel from "./roleConfigComponents/RolePanel";
 import UserPanel from "./userConfigComponents/UserPanel";
 import LazyFetch from "../common/requests/LazyFetch";
+import LoadingDots from "../common/animation/LoadingDots";
 
 const colorTest = [
   "#dd0000",
@@ -86,7 +87,7 @@ const createRoleObject = (itemId) => {
 /**
  * Generates a list of Role Components for State Management
  */
-const GenerateRoleList = (roles) => {
+const GenerateRoleList = (roles, setRoles, userList, setUserList) => {
   return roles.map((role, index) => (
     <RolePanel
       key={index}
@@ -95,6 +96,9 @@ const GenerateRoleList = (roles) => {
       roleName={role?.name}
       panelOutlineColor={role?.roleColor}
       courseRoles={roles}
+      setCourseRoles={setRoles}
+      userList={userList}
+      setUserList={setUserList}
     />
   ));
 };
@@ -125,17 +129,7 @@ const ConfigPanel = ({
   setRoleIdCounter,
   ...props
 }) => {
-  // State for roles
-  let realRoleList =
-    courseRoles != null ? GenerateRoleList(courseRoles) : <></>;
-
-  console.log("Course Roles: ", courseRoles);
-  console.log("RealRolesList: ", realRoleList);
-
-  // const [roleList, setRoleList] = useState(realRoleList);
-  const [cachedRoleList, setCachedRoleList] = useState(realRoleList);
-
-  // console.log("Role List: ", roleList);
+  const [loadingIcons, setLoadingIcons] = useState(true);
 
   // State for users
   let realUserList = GenerateUserList(courseUsers, courseRoles);
@@ -143,10 +137,31 @@ const ConfigPanel = ({
   const [userList, setUserList] = useState(realUserList);
   //const [cachedUserList, setCachedUserList] = useState(userList);
 
+  // State for roles ------------------------------------------------------
+  let realRoleList =
+    courseRoles != null ? (
+      GenerateRoleList(courseRoles, setCourseRoles, userList, setUserList)
+    ) : (
+      <></>
+    );
+  // ----------------------------------------------------------------------
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoadingIcons(false);
+    }, 500);
+  });
+
   return (
     <PanelWrapper>
       <ConfigPanelGroup panelHeader={"Edit the permissions of each role here."}>
-        {realRoleList}
+        {loadingIcons ? (
+          <div style={{ margin: `2em 0` }}>
+            <LoadingDots size={24} color={"#4a86fa"} />
+          </div>
+        ) : (
+          realRoleList
+        )}
         <Button
           secondary
           buttonWidth={"207px"}
@@ -163,7 +178,13 @@ const ConfigPanel = ({
                 permissions: newPerms.permissions,
               },
               onSuccess: (data) => {
-                console.log("Roles Post Success: ", data);
+                let { status, role } = data;
+                console.log("Roles Post Success: ", status);
+                let newCourseRoles =
+                  courseRoles != null ? [...courseRoles, role] : [role];
+                setCourseRoles(newCourseRoles);
+
+                setUserList(GenerateUserList(courseUsers, newCourseRoles));
               },
               onFailure: (err) => {
                 console.log("Failed to Post Roles.", err?.response);
@@ -172,12 +193,12 @@ const ConfigPanel = ({
 
             // console.log("NEW PERMS: ", newPerms);
 
-            let newCourseRoles =
-              courseRoles != null ? [...courseRoles, newPerms] : [newPerms];
+            // let newCourseRoles =
+            // courseRoles != null ? [...courseRoles, newPerms] : [newPerms];
             // setRoleList(GenerateRoleList(newCourseRoles));
-            setUserList(GenerateUserList(courseUsers, newCourseRoles));
+            // setUserList(GenerateUserList(courseUsers, newCourseRoles));
 
-            setCourseRoles(newCourseRoles);
+            // setCourseRoles(newCourseRoles);
           }}
         >
           + Add a New Role
@@ -190,20 +211,6 @@ const ConfigPanel = ({
       </ConfigPanelGroup>
 
       <ButtonContainer>
-        {/* <Button
-          style={{ margin: `0 0.5em`, color: `#4A86FA`, fontWeight: `600` }}
-          outlineSecondary
-          buttonWidth={"200px"}
-          buttonHeight={"2.2rem"}
-          onClick={() => {
-            alert("Feature is work in progress.");
-            // setRoleList(cachedRoleList);
-            setCourseRoles(cachedRoleList);
-            setRoleIdCounter(1);
-          }}
-        >
-          Cancel
-        </Button> */}
         <Button
           primary
           style={{ margin: `0 0.5em` }}
@@ -212,6 +219,7 @@ const ConfigPanel = ({
           onClick={() => {
             console.log("CourseRoles (Confirm): ", courseRoles);
             let testList = [];
+            let testBool = false;
 
             for (let i = 0; i < realRoleList.length; i++) {
               console.log(realRoleList[i].props.roleObject);
@@ -227,11 +235,14 @@ const ConfigPanel = ({
               },
               onSuccess: (data) => {
                 console.log("Success PUT Roles: ", data);
+                testBool = true;
               },
               onFailure: (err) => {
                 console.log("Failed PUT Roles.", err);
               },
             });
+
+            console.log("Bool Test: ", testBool);
           }}
         >
           Confirm

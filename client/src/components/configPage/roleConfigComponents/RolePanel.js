@@ -10,6 +10,7 @@ import DraftTextArea from "../../common/DraftTextArea";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Arrow from "../../../imgs/carrot-down-secondary.svg";
 import MaterialDropDownGroup from "./MaterialDropDownGroup";
+import UserPanel from "../userConfigComponents/UserPanel";
 
 // MATERIAL UI -----------------------------------------------------------
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -27,19 +28,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 // -----------------------------------------------------------------------
 
-// const removeRoleFromList = (roleNameToRemove, roleList) => {
-//   roleList.filter((role) => {
-//     return role.roleName != roleNameToRemove;
-//   });
+/**
+ * Generates a list of User Components for State Management
+ */
+const GenerateUserList = (users, roles) => {
+  var test_simple_role = { roleName: "Regular User", roleColor: "#55cc88" };
 
-//   return roleList;
-// };
+  return users.map((user, index) => (
+    <UserPanel
+      key={index}
+      userName={user.userName}
+      userImg={user.userImg}
+      userRole={test_simple_role}
+      allRoles={roles}
+    />
+  ));
+};
 
 const RolePanel = ({
   roleObject,
   roleName,
   panelOutlineColor,
   courseRoles,
+  setCourseRoles,
+  userList,
+  setUserList,
   ...props
 }) => {
   // MATERIAL UI --------------------------------
@@ -47,13 +60,13 @@ const RolePanel = ({
 
   const [publishAnchorEl, setPublishAnchorEl] = useState(null);
 
-  const publishHandleClick = (event) => {
-    setPublishAnchorEl(event?.currentTarget);
-  };
+  // const publishHandleClick = (event) => {
+  //   setPublishAnchorEl(event?.currentTarget);
+  // };
 
-  const publishHandleClose = () => {
-    setPublishAnchorEl(null);
-  };
+  // const publishHandleClose = () => {
+  //   setPublishAnchorEl(null);
+  // };
 
   const [publishCheckedState, setPublishCheckedState] = useState({
     postComment: roleObject.permissions.publish.postComment,
@@ -427,6 +440,20 @@ const RolePanel = ({
                 ". ",
                 data
               );
+              // let newRolesList = ;
+              let newRolesList = courseRoles.filter((role) => {
+                console.log(
+                  "role._id: ",
+                  role._id,
+                  " , roleObject._id: ",
+                  roleObject._id
+                );
+                return role._id != roleObject._id;
+              });
+              console.log("After Filter: ", newRolesList);
+              setCourseRoles();
+
+              setUserList(GenerateUserList(userList, newRolesList));
             },
             onFailure: (err) => {
               console.log(

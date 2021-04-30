@@ -117,7 +117,7 @@ const ConfigView = ({ props }) => {
     }
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 650);
   });
 
   // console.log("Course Roles: ", courseRoles);

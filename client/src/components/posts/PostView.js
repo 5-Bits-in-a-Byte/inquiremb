@@ -47,6 +47,7 @@ const PostView = ({ userRole, highlightedSection }) => {
         setSocketPosts([post, ...socketPosts]);
       }
     });
+
     return () => {
       io.emit("leave", { room: courseId });
     };
@@ -89,6 +90,8 @@ const PostView = ({ userRole, highlightedSection }) => {
     data = [...socketPosts, ...data];
   }
   let posts = generateSections(data, userRole);
+  let pinnedLen = posts.pinned.length;
+  let otherLen = posts.other.length;
 
   return (
     <>
