@@ -62,8 +62,8 @@ const ConfigView = ({ props }) => {
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
 
-  const setUserRole = useContext(UserRoleDispatchContext);
   const userRole = useContext(UserRoleContext);
+  const setUserRole = useContext(UserRoleDispatchContext);
 
   const attemptGetUserRole = (courseId) => {
     LazyFetch({

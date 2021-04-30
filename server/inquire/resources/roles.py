@@ -124,9 +124,19 @@ class Roles(Resource):
         except Course.DoesNotExit:
             return {"deleted": False, "error": f"Course does not exist"}
 
+        # cp'd from Brian in #general
+        # role_query = Role.Objects.raw({"_id": roleId})
+        # role = role_query.first()
+        # role.delete()
+
         roleId = ObjectId(data["roleId"])
         role_users = User.objects.raw({'courses.role': str(roleId)})
         count = role_users.count()
+
+        role_query = Role.objects.raw({"_id": roleId})
+        role = role_query.first()
+        role.delete()
+
         # return count
         if roleId not in course.roles:
             return {"deleted": False, "error": f"Role with id {str(roleId)} does not exit"}

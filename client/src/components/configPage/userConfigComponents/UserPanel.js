@@ -15,9 +15,9 @@ const UserPerms = { canBan: true, canRemove: true };
 const GenerateRoleOptions = (roles) => {
   return roles.map((role) => ({
     onClick: () => {
-      alert(role.roleName + " Role selected");
+      alert(role.name + " Role selected");
     },
-    label: role.roleName,
+    label: role.name,
   }));
 };
 
