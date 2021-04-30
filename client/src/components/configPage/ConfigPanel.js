@@ -5,6 +5,7 @@ import Button from "../common/Button";
 import ConfigPanelGroup from "./ConfigPanelGroup";
 import RolePanel from "./roleConfigComponents/RolePanel";
 import UserPanel from "./userConfigComponents/UserPanel";
+import LazyFetch from "../common/requests/LazyFetch";
 
 const colorTest = [
   "#dd0000",
@@ -41,39 +42,41 @@ const colorTest = [
 
 const createRoleObject = (itemId) => {
   let newPerms = {
-    _id: itemId.toString(),
-    roleName: "New Role " + itemId.toString(),
-    roleColor: colorTest[Math.floor(Math.random() * colorTest.length)],
-    publish: {
-      postComment: false,
-      reply: false,
-      poll: false,
-    },
-    delete: {
-      postComment: false,
-      reply: false,
-      poll: false,
-    },
-    participation: {
-      reactions: false,
-      voteInPoll: false,
-      pin: false,
-    },
-    edit: {
-      postComment: false,
-      reply: false,
-      poll: false,
-    },
-    privacy: {
-      private: false,
-      anonymous: false,
-    },
-    admin: {
-      banUsers: false,
-      removeUsers: false,
-      announce: false,
-      configure: false,
-      highlightPost: false,
+    // _id: itemId.toString(),
+    name: "New Role " + itemId.toString(),
+    // roleColor: colorTest[Math.floor(Math.random() * colorTest.length)],
+    permissions: {
+      publish: {
+        postComment: false,
+        reply: false,
+        poll: false,
+      },
+      delete: {
+        postComment: false,
+        reply: false,
+        poll: false,
+      },
+      participation: {
+        reactions: false,
+        voteInPoll: false,
+        pin: false,
+      },
+      edit: {
+        postComment: false,
+        reply: false,
+        poll: false,
+      },
+      privacy: {
+        private: false,
+        anonymous: false,
+      },
+      admin: {
+        banUsers: false,
+        removeUsers: false,
+        announce: false,
+        configure: false,
+        highlightPost: false,
+      },
     },
   };
 
@@ -89,7 +92,7 @@ const GenerateRoleList = (roles) => {
       key={index}
       value={index}
       roleObject={role}
-      roleName={role?.roleName}
+      roleName={role?.name}
       panelOutlineColor={role?.roleColor}
       courseRoles={roles}
     />
@@ -114,6 +117,7 @@ const GenerateUserList = (users, roles) => {
 };
 
 const ConfigPanel = ({
+  courseId,
   courseUsers,
   courseRoles,
   setCourseRoles,
@@ -125,11 +129,13 @@ const ConfigPanel = ({
   let realRoleList =
     courseRoles != null ? GenerateRoleList(courseRoles) : <></>;
 
-  //console.log("Course Roles: ", courseRoles);
-  //console.log("RealRolesList: ", realRoleList);
+  console.log("Course Roles: ", courseRoles);
+  console.log("RealRolesList: ", realRoleList);
 
-  const [roleList, setRoleList] = useState(realRoleList);
-  const [cachedRoleList, setCachedRoleList] = useState(roleList);
+  // const [roleList, setRoleList] = useState(realRoleList);
+  const [cachedRoleList, setCachedRoleList] = useState(realRoleList);
+
+  // console.log("Role List: ", roleList);
 
   // State for users
   let realUserList = GenerateUserList(courseUsers, courseRoles);
@@ -140,7 +146,7 @@ const ConfigPanel = ({
   return (
     <PanelWrapper>
       <ConfigPanelGroup panelHeader={"Edit the permissions of each role here."}>
-        {roleList}
+        {realRoleList}
         <Button
           secondary
           buttonWidth={"207px"}
@@ -149,11 +155,26 @@ const ConfigPanel = ({
             setRoleIdCounter(roleIdCounter + 1);
             let newPerms = createRoleObject(roleIdCounter);
 
+            LazyFetch({
+              type: "post",
+              endpoint: "/api/courses/" + courseId + "/roles",
+              data: {
+                name: newPerms.name,
+                permissions: newPerms.permissions,
+              },
+              onSuccess: (data) => {
+                console.log("Roles Post Success: ", data);
+              },
+              onFailure: (err) => {
+                console.log("Failed to Post Roles.", err?.response);
+              },
+            });
+
             // console.log("NEW PERMS: ", newPerms);
 
             let newCourseRoles =
               courseRoles != null ? [...courseRoles, newPerms] : [newPerms];
-            setRoleList(GenerateRoleList(newCourseRoles));
+            // setRoleList(GenerateRoleList(newCourseRoles));
             setUserList(GenerateUserList(courseUsers, newCourseRoles));
 
             setCourseRoles(newCourseRoles);
@@ -169,34 +190,48 @@ const ConfigPanel = ({
       </ConfigPanelGroup>
 
       <ButtonContainer>
-        <Button
+        {/* <Button
           style={{ margin: `0 0.5em`, color: `#4A86FA`, fontWeight: `600` }}
           outlineSecondary
           buttonWidth={"200px"}
           buttonHeight={"2.2rem"}
           onClick={() => {
             alert("Feature is work in progress.");
-            setRoleList(cachedRoleList);
+            // setRoleList(cachedRoleList);
             setCourseRoles(cachedRoleList);
-            setRoleIdCounter(2);
+            setRoleIdCounter(1);
           }}
         >
           Cancel
-        </Button>
+        </Button> */}
         <Button
           primary
           style={{ margin: `0 0.5em` }}
           buttonWidth={"200px"}
           buttonHeight={"2.2rem"}
           onClick={() => {
-            alert("Feature is work in progress.");
-            // alert("Role Name: ", roleList[0].props.roleObject.roleName);
-            for (let i = 0; i < roleList.length; i++) {
-              console.log(
-                roleList[i].props.roleObject?.roleName + " ",
-                roleList[i].props.roleObject
-              );
+            console.log("CourseRoles (Confirm): ", courseRoles);
+            let testList = [];
+
+            for (let i = 0; i < realRoleList.length; i++) {
+              console.log(realRoleList[i].props.roleObject);
+              testList.push(realRoleList[i].props.roleObject);
             }
+
+            // alert("Feature is work in progress.");
+            LazyFetch({
+              type: "put",
+              endpoint: "/api/courses/" + courseId + "/roles",
+              data: {
+                roles: testList,
+              },
+              onSuccess: (data) => {
+                console.log("Success PUT Roles: ", data);
+              },
+              onFailure: (err) => {
+                console.log("Failed PUT Roles.", err);
+              },
+            });
           }}
         >
           Confirm

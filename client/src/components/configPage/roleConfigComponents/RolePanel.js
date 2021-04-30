@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import Button from "../../common/Button";
@@ -17,6 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import LazyFetch from "../../common/requests/LazyFetch";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -54,44 +56,46 @@ const RolePanel = ({
   };
 
   const [publishCheckedState, setPublishCheckedState] = useState({
-    postComment: roleObject.publish.postComment,
-    reply: roleObject.publish.reply,
-    poll: roleObject.publish.poll,
+    postComment: roleObject.permissions.publish.postComment,
+    reply: roleObject.permissions.publish.reply,
+    poll: roleObject.permissions.publish.poll,
   });
 
   // console.log("Publish init state: ", publishCheckedState);
 
   const [deleteCheckedState, setDeleteCheckedState] = useState({
-    postComment: roleObject.delete.postComment,
-    reply: roleObject.delete.reply,
-    poll: roleObject.delete.poll,
+    postComment: roleObject.permissions.delete.postComment,
+    reply: roleObject.permissions.delete.reply,
+    poll: roleObject.permissions.delete.poll,
   });
 
   const [editCheckedState, setEditCheckedState] = useState({
-    postComment: roleObject.edit.postComment,
-    reply: roleObject.edit.reply,
-    poll: roleObject.edit.poll,
+    postComment: roleObject.permissions.edit.postComment,
+    reply: roleObject.permissions.edit.reply,
+    poll: roleObject.permissions.edit.poll,
   });
 
   const [participationCheckedState, setParticipationCheckedState] = useState({
-    reactions: roleObject.participation.reactions,
-    voteInPoll: roleObject.participation.voteInPoll,
-    pin: roleObject.participation.pin,
+    reactions: roleObject.permissions.participation.reactions,
+    voteInPoll: roleObject.permissions.participation.voteInPoll,
+    pin: roleObject.permissions.participation.pin,
   });
 
   const [privacyCheckedState, setPrivacyCheckedState] = useState({
-    private: roleObject.privacy.private,
-    anonymous: roleObject.privacy.anonymous,
+    private: roleObject.permissions.privacy.private,
+    anonymous: roleObject.permissions.privacy.anonymous,
   });
 
   const [adminCheckedState, setAdminCheckedState] = useState({
-    banUsers: roleObject.admin.banUsers,
-    removeUsers: roleObject.admin.removeUsers,
-    announce: roleObject.admin.announce,
-    configure: roleObject.admin.configure,
-    highlightPost: roleObject.admin.highlightPost,
+    banUsers: roleObject.permissions.admin.banUsers,
+    removeUsers: roleObject.permissions.admin.removeUsers,
+    announce: roleObject.permissions.admin.announce,
+    configure: roleObject.permissions.admin.configure,
+    highlightPost: roleObject.permissions.admin.highlightPost,
   });
   // --------------------------------------------
+
+  const urlParams = useParams();
 
   const [nameField, setNameField] = useState(roleName);
   const [nameFieldState, setNameFieldState] = useState(true);
@@ -109,8 +113,8 @@ const RolePanel = ({
             style={{ width: `150px`, marginRight: `1em` }}
             onChange={(e) => {
               // console.log(e.target.value);
-              if (e.target.value != roleObject.roleName) {
-                roleObject.roleName = e.target.value;
+              if (e.target.value != roleObject.name) {
+                roleObject.name = e.target.value;
               }
               setNameField(e.target.value);
             }}
@@ -141,7 +145,7 @@ const RolePanel = ({
               stateLabel: "postComment",
               itemLabel: "Draft Posts / Comments",
               changeRoleVal: (val) => {
-                roleObject.publish.postComment = val;
+                roleObject.permissions.publish.postComment = val;
                 setPublishCheckedState({
                   ...publishCheckedState,
                   postComment: val,
@@ -152,7 +156,7 @@ const RolePanel = ({
               stateLabel: "reply",
               itemLabel: "Draft Replies",
               changeRoleVal: (val) => {
-                roleObject.publish.reply = val;
+                roleObject.permissions.publish.reply = val;
                 setPublishCheckedState({
                   ...publishCheckedState,
                   reply: val,
@@ -163,7 +167,7 @@ const RolePanel = ({
               stateLabel: "poll",
               itemLabel: "Draft Polls",
               changeRoleVal: (val) => {
-                roleObject.publish.poll = val;
+                roleObject.permissions.publish.poll = val;
                 setPublishCheckedState({
                   ...publishCheckedState,
                   poll: val,
@@ -185,7 +189,7 @@ const RolePanel = ({
               stateLabel: "postComment",
               itemLabel: "Delete Posts / Comments",
               changeRoleVal: (val) => {
-                roleObject.delete.postComment = val;
+                roleObject.permissions.delete.postComment = val;
                 setDeleteCheckedState({
                   ...deleteCheckedState,
                   postComment: val,
@@ -196,7 +200,7 @@ const RolePanel = ({
               stateLabel: "reply",
               itemLabel: "Delete Replies",
               changeRoleVal: (val) => {
-                roleObject.delete.reply = val;
+                roleObject.permissions.delete.reply = val;
                 setDeleteCheckedState({
                   ...deleteCheckedState,
                   reply: val,
@@ -207,7 +211,7 @@ const RolePanel = ({
               stateLabel: "poll",
               itemLabel: "Delete Polls",
               changeRoleVal: (val) => {
-                roleObject.delete.poll = val;
+                roleObject.permissions.delete.poll = val;
                 setDeleteCheckedState({
                   ...deleteCheckedState,
                   poll: val,
@@ -229,7 +233,7 @@ const RolePanel = ({
               stateLabel: "postComment",
               itemLabel: "Edit Posts / Comments",
               changeRoleVal: (val) => {
-                roleObject.edit.postComment = val;
+                roleObject.permissions.edit.postComment = val;
                 setEditCheckedState({
                   ...editCheckedState,
                   postComment: val,
@@ -240,7 +244,7 @@ const RolePanel = ({
               stateLabel: "reply",
               itemLabel: "Edit Replies",
               changeRoleVal: (val) => {
-                roleObject.edit.reply = val;
+                roleObject.permissions.edit.reply = val;
                 setEditCheckedState({
                   ...editCheckedState,
                   reply: val,
@@ -251,7 +255,7 @@ const RolePanel = ({
               stateLabel: "poll",
               itemLabel: "Edit Polls",
               changeRoleVal: (val) => {
-                roleObject.edit.poll = val;
+                roleObject.permissions.edit.poll = val;
                 setEditCheckedState({
                   ...editCheckedState,
                   poll: val,
@@ -273,7 +277,7 @@ const RolePanel = ({
               stateLabel: "reactions",
               itemLabel: "React to Posts",
               changeRoleVal: (val) => {
-                roleObject.participation.reactions = val;
+                roleObject.permissions.participation.reactions = val;
                 setParticipationCheckedState({
                   ...participationCheckedState,
                   reactions: val,
@@ -284,7 +288,7 @@ const RolePanel = ({
               stateLabel: "voteInPoll",
               itemLabel: "Vote in Polls",
               changeRoleVal: (val) => {
-                roleObject.participation.voteInPoll = val;
+                roleObject.permissions.participation.voteInPoll = val;
                 setParticipationCheckedState({
                   ...participationCheckedState,
                   voteInPoll: val,
@@ -295,7 +299,7 @@ const RolePanel = ({
               stateLabel: "pin",
               itemLabel: "Pin Posts",
               changeRoleVal: (val) => {
-                roleObject.participation.pin = val;
+                roleObject.permissions.participation.pin = val;
                 setParticipationCheckedState({
                   ...participationCheckedState,
                   pin: val,
@@ -317,7 +321,7 @@ const RolePanel = ({
               stateLabel: "private",
               itemLabel: "Post Privately",
               changeRoleVal: (val) => {
-                roleObject.privacy.private = val;
+                roleObject.permissions.privacy.private = val;
                 setPrivacyCheckedState({
                   ...privacyCheckedState,
                   private: val,
@@ -328,7 +332,7 @@ const RolePanel = ({
               stateLabel: "anonymous",
               itemLabel: "Post Anonymously",
               changeRoleVal: (val) => {
-                roleObject.privacy.anonymous = val;
+                roleObject.permissions.privacy.anonymous = val;
                 setPrivacyCheckedState({
                   ...privacyCheckedState,
                   anonymous: val,
@@ -350,7 +354,7 @@ const RolePanel = ({
               stateLabel: "banUsers",
               itemLabel: "Ban Users",
               changeRoleVal: (val) => {
-                roleObject.admin.banUsers = val;
+                roleObject.permissions.admin.banUsers = val;
                 setAdminCheckedState({
                   ...adminCheckedState,
                   banUsers: val,
@@ -361,7 +365,7 @@ const RolePanel = ({
               stateLabel: "removeUsers",
               itemLabel: "Remove Users",
               changeRoleVal: (val) => {
-                roleObject.admin.removeUsers = val;
+                roleObject.permissions.admin.removeUsers = val;
                 setAdminCheckedState({
                   ...adminCheckedState,
                   removeUsers: val,
@@ -372,7 +376,7 @@ const RolePanel = ({
               stateLabel: "announce",
               itemLabel: "Draft Announcements",
               changeRoleVal: (val) => {
-                roleObject.admin.announce = val;
+                roleObject.permissions.admin.announce = val;
                 setAdminCheckedState({
                   ...adminCheckedState,
                   announce: val,
@@ -383,7 +387,7 @@ const RolePanel = ({
               stateLabel: "configure",
               itemLabel: "Edit Course Configurations",
               changeRoleVal: (val) => {
-                roleObject.admin.configure = val;
+                roleObject.permissions.admin.configure = val;
                 setAdminCheckedState({
                   ...adminCheckedState,
                   configure: val,
@@ -394,7 +398,7 @@ const RolePanel = ({
               stateLabel: "highlightPost",
               itemLabel: "Highlight Posts",
               changeRoleVal: (val) => {
-                roleObject.admin.highlightPost = val;
+                roleObject.permissions.admin.highlightPost = val;
                 setAdminCheckedState({
                   ...adminCheckedState,
                   highlightPost: val,
@@ -409,7 +413,30 @@ const RolePanel = ({
         primary
         buttonColor={"rgba(0, 0, 0, 0.0)"}
         onClick={() => {
-          alert("This feature is work in progress.");
+          // alert("This feature is work in progress.");
+          LazyFetch({
+            type: "delete",
+            endpoint: "/api/courses/" + urlParams.courseId + "/roles",
+            data: {
+              roleId: roleObject._id,
+            },
+            onSuccess: (data) => {
+              console.log(
+                "Successful delete of role: ",
+                roleObject.name,
+                ". ",
+                data
+              );
+            },
+            onFailure: (err) => {
+              console.log(
+                "Failed to delete role: ",
+                roleObject.name,
+                ". ",
+                err?.response
+              );
+            },
+          });
         }}
       >
         <ChangeNameIcon src={CloseButtonIcon} />
