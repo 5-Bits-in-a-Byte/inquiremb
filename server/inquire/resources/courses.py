@@ -93,6 +93,9 @@ class Courses(Resource):
 
         return {"courseId": course._id, "courseName": args.course,
                 "color": color}, 200
+    
+    def get(self):
+        return {"status": "dummy object"}
 
     def delete(self):
         # Parse argument

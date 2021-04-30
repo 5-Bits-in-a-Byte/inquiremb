@@ -109,6 +109,8 @@ const GenerateRoleList = (roles, setRoles, userList, setUserList) => {
 const GenerateUserList = (users, roles) => {
   var test_simple_role = { roleName: "Regular User", roleColor: "#55cc88" };
 
+  // if (roles[users.])
+
   return users.map((user, index) => (
     <UserPanel
       key={index}
@@ -190,15 +192,6 @@ const ConfigPanel = ({
                 console.log("Failed to Post Roles.", err?.response);
               },
             });
-
-            // console.log("NEW PERMS: ", newPerms);
-
-            // let newCourseRoles =
-            // courseRoles != null ? [...courseRoles, newPerms] : [newPerms];
-            // setRoleList(GenerateRoleList(newCourseRoles));
-            // setUserList(GenerateUserList(courseUsers, newCourseRoles));
-
-            // setCourseRoles(newCourseRoles);
           }}
         >
           + Add a New Role
