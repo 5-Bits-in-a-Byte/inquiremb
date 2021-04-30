@@ -9,6 +9,7 @@ import Dropdown from "../common/dropdown/Dropdown";
 import { UserContext } from "../context/UserProvider";
 import Arrow from "../../imgs/carrot-down-secondary.svg";
 import Icon from "../common/Icon";
+import "../common/css/noTextSelection.css";
 
 /** TopNavBar Component
  * @brief Wrapper the top content of the website such as profile icon / menu, etc etc
@@ -52,8 +53,14 @@ const TopNavBar = () => {
         ) : (
           <Dropdown options={options}>
             <DropdownSelector tabIndex="0">
-              <SelectionName>Select a Class</SelectionName>
-              <Icon src={Arrow} style={{ padding: "0 .75em 0 .25em" }} />
+              <SelectionName className={"noselect"}>
+                Select a Class
+              </SelectionName>
+              <Icon
+                className={"noselect"}
+                src={Arrow}
+                style={{ padding: "0 .75em 0 .25em" }}
+              />
             </DropdownSelector>
           </Dropdown>
         )}

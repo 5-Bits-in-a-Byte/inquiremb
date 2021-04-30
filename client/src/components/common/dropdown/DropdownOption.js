@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import "../css/noTextSelection.css";
 
 /** DropdownOption Component
  * A simple contained clickable label acting an an option in a dropdown list of items.
@@ -9,8 +10,8 @@ import styled from "styled-components";
  */
 const DropdownOption = ({ extra, ...props }) => {
   return (
-    <Option {...props}>
-      <Label>{props.children}</Label>
+    <Option className={"noselect"} {...props}>
+      <Label className={"noselect"}>{props.children}</Label>
       {extra}
     </Option>
   );
