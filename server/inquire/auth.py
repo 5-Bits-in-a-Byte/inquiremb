@@ -226,7 +226,7 @@ def retrieve_user(_id):
 
 def retrieve_role(_id):
     '''Retrieves the role object from the database'''
-    query = Role.objects.raw({'_id': ObjectId(_id)})
+    query = Role.objects.raw({'_id': _id})
     count = query.count()
     if count > 1:
         raise Exception(

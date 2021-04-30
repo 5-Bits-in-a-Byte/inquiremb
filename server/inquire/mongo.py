@@ -116,8 +116,8 @@ class Course(MongoModel):
     course = fields.CharField()
     canJoinById = fields.BooleanField()
     instructorID = fields.CharField()
-    roles = fields.ListField(required=True)
-    defaultRole = fields.ObjectIdField(required=True)
+    roles = fields.DictField(required=True)
+    defaultRole = fields.CharField(required=True)
     _id = fields.CharField(primary_key=True, default=shortuuid.uuid)
 
     class Meta:
@@ -146,6 +146,7 @@ def role_validator(d, example=None):
     return True
 
 class Role(MongoModel):
+    _id = fields.CharField(primary_key=True, default=ObjectId)
     name = fields.CharField(required=True)
     permissions = fields.DictField(default=False, validators=[role_validator])
     class Meta:

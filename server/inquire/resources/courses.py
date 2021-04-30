@@ -80,7 +80,7 @@ class Courses(Resource):
         # Creating initial roles available in course
         student_role = Role(name="student", permissions=student).save()
         admin_role = Role(name="admin", permissions=admin).save()
-        roles = [student_role._id, admin_role._id]
+        roles = {student_role._id:[], admin_role._id:[current_user._id]}
 
         # Add the course to the user's course list and create the course
         course = Course(course=args.course,

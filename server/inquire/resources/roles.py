@@ -11,35 +11,24 @@ from inquire.socketio_app import io
 class Roles(Resource):
     @permission_layer(required_permissions=["admin-configure"])
     def get(self, courseId):
-        # Query for courseId
-        course_query = Course.objects.raw({"_id": courseId})
-        # Error check
-        course_count = course_query.count()
-        if course_count > 1:
-            return {"error": [f"Multiple courses with id: {courseId}"]}, 400
-        elif course_count == 0:
+        try:
+            course = Course.objects.get({"_id": courseId})
+        except Course.DoesNotExist:
             return {"error": [f"No courses with id: {courseId}"]}, 400
-        else:
-            # Grab the course we're looking for
-            course = course_query.first()
-            # Initialize list of roles to return
-            role_list = []
-            # Loop through all roles associated with a course and add it to the return list
-            for role_id in course.roles:
-                role_query = Role.objects.raw({"_id": role_id})
-                role_count = role_query.count()
-                if role_count > 1:
-                    return {"error": [f"Multiple roles with id: {role_id}"]}, 400
-                elif role_count == 0:
-                    return {"error": [f"No roles with id: {role_id}"]}, 400
-                else:
-                    role = self._serialize(role_query.first())
-                    role_list.append(role)
-            return role_list
+        except Course.MultipleObjectsReturned:
+            return {"error": [f"Multiple courses with id: {courseId}"]}, 400
+        # Initialize list of roles to return
+        role_list = []
+        # Loop through all roles associated with a course and add it to the return list
+        roles = Role.objects.raw({"_id": {"$in": list(course.roles.keys())}})
+
+        for role in roles:
+            serialized_role = self._serialize(role)
+            role_list.append(serialized_role)
+        return role_list
 
     @permission_layer(required_permissions=["admin-configure"])
     def post(self, courseId):
-        # print("THIS IS THE POST REQUEST.")
         parser = reqparse.RequestParser()
         parser.add_argument('permissions', type=dict)
         parser.add_argument('name')
@@ -47,11 +36,8 @@ class Roles(Resource):
         try:
             new_role = Role(
                 name=args['name'], permissions=args['permissions']).save()
-            query = Course.objects.raw({"_id": courseId})
-            course = query.first()
-            # print("Course Roles (before): ", course.roles)
-            course.roles.append(new_role._id)
-            # print("Course Roles (after): ", course.roles)
+            course = Course.objects.get({"_id": courseId})
+            course.roles[new_role._id] = []
             course.save()
             return {"status": "success", "role": self._serialize(new_role)}
         except Exception as exc:
@@ -66,46 +52,38 @@ class Roles(Resource):
         data = request.get_json()
         # Check for default
         if "default" in data:
-            # Query for courseId
-            course_query = Course.objects.raw({"_id": courseId})
-            # Error check
-            course_count = course_query.count()
-            if course_count > 1:
-                return {"error": [f"Multiple courses with id: {courseId}"]}, 400
-            elif course_count == 0:
+            try:
+                course = Course.objects.get({"_id": courseId})
+            except Course.DoesNotExist:
                 return {"error": [f"No courses with id: {courseId}"]}, 400
-            else:
-                course = course_query.first()
-                default = data['default']
-                if default in course.roles:
-                    course.defaultRole = default
-                    course.save()
+            except Course.MultipleObjectsReturned:
+                return {"error": [f"Multiple courses with id: {courseId}"]}, 400
+            default = data['default']
+            if default in course.roles:
+                course.defaultRole = default
+                course.save()
         updated_list = []
         # Loop through all roles in the request
         for role in data['roles']:
             # Query for a matching role
             _id = ObjectId(role["_id"])
-            role_query = Role.objects.raw({"_id": _id})
-            # Error check to make sure we find a role
-            role_count = role_query.count()
-            if role_count > 1:
-                return {"error": [f"Multiple roles found with id: {_id}"]}, 400
-            elif role_count == 0:
-                return {"error": [f"No roles found with id: {_id}"]}, 400
+            try:
+                saved = Role.objects.get({"_id": _id})
+            except Role.DoesNotExist:
+                return {"error": [f"No role with id: {_id}"]}, 400
+            except Role.MultipleObjectsReturned:
+                return {"error": [f"Multiple roles with id: {_id}"]}, 400
+            # Convert the role to a dict for comparison
+            db_role = dict(self._serialize(saved))
+            db_role = dict(db_role)
+            if db_role == role:
+                continue
             else:
-                # Save the role we queried for in a variable
-                saved = role_query.first()
-                # Convert the role to a dict for comparison
-                db_role = self._serialize(role_query.first())
-                db_role = dict(db_role)
-                if db_role == role:
-                    continue
-                else:
-                    # Update the name and permissions
-                    saved.name = role['name']
-                    saved.permissions = role['permissions']
-                    # Append the updated role to the updated list
-                    updated_list.append(saved)
+                # Update the name and permissions
+                saved.name = role['name']
+                saved.permissions = role['permissions']
+                # Append the updated role to the updated list
+                updated_list.append(saved)
         # Make sure update is valid
         for updated_role in updated_list:
             if(not updated_role.is_valid()):
@@ -118,21 +96,14 @@ class Roles(Resource):
     @permission_layer(required_permissions=["admin-configure"])
     def delete(self, courseId):
         data = request.get_json()
-        print("Data: ", data) 
         try:
             course = Course.objects.get({"_id": courseId})
         except Course.DoesNotExit:
             return {"deleted": False, "error": f"Course does not exist"}
 
-        roleId = ObjectId(data["roleId"])
-        role_users = User.objects.raw({'courses.role': str(roleId)})
-        count = role_users.count()
-
-        role_query = Role.objects.raw({"_id": roleId})
-        role = role_query.first()
-        role.delete()
-
-        # return count
+        roleId = data["roleId"]
+        role_users = course.roles[roleId]
+        count = len(role_users)
         if roleId not in course.roles:
             return {"deleted": False, "error": f"Role with id {str(roleId)} does not exit"}
         elif course.defaultRole == roleId:
@@ -140,9 +111,16 @@ class Roles(Resource):
         elif count > 0:
             return {"deleted": False, "error": f"Cannot delete role while it's in use"}
         else:
-            course.roles.remove(roleId)
-            course.save()
-            return {"deleted": True}
+            try:
+                role = Role.objects.get({"_id": roleId})
+                role.delete()
+                course.roles.pop(roleId,None)
+                course.save()
+                return {"deleted": True}
+            except Role.DoesNotExist:
+                return {"deleted": False, "error": f"Role with id {str(roleId)} does not exit"}
+            except Exception:
+                return {"deleted": False, "error": "Unspecified error occured"}
         
 
     def _serialize(self, role):
