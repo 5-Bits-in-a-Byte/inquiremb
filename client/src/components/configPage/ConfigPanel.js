@@ -219,7 +219,6 @@ const ConfigPanel = ({
           onClick={() => {
             console.log("CourseRoles (Confirm): ", courseRoles);
             let testList = [];
-            let testBool = false;
 
             for (let i = 0; i < realRoleList.length; i++) {
               console.log(realRoleList[i].props.roleObject);
@@ -235,14 +234,12 @@ const ConfigPanel = ({
               },
               onSuccess: (data) => {
                 console.log("Success PUT Roles: ", data);
-                testBool = true;
+                alert("Changes saved successfully.");
               },
               onFailure: (err) => {
                 console.log("Failed PUT Roles.", err);
               },
             });
-
-            console.log("Bool Test: ", testBool);
           }}
         >
           Confirm
