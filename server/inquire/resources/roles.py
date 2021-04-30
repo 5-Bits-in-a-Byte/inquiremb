@@ -39,6 +39,7 @@ class Roles(Resource):
 
     @permission_layer(required_permissions=["admin-configure"])
     def post(self, courseId):
+        # print("THIS IS THE POST REQUEST.")
         parser = reqparse.RequestParser()
         parser.add_argument('permissions', type=dict)
         parser.add_argument('name')
@@ -46,6 +47,12 @@ class Roles(Resource):
         try:
             new_role = Role(
                 name=args['name'], permissions=args['permissions']).save()
+            query = Course.objects.raw({"_id": courseId})
+            course = query.first()
+            # print("Course Roles (before): ", course.roles)
+            course.roles.append(new_role._id)
+            # print("Course Roles (after): ", course.roles)
+            course.save()
             return {"status": "success", "role": self._serialize(new_role)}
         except Exception as exc:
             if type(exc) == list:
@@ -111,6 +118,7 @@ class Roles(Resource):
     @permission_layer(required_permissions=["admin-configure"])
     def delete(self, courseId):
         data = request.get_json()
+        print("Data: ", data) 
         try:
             course = Course.objects.get({"_id": courseId})
         except Course.DoesNotExit:
@@ -119,7 +127,7 @@ class Roles(Resource):
         roleId = ObjectId(data["roleId"])
         role_users = User.objects.raw({'courses.role': str(roleId)})
         count = role_users.count()
-        return count
+        # return count
         if roleId not in course.roles:
             return {"deleted": False, "error": f"Role with id {str(roleId)} does not exit"}
         elif course.defaultRole == roleId:

@@ -117,35 +117,55 @@ const ConfigView = ({ props }) => {
     });
   };
 
+  // State ------------------------------------------------------
+  // var fetchedCourseRoles;
+
+  // LazyFetch({
+  //   type: "get",
+  //   endpoint: "/api/courses/" + courseId + "/roles",
+  //   onSuccess: (roles) => {
+  //     console.log("Successfully fetched Course Roles: ", roles);
+  //     fetchedCourseRoles = roles;
+  //   },
+  //   onFailure: (err) => {
+  //     console.log("Failed to fetch Course Roles. ", err);
+  //     fetchedCourseRoles = null;
+  //   },
+  // });
+
+  // console.log("CourseRoles: ", fetchedCourseRoles);
+
+  const [courseUsers, setCourseUsers] = useState(dummy_users);
+
+  const [roleIdCounter, setRoleIdCounter] = useState(1);
+  const [courseRoles, setCourseRoles] = useState(null);
+
+  const attemptGetCourseRoles = (courseId) => {
+    LazyFetch({
+      type: "get",
+      endpoint: "/api/courses/" + courseId + "/roles",
+      onSuccess: (roles) => {
+        console.log("Successfully fetched Course Roles: ", roles);
+        setCourseRoles(roles);
+      },
+      onFailure: (err) => {
+        console.log("Failed to fetch Course Roles. ", err);
+      },
+    });
+  };
+
   useEffect(() => {
     // console.log("rendered");
     if (!userRole) {
       attemptGetUserRole(courseId);
     }
+
+    if (!courseRoles) {
+      attemptGetCourseRoles(courseId);
+    }
   });
 
-  // State ------------------------------------------------------
-  var fetchedCourseRoles = null;
-
-  LazyFetch({
-    type: "get",
-    endpoint: "/api/courses/" + courseId + "/roles",
-    onSuccess: (roles) => {
-      console.log("Successfully fetched Course Roles.");
-      fetchedCourseRoles = roles;
-    },
-    onFailure: (err) => {
-      console.log("Failed to fetch Course Roles. ", err);
-    },
-  });
-
-  console.log("CourseRoles: ", fetchedCourseRoles);
-
-  const [courseUsers, setCourseUsers] = useState(dummy_users);
-
-  const [roleIdCounter, setRoleIdCounter] = useState(1);
-  const [courseRoles, setCourseRoles] = useState(fetchedCourseRoles);
-  // console.log("Course Roles", courseRoles);
+  // console.log("Course Roles: ", courseRoles);
   // ------------------------------------------------------------
 
   var userIsAdmin = false;
@@ -180,6 +200,7 @@ const ConfigView = ({ props }) => {
         {userIsAdmin ? (
           // <CenterContent>
           <ConfigPanel
+            courseId={courseId}
             courseUsers={courseUsers}
             courseRoles={courseRoles}
             setCourseRoles={setCourseRoles}
