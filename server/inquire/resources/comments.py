@@ -16,7 +16,8 @@ from inquire.socketio_app import io
 
 
 class Comments(Resource):
-    def get(self, postId=None):
+    @permission_layer(require_joined_course=True)
+    def get(self, courseId=None, postId=None):
         """
         Retrieves all the comments responding to a specific post
         ---
@@ -45,7 +46,7 @@ class Comments(Resource):
         return [self.serialize(comment) for comment in Comment.objects.raw({'postId': postId})]
 
     @permission_layer(required_permissions=["publish-postComment"])
-    def post(self, postId=None):
+    def post(self, courseId=None, postId=None):
         """
         Creates a new comment
         ---
@@ -106,7 +107,8 @@ class Comments(Resource):
             current_app.socketio.emit('Comment/create', result, room=postId)
         return result, 200
 
-    def put(self, postId=None):
+    @permission_layer(required_permissions=["edit-postComment"])
+    def put(self, courseId=None, postId=None):
         """
         Updates a comment
         ---
@@ -143,8 +145,6 @@ class Comments(Resource):
         errors = self.validate_comment(args)
         if(bool(errors)):
             return {"errors": errors}, 400
-        courseId = post.courseId
-        current_course = current_user.get_course(post.courseId)
         _id = ObjectId(args['_id'])
         query = Comment.objects.raw({'_id': _id})
         count = query.count()
@@ -155,7 +155,7 @@ class Comments(Resource):
             comment = query.first()
             id_match = current_user._id == comment.postedBy[
                 '_id'] or current_user.anonymousId == comment.postedBy['_id']
-            if id_match or current_course.admin:
+            if id_match:
                 comment.content = args['content']
                 post.updatedDate = datetime.datetime.now()
                 comment.save()
@@ -167,7 +167,8 @@ class Comments(Resource):
         else:
             raise Exception(f'No comment with id')
 
-    def delete(self, postId=None):
+    @permission_layer(required_permissions=["delete-postComment"])
+    def delete(self, courseId=None, postId=None):
         """
         Deletes a comment
         ---
@@ -208,7 +209,6 @@ class Comments(Resource):
                   example: False
         """
         post = self.retrieve_post(postId)
-        courseId = post.courseId
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
         args = parser.parse_args()
@@ -225,13 +225,13 @@ class Comments(Resource):
             raise Exception(
                 f'Duplicate comment detected, multiple comments in database with id {args["_id"]}')
         elif count == 1:
-            # Get the current course
-            current_course = current_user.get_course(courseId)
             # Permission check
             comment = query.first()
             id_match = current_user._id == comment.postedBy[
                 '_id'] or current_user.anonymousId == comment.postedBy['_id']
-            if id_match or current_course.admin:
+            # FIX ME
+            # Replace [admin][configure] with correct permission that handles deleteing others posts
+            if id_match or current_user.permissions['admin']['configure']:
                 post.comments -= 1
                 post.save()
                 comment.delete()

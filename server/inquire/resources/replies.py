@@ -15,7 +15,8 @@ from inquire.socketio_app import io
 
 
 class Replies(Resource):
-    def post(self, postId=None, comment_id=None):
+    @permission_layer(required_permissions=["publish-reply"])
+    def post(self, courseId=None, postId=None, comment_id=None):
         """
         Creates a new reply
         ---
@@ -84,6 +85,7 @@ class Replies(Resource):
                 'Reply/create', self.serialize(comment), room=postId)
         return result, 200
 
+    @permission_layer(required_permissions=["edit-reply"])
     def put(self, postId=None, comment_id=None):
         """
         Updates a reply
@@ -127,8 +129,7 @@ class Replies(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
-        # Get the current course and retrieve the comment
-        current_course = current_user.get_course(post.courseId)
+        # Retrieve the comment
         comment = self.retrieve_comment(comment_id)
 
         # Get the reply we're looking for
@@ -144,12 +145,13 @@ class Replies(Resource):
         # Permissions check
         id_match = current_user._id == reply.postedBy[
             '_id'] or current_user.anonymousId == reply.postedBy['_id']
-        if id_match or current_course.admin:
+        if id_match:
             reply.content = args['content']
             comment.save()
             result = self.serialize(comment)
             return result, 200
 
+    @permission_layer(required_permissions=["delete-reply"])
     def delete(self, postId=None, comment_id=None):
         """
         Deletes a reply
@@ -205,9 +207,6 @@ class Replies(Resource):
             return abort(400, errors=["No comment id"])
 
         comment = self.retrieve_comment(comment_id)
-        # Get the current course
-        current_course = current_user.get_course(post.courseId)
-
         # Get the reply we're looking for
         reply = None
         for reply in comment.replies:
@@ -221,7 +220,9 @@ class Replies(Resource):
         # Permission check
         id_match = current_user._id == reply.postedBy[
             '_id'] or current_user.anonymousId == reply.postedBy['_id']
-        if id_match or current_course.admin:
+        # FIX ME
+        # Replace current_user.permissions['admin']['configure'] with whatever permission is required to delete content
+        if id_match or current_user.permissions['admin']['configure']:
             comment.replies.remove(reply)
             comment.save()
             return {'deleted': True}, 200

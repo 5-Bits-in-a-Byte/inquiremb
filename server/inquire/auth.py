@@ -115,7 +115,7 @@ def _permission_comparison(user_permissions: dict, required_permissions: list):
     return missing_permissions
 
 
-def permission_layer(required_permissions: list, require_login=True, require_joined_course=False):
+def permission_layer(required_permissions=None, require_login=True, require_joined_course=False):
     """
     Retricts access to an endpoint based on the user's permissions in the course
     """

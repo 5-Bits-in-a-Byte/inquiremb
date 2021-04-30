@@ -14,7 +14,7 @@ from inquire.mongo import *
 
 
 class Reactions(Resource):
-    def put(self):
+    def put(self, courseId=None):
         """
         Responds with a reaction to a post, comment, or reply
         ---

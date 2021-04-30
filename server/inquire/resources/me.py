@@ -14,7 +14,7 @@ from inquire.mongo import *
 
 
 class Me(Resource):
-    @permission_layer([])
+    @permission_layer(require_login=True)
     def get(self):
         """
         Retrieves the current user
@@ -41,4 +41,5 @@ class Me(Resource):
             schema:
               $ref: '#/definitions/403Response'
         """
+
         return current_user.to_son().to_dict()
