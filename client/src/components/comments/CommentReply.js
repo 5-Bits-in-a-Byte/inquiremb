@@ -17,7 +17,13 @@ const CommentReply = ({ reply, isDraft, submitReply, postid, commentid }) => {
 
   // '/posts/<string:postId>/comments/<string:comment_id>/replies'
   const endpoint =
-    "/api/posts/" + postid + "/comments/" + commentid + "/replies";
+    "/api/courses/" +
+    courseId +
+    "/posts/" +
+    postid +
+    "/comments/" +
+    commentid +
+    "/replies";
 
   const handleChange = (e) => {
     setDraft(e.target.value);

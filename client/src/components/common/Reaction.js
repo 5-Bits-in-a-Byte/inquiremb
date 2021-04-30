@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import UnlikedImg from "../../imgs/like_grey.svg";
 import LikedImg from "../../imgs/like_blue.svg";
@@ -15,13 +16,14 @@ import LazyFetch from "./requests/LazyFetch";
  * @returns Reaction Component
  */
 const Reaction = ({ reactions, type, id, postid }) => {
+  const urlParams = useParams();
   const user = useContext(UserContext);
   const [reactionState, setReactions] = useState(reactions);
   const [reactClicked, setClicked] = useState({
     liked: reactions.likes.includes(user._id),
   });
 
-  let endpoint = "/api/reactions";
+  let endpoint = "/api/courses/" + urlParams.courseId + "/reactions";
 
   switch (type) {
     case "post":

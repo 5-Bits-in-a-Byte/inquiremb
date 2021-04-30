@@ -48,7 +48,8 @@ const CommentView = ({ classroomName }) => {
     if (post) {
       LazyFetch({
         type: "get",
-        endpoint: "/api/posts/" + post._id + "/comments",
+        endpoint:
+          "/api/courses/" + courseId + "/posts/" + post._id + "/comments",
         onSuccess: (data) => {
           setCommentData([...renderComments(data)]);
         },
@@ -107,7 +108,8 @@ const CommentView = ({ classroomName }) => {
     } else {
       LazyFetch({
         type: "post",
-        endpoint: "/api/posts/" + post._id + "/comments",
+        endpoint:
+          "/api/courses/" + courseId + "/posts/" + post._id + "/comments",
         data: { isAnonymous: false, content: content },
         onSuccess: (data) => {
           setNewComments({ draft: false });

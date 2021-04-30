@@ -152,7 +152,7 @@ class Replies(Resource):
             return result, 200
 
     @permission_layer(required_permissions=["delete-reply"])
-    def delete(self, postId=None, comment_id=None):
+    def delete(self, courseId=None, postId=None, comment_id=None):
         """
         Deletes a reply
         ---
