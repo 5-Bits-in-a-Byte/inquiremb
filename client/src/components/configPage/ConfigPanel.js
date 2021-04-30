@@ -238,6 +238,7 @@ const ConfigPanel = ({
               },
               onFailure: (err) => {
                 console.log("Failed PUT Roles.", err);
+                alert("Error: Changes not saved. Please try again.");
               },
             });
           }}
