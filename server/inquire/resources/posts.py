@@ -274,7 +274,7 @@ class Posts(Resource):
         else:
             return {'deleted': False, 'errors': f"No post with id {args['_id']}"}, 403
 
-    def put(self, courseId):
+    def put(self, courseId=None):
         """
         Edits a post
         ---
