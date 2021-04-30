@@ -9,3 +9,4 @@ from .reactions import Reactions
 from .replies import Replies
 from .roles import Roles
 from .me_role import MeRole
+from .course_users import CourseUsers

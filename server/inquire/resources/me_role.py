@@ -16,29 +16,4 @@ from inquire.mongo import *
 class MeRole(Resource):
     @permission_layer([])
     def get(self, courseId=None):
-        """
-        Retrieves the current user
-        ---
-        tags:
-          - User
-        definitions:
-          import: "./flasgger/responses.yml"
-          import: "./flasgger/courses.yml"
-          import: "./flasgger/user.yml"
-          import: "./flasgger/shared.yml"
-          import: "./flasgger/posts.yml"
-          import: "./flasgger/comments.yml"
-          import: "./flasgger/replies.yml"
-          import: "./flasgger/requests.yml"
-
-        responses:
-          200:
-            description: Stored user data for the currently logged in user
-            schema:
-              $ref: '#/definitions/User'
-          403:
-            description: Unable to retrieve current user data
-            schema:
-              $ref: '#/definitions/403Response'
-        """
         return current_user.permissions

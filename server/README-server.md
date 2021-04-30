@@ -161,8 +161,24 @@ This component handles setting up all of our MongoDB models so that each collect
   "canJoinById": true,
   "instructorID": "oasif-jo12j-asdjf-asdf9",
   "roles": ["roleId1", "roleId2"], // NEW (04.18.21)
+  "users": ["userId1", "userId2"], // NEW (04.30.21)
+  "differentRoles": {
+    "roleId1": ["userId1", "userId2"],
+    "roleId2": ["userId1", "userId2", "userId3", "userId4"]
+  },
   "defaultRole": "roleId1"
 }
+```
+
+```json
+[
+  {
+    "userName": "name",
+    "imgUrl": "url",
+    "roleColor": "#color",
+    "roleId": "roleId"
+  }
+]
 ```
 
 ### Roles Model (NEW 04.18.21)
