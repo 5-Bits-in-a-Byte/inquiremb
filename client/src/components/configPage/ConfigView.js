@@ -12,6 +12,7 @@ import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import { DeleteUserCourse } from "../common/stateManagement/UpdateUser.js";
 import TempIcon from "../../imgs/temporary-user-icon.png";
+import LoadingDots from "../common/animation/LoadingDots";
 
 const dummy_usernames = [
   "Amelia Ambassador",
@@ -47,42 +48,6 @@ const dummy_users = dummy_usernames.map((username) => ({
   userImg: TempIcon,
 }));
 
-const adminPerms = {
-  _id: "1",
-  roleName: "Admin Role",
-  publish: {
-    postComment: true,
-    reply: true,
-    poll: true,
-  },
-  delete: {
-    postComment: true,
-    reply: true,
-    poll: true,
-  },
-  participation: {
-    reactions: true,
-    voteInPoll: true,
-    pin: true,
-  },
-  edit: {
-    postComment: true,
-    reply: true,
-    poll: true,
-  },
-  privacy: {
-    private: true,
-    anonymous: true,
-  },
-  admin: {
-    banUsers: true,
-    removeUsers: true,
-    announce: true,
-    configure: true,
-    highlightPost: true,
-  },
-};
-
 /** ConfigView
  * @brief The webpage for the config panel of each course
  *
@@ -90,6 +55,8 @@ const adminPerms = {
  * @returns ConfigView Component
  */
 const ConfigView = ({ props }) => {
+  const [loading, setLoading] = useState(true);
+
   let history = useHistory();
   const { courseId } = useParams();
   const user = useContext(UserContext);
@@ -118,21 +85,6 @@ const ConfigView = ({ props }) => {
   };
 
   // State ------------------------------------------------------
-  // var fetchedCourseRoles;
-
-  // LazyFetch({
-  //   type: "get",
-  //   endpoint: "/api/courses/" + courseId + "/roles",
-  //   onSuccess: (roles) => {
-  //     console.log("Successfully fetched Course Roles: ", roles);
-  //     fetchedCourseRoles = roles;
-  //   },
-  //   onFailure: (err) => {
-  //     console.log("Failed to fetch Course Roles. ", err);
-  //     fetchedCourseRoles = null;
-  //   },
-  // });
-
   // console.log("CourseRoles: ", fetchedCourseRoles);
 
   const [courseUsers, setCourseUsers] = useState(dummy_users);
@@ -163,6 +115,9 @@ const ConfigView = ({ props }) => {
     if (!courseRoles) {
       attemptGetCourseRoles(courseId);
     }
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   });
 
   // console.log("Course Roles: ", courseRoles);
@@ -178,7 +133,16 @@ const ConfigView = ({ props }) => {
     history.push("/");
   };
 
-  return (
+  return loading ? (
+    <div
+      style={{
+        width: `100%`,
+        margin: `calc(50vh - 64px) 0 0 calc(50vw - 225px)`,
+      }}
+    >
+      <LoadingDots size={48} color={"#4a86fa"} />
+    </div>
+  ) : (
     <ConfigWrapper>
       <ScrollingDiv>
         {/* <CenterContent> */}
