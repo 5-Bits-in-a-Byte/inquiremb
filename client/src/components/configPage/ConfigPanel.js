@@ -197,12 +197,6 @@ const ConfigPanel = ({
           + Add a New Role
         </Button>
       </ConfigPanelGroup>
-      <ConfigPanelGroup
-        panelHeader={"Assign roles to participants of this course here."}
-      >
-        <UserContainer>{userList}</UserContainer>
-      </ConfigPanelGroup>
-
       <ButtonContainer>
         <Button
           primary
@@ -239,6 +233,11 @@ const ConfigPanel = ({
           Confirm
         </Button>
       </ButtonContainer>
+      <ConfigPanelGroup
+        panelHeader={"Assign roles to participants of this course here."}
+      >
+        <UserContainer>{userList}</UserContainer>
+      </ConfigPanelGroup>
     </PanelWrapper>
   );
 };

@@ -30,4 +30,4 @@ class CourseUsers(Resource):
             # for user_id in course.roles[role]:
             #     print()
 
-        return result, 200
+        return {"status": "Success!", "data": result}, 200

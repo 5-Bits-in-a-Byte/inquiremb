@@ -72,6 +72,8 @@ const ConfigView = ({ props }) => {
       onSuccess: (role) => {
         if (role) {
           setUserRole(role);
+        } else {
+          console.log("Err: role is null / none / etc.");
         }
       },
       onFailure: (err) => {
