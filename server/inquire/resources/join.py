@@ -160,6 +160,10 @@ class Join(Resource):
 
             current_user.save()
 
+            course_to_add.roles[course_to_add.defaultRole].append(current_user._id)
+
+            course_to_add.save()
+
             result = user_course.to_son()
 
             return {"success": ["Course joined successfully"], "course": result}, 200
