@@ -83,7 +83,8 @@ const ReactImg = styled.img`
   margin-right: 8px;
   margin-left: 20px;
   user-select: none;
-  cursor: ${(props) => (props.postid ? "pointer" : "default")};
+  /* cursor: ${(props) => (props.postid ? "pointer" : "default")}; */
+  cursor: pointer;
   opacity: ${(props) => (!props.clicked && "100%") || "100%"};
 `;
 
