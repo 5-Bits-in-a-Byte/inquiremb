@@ -111,19 +111,21 @@ const GenerateUserList = (users, roles) => {
 
   var userRole = { name: "null", roleColor: "#e7e7e7" };
 
-  // for (let i = 0; i < roles.length; i++) {
-  //   if (roles[i]._id == user.role) userRole = roles[i];
-  // }
+  return users.map((user, index) => {
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i]._id == user.role) userRole = roles[i];
+    }
 
-  return users.map((user, index) => (
-    <UserPanel
-      key={index}
-      userName={user.userName}
-      userImg={user.userImg}
-      userRole={userRole}
-      allRoles={roles}
-    />
-  ));
+    return (
+      <UserPanel
+        key={index}
+        userName={user.userName}
+        userImg={user.userImg}
+        userRole={userRole}
+        allRoles={roles}
+      />
+    );
+  });
 };
 
 const ConfigPanel = ({
