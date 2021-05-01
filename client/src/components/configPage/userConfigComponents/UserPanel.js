@@ -43,11 +43,13 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
       <UserNameWrapper>
         <UserName>{userName}</UserName>
       </UserNameWrapper>
-      <UserRoleWrapper borderColor={userRole.roleColor}>
+      <UserRoleWrapper
+        borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
+      >
         <Dropdown options={roleOptionsState}>
           <DropdownWrapper className="flex-row align">
             <RoleDisplay className="font-regular" style={{ cursor: `pointer` }}>
-              {userRole.roleName}
+              {userRole.name}
             </RoleDisplay>
             <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
           </DropdownWrapper>

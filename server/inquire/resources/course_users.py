@@ -26,8 +26,8 @@ class CourseUsers(Resource):
         for role in course.roles:
             # TODO: add a thingy for role color...
             users = User.objects.raw({"_id": {"$in": course.roles[role]}})
-            print("Users Test: ", users)
-            # for user_id in course.roles[role]:
-            #     print()
+            for user in users:
+                # print("Users Test: ", user)
+                result.append({"role": role, "userName": user.first + " " + user.last, "userImg": user.picture})
 
         return {"status": "Success!", "data": result}, 200

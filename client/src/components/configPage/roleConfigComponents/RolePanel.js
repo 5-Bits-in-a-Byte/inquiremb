@@ -14,11 +14,6 @@ import UserPanel from "../userConfigComponents/UserPanel";
 
 // MATERIAL UI -----------------------------------------------------------
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import LazyFetch from "../../common/requests/LazyFetch";
 
 const useStyles = makeStyles((theme) => ({
