@@ -62,7 +62,10 @@ const Reaction = ({ reactions, type, id, postid }) => {
     <>
       <ReactImg
         src={reactClicked.liked ? LikedImg : UnlikedImg}
-        onClick={handleLike}
+        onClick={(event) => {
+          event.stopPropagation();
+          handleLike();
+        }}
         clicked={reactClicked.liked}
         postid={postid}
       />

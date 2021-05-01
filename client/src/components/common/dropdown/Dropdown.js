@@ -14,7 +14,10 @@ const Dropdown = (props) => {
   return (
     <ClickAway
       style={{ display: "inline-block", height: "fit-content" }}
-      onClick={() => toggle(!open)}
+      onClick={(event) => {
+        event.stopPropagation();
+        toggle(!open);
+      }}
       onClickAway={() => toggle(false)}
       closeCallback={props.closeCallback}
       contents={
@@ -25,7 +28,9 @@ const Dropdown = (props) => {
               <Options {...props} open={open}>
                 {props.options.map((option, index) => (
                   <DropdownOption
-                    onClick={option.onClick}
+                    onClick={(event) => {
+                      option.onClick();
+                    }}
                     key={option.key || index}
                     extras={option.extra}
                   >
