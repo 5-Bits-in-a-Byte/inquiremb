@@ -119,6 +119,7 @@ const GenerateUserList = (users, roles) => {
     return (
       <UserPanel
         key={index}
+        userId={user.userId}
         userName={user.userName}
         userImg={user.userImg}
         userRole={userRole}

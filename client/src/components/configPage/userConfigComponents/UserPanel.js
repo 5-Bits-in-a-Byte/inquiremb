@@ -1,33 +1,54 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import Button from "../../common/Button";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Arrow from "../../../imgs/carrot-down-secondary.svg";
-import { UserContext } from "../../context/UserProvider";
+import LazyFetch from "../../common/requests/LazyFetch";
 
 // Hardcoded dummy values
 // Ultimately the goal is to pull these from the permissions object in the user context
 const UserPerms = { canBan: true, canRemove: true };
 
 /* Handle Role selection in the dropdown */
-const GenerateRoleOptions = (roles) => {
+const GenerateRoleOptions = (roles, courseId, userId) => {
   return roles.map((role) => ({
     onClick: () => {
-      alert(role.name + " Role selected");
+      LazyFetch({
+        type: "put",
+        endpoint: "/api/courses/" + courseId + "/users",
+        data: {
+          role: role._id,
+          user: userId,
+        },
+        onSuccess: (data) => {
+          console.log("Successful PUT (UserPanel). Status: ", data.status);
+          alert(role.name + " Role selected and updated.");
+        },
+        onFailure: (err) => {
+          console.log("ERROR: failed PUT (UserPanel): ", err.response);
+          alert("There was an error updating the role for this user.");
+        },
+      });
     },
     label: role.name,
   }));
 };
 
-const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
-  //const user = useContext(UserContext);
+const UserPanel = ({
+  userName,
+  userRole,
+  userImg,
+  userId,
+  allRoles,
+  ...props
+}) => {
+  const { courseId } = useParams();
 
-  // console.log("All Roles: ", allRoles);
-
-  let roleOptionsState =
+  let realRoleOptions =
     allRoles != null
-      ? GenerateRoleOptions(allRoles)
+      ? GenerateRoleOptions(allRoles, courseId, userId)
       : [
           {
             onClick: () => {
@@ -36,6 +57,8 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
             label: "NULL",
           },
         ];
+
+  const [roleOptions, setRoleOptions] = useState(realRoleOptions);
 
   return (
     <UserPanelWrapper>
@@ -46,7 +69,7 @@ const UserPanel = ({ userName, userRole, userImg, allRoles, ...props }) => {
       <UserRoleWrapper
         borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
       >
-        <Dropdown options={roleOptionsState}>
+        <Dropdown options={roleOptions}>
           <DropdownWrapper className="flex-row align">
             <RoleDisplay className="font-regular" style={{ cursor: `pointer` }}>
               {userRole.name}
