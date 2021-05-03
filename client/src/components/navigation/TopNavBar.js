@@ -48,7 +48,7 @@ const TopNavBar = () => {
         </Link>
       </Wrapper>
       <Wrapper style={{ display: "flex", justifyContent: "center" }}>
-        {courseId ? (
+        {false ? (
           <SearchBar placeholder="Search for a post or class" />
         ) : (
           <Dropdown options={options}>
