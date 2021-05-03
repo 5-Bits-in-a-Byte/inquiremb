@@ -1,5 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo, useRef } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
+import {
+  UserRoleContext,
+  UserRoleDispatchContext,
+} from "../context/UserRoleProvider";
 import styled from "styled-components";
 import Post from "../posts/Post";
 import Sidebar from "../posts/Sidebar";
@@ -9,24 +13,67 @@ import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
 
-const renderComments = (data) => {
+const renderComments = (data, userRole) => {
   let ret = [];
   if (data) {
     data.forEach((comment) => {
-      ret.push(<Comment comment={comment} key={comment._id} />);
+      ret.push(
+        <Comment comment={comment} key={comment._id} userRole={userRole} />
+      );
     });
   }
   return ret;
 };
 
 const CommentView = ({ classroomName }) => {
+  const { courseId, postid } = useParams();
+  // var roleAfterGetRequest = null;
+
+  // LazyFetch({
+  //   type: "get",
+  //   endpoint: "/api/userRole/" + courseId,
+  //   onSuccess: (role) => {
+  //     if (role) {
+  //       roleAfterGetRequest = role;
+  //     }
+  //   },
+  //   onFailure: (err) => {
+  //     console.log(
+  //       "Error getting user role object from {" + courseId + "}:",
+  //       err
+  //     );
+  //   },
+  // });
+
   const user = useContext(UserContext);
   const history = useHistory();
   // Stores comments fetched live from socketio
   const [newComments, setNewComments] = useState({ draft: false });
   const [commentData, setCommentData] = useState([]);
-  const { courseId, postid } = useParams();
   const [highlightedSection, setHighlightedSection] = useState("");
+
+  const setUserRole = useContext(UserRoleDispatchContext);
+  const userRole = useContext(UserRoleContext);
+  console.log("Comment View Role Object: ", userRole);
+
+  const attemptGetUserRole = (courseId) => {
+    LazyFetch({
+      type: "get",
+      endpoint: "/api/userRole/" + courseId,
+      onSuccess: (role) => {
+        if (role) {
+          setUserRole(role);
+        }
+      },
+      onFailure: (err) => {
+        console.log(
+          "Error getting user role object from {" + courseId + "}:",
+          err
+        );
+        setUserRole(null);
+      },
+    });
+  };
 
   const redirect = (sectionFilter) => {
     history.push({
@@ -51,7 +98,7 @@ const CommentView = ({ classroomName }) => {
         endpoint:
           "/api/courses/" + courseId + "/posts/" + post._id + "/comments",
         onSuccess: (data) => {
-          setCommentData([...renderComments(data)]);
+          setCommentData([...renderComments(data, userRole)]);
         },
       });
     }
@@ -73,7 +120,7 @@ const CommentView = ({ classroomName }) => {
         // console.log(commentData);
         setCommentData([
           ...commentData,
-          <Comment comment={comment} key={comment._id} />,
+          <Comment comment={comment} key={comment._id} userRole={userRole} />,
         ]);
       }
     });
@@ -87,13 +134,22 @@ const CommentView = ({ classroomName }) => {
         // console.log(allComments[i], "in for loop");
         if (allComments[i].props.comment._id === comment._id) {
           // console.log("found a match");
-          allComments[i] = <Comment comment={comment} key={comment._id} />;
+          allComments[i] = (
+            <Comment comment={comment} key={comment._id} userRole={userRole} />
+          );
           break;
         }
       }
       setCommentData(allComments);
     });
   }, [commentData]);
+
+  useEffect(() => {
+    // console.log("rendered");
+    if (!userRole) {
+      attemptGetUserRole(courseId);
+    }
+  }, [userRole]);
 
   const draftNewComment = () => {
     setNewComments({
@@ -115,7 +171,7 @@ const CommentView = ({ classroomName }) => {
           setNewComments({ draft: false });
           setCommentData([
             ...commentData,
-            <Comment comment={data} key={data._id} />,
+            <Comment comment={data} key={data._id} userRole={userRole} />,
           ]);
         },
       });
@@ -139,6 +195,7 @@ const CommentView = ({ classroomName }) => {
         isDraft={true}
         callback={finishComment}
         key="draft"
+        userRole={userRole}
       />
     );
   }

@@ -12,7 +12,8 @@ import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 import { UserContext } from "../context/UserProvider";
 
-const Comment = ({ comment, isDraft, callback }) => {
+const Comment = ({ comment, isDraft, callback, userRole }) => {
+  console.log("Comment Role Object: ", userRole);
   const { courseId, postid } = useParams();
   const [content, setContent] = useState("");
   const user = useContext(UserContext);
@@ -46,7 +47,12 @@ const Comment = ({ comment, isDraft, callback }) => {
           toggleReply(false);
           setNewReplies([
             ...newReplies,
-            <CommentReply reply={data} key={data._id} postid={postid} />,
+            <CommentReply
+              reply={data}
+              key={data._id}
+              postid={postid}
+              userRole={userRole}
+            />,
           ]);
         },
       });
@@ -68,6 +74,7 @@ const Comment = ({ comment, isDraft, callback }) => {
           postid={postid}
           key={reply._id}
           commentid={comment._id}
+          userRole={userRole}
         />
       );
     });
@@ -78,7 +85,13 @@ const Comment = ({ comment, isDraft, callback }) => {
   // If the user clicks reply, insert a drafted reply
   if (isReplying) {
     replies.push(
-      <CommentReply isDraft submitReply={submitReply} postid={postid} key={0} />
+      <CommentReply
+        isDraft
+        submitReply={submitReply}
+        postid={postid}
+        key={0}
+        userRole={userRole}
+      />
     );
   }
 

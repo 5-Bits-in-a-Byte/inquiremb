@@ -10,7 +10,15 @@ import Dropdown from "../common/dropdown/Dropdown";
 import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 
-const CommentReply = ({ reply, isDraft, submitReply, postid, commentid }) => {
+const CommentReply = ({
+  reply,
+  isDraft,
+  submitReply,
+  postid,
+  commentid,
+  userRole,
+}) => {
+  console.log("Comment Reply Role Object: ", userRole);
   const user = useContext(UserContext);
   const [draft, setDraft] = useState("");
   const { courseId } = useParams();
