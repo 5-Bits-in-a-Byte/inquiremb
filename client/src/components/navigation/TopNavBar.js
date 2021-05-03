@@ -99,7 +99,7 @@ const LogoImg = styled.img`
 const DropdownSelector = styled.div`
   background-color: #e7e7e7;
   width: 100vw;
-  height: 5vh;
+  height: 2rem;
   display: flex;
   align-items: center;
   border-radius: 0.25em;
