@@ -10,10 +10,24 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
       <FlexWrapper>
         <Wrapper>
           <PostFeedWrapper>
-            <PostWrapper />
-            <PostWrapper />
-            <PostWrapper />
-            <PostWrapper />
+            <PostWrapper
+              contentObject={{ postType: "Question" }}
+              // isRead
+              postType={"Question"}
+              accentColor={"#4a86fa"}
+            />
+            <PostWrapper
+              contentObject={{ postType: "Question" }}
+              // isRead
+              postType={"Announcement"}
+              accentColor={"#FA6A4A"}
+            />
+            <PostWrapper
+              // contentObject={{ postType: "Question" }}
+              // isRead
+              postType={"Poll"}
+              accentColor={"#4CAF50"}
+            />
           </PostFeedWrapper>
           <OptionsPanel userRole={false} />
         </Wrapper>
@@ -59,7 +73,7 @@ const PostFeedWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 1200px;
+  width: 100%;
   padding: 1rem;
   /* border: 1px solid green; */
 `;
