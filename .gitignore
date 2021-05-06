@@ -117,3 +117,6 @@ server/test-output.xml
 
 #vscode
 **.vscode
+
+run-dev-client.sh
+run-dev-server.sh
