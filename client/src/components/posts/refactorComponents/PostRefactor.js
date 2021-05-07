@@ -3,21 +3,32 @@ import styled, { css } from "styled-components";
 import Options from "../Options";
 import OptionsPanel from "./OptionsPanel";
 import PostWrapper from "./PostWrapper";
+import Poll from "react-polls";
+
+const pollAnswers = [
+  { option: "Yes", votes: 8 },
+  { option: "No", votes: 2 },
+];
 
 const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
+  const [pollAns, setPollAns] = useState(pollAnswers);
+
+  const handleVote = (voteAnswer) => {
+    var pa = pollAns;
+    const newPollAnswers = pa.map((answer) => {
+      if (answer.option === voteAnswer) answer.votes++;
+      return answer;
+    });
+    setPollAns(newPollAnswers);
+  };
+
   return (
     <>
       <FlexWrapper>
         <Wrapper>
           <PostFeedWrapper>
             <PostWrapper
-              contentObject={{ postType: "Question" }}
-              // isRead
-              postType={"Question"}
-              accentColor={"#4a86fa"}
-            />
-            <PostWrapper
-              contentObject={{ postType: "Question" }}
+              // contentObject={{ postType: "Question" }}
               // isRead
               postType={"Announcement"}
               accentColor={"#FA6A4A"}
@@ -25,8 +36,26 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
             <PostWrapper
               // contentObject={{ postType: "Question" }}
               // isRead
+              postType={"Question"}
+              accentColor={"#4a86fa"}
+            />
+            <PostWrapper
+              contentObject={{ postType: "Question" }}
+              // isRead
               postType={"Poll"}
               accentColor={"#4CAF50"}
+              content={
+                <Poll
+                  question={"Test Question?"}
+                  answers={pollAns}
+                  onVote={handleVote}
+                  noStorage
+                  // customStyles={{
+                  //   align: "center",
+                  //   theme: "cyan",
+                  // }}
+                />
+              }
             />
           </PostFeedWrapper>
           <OptionsPanel userRole={false} />

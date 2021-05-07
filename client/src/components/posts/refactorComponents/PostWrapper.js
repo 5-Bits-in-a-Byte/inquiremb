@@ -26,6 +26,7 @@ const PostWrapper = ({
   accentColor,
   postType,
   isRead,
+  content,
   ...props
 }) => {
   const dropdownOptions = [
@@ -40,17 +41,17 @@ const PostWrapper = ({
           isRead={isRead}
           accentColor={accentColor ? accentColor : "#4a86fa"}
         />
-        <PostTitle>This is the post title</PostTitle>
         <PostFlag accentColor={accentColor ? accentColor : "#4a86fa"}>
           {postType ? postType : "Question"}
         </PostFlag>
+        <PostTitle>This is the post title</PostTitle>
         <DropDownContainer>
           <Dropdown options={dropdownOptions}>
             <Icon src={OptionDots} style={{ cursor: "pointer" }} />
           </Dropdown>
         </DropDownContainer>
       </HeaderContentWrapper>
-      {contentObject ? <ContentWrapper /> : <></>}
+      {contentObject ? <ContentWrapper>{content}</ContentWrapper> : <></>}
       <HRSeperator />
       <FooterContentWrapper>THIS WILL HOLD FOOTER CONTENT</FooterContentWrapper>
     </Wrapper>
@@ -99,7 +100,7 @@ const CircleIcon = styled.div`
 `;
 
 const PostTitle = styled.h1`
-  margin-left: 1em;
+  /* margin-left: 1em; */
   padding: 5px;
   font-size: 18px;
 `;
@@ -128,7 +129,7 @@ const DropDownContainer = styled.div`
 
 const ContentWrapper = styled.div`
   padding: 5px;
-  height: 145px;
+  min-height: 145px;
   border: 2px solid #e7e7e7;
   border-radius: 5px;
 `;
