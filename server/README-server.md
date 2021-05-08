@@ -94,7 +94,7 @@ This component handles setting up all of our MongoDB models so that each collect
 }
 ```
 
-### New Post Model: Posts
+### New Post Model: Polls
 
 ```json
 {
@@ -108,16 +108,21 @@ This component handles setting up all of our MongoDB models so that each collect
     "picture": "profile-picture-url.com"
   },
   "title": "example",
-  "type": "poll",
-  "content": {"fields":
-                {"field1Id": { "votes": 3, 
-                              "users": [userIds....],
-                              "label": "Cancel final"},
-                "field2Id": { "users": [userIds....], // Delete users before sending?
-                              "votes": 3,
-                              "label": "Make final harder"}
-                }
-              },
+  "content": {
+    "type": "poll",
+    "fields": {
+        "Cancel final": {
+            "votes": 3,
+            "users": [userIds....],
+            "option": "Cancel final"
+        },
+        "Make final harder": {
+            "users": [userIds....], // Delete users before sending?
+            "votes": 3,
+            "option": "Make final harder"
+        }
+    }
+  },
   "isInstructor": false,
   "isPinned": false,
   "isPrivate": false,
@@ -134,20 +139,19 @@ This component handles setting up all of our MongoDB models so that each collect
 ### New Post Content Model: Question
 
 ```json
-
-  {"text": "????????????????????"
-    "other_data": true,
-  }
-
+{
+  "type": "question",
+  "text": "????????????????????"
+}
 ```
-### New Post Content Model: Note
+
+### New Post Content Model: Announcement
 
 ```json
-
-  {"text": "????????????????????"
-    "other_data": true,
-  }
-
+{
+  "type": "announcement",
+  "text": "????????????????????"
+}
 ```
 
 ### Comment Model
@@ -306,4 +310,10 @@ This component handles setting up all of our MongoDB models so that each collect
     }
   ]
 }
+```
+
+### POST get request
+
+```
+[full of posts] (polls will have users omitted)
 ```
