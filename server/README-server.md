@@ -94,6 +94,62 @@ This component handles setting up all of our MongoDB models so that each collect
 }
 ```
 
+### New Post Model: Posts
+
+```json
+{
+  "_id": "oasif-jo12j-asdjf-asdf9",
+  "courseId": "vonqJNDJ07yPyiagvKlR",
+  "postedBy": {
+    "first": "Alec",
+    "last": "Springel",
+    "_id": "oasif-jo12j-asdjf-asdf9",
+    "anonymous": false,
+    "picture": "profile-picture-url.com"
+  },
+  "title": "example",
+  "type": "poll",
+  "content": {"fields":
+                {"field1Id": { "votes": 3, 
+                              "users": [userIds....],
+                              "label": "Cancel final"},
+                "field2Id": { "users": [userIds....], // Delete users before sending?
+                              "votes": 3,
+                              "label": "Make final harder"}
+                }
+              },
+  "isInstructor": false,
+  "isPinned": false,
+  "isPrivate": false,
+  "instructorCommented": false,
+  "reactions": {
+    "likes": ["userid123"]
+  },
+  "comments": 3,
+  "createdDate": "2021-03-08 17:46:53.289000",
+  "updatedDate": "2021-03-08 18:26:33.128000"
+}
+```
+
+### New Post Content Model: Question
+
+```json
+
+  {"text": "????????????????????"
+    "other_data": true,
+  }
+
+```
+### New Post Content Model: Note
+
+```json
+
+  {"text": "????????????????????"
+    "other_data": true,
+  }
+
+```
+
 ### Comment Model
 
 ```json
