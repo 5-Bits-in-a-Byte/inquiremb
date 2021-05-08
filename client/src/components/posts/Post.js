@@ -278,6 +278,7 @@ const HRStyle = {
 };
 
 const PostWrapper = styled.div`
+  cursor: pointer;
   position: relative;
   padding: 23px 30px;
   display: flex;

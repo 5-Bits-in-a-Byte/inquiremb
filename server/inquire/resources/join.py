@@ -154,11 +154,15 @@ class Join(Resource):
             color = pick_color(DEFAULT_COLORS)
 
             user_course = UserCourse(
-                courseId=args['courseId'], courseName=course_to_add.course, color=color)
+                courseId=args['courseId'], courseName=course_to_add.course, color=color, role=course_to_add.defaultRole)
 
             current_user.courses.append(user_course)
 
             current_user.save()
+
+            course_to_add.roles[course_to_add.defaultRole].append(current_user._id)
+
+            course_to_add.save()
 
             result = user_course.to_son()
 

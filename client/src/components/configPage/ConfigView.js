@@ -72,6 +72,8 @@ const ConfigView = ({ props }) => {
       onSuccess: (role) => {
         if (role) {
           setUserRole(role);
+        } else {
+          console.log("Err: role is null / none / etc.");
         }
       },
       onFailure: (err) => {
@@ -85,9 +87,28 @@ const ConfigView = ({ props }) => {
   };
 
   // State ------------------------------------------------------
-  // console.log("CourseRoles: ", fetchedCourseRoles);
 
-  const [courseUsers, setCourseUsers] = useState(dummy_users);
+  const [courseUsers, setCourseUsers] = useState([
+    {
+      userName: "NULL USER",
+      userIcon: TempIcon,
+    },
+  ]);
+
+  // const [courseUsers, setCourseUsers] = useState(dummy_users);
+
+  const attemptGetCourseUsers = (courseId) => {
+    LazyFetch({
+      type: "get",
+      endpoint: "/api/courses/" + courseId + "/users",
+      onSuccess: (data) => {
+        setCourseUsers(data.data);
+      },
+      onFailure: (err) => {
+        console.log("Error: Failed GET course users. ", err.response);
+      },
+    });
+  };
 
   const [roleIdCounter, setRoleIdCounter] = useState(1);
   const [courseRoles, setCourseRoles] = useState(null);
@@ -99,6 +120,7 @@ const ConfigView = ({ props }) => {
       onSuccess: (roles) => {
         console.log("Successfully fetched Course Roles: ", roles);
         setCourseRoles(roles);
+        console.log(roles);
       },
       onFailure: (err) => {
         console.log("Failed to fetch Course Roles. ", err);
@@ -115,6 +137,11 @@ const ConfigView = ({ props }) => {
     if (!courseRoles) {
       attemptGetCourseRoles(courseId);
     }
+
+    if (courseUsers[0].userName == "NULL USER") {
+      attemptGetCourseUsers(courseId);
+    }
+
     setTimeout(() => {
       setLoading(false);
     }, 650);

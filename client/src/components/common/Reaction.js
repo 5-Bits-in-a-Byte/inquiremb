@@ -62,7 +62,10 @@ const Reaction = ({ reactions, type, id, postid }) => {
     <>
       <ReactImg
         src={reactClicked.liked ? LikedImg : UnlikedImg}
-        onClick={handleLike}
+        onClick={(event) => {
+          event.stopPropagation();
+          handleLike();
+        }}
         clicked={reactClicked.liked}
         postid={postid}
       />
@@ -80,7 +83,8 @@ const ReactImg = styled.img`
   margin-right: 8px;
   margin-left: 20px;
   user-select: none;
-  cursor: ${(props) => (props.postid ? "pointer" : "default")};
+  /* cursor: ${(props) => (props.postid ? "pointer" : "default")}; */
+  cursor: pointer;
   opacity: ${(props) => (!props.clicked && "100%") || "100%"};
 `;
 

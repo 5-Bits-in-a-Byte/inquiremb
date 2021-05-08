@@ -109,17 +109,24 @@ const GenerateRoleList = (roles, setRoles, userList, setUserList) => {
 const GenerateUserList = (users, roles) => {
   var test_simple_role = { roleName: "Regular User", roleColor: "#55cc88" };
 
-  // if (roles[users.])
+  var userRole = { name: "null", roleColor: "#e7e7e7" };
 
-  return users.map((user, index) => (
-    <UserPanel
-      key={index}
-      userName={user.userName}
-      userImg={user.userImg}
-      userRole={test_simple_role}
-      allRoles={roles}
-    />
-  ));
+  return users.map((user, index) => {
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i]._id == user.role) userRole = roles[i];
+    }
+
+    return (
+      <UserPanel
+        key={index}
+        userId={user.userId}
+        userName={user.userName}
+        userImg={user.userImg}
+        userRole={userRole}
+        allRoles={roles}
+      />
+    );
+  });
 };
 
 const ConfigPanel = ({
@@ -197,12 +204,6 @@ const ConfigPanel = ({
           + Add a New Role
         </Button>
       </ConfigPanelGroup>
-      <ConfigPanelGroup
-        panelHeader={"Assign roles to participants of this course here."}
-      >
-        <UserContainer>{userList}</UserContainer>
-      </ConfigPanelGroup>
-
       <ButtonContainer>
         <Button
           primary
@@ -230,7 +231,7 @@ const ConfigPanel = ({
                 alert("Changes saved successfully.");
               },
               onFailure: (err) => {
-                console.log("Failed PUT Roles.", err);
+                console.log("Failed PUT Roles. ", err?.response);
                 alert("Error: Changes not saved. Please try again.");
               },
             });
@@ -239,6 +240,11 @@ const ConfigPanel = ({
           Confirm
         </Button>
       </ButtonContainer>
+      <ConfigPanelGroup
+        panelHeader={"Assign roles to participants of this course here."}
+      >
+        <UserContainer>{userList}</UserContainer>
+      </ConfigPanelGroup>
     </PanelWrapper>
   );
 };
@@ -266,8 +272,9 @@ const ButtonContainer = styled.div`
 `;
 
 const UserContainer = styled.div`
-  height: 300px;
   width: 100%;
+  min-height: 150px;
+  max-height: 300px;
   margin: 1rem 0;
   overflow: auto;
 `;
