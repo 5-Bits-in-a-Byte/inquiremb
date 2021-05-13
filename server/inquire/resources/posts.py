@@ -53,7 +53,7 @@ class Posts(Resource):
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('title')
-        parser.add_argument('content')
+        parser.add_argument('content', type=dict)
         parser.add_argument('isPrivate', type=bool)
         parser.add_argument('isAnonymous', type=bool)
         args = parser.parse_args()
@@ -63,9 +63,7 @@ class Posts(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
-        
-        # Controls whether
-        # FIX ME
+        # Controls whether the post should be highlighted orange for isntructor
         highlighted = current_user.permissions["admin"]["highlightPost"]
 
         # Adding user info to dict
@@ -192,7 +190,7 @@ class Posts(Resource):
         result = [self.serialize(post) for post in query]
 
         return result, 200
-    
+
     @permission_layer(required_permissions=["delete-postComment"])
     def delete(self, courseId=None):
         """
@@ -343,17 +341,43 @@ class Posts(Resource):
         else:
             raise Exception(f'No post with id')
 
+    # def validate_post(self, args):
+    #     errors = []
+    #     if args.title is None:
+    #         errors.append("Please give your message a title")
+    #     if args.content is None:
+    #         errors.append("Please give your message content")
+    #     return errors
+
     def validate_post(self, args):
         errors = []
+        # Make sure title is provided
         if args.title is None:
             errors.append("Please give your message a title")
+        # Make sure the content field is provided (must return if it's not)
         if args.content is None:
-            errors.append("Please give your message content")
+            errors.append("Please give your post content")
+            return errors
+        # Make sure type is provided (must return if it's not)
+        if "type" not in args.content or args.content["type"] is None:
+            errors.append("Please provide a type for the post")
+            return errors
+        # Validate the type. Types include question, announcement, and poll.
+        if not (args.content["type"] == "question" or args.content["type"] == "announcement" or args.content["type"] == "poll"):
+            errors.append(
+                "Invalid type provided. Valid types are: question, announcement, or poll.")
+        # Make sure text field is provided for questions and announcements
+        if (args.content["type"] == "question" or args.content["type"] == "announcement") and ("text" not in args.content or args.content["text"] is None or args.content["text"] == ""):
+            errors.append("Please give your post message content")
+        # Make sure fields dict is provided
+        if args.content["type"] == "poll" and ("fields" not in args.content or args.content["fields"] is None):
+            errors.append("Please provide options for your poll")
         return errors
 
     def serialize(self, post):
         # Get the JSON format
         result = post.to_son()
+        print("result:", result)
 
         # Convert datetime to a string
         date = str(result['createdDate'])

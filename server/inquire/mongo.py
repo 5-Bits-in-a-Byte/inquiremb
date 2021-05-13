@@ -20,7 +20,8 @@ import datetime
 from bson.objectid import ObjectId
 import os
 import sys
-script_dir = os.path.dirname(__file__) 
+script_dir = os.path.dirname(__file__)
+
 
 class User(MongoModel):
     _id = fields.CharField(primary_key=True)
@@ -31,7 +32,6 @@ class User(MongoModel):
     picture = fields.URLField()
     courses = fields.EmbeddedDocumentListField(
         'UserCourse', blank=True, required=True)
-
 
     def get_course(self, courseId):
         for course in self.courses:
@@ -71,7 +71,7 @@ class Post(MongoModel):
     courseId = fields.CharField()
     postedBy = fields.DictField()
     title = fields.CharField(required=True)
-    content = fields.CharField(required=True)
+    content = fields.DictField(required=True)
     isInstructor = fields.BooleanField(default=False)
     isPinned = fields.BooleanField(default=False)
     isPrivate = fields.BooleanField()
@@ -126,6 +126,7 @@ class Course(MongoModel):
 
         indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
 
+
 def role_validator(d, example=None):
     """For use with the Roles Model"""
     # Loop through each field
@@ -145,12 +146,12 @@ def role_validator(d, example=None):
 
     return True
 
+
 class Role(MongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
     name = fields.CharField(required=True)
     permissions = fields.DictField(default=False, validators=[role_validator])
+
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
-
-
