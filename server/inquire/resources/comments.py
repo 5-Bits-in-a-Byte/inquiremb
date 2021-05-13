@@ -14,6 +14,7 @@ from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
 from inquire.socketio_app import io
 
+import datetime
 
 class Comments(Resource):
     @permission_layer(require_joined_course=True)
@@ -42,6 +43,10 @@ class Comments(Resource):
         post = self.retrieve_post(postId)
         if post is None:
             return abort(400, errors=["Bad post id"])
+        # Marking that the current_user just viewed this post
+        if (course := current_user.get_course(courseId)) != None:
+            course.viewed[postId] = datetime.datetime.now()
+            current_user.save()
 
         return [self.serialize(comment) for comment in Comment.objects.raw({'postId': postId})]
 

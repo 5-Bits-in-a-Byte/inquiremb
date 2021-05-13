@@ -53,6 +53,7 @@ class UserCourse(EmbeddedMongoModel):
     nickname = fields.CharField(blank=True)
     color = fields.CharField(blank=True)
     role = fields.CharField(required=True)
+    viewed = fields.DictField(default={})
 
 
 '''

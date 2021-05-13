@@ -7,6 +7,7 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
+import datetime
 from flask import jsonify, request, current_app
 from flask_restful import reqparse, Resource
 from inquire.auth import current_user, permission_layer
@@ -83,6 +84,13 @@ class Posts(Resource):
 
         # Get the JSON format
         result = self.serialize(post)
+        
+        # Marking that the creator of the post has viewed their own post
+        if (course := current_user.get_course(courseId)) != None:
+            course.viewed[result["_id"]] = datetime.datetime.now()
+            current_user.save()
+
+
         if not result['isPrivate'] and current_app.config['include_socketio']:
             current_app.socketio.emit('Post/create', result, room=courseId)
         return result, 200
@@ -190,6 +198,11 @@ class Posts(Resource):
 
         # Get the json for all the posts we want to display
         result = [self.serialize(post) for post in query]
+        # Setting "read" property of each post based on UserCourse.viewed dict
+        if (course := current_user.get_course(courseId)) !=None:
+            viewed = course.viewed
+            for post in result:
+              self.set_read(post, viewed)
 
         return result, 200
     
@@ -362,3 +375,20 @@ class Posts(Resource):
         date = str(result['updatedDate'])
         result['updatedDate'] = date
         return result
+
+    def set_read(self, post, viewed):
+        """Modifies a dictionary representing a post by setting a new key-value
+        pair of either "read": True or "read": False depending on the contents
+        of the viewed dict.
+
+        Args:
+            post (dict): Dictionary representing a post
+            viewed (dict): Dictionary representing the last time a user viewed the comments on a post.
+            Keys are post id strings, values are datetime objects. If post id is not a key in the dict, 
+            the user has never viewed the post.
+        """
+        post_id = post["_id"]
+        if post_id in viewed and viewed[post_id] > post['updatedDate']:
+            post['read'] = True
+        else:
+            post['read'] = False
