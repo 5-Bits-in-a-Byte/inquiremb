@@ -149,32 +149,50 @@ class Posts(Resource):
             queryParams["isInstructor"] = True
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
+
         # Filter by 'me'
         elif filterby == 'me':
             queryParams["postedBy._id"] = {
                 '$in': [current_user._id, current_user.anonymousId]}
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
+
         # Filter by 'myupvoted'
         elif filterby == 'myupvoted':
             queryParams["reactions.likes"] = current_user._id
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
+
         # Filter by 'question'
         elif filterby == 'question':
+            # Check if the user can see private posts
+            if not user_perms["privacy"]["private"]:
+                queryParams['$or'] = [{'isPrivate': False}, {'postedBy._id': {
+                    '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams["content.type"] = "question"
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
+
         # Filter by 'announcement'
         elif filterby == 'announcement':
+            # Check if the user can see private posts
+            if not user_perms["privacy"]["private"]:
+                queryParams['$or'] = [{'isPrivate': False}, {'postedBy._id': {
+                    '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams["content.type"] = "announcement"
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
+
         # Filter by 'poll'
         elif filterby == 'poll':
+            # Check if the user can see private posts
+            if not user_perms["privacy"]["private"]:
+                queryParams['$or'] = [{'isPrivate': False}, {'postedBy._id': {
+                    '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams["content.type"] = "poll"
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
+
         # If the current user can see private posts and there's no search
         elif user_perms["privacy"]["private"] and (req is None):
             query = Post.objects.raw(
