@@ -160,6 +160,21 @@ class Posts(Resource):
             queryParams["reactions.likes"] = current_user._id
             query = Post.objects.raw(
                 queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
+        # Filter by 'question'
+        elif filterby == 'question':
+            queryParams["content.type"] = "question"
+            query = Post.objects.raw(queryParams).order_by(
+                [("isPinned", -1), ("createdDate", sort_date)])
+        # Filter by 'announcement'
+        elif filterby == 'announcement':
+            queryParams["content.type"] = "announcement"
+            query = Post.objects.raw(queryParams).order_by(
+                [("isPinned", -1), ("createdDate", sort_date)])
+        # Filter by 'poll'
+        elif filterby == 'poll':
+            queryParams["content.type"] = "poll"
+            query = Post.objects.raw(queryParams).order_by(
+                [("isPinned", -1), ("createdDate", sort_date)])
         # If the current user can see private posts and there's no search
         elif user_perms["privacy"]["private"] and (req is None):
             query = Post.objects.raw(
