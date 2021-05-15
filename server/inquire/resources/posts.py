@@ -58,6 +58,13 @@ class Posts(Resource):
         parser.add_argument('isAnonymous', type=bool)
         args = parser.parse_args()
 
+        # How polls look being sent from frontend
+        # {
+        #   "type": "blah",
+        #   "question": "blah blah",
+        #   "fields": ["blah", "blah", "blah"]
+        # }
+
         # Validate the args
         errors = self.validate_post(args)
         if(bool(errors)):
@@ -80,6 +87,7 @@ class Posts(Resource):
                     isPrivate=args.isPrivate, content=args.content, isInstructor=highlighted).save()
 
         # Get the JSON format
+        # FIXME: remove users list from polls
         result = self.serialize(post)
         if not result['isPrivate'] and current_app.config['include_socketio']:
             current_app.socketio.emit('Post/create', result, room=courseId)
@@ -277,33 +285,28 @@ class Posts(Resource):
         args = parser.parse_args()
 
         # Get the post you want to delete
-        query = Post.objects.raw({'_id': args['_id']})
-        post = query.first()
-
-        # Count how many posts had same id for error checking and handle appropriately
-        count = query.count()
-
-        if count > 1:
-            raise Exception(
-                f'Duplicate post detected, multiple posts in database with id {_id}')
-        elif count == 1:
-            # Permission check
-            # FIX ME: Switch to using something other than "admin-configure" as the admin permission for deleting posts
-            if current_user._id == post.postedBy['_id'] or current_user.anonymousId == post.postedBy['_id'] or current_user.permissions["admin"]["configure"]:
-                # Get all comments associated with a post
-                comment_query = Comment.objects.raw({"postId": str(post._id)})
-                comments = list(comment_query)
-                # Loop throught and delete all associated comments
-                for comment in comments:
-                    post.comments -= 1
-                    comment.delete()
-                # Delete the post
-                post.delete()
-                return {'deleted': True}, 200
-            else:
-                return {'deleted': False}, 403
-        else:
+        try:
+            post = Post.objects.get({'_id': args['_id']})
+        except Post.DoesNotExist:
             return {'deleted': False, 'errors': f"No post with id {args['_id']}"}, 403
+        except Post.MultipleObjectsReturned:
+            return {'deleted': False, 'errors': f"Duplicate post detected, multiple posts in database with id {args['_id']}"}, 400
+
+        # Permission check
+        # FIX ME: Switch to using something other than "admin-configure" as the admin permission for deleting posts
+        if current_user._id == post.postedBy['_id'] or current_user.anonymousId == post.postedBy['_id'] or current_user.permissions["admin"]["configure"]:
+            # Get all comments associated with a post
+            comment_query = Comment.objects.raw({"postId": str(post._id)})
+            comments = list(comment_query)
+            # Loop throught and delete all associated comments
+            for comment in comments:
+                post.comments -= 1
+                comment.delete()
+            # Delete the post
+            post.delete()
+            return {'deleted': True}, 200
+        else:
+            return {'deleted': False}, 403
 
     @permission_layer(required_permissions=["edit-postComment"])
     def put(self, courseId=None):
@@ -350,37 +353,25 @@ class Posts(Resource):
         if(bool(errors)):
             return {"errors": errors}, 400
 
-        # Query for the post and get the current course
-        query = Post.objects.raw({'_id': args["_id"]})
+        # Get the post you want to update
+        try:
+            post = Post.objects.get({'_id': args['_id']})
+        except Post.DoesNotExist:
+            return {'updated': False, 'errors': f"No post with id {args['_id']}"}, 403
+        except Post.MultipleObjectsReturned:
+            return {'updated': False, 'errors': f"Duplicate post detected, multiple posts in database with id {args['_id']}"}, 400
 
-        # Count how many posts had same id for error checking and handle appropriately
-        count = query.count()
-        if count > 1:
-            raise Exception(
-                f'Duplicate post detected, multiple posts in database with id {args["_id"]}')
-        elif count == 1:
-            post = query.first()
-            id_match = current_user._id == post.postedBy[
-                '_id'] or current_user.anonymousId == post.postedBy['_id']
-            if id_match:
-                post.title = args['title']
-                post.content = args['content']
-                post.updatedDate = datetime.datetime.now()
-                if current_user.permissions['participation']['pin']:
-                    post.isPinned = args['isPinned']
-                post.save()
-                result = self.serialize(post)
-                return result, 200
-        else:
-            raise Exception(f'No post with id')
-
-    # def validate_post(self, args):
-    #     errors = []
-    #     if args.title is None:
-    #         errors.append("Please give your message a title")
-    #     if args.content is None:
-    #         errors.append("Please give your message content")
-    #     return errors
+        id_match = current_user._id == post.postedBy[
+            '_id'] or current_user.anonymousId == post.postedBy['_id']
+        if id_match:
+            post.title = args['title']
+            post.content = args['content']
+            post.updatedDate = datetime.datetime.now()
+            if current_user.permissions['participation']['pin']:
+                post.isPinned = args['isPinned']
+            post.save()
+            result = self.serialize(post)
+            return result, 200
 
     def validate_post(self, args):
         errors = []
