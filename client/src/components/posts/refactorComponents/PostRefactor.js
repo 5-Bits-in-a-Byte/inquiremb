@@ -4,6 +4,8 @@ import Options from "../Options";
 import OptionsPanel from "./OptionsPanel";
 import PostWrapper from "./PostWrapper";
 import Poll from "react-polls";
+import Button from "../../common/Button";
+import LineWidthImg from "../../../imgs/line-width.svg";
 
 const pollAnswers = [
   { option: "Yes", votes: 8 },
@@ -62,10 +64,35 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
 
   return (
     <>
-      <FlexWrapper>
-        <Wrapper>
-          <PostFeedWrapper>
-            {true ? createPost("Question") : TestPosts}
+      <FlexWrapper id={"FlexWrapper"}>
+        <Wrapper id={"PostRefactorWrapper"}>
+          <PostFeedWrapper id={"PostFeedWrapper"}>
+            <CenterWrapper id={"CenterWrapper"}>
+              <SortingOptions id={"SortingOptions"}>
+                <Button
+                  secondary={true}
+                  onClick={() => {
+                    // setCondensedState(!isCondensed);
+                    alert("This feature is a work in progress.");
+                  }}
+                >
+                  <img src={LineWidthImg} />
+                </Button>
+                <Button
+                  secondary={true}
+                  style={{
+                    marginLeft: "1em",
+                    marginRight: "1em",
+                  }}
+                  onClick={() => {
+                    alert("This feature is a work in progress.");
+                  }}
+                >
+                  {"Most Recent"}
+                </Button>
+              </SortingOptions>
+              {false ? createPost("Question") : TestPosts}
+            </CenterWrapper>
           </PostFeedWrapper>
           <OptionsPanel userRole={false} />
         </Wrapper>
@@ -114,4 +141,23 @@ const PostFeedWrapper = styled.div`
   width: 100%;
   padding: 1rem;
   /* border: 1px solid green; */
+`;
+
+const CenterWrapper = styled.div`
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  padding-left: 10rem;
+  /* position: relative; */
+`;
+
+const SortingOptions = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  margin: 1.5em 0 1em 0;
+  /* position: absolute; */
+  padding-right: 0em;
 `;

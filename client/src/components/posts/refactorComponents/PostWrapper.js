@@ -70,7 +70,7 @@ const PostWrapper = ({
 export default PostWrapper;
 
 const Wrapper = styled.div`
-  margin: 1em;
+  margin: 2em;
   padding: 0.5em;
   width: 719px;
   max-width: 900px;
