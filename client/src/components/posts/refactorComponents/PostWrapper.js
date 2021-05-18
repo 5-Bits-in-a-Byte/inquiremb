@@ -4,6 +4,19 @@ import Dropdown from "../../common/dropdown/Dropdown";
 import Icon from "../../common/Icon";
 import OptionDots from "../../../imgs/option-dots.svg";
 
+const accentColor = (type) => {
+  switch (type) {
+    case "Question":
+      return "#4a86fa";
+    case "Announcement":
+      return "#FA6A4A";
+    case "Poll":
+      return "#4CAF50";
+    default:
+      return "#4a86fa";
+  }
+};
+
 const handleDelete = () => {
   // LazyFetch({
   //   type: "delete",
@@ -23,7 +36,6 @@ const handleEdit = () => {
 
 const PostWrapper = ({
   contentObject,
-  accentColor,
   postType,
   isRead,
   content,
@@ -35,13 +47,10 @@ const PostWrapper = ({
   ];
 
   return (
-    <Wrapper sideBarColor={accentColor ? accentColor : "#4a86fa"}>
+    <Wrapper sideBarColor={accentColor(postType)}>
       <HeaderContentWrapper>
-        <CircleIcon
-          isRead={isRead}
-          accentColor={accentColor ? accentColor : "#4a86fa"}
-        />
-        <PostFlag accentColor={accentColor ? accentColor : "#4a86fa"}>
+        <CircleIcon isRead={isRead} accentColor={accentColor(postType)} />
+        <PostFlag accentColor={accentColor(postType)}>
           {postType ? postType : "Question"}
         </PostFlag>
         <PostTitle>This is the post title</PostTitle>

@@ -10,6 +10,10 @@ const pollAnswers = [
   { option: "No", votes: 2 },
 ];
 
+const createPost = (postType, postData, userRole) => {
+  return <PostWrapper postType={postType} />;
+};
+
 const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
   const [pollAns, setPollAns] = useState(pollAnswers);
 
@@ -22,41 +26,46 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
     setPollAns(newPollAnswers);
   };
 
+  //#region TEST_POSTS
+  const TestPosts = (
+    <>
+      <PostWrapper
+        // contentObject={{ postType: "Question" }}
+        // isRead
+        postType={"Question"}
+      />
+      <PostWrapper
+        // contentObject={{ postType: "Question" }}
+        // isRead
+        postType={"Announcement"}
+      />
+      <PostWrapper
+        contentObject={{ postType: "Question" }}
+        // isRead
+        postType={"Poll"}
+        content={
+          <Poll
+            question={"Test Question?"}
+            answers={pollAns}
+            onVote={handleVote}
+            noStorage
+            // customStyles={{
+            //   align: "center",
+            //   theme: "cyan",
+            // }}
+          />
+        }
+      />
+    </>
+  );
+  //#endregion
+
   return (
     <>
       <FlexWrapper>
         <Wrapper>
           <PostFeedWrapper>
-            <PostWrapper
-              // contentObject={{ postType: "Question" }}
-              // isRead
-              postType={"Announcement"}
-              accentColor={"#FA6A4A"}
-            />
-            <PostWrapper
-              // contentObject={{ postType: "Question" }}
-              // isRead
-              postType={"Question"}
-              accentColor={"#4a86fa"}
-            />
-            <PostWrapper
-              contentObject={{ postType: "Question" }}
-              // isRead
-              postType={"Poll"}
-              accentColor={"#4CAF50"}
-              content={
-                <Poll
-                  question={"Test Question?"}
-                  answers={pollAns}
-                  onVote={handleVote}
-                  noStorage
-                  // customStyles={{
-                  //   align: "center",
-                  //   theme: "cyan",
-                  // }}
-                />
-              }
-            />
+            {true ? createPost("Question") : TestPosts}
           </PostFeedWrapper>
           <OptionsPanel userRole={false} />
         </Wrapper>
