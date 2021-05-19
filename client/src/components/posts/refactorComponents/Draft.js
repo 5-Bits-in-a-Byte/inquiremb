@@ -3,6 +3,9 @@ import styled, { css } from "styled-components";
 import DraftTextArea from "../../common/DraftTextArea";
 import Checkbox from "../../common/Checkbox";
 import Button from "../../common/Button";
+import LazyFetch from "../../common/requests/LazyFetch";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Icon from "../../common/Icon";
 
 const accentColor = (type) => {
@@ -22,12 +25,11 @@ const Draft = () => {
   // State and handler for drafting posts
   const [draft, setDraft] = useState({
     title: "",
-    content: "",
     isAnonymous: false,
     isPrivate: false,
   });
 
-  const [postType, setPostType] = useState("Question");
+  const [content, setContent] = useState({ type: "Question", text: "" });
 
   const handleChange = (e) => {
     setDraft({
@@ -37,22 +39,25 @@ const Draft = () => {
     });
   };
 
-  var titlePlaceholder = postType ? postType + " title" : "Post title";
+  const handleContentChange = (e) => {
+    console.log(e.blocks);
+  };
 
+  var titlePlaceholder = content.type ? content.type + " title" : "Post title";
   return (
-    <Wrapper sideBarColor={accentColor(postType)}>
+    <Wrapper sideBarColor={accentColor(content.type)}>
       <HeaderContentWrapper>
-        <CircleIcon accentColor={accentColor(postType)} />
+        <CircleIcon accentColor={accentColor(content.type)} />
         <Button
           signin
           onClick={() => {
-            setPostType("Question");
+            setContent({ ...content, type: "Question" });
           }}
           style={{ margin: "0 .5em" }}
         >
           <PostFlag
-            accentColor={accentColor(postType)}
-            selected={postType === "Question"}
+            accentColor={accentColor(content.type)}
+            selected={content.type === "Question"}
           >
             Question
           </PostFlag>
@@ -60,13 +65,13 @@ const Draft = () => {
         <Button
           signin
           onClick={() => {
-            setPostType("Announcement");
+            setContent({ ...content, type: "Announcement" });
           }}
           style={{ margin: "0 2em" }}
         >
           <PostFlag
-            accentColor={accentColor(postType)}
-            selected={postType === "Announcement"}
+            accentColor={accentColor(content.type)}
+            selected={content.type === "Announcement"}
           >
             Announcement
           </PostFlag>
@@ -78,11 +83,16 @@ const Draft = () => {
         onChange={handleChange}
         name="title"
       />
-      <DraftTextArea
-        secondary
-        placeholder="Details"
-        onChange={handleChange}
+      <Editor
         name="content"
+        editorStyle={{
+          backgroundColor: "#f1f1f1",
+          height: "100px",
+          padding: "0 8px",
+        }}
+        placeholder="Details"
+        onChange={handleContentChange}
+        toolbar={{ options: ["inline", "list", "link", "emoji", "history"] }}
       />
       <HRSeperator />
       <FooterContentWrapper>
