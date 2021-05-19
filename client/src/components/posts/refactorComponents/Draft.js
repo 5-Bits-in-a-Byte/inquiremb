@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
 import DraftTextArea from "../../common/DraftTextArea";
 import Checkbox from "../../common/Checkbox";
 import Button from "../../common/Button";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { Editor } from "react-draft-wysiwyg";
-import draftToMarkdown from "draftjs-to-markdown";
 import { convertToRaw, EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import Icon from "../../common/Icon";
+import { useHistory } from "react-router";
 
 const accentColor = (type) => {
   switch (type) {
@@ -24,6 +24,8 @@ const accentColor = (type) => {
 };
 
 const Draft = () => {
+  const { courseId } = useParams();
+  const history = useHistory();
   // State and handler for drafting posts
   const [draft, setDraft] = useState({
     title: "",
@@ -33,7 +35,8 @@ const Draft = () => {
 
   const [content, setContent] = useState({
     type: "Question",
-    text: EditorState.createEmpty(),
+    raw: EditorState.createEmpty(),
+    plainText: EditorState.createEmpty(),
   });
 
   const handleChange = (e) => {
@@ -45,9 +48,32 @@ const Draft = () => {
   };
 
   const handleContentChange = (e) => {
-    setContent({ ...content, text: e });
-    // In case we need to convert to plain text
-    // const plainText = convertToRaw(content.text.getCurrentContent().getPlainText());
+    const plainText = e.getCurrentContent().getPlainText();
+    setContent({ ...content, raw: e, plainText: plainText });
+    console.log(content);
+  };
+
+  const handleSubmit = () => {
+    LazyFetch({
+      type: "post",
+      endpoint: "/api/post/" + courseId + "/posts",
+      data: {
+        title: draft.title,
+        isAnonymous: draft.isAnonymous,
+        isPrivate: draft.isPrivate,
+        content: content,
+      },
+      onSuccess: (data) => {
+        /* data.new is used after the redirect to prevent 
+        a request for comments (new posts have 0 comments)*/
+        console.log(data);
+        data.new = true;
+        history.push({
+          pathname: "/course/" + data.courseId + "/post/" + data._id,
+          state: { post: data },
+        });
+      },
+    });
   };
 
   // <Editor
@@ -134,11 +160,7 @@ const Draft = () => {
             onChange={handleChange}
             checkStatus={draft.isPrivate}
           />
-          <Button
-            primary
-            onClick={() => console.log("submit")}
-            style={{ margin: "0 1em" }}
-          >
+          <Button primary onClick={handleSubmit} style={{ margin: "0 1em" }}>
             Submit
           </Button>
         </ButtonSection>
@@ -188,12 +210,6 @@ const CircleIcon = styled.div`
   border-radius: 50%;
 `;
 
-const PostTitle = styled.h1`
-  /* margin-left: 1em; */
-  padding: 5px;
-  font-size: 18px;
-`;
-
 const PostFlag = styled.div`
   margin-left: 1em;
   padding: 2px 5px;
@@ -203,40 +219,11 @@ const PostFlag = styled.div`
   border-radius: 2px;
 `;
 
-const DropDownContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-content: center;
-
-  margin-left: auto;
-  margin-bottom: 0.5em;
-
-  /* background-color: #e7e7e7; */
-`;
-
-//#endregion
-
-const ContentWrapper = styled.div`
-  padding: 5px;
-  min-height: 145px;
-  border: 2px solid #e7e7e7;
-  border-radius: 5px;
-`;
-
 const HRSeperator = styled.hr`
   margin: 5px 0;
   padding: 0 0 0 0;
   border: 1px solid #e7e7e7;
   border-radius: 5px;
-`;
-
-const UserIcon = styled.img`
-  /* float: left; */
-  width: 36px;
-  height: 36px;
-  margin-right: 0.5em;
-  border-radius: 50%;
-  user-select: none;
 `;
 
 const FooterContentWrapper = styled.div`
@@ -247,13 +234,6 @@ const FooterContentWrapper = styled.div`
   height: 50px;
 
   /* border: 1px solid orange; */
-`;
-
-const UserDescription = styled.h5`
-  user-select: none;
-  color: ${(props) => (props.isInstructor ? "#FF9900" : "#A7A7A7")};
-  opacity: 80%;
-  font-size: 15px;
 `;
 
 const ButtonSection = styled.div`
