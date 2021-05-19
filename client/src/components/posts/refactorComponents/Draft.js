@@ -43,7 +43,34 @@ const Draft = () => {
     <Wrapper sideBarColor={accentColor(postType)}>
       <HeaderContentWrapper>
         <CircleIcon accentColor={accentColor(postType)} />
-        <PostFlag accentColor={accentColor(postType)}>Question</PostFlag>
+        <Button
+          signin
+          onClick={() => {
+            setPostType("Question");
+          }}
+          style={{ margin: "0 .5em" }}
+        >
+          <PostFlag
+            accentColor={accentColor(postType)}
+            selected={postType === "Question"}
+          >
+            Question
+          </PostFlag>
+        </Button>
+        <Button
+          signin
+          onClick={() => {
+            setPostType("Announcement");
+          }}
+          style={{ margin: "0 2em" }}
+        >
+          <PostFlag
+            accentColor={accentColor(postType)}
+            selected={postType === "Announcement"}
+          >
+            Announcement
+          </PostFlag>
+        </Button>
       </HeaderContentWrapper>
       <DraftTextArea
         minRows={1}
@@ -135,9 +162,9 @@ const PostTitle = styled.h1`
 const PostFlag = styled.div`
   margin-left: 1em;
   padding: 2px 5px;
-  color: #fff;
+  color: ${(props) => (props.selected ? "#fff" : "#000")};
   background-color: ${(props) =>
-    props.accentColor ? props.accentColor : "#e7e7e7"};
+    props.selected ? props.accentColor : "#e7e7e7"};
   border-radius: 2px;
 `;
 
