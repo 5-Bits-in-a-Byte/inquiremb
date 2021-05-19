@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.7.1",
     "axios": "^0.21.1",
     "draft-js": "^0.11.7",
+    "draftjs-to-markdown": "^0.6.0",
     "mdb-react-ui-kit": "^1.0.0-alpha4",
     "react": "^17.0.1",
     "react-color": "^2.19.3",

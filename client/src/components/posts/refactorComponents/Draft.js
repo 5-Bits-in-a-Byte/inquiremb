@@ -5,6 +5,8 @@ import Checkbox from "../../common/Checkbox";
 import Button from "../../common/Button";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { Editor } from "react-draft-wysiwyg";
+import draftToMarkdown from "draftjs-to-markdown";
+import { convertToRaw, EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Icon from "../../common/Icon";
 
@@ -29,7 +31,10 @@ const Draft = () => {
     isPrivate: false,
   });
 
-  const [content, setContent] = useState({ type: "Question", text: "" });
+  const [content, setContent] = useState({
+    type: "Question",
+    text: EditorState.createEmpty(),
+  });
 
   const handleChange = (e) => {
     setDraft({
@@ -40,8 +45,24 @@ const Draft = () => {
   };
 
   const handleContentChange = (e) => {
-    console.log(e.blocks);
+    setContent({ ...content, text: e });
+    // In case we need to convert to plain text
+    // const plainText = convertToRaw(content.text.getCurrentContent().getPlainText());
   };
+
+  // <Editor
+  // toolbarHidden
+  // readOnly
+  // name="content"
+  // editorStyle={{
+  //   // backgroundColor: "#f1f1f1",
+  //   minHeight: "100px",
+  //   padding: "0 8px",
+  //   maxHeight: "200px",
+  //   overflow: "hidden",
+  //   border: "2px solid #e7e7e7",
+  //   borderRadius: "5px",
+  // }}
 
   var titlePlaceholder = content.type ? content.type + " title" : "Post title";
   return (
@@ -86,13 +107,17 @@ const Draft = () => {
       <Editor
         name="content"
         editorStyle={{
-          backgroundColor: "#f1f1f1",
-          height: "100px",
+          // backgroundColor: "#f1f1f1",
+          minHeight: "100px",
           padding: "0 8px",
+          border: "2px solid #e7e7e7",
+          borderRadius: "5px",
         }}
-        placeholder="Details"
-        onChange={handleContentChange}
-        toolbar={{ options: ["inline", "list", "link", "emoji", "history"] }}
+        // placeholder="Details"
+        onEditorStateChange={handleContentChange}
+        toolbar={{
+          options: ["inline", "list", "link", "emoji", "history", "blockType"],
+        }}
       />
       <HRSeperator />
       <FooterContentWrapper>
