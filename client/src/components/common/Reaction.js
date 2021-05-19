@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import UnlikedImg from "../../imgs/like_grey.svg";
 import LikedImg from "../../imgs/like_blue.svg";
+import LightbulbImg from "../../imgs/lightbulb.svg";
+import GreenPlusImg from "../../imgs/green-plus.svg";
+import GreyPlusImg from "../../imgs/grey-plus.svg";
+import GreyLightbulbImg from "../../imgs/lightbulb-grey.svg";
 import { UserContext } from "../context/UserProvider";
 import LazyFetch from "./requests/LazyFetch";
 
@@ -16,12 +20,17 @@ import LazyFetch from "./requests/LazyFetch";
  * @returns Reaction Component
  */
 const Reaction = ({ reactions, type, id, postid }) => {
+  console.log("reactions: ", reactions);
   const urlParams = useParams();
   const user = useContext(UserContext);
   const [reactionState, setReactions] = useState(reactions);
   const [reactClicked, setClicked] = useState({
     liked: reactions.likes.includes(user._id),
+    // Add more here
+    gooded: reactions.goods.includes(user._id),
+    helpfuled: reactions.helpfuls.includes(user._id),
   });
+  console.log("reactClicked: ", reactClicked);
 
   let endpoint = "/api/courses/" + urlParams.courseId + "/reactions";
 
@@ -60,15 +69,41 @@ const Reaction = ({ reactions, type, id, postid }) => {
 
   return (
     <>
-      <ReactImg
-        src={reactClicked.liked ? LikedImg : UnlikedImg}
-        onClick={(event) => {
-          event.stopPropagation();
-          handleLike();
-        }}
-        clicked={reactClicked.liked}
-        postid={postid}
-      />
+      <a title={"Good post"}>
+        <ReactImg
+          src={reactClicked.gooded ? LightbulbImg : GreyLightbulbImg}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleLike();
+          }}
+          clicked={reactClicked.gooded}
+          postid={postid}
+        />
+      </a>
+      <ReactValue>{reactionState.goods.length}</ReactValue>
+      <a title={"Helpful post"}>
+        <ReactImg
+          src={reactClicked.helpfuled ? GreenPlusImg : GreyPlusImg}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleLike();
+          }}
+          clicked={reactClicked.helpfuled}
+          postid={postid}
+        />
+      </a>
+      <ReactValue>{reactionState.helpfuls.length}</ReactValue>
+      <a title={"Like post"}>
+        <ReactImg
+          src={reactClicked.liked ? LikedImg : UnlikedImg}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleLike();
+          }}
+          clicked={reactClicked.liked}
+          postid={postid}
+        />
+      </a>
       <ReactValue>{reactionState.likes.length}</ReactValue>
     </>
   );

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 
-const Icon = ({ src, onClick, msg, width, ...props }) => {
+const Icon = ({ src, onClick, msg, width, title, ...props }) => {
   const clickHandler = props.clickable ? onClick : undefined;
   return (
     <IconDiv {...props} onClick={clickHandler}>

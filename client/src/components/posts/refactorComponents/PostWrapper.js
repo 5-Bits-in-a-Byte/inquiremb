@@ -3,6 +3,8 @@ import styled, { css } from "styled-components";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Icon from "../../common/Icon";
 import OptionDots from "../../../imgs/option-dots.svg";
+import Reaction from "../../common/Reaction";
+import CommentImg from "../../../imgs/comment.svg";
 
 const accentColor = (type) => {
   switch (type) {
@@ -39,6 +41,7 @@ const PostWrapper = ({
   postType,
   isRead,
   content,
+  postObject,
   ...props
 }) => {
   const dropdownOptions = [
@@ -62,7 +65,35 @@ const PostWrapper = ({
       </HeaderContentWrapper>
       {contentObject ? <ContentWrapper>{content}</ContentWrapper> : <></>}
       <HRSeperator />
-      <FooterContentWrapper>THIS WILL HOLD FOOTER CONTENT</FooterContentWrapper>
+      <FooterContentWrapper>
+        {postObject.postedBy.isAnonymous ? null : (
+          <UserIcon src={postObject.postedBy.picture} />
+        )}
+        <UserDescription isInstructor={postObject.isInstructor}>
+          Posted by {postObject.postedBy.firstName}{" "}
+          {postObject.postedBy.lastName}
+        </UserDescription>
+        <ReactionSection>
+          <Reaction
+            reactions={postObject.reactions}
+            type="post"
+            id={postObject._id}
+            postid={postObject._id}
+          />
+          <Icon
+            alt={"Number of comments"}
+            src={CommentImg}
+            width={"18px"}
+            style={{
+              float: "left",
+              marginRight: "8px",
+              marginLeft: "20px",
+              userSelect: "none",
+            }}
+          />
+          <h5 style={{ color: "#8c8c8c" }}>{postObject.comments}</h5>
+        </ReactionSection>
+      </FooterContentWrapper>
     </Wrapper>
   );
 };
@@ -150,6 +181,15 @@ const HRSeperator = styled.hr`
   border-radius: 5px;
 `;
 
+const UserIcon = styled.img`
+  /* float: left; */
+  width: 36px;
+  height: 36px;
+  margin-right: 0.5em;
+  border-radius: 50%;
+  user-select: none;
+`;
+
 const FooterContentWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -158,4 +198,18 @@ const FooterContentWrapper = styled.div`
   height: 50px;
 
   /* border: 1px solid orange; */
+`;
+
+const UserDescription = styled.h5`
+  user-select: none;
+  color: ${(props) => (props.isInstructor ? "#FF9900" : "#A7A7A7")};
+  opacity: 80%;
+  font-size: 15px;
+`;
+
+const ReactionSection = styled.div`
+  display: inline-flex;
+  margin-left: auto;
+  height: 100%;
+  align-items: center;
 `;

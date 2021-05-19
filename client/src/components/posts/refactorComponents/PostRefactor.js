@@ -28,22 +28,56 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
     setPollAns(newPollAnswers);
   };
 
+  var testAnonymousPostObject = {
+    _id: "987654321",
+    postedBy: {
+      firstName: "Anonymous",
+      lastName: "",
+      isAnonymous: true,
+      _id: "608dd55e87f76c3cdbf52745",
+    },
+    comments: 11,
+    reactions: { likes: [], goods: [], helpfuls: [] },
+    isInstructor: true,
+  };
+  var testPostObject = {
+    _id: "123456789",
+    postedBy: {
+      firstName: "Brian",
+      lastName: "Gunnarson",
+      picture:
+        "https://lh3.googleusercontent.com/a-/AOh14Ggopr1ZffPC5y-S8yZzvlkTYZanP0iDYBg0JnKU2Q=s96-c",
+      isAnonymous: false,
+      _id: "108734863236913803139",
+    },
+    comments: 7,
+    reactions: { likes: ["108734863236913803139"], goods: [], helpfuls: [] },
+    isInstructor: false,
+  };
+
   //#region TEST_POSTS
   const TestPosts = (
     <>
       <PostWrapper
         // contentObject={{ postType: "Question" }}
         // isRead
+        postObject={testAnonymousPostObject}
         postType={"Question"}
       />
       <PostWrapper
         // contentObject={{ postType: "Question" }}
         // isRead
+        postObject={testPostObject}
+        isAnonymous={false}
+        picture={
+          "https://lh3.googleusercontent.com/a-/AOh14Ggopr1ZffPC5y-S8yZzvlkTYZanP0iDYBg0JnKU2Q=s96-c"
+        }
         postType={"Announcement"}
       />
       <PostWrapper
         contentObject={{ postType: "Question" }}
         // isRead
+        postObject={testPostObject}
         postType={"Poll"}
         content={
           <Poll
@@ -147,7 +181,7 @@ const CenterWrapper = styled.div`
   margin: 0 auto;
   max-width: 1200px;
   width: 100%;
-  padding-left: 10rem;
+  /* padding-left: 10rem; */
   /* position: relative; */
 `;
 
