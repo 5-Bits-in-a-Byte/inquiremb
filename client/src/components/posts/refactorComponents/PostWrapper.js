@@ -83,7 +83,7 @@ const PostWrapper = ({
           <Icon
             alt={"Number of comments"}
             src={CommentImg}
-            width={"18px"}
+            width={"22px"}
             style={{
               float: "left",
               marginRight: "8px",
@@ -91,7 +91,9 @@ const PostWrapper = ({
               userSelect: "none",
             }}
           />
-          <h5 style={{ color: "#8c8c8c" }}>{postObject.comments}</h5>
+          <h5 style={{ color: "#8c8c8c", marginRight: "1em" }}>
+            {postObject.comments}
+          </h5>
         </ReactionSection>
       </FooterContentWrapper>
     </Wrapper>
@@ -185,7 +187,7 @@ const UserIcon = styled.img`
   /* float: left; */
   width: 36px;
   height: 36px;
-  margin-right: 0.5em;
+  margin-left: 0.5em;
   border-radius: 50%;
   user-select: none;
 `;
@@ -201,6 +203,8 @@ const FooterContentWrapper = styled.div`
 `;
 
 const UserDescription = styled.h5`
+  margin-left: 0.5em;
+
   user-select: none;
   color: ${(props) => (props.isInstructor ? "#FF9900" : "#A7A7A7")};
   opacity: 80%;

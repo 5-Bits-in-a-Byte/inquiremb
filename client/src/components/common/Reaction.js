@@ -175,8 +175,8 @@ export default Reaction;
 
 const ReactImg = styled.img`
   float: left;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   margin-right: 8px;
   margin-left: 20px;
   user-select: none;
