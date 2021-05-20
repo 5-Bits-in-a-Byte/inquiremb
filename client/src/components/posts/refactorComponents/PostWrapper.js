@@ -63,7 +63,11 @@ const PostWrapper = ({
           </Dropdown>
         </DropDownContainer>
       </HeaderContentWrapper>
-      {contentObject ? <ContentWrapper>{content}</ContentWrapper> : <></>}
+      {contentObject ? (
+        <ContentWrapper postType={postType}>{content}</ContentWrapper>
+      ) : (
+        <></>
+      )}
       <HRSeperator />
       <FooterContentWrapper>
         {postObject.postedBy.isAnonymous ? null : (
@@ -105,7 +109,7 @@ export default PostWrapper;
 const Wrapper = styled.div`
   margin: 2em;
   padding: 0.5em;
-  width: 719px;
+  width: 726px;
   max-width: 900px;
   /* min-height: 255px; */
   /* height: 255px; */
@@ -171,9 +175,10 @@ const DropDownContainer = styled.div`
 
 const ContentWrapper = styled.div`
   padding: 5px;
-  min-height: 145px;
-  border: 2px solid #e7e7e7;
-  border-radius: 5px;
+  min-height: 100px;
+
+  border: ${(props) => (props.postType == "Poll" ? "2px solid #e7e7e7" : "")};
+  border-radius: ${(props) => (props.postType == "Poll" ? "5px" : "")};
 `;
 
 const HRSeperator = styled.hr`

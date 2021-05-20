@@ -6,6 +6,8 @@ import PostWrapper from "./PostWrapper";
 import Poll from "react-polls";
 import Button from "../../common/Button";
 import LineWidthImg from "../../../imgs/line-width.svg";
+import { Editor } from "react-draft-wysiwyg";
+import { convertToRaw, EditorState } from "draft-js";
 
 const pollAnswers = [
   { option: "Yes", votes: 8 },
@@ -18,6 +20,18 @@ const createPost = (postType, postData, userRole) => {
 
 const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
   const [pollAns, setPollAns] = useState(pollAnswers);
+
+  const [content, setContent] = useState({
+    type: "Question",
+    raw: EditorState.createEmpty(),
+    plainText: EditorState.createEmpty(),
+  });
+
+  const handleContentChange = (e) => {
+    const plainText = e.getCurrentContent().getPlainText();
+    setContent({ ...content, raw: e, plainText: plainText });
+    console.log(content);
+  };
 
   const handleVote = (voteAnswer) => {
     var pa = pollAns;
@@ -63,12 +77,70 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
         // isRead
         postObject={testAnonymousPostObject}
         postType={"Question"}
+        contentObject={{ idk: false }}
+        content={
+          <Editor
+            readOnly
+            toolbarHidden
+            name="content"
+            editorStyle={{
+              // backgroundColor: "#f1f1f1",
+              minHeight: "100px",
+              padding: "0 8px",
+              maxHeight: "200px",
+              overflow: "hidden",
+              border: "2px solid #e7e7e7",
+              borderRadius: "5px",
+            }}
+            // placeholder="Details"
+            onEditorStateChange={handleContentChange}
+            toolbar={{
+              options: [
+                "inline",
+                "list",
+                "link",
+                "emoji",
+                "history",
+                "blockType",
+              ],
+            }}
+          />
+        }
       />
       <PostWrapper
         // contentObject={{ postType: "Question" }}
         // isRead
         postObject={testPostObject}
         isAnonymous={false}
+        contentObject={{ idk: false }}
+        content={
+          <Editor
+            readOnly
+            toolbarHidden
+            name="content"
+            editorStyle={{
+              // backgroundColor: "#f1f1f1",
+              minHeight: "100px",
+              padding: "0 8px",
+              maxHeight: "200px",
+              overflow: "hidden",
+              border: "2px solid #e7e7e7",
+              borderRadius: "5px",
+            }}
+            // placeholder="Details"
+            onEditorStateChange={handleContentChange}
+            toolbar={{
+              options: [
+                "inline",
+                "list",
+                "link",
+                "emoji",
+                "history",
+                "blockType",
+              ],
+            }}
+          />
+        }
         picture={
           "https://lh3.googleusercontent.com/a-/AOh14Ggopr1ZffPC5y-S8yZzvlkTYZanP0iDYBg0JnKU2Q=s96-c"
         }
