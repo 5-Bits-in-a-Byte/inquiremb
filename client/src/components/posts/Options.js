@@ -102,7 +102,7 @@ const OptionsWrapper = styled.div`
   right: -40px;
   top: 0;
 
-  border: 1px solid red;
+  /* border: 1px solid red; */
 `;
 
 const OptionsHeader = styled.h1`
