@@ -12,6 +12,7 @@ import Comment from "./Comment";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
+import Draft from "../posts/refactorComponents/Draft";
 
 const renderComments = (data, userRole) => {
   let ret = [];
@@ -224,11 +225,15 @@ const CommentView = ({ classroomName }) => {
                   </Button>
                 )}
               </OptionsContainer>
-              <Post
-                post={post}
-                isCondensed={false}
-                isDraft={postid === "new"}
-              />
+              {postid === "new" ? (
+                <Draft />
+              ) : (
+                <Post
+                  post={post}
+                  isCondensed={false}
+                  // isDraft={postid === "new"}
+                />
+              )}
               {comments}
             </MaxWidth>
           </ScrollingDiv>

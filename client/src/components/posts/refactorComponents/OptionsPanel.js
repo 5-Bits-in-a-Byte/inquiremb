@@ -1,38 +1,19 @@
-import React, { useContext } from "react";
-import { UserContext } from "../context/UserProvider";
+import React from "react";
+import { useParams } from "react-router-dom";
+import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-import Button from "../common/Button";
+import Button from "../../common/Button";
 import { Link } from "react-router-dom";
-import CogIcon from "../../imgs/settings 1.svg";
+import CogIcon from "../../../imgs/settings 1.svg";
 
-/**
- * Options Component ~ Button side panel for displaying buttons for the user
- *
- * @param {string} courseId given to the "+ New Post" button to route to the Post form page
- */
-const Options = ({ userRole, courseId }) => {
-  const user = useContext(UserContext);
-  // console.log("User Object: ", user);
-
-  // Will be used to conditionally render the config page button
-  var userIsAdmin = false;
-  if (userRole) userIsAdmin = userRole.admin.configure;
-
-  // Checks the current user course for Admin privledge status
-  // sets the above 'userIsAdmin' variable accordingly
-  // for (let i = 0; i < user.courses.length; i++) {
-  //   if (user?.courses[i].courseId == courseId) {
-  //     userIsAdmin = user.courses[i].admin;
-  //   }
-  // }
-
-  // console.log(userIsAdmin);
+const OptionsPanel = ({ userRole, ...props }) => {
+  var { courseId } = useParams();
+  var userIsAdmin = userRole ? userRole.admin.config : false;
 
   return (
-    <OptionsWrapper>
-      <OptionsHeader>OPTIONS</OptionsHeader>
-      <OptionsPanel>
+    <Wrapper>
+      <OptionsHeader>Options</OptionsHeader>
+      <Panel>
         <Link
           style={{
             width: "100%",
@@ -84,25 +65,16 @@ const Options = ({ userRole, courseId }) => {
             </Button>
           </Link>
         )}
-      </OptionsPanel>
-    </OptionsWrapper>
+      </Panel>
+    </Wrapper>
   );
 };
 
-Options.propTypes = {
-  courseId: PropTypes.string,
-};
+export default OptionsPanel;
 
-export default Options;
-
-const OptionsWrapper = styled.div`
-  width: 280px; // Need to make same width as nav + menu bar
-  flex-grow: 1;
-  position: absolute;
-  right: -40px;
-  top: 0;
-
-  border: 1px solid red;
+const Wrapper = styled.div`
+  width: 100%;
+  /* border: 1px solid red; */
 `;
 
 const OptionsHeader = styled.h1`
@@ -111,7 +83,7 @@ const OptionsHeader = styled.h1`
   font-size: 14px;
 `;
 
-const OptionsPanel = styled.div`
+const Panel = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

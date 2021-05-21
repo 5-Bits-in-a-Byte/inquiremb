@@ -11,6 +11,7 @@ import SectionTab from "./SectionTab";
 import Sidebar from "./Sidebar";
 import LazyFetch from "../common/requests/LazyFetch";
 import LoadingDots from "../common/animation/LoadingDots";
+import PostRefactor from "./refactorComponents/PostRefactor";
 
 const PostView = React.lazy(() => import("./PostView"));
 
@@ -94,7 +95,8 @@ const ClassView = ({ props }) => {
           </div>
         }
       >
-        <PostView userRole={userRole} highlightedSection={highlightedSection} />
+        {/* <PostView userRole={userRole} highlightedSection={highlightedSection} /> */}
+        <PostRefactor />
       </Suspense>
     </ClassViewWrapper>
   );
