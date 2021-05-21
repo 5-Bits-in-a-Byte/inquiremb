@@ -1,18 +1,14 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import PropTypes from "prop-types";
-import LazyFetch from "../../common/requests/LazyFetch";
 import styled, { css } from "styled-components";
 import InfoIcon from "../../../imgs/Info_tip.svg";
 import PencilIcon from "../../../imgs/pencil.svg";
 import CloseButtonIcon from "../../../imgs/close.svg";
-import Input from "../../common/Input";
 import DraftTextArea from "../../common/DraftTextArea";
 import Button from "../../common/Button";
 
 const max_options = 6;
 const default_title = "Poll Title";
-const default_options = ["Yes", "No", "Maybe", "I don't know", "I don't care"];
+const default_options = ["Yes", "No", "Maybe"];
 
 const PollTitlePanel = ({ titleText }) => {
   const [nameField, setNameField] = useState(titleText);
@@ -54,50 +50,13 @@ const PollTitlePanel = ({ titleText }) => {
 const PollOptionPanel = ({
   value,
   optionText,
-  options,
+  /*options,*/
   testNewOption,
+  removeOption,
   ...props
 }) => {
-  /*const urlParams = useParams();*/
-
-  /**
-   * Quick and dirty iteration through the string list to detect any duplicates.
-   * DISREGARDS case by converting to uppercase first.
-   */
-  const StringConflictCheck = (current_index, newOptions) => {
-    var upperNewOptions = [...newOptions];
-
-    console.log(upperNewOptions);
-
-    const len = upperNewOptions.length;
-
-    for (var i = 0; i < len; i++) {
-      upperNewOptions[i] = upperNewOptions[i].toUpperCase();
-    }
-
-    const current_option = upperNewOptions[current_index];
-
-    console.log(upperNewOptions);
-
-    for (var i = 0; i < len - 1; i++) {
-      for (var j = i + 1; j < len; j++) {
-        console.log(upperNewOptions[i] + " vs " + upperNewOptions[j]);
-
-        if (upperNewOptions[i] == upperNewOptions[j]) {
-          console.log("From func, Conflict");
-          return true;
-        }
-      }
-    }
-
-    console.log("From func, No conflict");
-
-    return false;
-  };
-
   const [nameField, setNameField] = useState(optionText);
   const [cachedNameField, setcachedNameField] = useState(optionText);
-
   const [nameFieldState, setNameFieldState] = useState(true);
 
   return (
@@ -130,7 +89,6 @@ const PollOptionPanel = ({
                 setNameField(cachedNameField);
               }
             }
-
             setNameFieldState(!nameFieldState);
           }}
         >
@@ -138,7 +96,13 @@ const PollOptionPanel = ({
         </Button>
       </PollDetailPanel>
 
-      <Button primary buttonColor={"rgba(0, 0, 0, 0.0)"} onClick={() => {}}>
+      <Button
+        primary
+        buttonColor={"rgba(0, 0, 0, 0.0)"}
+        onClick={() => {
+          removeOption(value);
+        }}
+      >
         <ChangeNameIcon src={CloseButtonIcon} />
       </Button>
     </PollAttributeWrapper>
@@ -148,61 +112,61 @@ const PollOptionPanel = ({
 /**
  * Generates a list of Poll Option Components for State Management
  */
-const GenerateOptionList = (options, testNewOption) => {
+const GenerateOptionList = (options, testNewOption, removeOption) => {
   return options.map((option, index) => (
     <PollOptionPanel
       key={index}
       value={index}
       optionText={option}
-      options={options}
+      /*options={options}*/
       testNewOption={testNewOption}
+      removeOption={removeOption}
     />
   ));
+};
+
+/**
+ * Verifies that the array has no duplicates.
+ * Strings are converted to uppercase; comparison is not case-sensitive.
+ */
+const StringConflictCheck = (newOptions) => {
+  var upperNewOptions = [...newOptions];
+
+  //console.log(upperNewOptions);
+
+  const len = upperNewOptions.length;
+
+  for (var i = 0; i < len; i++) {
+    upperNewOptions[i] = upperNewOptions[i].toUpperCase();
+  }
+
+  //console.log(upperNewOptions);
+
+  for (var i = 0; i < len - 1; i++) {
+    for (var j = i + 1; j < len; j++) {
+      //console.log(upperNewOptions[i] + " vs " + upperNewOptions[j]);
+
+      if (upperNewOptions[i] == upperNewOptions[j]) {
+        console.log("From checker, Conflict");
+        return true;
+      }
+    }
+  }
+
+  console.log("From checker, No conflict");
+
+  return false;
 };
 
 const PollConfig = ({ children, ...props }) => {
   const [options, setOptions] = useState(default_options);
   const [optionCounter, setOptionCounter] = useState(1);
 
-  // Tracks whether the options list is in a conflicting state
-  //const [conflict, setConflict] = useState(false);
-
-  const StringConflictCheck = (current_index, newOptions) => {
-    var upperNewOptions = [...newOptions];
-
-    //console.log(upperNewOptions);
-
-    const len = upperNewOptions.length;
-
-    for (var i = 0; i < len; i++) {
-      upperNewOptions[i] = upperNewOptions[i].toUpperCase();
-    }
-
-    //const current_option = upperNewOptions[current_index];
-
-    //console.log(upperNewOptions);
-
-    for (var i = 0; i < len - 1; i++) {
-      for (var j = i + 1; j < len; j++) {
-        //console.log(upperNewOptions[i] + " vs " + upperNewOptions[j]);
-
-        if (upperNewOptions[i] == upperNewOptions[j]) {
-          console.log("From func, Conflict");
-          return true;
-        }
-      }
-    }
-
-    console.log("From func, No conflict");
-
-    return false;
-  };
-
   const TestNewOption = (index, newOption) => {
     var newOptions = [...options];
     newOptions[index] = newOption;
 
-    if (StringConflictCheck(index, newOptions)) {
+    if (StringConflictCheck(newOptions)) {
       alert("Options must all be different.");
       console.log("No change to options");
       return false;
@@ -213,7 +177,31 @@ const PollConfig = ({ children, ...props }) => {
     return true;
   };
 
-  let test_option_components = GenerateOptionList(options, TestNewOption);
+  const RemoveOption = (index) => {
+    var newOptions = [...options];
+    newOptions.splice(index, 1);
+
+    console.log(newOptions);
+    setOptions(newOptions);
+  };
+
+  const AddOption = () => {
+    if (options.length >= max_options) {
+      alert(
+        "The maximum number of poll options is " + max_options.toString() + "."
+      );
+    } else {
+      let newOption = "New Option " + optionCounter.toString();
+      setOptions([...options, newOption]);
+      setOptionCounter(optionCounter + 1);
+    }
+  };
+
+  let test_option_components = GenerateOptionList(
+    options,
+    TestNewOption,
+    RemoveOption
+  );
 
   return (
     <GroupWrapper>
@@ -236,17 +224,7 @@ const PollConfig = ({ children, ...props }) => {
         buttonWidth={"175px"}
         buttonHeight={"36px"}
         onClick={() => {
-          if (options.length >= max_options) {
-            alert(
-              "The maximum number of poll options is " +
-                max_options.toString() +
-                "."
-            );
-          } else {
-            let newOption = "New Option " + optionCounter.toString();
-            setOptions([...options, newOption]);
-            setOptionCounter(optionCounter + 1);
-          }
+          AddOption();
         }}
       >
         + Add a New Option
