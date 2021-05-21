@@ -86,7 +86,7 @@ class Replies(Resource):
         return result, 200
 
     @permission_layer(required_permissions=["edit-reply"])
-    def put(self, postId=None, comment_id=None):
+    def put(self, courseId=None, postId=None, comment_id=None):
         """
         Updates a reply
         ---
