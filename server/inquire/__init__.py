@@ -74,7 +74,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
         api_base_url='https://api.github.com/',
         client_kwargs={'scope': 'read:user user:email'},
     )
-    from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home, Roles, MeRole, CourseUsers
+    from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home, Roles, MeRole, CourseUsers, Poll
 
     api = Api(app, prefix="/api")
 
@@ -88,6 +88,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     api.add_resource(MeRole, '/userRole/<string:courseId>')
     api.add_resource(Courses, '/courses')
     api.add_resource(CourseUsers, '/courses/<string:courseId>/users')
+    api.add_resource(Poll, '/courses/<string:courseId>/polls')
     api.add_resource(Reactions, '/courses/<string:courseId>/reactions')
     api.add_resource(Home, '/home')
     api.add_resource(Posts, '/courses/<string:courseId>/posts')
