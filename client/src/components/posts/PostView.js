@@ -10,8 +10,10 @@ import Fetch from "../common/requests/Fetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
 import PostWrapper from "./refactorComponents/PostWrapper";
+import Poll from "react-polls";
 import { Editor } from "react-draft-wysiwyg";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
+import PollWrapper from "./refactorComponents/PollWrapper";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();
@@ -19,58 +21,129 @@ const convertToUpper = (postType) => {
   return first + rest;
 };
 
-const createPost = (post, userRole, isCondensed) => {
+const createPost = (post, userRole, isCondensed, pollAns, setPollAns) => {
+  const postType = convertToUpper(post.content.type);
+
+  // const establishPollAns = (post) => {
+  //   let initialPollAns = [];
+  //   Object.keys(post.content.fields).map((key) => {
+  //     initialPollAns.push(post.content.fields[key]);
+  //   });
+  //   return initialPollAns;
+  // };
+
+  // if (postType === "Poll") {
+  //   var pollEntry = { ...pollAns };
+  //   pollEntry[post._id] = establishPollAns(post);
+  //   console.log(pollEntry);
+  //   setPollAns(pollEntry);
+  // }
+
+  // const handleVote = (voteAnswer) => {
+  //   var pa = pollAns;
+  //   const newPollAnswers = pa.map((answer) => {
+  //     if (answer.option === voteAnswer) answer.votes++;
+  //     return answer;
+  //   });
+  //   setPollAns(newPollAnswers);
+  // };
+
+  var content;
+  var question = "question";
+  console.log("postType: ", postType);
+  if (
+    post.content.type === "question" ||
+    post.content.type === "announcement"
+  ) {
+    content = (
+      <Editor
+        readOnly
+        toolbarHidden
+        name="content"
+        editorState={EditorState.createWithContent(
+          convertFromRaw(post.content.raw)
+        )}
+        // editorState={EditorState.createEmpty()}
+        editorStyle={{
+          // backgroundColor: "#f1f1f1",
+          minHeight: "100px",
+          padding: "0 8px",
+          maxHeight: "200px",
+          overflow: "hidden",
+          border: "2px solid #e7e7e7",
+          borderRadius: "5px",
+        }}
+        // placeholder="Details"
+        // onEditorStateChange={handleContentChange}
+        toolbar={{
+          options: ["inline", "list", "link", "emoji", "history", "blockType"],
+        }}
+      />
+    );
+  } else if (post.content.type === "poll") {
+    content = <PollWrapper post={post} />;
+  }
+  // switch (post.content.type) {
+  //   case question:
+  //     content = (
+  //       <Editor
+  //         readOnly
+  //         toolbarHidden
+  //         name="content"
+  //         editorState={EditorState.createWithContent(
+  //           convertFromRaw(post.content.raw)
+  //         )}
+  //         // editorState={EditorState.createEmpty()}
+  //         editorStyle={{
+  //           // backgroundColor: "#f1f1f1",
+  //           minHeight: "100px",
+  //           padding: "0 8px",
+  //           maxHeight: "200px",
+  //           overflow: "hidden",
+  //           border: "2px solid #e7e7e7",
+  //           borderRadius: "5px",
+  //         }}
+  //         // placeholder="Details"
+  //         // onEditorStateChange={handleContentChange}
+  //         toolbar={{
+  //           options: [
+  //             "inline",
+  //             "list",
+  //             "link",
+  //             "emoji",
+  //             "history",
+  //             "blockType",
+  //           ],
+  //         }}
+  //       />
+  //     );
+  //   case "poll":
+  //     content = <PollWrapper post={post} />;
+  // }
   return (
     // <Post userRole={userRole} post={post} key={post._id} isCondensed={false} />
     <PostWrapper
       postObject={post}
-      postType={convertToUpper(post.content.type)}
+      postType={postType}
       condensed={isCondensed}
-      content={
-        <Editor
-          readOnly
-          toolbarHidden
-          name="content"
-          editorState={EditorState.createWithContent(
-            convertFromRaw(post.content.raw)
-          )}
-          // editorState={EditorState.createEmpty()}
-          editorStyle={{
-            // backgroundColor: "#f1f1f1",
-            minHeight: "100px",
-            padding: "0 8px",
-            maxHeight: "200px",
-            overflow: "hidden",
-            border: "2px solid #e7e7e7",
-            borderRadius: "5px",
-          }}
-          // placeholder="Details"
-          // onEditorStateChange={handleContentChange}
-          toolbar={{
-            options: [
-              "inline",
-              "list",
-              "link",
-              "emoji",
-              "history",
-              "blockType",
-            ],
-          }}
-        />
-      }
+      content={content}
     />
   );
 };
 
 // Sorts the posts by pinned/date
-const generateSections = (data, userRole, isCondensed) => {
+const generateSections = (data, userRole, isCondensed, pa) => {
   let posts = { pinned: [], other: [] };
   if (data) {
     data.forEach((post) => {
       if (post.isPinned) {
-        posts.pinned.push(createPost(post, userRole, isCondensed));
+        posts.pinned.push(
+          createPost(post, userRole, isCondensed, pa.pollAns, pa.setPollAns)
+        );
       } else {
-        posts.other.push(createPost(post, userRole, isCondensed));
+        posts.other.push(
+          createPost(post, userRole, isCondensed, pa.pollAns, pa.setPollAns)
+        );
       }
     });
   }
@@ -80,6 +153,8 @@ const generateSections = (data, userRole, isCondensed) => {
 const PostView = ({ userRole, highlightedSection }) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
+  const [pollAns, setPollAns] = useState(null);
+
   useEffect(() => {
     io.emit("join", { room: courseId, room_type: "course" });
     io.on("Post/create", (post) => {
@@ -136,7 +211,10 @@ const PostView = ({ userRole, highlightedSection }) => {
     console.log("DATA: ", data);
     data = [...socketPosts, ...data];
   }
-  let posts = generateSections(data, userRole, isCondensed);
+  let posts = generateSections(data, userRole, isCondensed, {
+    pollAns,
+    setPollAns,
+  });
   let pinnedLen = posts.pinned.length;
   let otherLen = posts.other.length;
 

@@ -16,6 +16,8 @@ import io from "../../services/socketio";
 import Draft from "../posts/refactorComponents/Draft";
 import { Editor } from "react-draft-wysiwyg";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
+import PollConfig from "../posts/refactorComponents/PollConfig";
+import Poll from "react-polls";
 
 const renderComments = (data, userRole) => {
   let ret = [];
@@ -55,10 +57,20 @@ const CommentView = ({ classroomName }) => {
   const [newComments, setNewComments] = useState({ draft: false });
   const [commentData, setCommentData] = useState([]);
   const [highlightedSection, setHighlightedSection] = useState("");
+  const [pollAns, setPollAns] = useState([{ option: "dummy", votes: 0 }]);
 
   const setUserRole = useContext(UserRoleDispatchContext);
   const userRole = useContext(UserRoleContext);
-  console.log("Comment View Role Object: ", userRole);
+  // console.log("Comment View Role Object: ", userRole);
+
+  const handleVote = (voteAnswer) => {
+    var pa = pollAns;
+    const newPollAnswers = pa.map((answer) => {
+      if (answer.option === voteAnswer) answer.votes++;
+      return answer;
+    });
+    setPollAns(newPollAnswers);
+  };
 
   const attemptGetUserRole = (courseId) => {
     LazyFetch({
@@ -93,7 +105,23 @@ const CommentView = ({ classroomName }) => {
   if (location.state) {
     console.log("L State: ", location.state);
     post = location.state.post;
+    console.log(post);
   }
+
+  const establishPollAns = (post) => {
+    let initialPollAns = [];
+    Object.keys(post.content.fields).map((key) => {
+      initialPollAns.push(post.content.fields[key]);
+    });
+    console.log("InitialPollAns in CommentView:", initialPollAns);
+    return initialPollAns;
+  };
+
+  useEffect(() => {
+    if (post && post.content.type == "poll") {
+      setPollAns(establishPollAns(post));
+    }
+  });
 
   const convertToUpper = (postType) => {
     var first = postType[0].toUpperCase();
@@ -210,6 +238,8 @@ const CommentView = ({ classroomName }) => {
       />
     );
   }
+  const postExists = postid !== "newQorA" && postid !== "newPoll";
+  // console.log("postid !== newPoll: ", postid !== "newPoll");
   return (
     <CommentViewWrapper>
       <Sidebar
@@ -229,53 +259,70 @@ const CommentView = ({ classroomName }) => {
                 >
                   <Button secondary>Back to all Posts</Button>
                 </Link>
-                {postid !== "new" && (
+                {postExists && (
                   <Button onClick={draftNewComment} secondary>
                     Reply to Post
                   </Button>
                 )}
               </OptionsContainer>
-              {postid === "new" ? (
-                <Draft />
-              ) : (
-                <PostWrapper
-                  postObject={post}
-                  postType={convertToUpper(post.content.type)}
-                  condensed={false}
-                  content={
-                    <Editor
-                      readOnly
-                      toolbarHidden
-                      name="content"
-                      editorState={EditorState.createWithContent(
-                        convertFromRaw(post.content.raw)
-                      )}
-                      // editorState={EditorState.createEmpty()}
-                      editorStyle={{
-                        // backgroundColor: "#f1f1f1",
-                        minHeight: "100px",
-                        padding: "0 8px",
-                        // maxHeight: "200px",
-                        overflow: "hidden",
-                        border: "2px solid #e7e7e7",
-                        borderRadius: "5px",
-                      }}
-                      // placeholder="Details"
-                      // onEditorStateChange={handleContentChange}
-                      toolbar={{
-                        options: [
-                          "inline",
-                          "list",
-                          "link",
-                          "emoji",
-                          "history",
-                          "blockType",
-                        ],
-                      }}
-                    />
-                  }
-                />
-              )}
+              {postid === "newQorA" && <Draft />}
+              {/* {postid === "newPoll" && <DraftPoll />} */}
+              {postid === "newPoll" && <PollConfig />}
+              {postExists &&
+                (convertToUpper(post.content.type) === "Poll" ? (
+                  <PostWrapper
+                    condensed={false}
+                    // isRead
+                    postObject={post}
+                    postType={"Poll"}
+                    content={
+                      <Poll
+                        question={post.title}
+                        answers={pollAns}
+                        onVote={handleVote}
+                        noStorage
+                      />
+                    }
+                  />
+                ) : (
+                  <PostWrapper
+                    postObject={post}
+                    postType={convertToUpper(post.content.type)}
+                    condensed={false}
+                    content={
+                      <Editor
+                        readOnly
+                        toolbarHidden
+                        name="content"
+                        editorState={EditorState.createWithContent(
+                          convertFromRaw(post.content.raw)
+                        )}
+                        // editorState={EditorState.createEmpty()}
+                        editorStyle={{
+                          // backgroundColor: "#f1f1f1",
+                          minHeight: "100px",
+                          padding: "0 8px",
+                          // maxHeight: "200px",
+                          overflow: "hidden",
+                          border: "2px solid #e7e7e7",
+                          borderRadius: "5px",
+                        }}
+                        // placeholder="Details"
+                        // onEditorStateChange={handleContentChange}
+                        toolbar={{
+                          options: [
+                            "inline",
+                            "list",
+                            "link",
+                            "emoji",
+                            "history",
+                            "blockType",
+                          ],
+                        }}
+                      />
+                    }
+                  />
+                ))}
               {comments}
             </MaxWidth>
           </ScrollingDiv>

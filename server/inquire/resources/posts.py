@@ -58,9 +58,6 @@ class Posts(Resource):
         parser.add_argument('isPrivate', type=bool)
         parser.add_argument('isAnonymous', type=bool)
         args = parser.parse_args()
-        print(args.content['type'])
-        print(args.content['raw'])
-        print(args.content['plainText'])
 
         # How polls look being sent from frontend
         # {
@@ -90,7 +87,7 @@ class Posts(Resource):
         if args.content.get("type") == "poll":
             field_names = args.content["fields"]
             args.content = {"type": "poll",
-                       "fields": self.create_poll_fields(field_names)}
+                            "fields": self.create_poll_fields(field_names)}
 
         # Trying to add the post to the DB
         try:
@@ -106,7 +103,6 @@ class Posts(Resource):
         if course != None:
             course.viewed[result["_id"]] = datetime.datetime.now()
             current_user.save()
-
 
         if not result['isPrivate'] and current_app.config['include_socketio']:
             current_app.socketio.emit('Post/create', result, room=courseId)
@@ -245,7 +241,6 @@ class Posts(Resource):
                 '$in': [current_user._id, current_user.anonymousId]}}]
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
-
 
         course = current_user.get_course(courseId)
         viewed = course.viewed
@@ -436,8 +431,9 @@ class Posts(Resource):
         result = post.to_son()
         if viewed:
             updated_date = result["updatedDate"]
-            result["read"] = self.calc_read(result["_id"], updated_date, viewed)
-        
+            result["read"] = self.calc_read(
+                result["_id"], updated_date, viewed)
+
         # Convert datetime to a string
         date = str(result['createdDate'])
         result['createdDate'] = date
@@ -448,7 +444,7 @@ class Posts(Resource):
         # Post content type specific modifications
         post_type = result["content"]["type"]
         if post_type == "poll":
-            self.anonymize_poll_content(post["content"])
+            self.anonymize_poll_content(result["content"])
         return result
 
     def calc_read(self, post_id, updatedDate, viewed):
@@ -464,13 +460,11 @@ class Posts(Resource):
         """
         return post_id in viewed and viewed[post_id] > updatedDate
 
-        
-
-    def anonymize_poll_content(poll):
+    def anonymize_poll_content(self, poll):
         for field_name in poll["fields"]:
             poll["fields"][field_name].pop("users")
 
-    def create_poll_fields(field_name_list):
+    def create_poll_fields(self, field_name_list):
         poll = {}
         for field in field_name_list:
             if type(field) == str:

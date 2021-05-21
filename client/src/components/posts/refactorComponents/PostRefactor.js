@@ -188,10 +188,6 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
             answers={pollAns}
             onVote={handleVote}
             noStorage
-            // customStyles={{
-            //   align: "center",
-            //   theme: "cyan",
-            // }}
           />
         }
       />
@@ -228,7 +224,7 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
                   {"Most Recent"}
                 </Button>
               </SortingOptions>
-              {false ? createPost("Question") : TestPosts}
+              {/* {false ? createPost("Question") : TestPosts} */}
             </CenterWrapper>
           </PostFeedWrapper>
           <OptionsPanel userRole={false} />

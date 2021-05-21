@@ -20,7 +20,7 @@ import LazyFetch from "./requests/LazyFetch";
  * @returns Reaction Component
  */
 const Reaction = ({ reactions, type, id, postid }) => {
-  console.log("reactions: ", reactions);
+  // console.log("reactions: ", reactions);
   const urlParams = useParams();
   const user = useContext(UserContext);
   const [reactionState, setReactions] = useState(reactions);
@@ -30,7 +30,7 @@ const Reaction = ({ reactions, type, id, postid }) => {
     gooded: reactions.goods.includes(user._id),
     helpfuled: reactions.helpfuls.includes(user._id),
   });
-  console.log("reactClicked: ", reactClicked);
+  // console.log("reactClicked: ", reactClicked);
 
   let endpoint = "/api/courses/" + urlParams.courseId + "/reactions";
 

@@ -44,7 +44,7 @@ const PostWrapper = ({
   postObject,
   ...props
 }) => {
-  console.log("IsRead: ", postObject);
+  // console.log("IsRead: ", postObject);
 
   const history = useHistory();
   const navigateToPost = (post) => {
