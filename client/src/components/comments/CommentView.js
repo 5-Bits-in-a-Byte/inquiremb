@@ -91,6 +91,7 @@ const CommentView = ({ classroomName }) => {
   let location = useLocation();
   let post;
   if (location.state) {
+    console.log("L State: ", location.state);
     post = location.state.post;
   }
 
@@ -255,7 +256,7 @@ const CommentView = ({ classroomName }) => {
                         // backgroundColor: "#f1f1f1",
                         minHeight: "100px",
                         padding: "0 8px",
-                        maxHeight: "200px",
+                        // maxHeight: "200px",
                         overflow: "hidden",
                         border: "2px solid #e7e7e7",
                         borderRadius: "5px",

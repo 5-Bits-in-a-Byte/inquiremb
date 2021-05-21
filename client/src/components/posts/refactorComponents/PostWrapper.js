@@ -5,6 +5,7 @@ import Icon from "../../common/Icon";
 import OptionDots from "../../../imgs/option-dots.svg";
 import Reaction from "../../common/Reaction";
 import CommentImg from "../../../imgs/comment.svg";
+import { useHistory } from "react-router";
 
 const accentColor = (type) => {
   switch (type) {
@@ -44,19 +45,34 @@ const PostWrapper = ({
   postObject,
   ...props
 }) => {
+  const history = useHistory();
+  const navigateToPost = (post) => {
+    history.push({
+      pathname: "/course/" + post.courseId + "/post/" + post._id,
+      state: { post },
+    });
+  };
+
   const dropdownOptions = [
     { onClick: handleDelete, label: "Delete post" },
     { onClick: handleEdit, label: "Edit post" },
   ];
 
   return (
-    <Wrapper sideBarColor={accentColor(postType)}>
+    <Wrapper
+      onClick={() => {
+        navigateToPost(postObject);
+      }}
+      sideBarColor={accentColor(postType)}
+    >
       <HeaderContentWrapper>
         <CircleIcon isRead={isRead} accentColor={accentColor(postType)} />
         <PostFlag accentColor={accentColor(postType)}>
           {postType ? postType : "Question"}
         </PostFlag>
-        <PostTitle>This is the post title</PostTitle>
+        <PostTitle>
+          {postObject.title ? postObject.title : "Big ol bungus energy"}
+        </PostTitle>
         <DropDownContainer>
           <Dropdown options={dropdownOptions}>
             <Icon src={OptionDots} style={{ cursor: "pointer" }} />
@@ -74,8 +90,7 @@ const PostWrapper = ({
           <UserIcon src={postObject.postedBy.picture} />
         )}
         <UserDescription isInstructor={postObject.isInstructor}>
-          Posted by {postObject.postedBy.firstName}{" "}
-          {postObject.postedBy.lastName}
+          Posted by {postObject.postedBy.first} {postObject.postedBy.last}
         </UserDescription>
         <ReactionSection>
           <Reaction
@@ -109,8 +124,8 @@ export default PostWrapper;
 const Wrapper = styled.div`
   margin: 2em;
   padding: 0.5em;
-  width: 726px;
-  max-width: 900px;
+  width: 100%px;
+  /* max-width: 900px; */
   /* min-height: 255px; */
   /* height: 255px; */
 

@@ -9,22 +9,69 @@ import { useParams } from "react-router-dom";
 import Fetch from "../common/requests/Fetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
+import PostWrapper from "./refactorComponents/PostWrapper";
+import { Editor } from "react-draft-wysiwyg";
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 
-const createPost = (post, userRole) => {
+const convertToUpper = (postType) => {
+  var first = postType[0].toUpperCase();
+  var rest = postType.slice(1);
+  return first + rest;
+};
+
+const createPost = (post, userRole, isCondensed) => {
   return (
-    <Post userRole={userRole} post={post} key={post._id} isCondensed={false} />
+    // <Post userRole={userRole} post={post} key={post._id} isCondensed={false} />
+    <PostWrapper
+      // isRead
+      postObject={post}
+      postType={convertToUpper(post.content.type)}
+      condensed={isCondensed}
+      content={
+        <Editor
+          readOnly
+          toolbarHidden
+          name="content"
+          editorState={EditorState.createWithContent(
+            convertFromRaw(post.content.raw)
+          )}
+          // editorState={EditorState.createEmpty()}
+          editorStyle={{
+            // backgroundColor: "#f1f1f1",
+            minHeight: "100px",
+            padding: "0 8px",
+            maxHeight: "200px",
+            overflow: "hidden",
+            border: "2px solid #e7e7e7",
+            borderRadius: "5px",
+          }}
+          // placeholder="Details"
+          // onEditorStateChange={handleContentChange}
+          toolbar={{
+            options: [
+              "inline",
+              "list",
+              "link",
+              "emoji",
+              "history",
+              "blockType",
+            ],
+          }}
+        />
+      }
+    />
   );
 };
 
 // Sorts the posts by pinned/date
-const generateSections = (data, userRole) => {
+const generateSections = (data, userRole, isCondensed) => {
   let posts = { pinned: [], other: [] };
   if (data) {
     data.forEach((post) => {
       if (post.isPinned) {
-        posts.pinned.push(createPost(post, userRole));
+        posts.pinned.push(createPost(post, userRole, isCondensed));
       } else {
-        posts.other.push(createPost(post, userRole));
+        posts.other.push(createPost(post, userRole, isCondensed));
       }
     });
   }
@@ -53,7 +100,7 @@ const PostView = ({ userRole, highlightedSection }) => {
     };
   }, []);
 
-  const [isCondensed, setCondensedState] = useState(true);
+  const [isCondensed, setCondensedState] = useState(false);
   const [sortByMostRecent, toggleSort] = useState(true);
   // Retrieves the courseId from the url parameters
   const { courseId } = useParams();
@@ -87,9 +134,10 @@ const PostView = ({ userRole, highlightedSection }) => {
     endpoint: endpoint,
   });
   if (data) {
+    console.log("DATA: ", data);
     data = [...socketPosts, ...data];
   }
-  let posts = generateSections(data, userRole);
+  let posts = generateSections(data, userRole, isCondensed);
   let pinnedLen = posts.pinned.length;
   let otherLen = posts.other.length;
 
@@ -103,7 +151,6 @@ const PostView = ({ userRole, highlightedSection }) => {
                 secondary={true}
                 onClick={() => {
                   setCondensedState(!isCondensed);
-                  alert("This feature is a work in progress.");
                 }}
               >
                 <img src={LineWidthImg} />
