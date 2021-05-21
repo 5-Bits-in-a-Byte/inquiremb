@@ -54,19 +54,24 @@ const Draft = () => {
   };
 
   const handleSubmit = () => {
+    const newContent = {
+      ...content,
+      type: content.type.toLowerCase(),
+      raw: convertToRaw(content.raw.getCurrentContent()),
+    };
     LazyFetch({
       type: "post",
-      endpoint: "/api/post/" + courseId + "/posts",
+      endpoint: "/api/courses/" + courseId + "/posts",
       data: {
         title: draft.title,
         isAnonymous: draft.isAnonymous,
         isPrivate: draft.isPrivate,
-        content: content,
+        content: newContent,
       },
       onSuccess: (data) => {
         /* data.new is used after the redirect to prevent 
         a request for comments (new posts have 0 comments)*/
-        console.log(data);
+        console.log("data:", data);
         data.new = true;
         history.push({
           pathname: "/course/" + data.courseId + "/post/" + data._id,
@@ -75,20 +80,6 @@ const Draft = () => {
       },
     });
   };
-
-  // <Editor
-  // toolbarHidden
-  // readOnly
-  // name="content"
-  // editorStyle={{
-  //   // backgroundColor: "#f1f1f1",
-  //   minHeight: "100px",
-  //   padding: "0 8px",
-  //   maxHeight: "200px",
-  //   overflow: "hidden",
-  //   border: "2px solid #e7e7e7",
-  //   borderRadius: "5px",
-  // }}
 
   var titlePlaceholder = content.type ? content.type + " title" : "Post title";
   return (

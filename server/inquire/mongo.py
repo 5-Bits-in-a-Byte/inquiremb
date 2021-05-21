@@ -109,7 +109,8 @@ class Post(MongoModel):
     isPinned = fields.BooleanField(default=False)
     isPrivate = fields.BooleanField()
     instructorCommented = fields.BooleanField(default=False)
-    reactions = fields.DictField(default={"likes": []})
+    reactions = fields.DictField(
+        default={"likes": [], 'goods': [], 'helpfuls': []})
     comments = fields.IntegerField(default=0)
     createdDate = fields.DateTimeField(default=datetime.datetime.now)
     updatedDate = fields.DateTimeField(default=datetime.datetime.now)
@@ -130,7 +131,8 @@ class Comment(MongoModel):
     postedBy = fields.DictField()
     endorsed = fields.BooleanField(default=False)
     replies = fields.EmbeddedDocumentListField('Reply', blank=True)
-    reactions = fields.DictField(default={'likes': []})
+    reactions = fields.DictField(
+        default={'likes': [], 'goods': [], 'helpfuls': []})
 
     class Meta:
         write_concern = WriteConcern(j=True)
