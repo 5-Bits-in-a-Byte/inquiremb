@@ -7,7 +7,6 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 02/15/2021
 '''
-from flask import jsonify
 from flask_restful import Resource, reqparse
 from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
