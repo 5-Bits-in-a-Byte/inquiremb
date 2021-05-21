@@ -71,7 +71,7 @@ class Post(MongoModel):
     courseId = fields.CharField()
     postedBy = fields.DictField()
     title = fields.CharField(required=True)
-    content = fields.DictField(required=True)
+    content = fields.DictField(required=True, validators=[post_content_validator])
     isInstructor = fields.BooleanField(default=False)
     isPinned = fields.BooleanField(default=False)
     isPrivate = fields.BooleanField()
@@ -146,7 +146,16 @@ def role_validator(d, example=None):
 
     return True
 
-
+def post_content_validator(content):
+    post_type = content.get("type", None)
+    if post_type == "poll":
+        return True
+    elif post_type == "question":
+        return True
+    elif post_type == "announcement":
+        return True
+    else:
+        raise ValidationError("Post type not recognized")
 class Role(MongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
     name = fields.CharField(required=True)
