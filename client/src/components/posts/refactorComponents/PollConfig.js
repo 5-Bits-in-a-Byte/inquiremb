@@ -10,7 +10,7 @@ const max_options = 6;
 const default_title = "Inquire is a great website!";
 const default_options = ["Yes", "No", "Maybe"];
 
-const PollTitlePanel = ({ titleText }) => {
+const PollTitlePanel = ({ titleText, setTitle }) => {
   const [nameField, setNameField] = useState(titleText);
   const [nameFieldState, setNameFieldState] = useState(true);
 
@@ -37,6 +37,10 @@ const PollTitlePanel = ({ titleText }) => {
           primary
           buttonColor={"rgba(0, 0, 0, 0.0)"}
           onClick={() => {
+            if (!nameFieldState) {
+              setTitle(nameField);
+            }
+
             setNameFieldState(!nameFieldState);
           }}
         >
@@ -160,6 +164,7 @@ const StringConflictCheck = (newOptions) => {
 
 const PollConfig = ({ children, ...props }) => {
   const [options, setOptions] = useState(default_options);
+  const [title, setTitle] = useState(default_title);
   const [optionCounter, setOptionCounter] = useState(1);
 
   const TestNewOption = (index, newOption) => {
@@ -175,19 +180,6 @@ const PollConfig = ({ children, ...props }) => {
     setOptions(newOptions);
 
     return true;
-  };
-
-  // Removing options, require users to have at least one
-  const RemoveOption = (index) => {
-    let newOptions = [...options];
-    newOptions.splice(index, 1);
-
-    console.log(newOptions);
-    if (newOptions.length > 0) {
-      setOptions(newOptions);
-    } else {
-      alert("A Poll must have at least one option.");
-    }
   };
 
   // Adding options; don't permit more than the max amount
@@ -230,6 +222,19 @@ const PollConfig = ({ children, ...props }) => {
     }
   };
 
+  // Removing options, require users to have at least one
+  const RemoveOption = (index) => {
+    let newOptions = [...options];
+    newOptions.splice(index, 1);
+
+    console.log(newOptions);
+    if (newOptions.length > 0) {
+      setOptions(newOptions);
+    } else {
+      alert("A Poll must have at least one option.");
+    }
+  };
+
   let test_option_components = GenerateOptionList(
     options,
     TestNewOption,
@@ -241,13 +246,13 @@ const PollConfig = ({ children, ...props }) => {
       <HeaderGroup>
         <HeaderText>{"Poll Title"}</HeaderText>
       </HeaderGroup>
-      <PollTitlePanel titleText={default_title} />
+      <PollTitlePanel titleText={title} setTitle={setTitle} />
       <HeaderGroup>
         <HeaderText>{"Create options for your poll."}</HeaderText>
         <HeaderInfoIcon
           src={InfoIcon}
           onClick={() => {
-            console.log(options);
+            console.log("Config data: ", title, options);
           }}
         />
       </HeaderGroup>
