@@ -29,9 +29,8 @@ const ClassView = ({ props }) => {
   }
 
   // UseState Hook to declare state variable "", and setState method to change the variable
-  const [highlightedSection, setHighlightedSection] = useState(
-    defaultHighlight
-  );
+  const [highlightedSection, setHighlightedSection] =
+    useState(defaultHighlight);
 
   var classroomID = urlParams.courseId;
   var courseContext = useContext(UserContext).courses;
@@ -95,8 +94,8 @@ const ClassView = ({ props }) => {
           </div>
         }
       >
-        {/* <PostView userRole={userRole} highlightedSection={highlightedSection} /> */}
-        <PostRefactor />
+        <PostView userRole={userRole} highlightedSection={highlightedSection} />
+        {/* <PostRefactor /> */}
       </Suspense>
     </ClassViewWrapper>
   );
