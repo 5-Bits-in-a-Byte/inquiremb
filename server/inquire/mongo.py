@@ -133,7 +133,7 @@ class Comment(MongoModel):
     endorsed = fields.BooleanField(default=False)
     replies = fields.EmbeddedDocumentListField('Reply', blank=True)
     reactions = fields.DictField(
-        default={'likes': [], 'goods': [], 'helpfuls': []})
+        default={'likes': []})
 
     class Meta:
         write_concern = WriteConcern(j=True)
