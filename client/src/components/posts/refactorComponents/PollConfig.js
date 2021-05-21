@@ -10,22 +10,58 @@ import Input from "../../common/Input";
 import DraftTextArea from "../../common/DraftTextArea";
 import Button from "../../common/Button";
 
-const PollOptionPanel = ({
-  optionObject,
-  optionText,
-  panelOutlineColor,
-  ...props
-}) => {
+const max_options = 6;
+const default_options = ["Yes", "No", "Maybe", "I don't know", "I don't care"];
+
+const PollTitlePanel = ({}) => {
+  const [nameField, setNameField] = useState("Poll Title");
+  const [nameFieldState, setNameFieldState] = useState(true);
+
+  return (
+    <PollAttributeWrapper>
+      <PollDetailPanel>
+        {nameFieldState ? (
+          <PollOptionName style={{ margin: `0 1rem 0 0` }}>
+            {nameField}
+          </PollOptionName>
+        ) : (
+          <DraftTextArea
+            minRows={1}
+            style={{ width: `75%`, marginRight: `1em` }}
+            onChange={(e) => {
+              /*if (e.target.value != optionObject.name) {
+                optionObject.name = e.target.value;
+              }*/
+              setNameField(e.target.value);
+            }}
+          >
+            {nameField}
+          </DraftTextArea>
+        )}
+
+        <Button
+          primary
+          buttonColor={"rgba(0, 0, 0, 0.0)"}
+          onClick={() => {
+            setNameFieldState(!nameFieldState);
+          }}
+        >
+          <ChangeNameIcon src={PencilIcon} />
+        </Button>
+      </PollDetailPanel>
+    </PollAttributeWrapper>
+  );
+};
+
+const PollOptionPanel = ({ optionObject, optionText, ...props }) => {
   const urlParams = useParams();
 
   const [nameField, setNameField] = useState(optionText);
   const [nameFieldState, setNameFieldState] = useState(true);
 
-  // console.log("This role id: ", props.value);
-
   return (
-    <PollOptionPanelWrapper panelOutlineColor={panelOutlineColor}>
-      <PollOptionNameWrapper>
+    <PollAttributeWrapper>
+      <PollDetailPanel>
         {nameFieldState ? (
           <PollOptionName style={{ margin: `0 1rem 0 0` }}>
             {nameField}
@@ -55,23 +91,14 @@ const PollOptionPanel = ({
         >
           <ChangeNameIcon src={PencilIcon} />
         </Button>
-      </PollOptionNameWrapper>
+      </PollDetailPanel>
 
       <Button primary buttonColor={"rgba(0, 0, 0, 0.0)"} onClick={() => {}}>
         <ChangeNameIcon src={CloseButtonIcon} />
       </Button>
-    </PollOptionPanelWrapper>
+    </PollAttributeWrapper>
   );
 };
-
-const test_options = [
-  "Spaghetti",
-  "Burrito",
-  "Lasagna",
-  "Pizza",
-  "Salad",
-  "Sandwich",
-];
 
 /**
  * Generates a list of Poll Option Components for State Management
@@ -83,24 +110,53 @@ const GenerateOptionList = (options) => {
       value={index}
       optionObject={{ name: option }}
       optionText={option}
-      panelOutlineColor={"#000000"}
     />
   ));
 };
 
-const PollDraftWrapper = ({ panelHeader, children, ...props }) => {
+const PollDraftWrapper = ({ children, ...props }) => {
   return (
     <GroupWrapper>
       <HeaderGroup>
-        <HeaderText>{panelHeader}</HeaderText>
+        <HeaderText>{"Poll Title"}</HeaderText>
+      </HeaderGroup>
+      <PollTitlePanel />
+      <HeaderGroup>
+        <HeaderText>{"Create options for your poll."}</HeaderText>
         <HeaderInfoIcon src={InfoIcon} />
       </HeaderGroup>
       {children}
       <Button
         secondary
-        buttonWidth={"207px"}
-        buttonHeight={"48px"}
-        onClick={() => {}}
+        buttonWidth={"175px"}
+        buttonHeight={"36px"}
+        onClick={() => {
+          /*
+          setRoleIdCounter(roleIdCounter + 1);
+          let newPerms = createRoleObject(roleIdCounter);
+
+          LazyFetch({
+            type: "post",
+            endpoint: "/api/courses/" + courseId + "/roles",
+            data: {
+              name: newPerms.name,
+              permissions: newPerms.permissions,
+            },
+            onSuccess: (data) => {
+              let { status, role } = data;
+              console.log("Roles Post Success: ", status);
+              let newCourseRoles =
+                courseRoles != null ? [...courseRoles, role] : [role];
+              setCourseRoles(newCourseRoles);
+
+              setUserList(GenerateUserList(courseUsers, newCourseRoles));
+            },
+            onFailure: (err) => {
+              console.log("Failed to Post Roles.", err?.response);
+            },
+          });
+        */
+        }}
       >
         + Add a New Option
       </Button>
@@ -109,16 +165,17 @@ const PollDraftWrapper = ({ panelHeader, children, ...props }) => {
 };
 
 const PollConfig = ({ ...props }) => {
-  return (
-    <PollDraftWrapper
-      panelHeader={"Create options for your poll."}
-    ></PollDraftWrapper>
-  );
+  let test_option_components = GenerateOptionList(default_options);
+
+  const [optionCount, setOptionCount] = useState(default_options);
+
+  return <PollDraftWrapper>{test_option_components}</PollDraftWrapper>;
 };
 
 export default PollConfig;
 
 const GroupWrapper = styled.div`
+  width: 50%;
   margin: 1rem;
   padding: 2rem;
 
@@ -146,13 +203,13 @@ const HeaderInfoIcon = styled.img`
   height: 16px;
 `;
 
-// Styles for the Poll Options panels - same as role panel styles
+// Styles for the Poll Options panels - very similar to role panel styles
 
-const PollOptionPanelWrapper = styled.div`
+const PollAttributeWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-  margin: 1rem 0;
+  justify-content: space-between;
+  margin: 0.5rem 0;
   padding: 0.25rem;
   border: 2px solid
     ${(props) =>
@@ -160,11 +217,11 @@ const PollOptionPanelWrapper = styled.div`
   border-radius: 5px;
 `;
 
-const PollOptionNameWrapper = styled.div`
+const PollDetailPanel = styled.div`
   display: flex;
   align-items: center;
 
-  margin: 1rem;
+  margin: 0.5rem;
 `;
 
 const PollOptionName = styled.p`
