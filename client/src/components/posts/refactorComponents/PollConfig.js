@@ -11,10 +11,11 @@ import DraftTextArea from "../../common/DraftTextArea";
 import Button from "../../common/Button";
 
 const max_options = 6;
+const default_title = "Poll Title";
 const default_options = ["Yes", "No", "Maybe", "I don't know", "I don't care"];
 
-const PollTitlePanel = ({}) => {
-  const [nameField, setNameField] = useState("Poll Title");
+const PollTitlePanel = ({ titleText }) => {
+  const [nameField, setNameField] = useState(titleText);
   const [nameFieldState, setNameFieldState] = useState(true);
 
   return (
@@ -29,9 +30,6 @@ const PollTitlePanel = ({}) => {
             minRows={1}
             style={{ width: `75%`, marginRight: `1em` }}
             onChange={(e) => {
-              /*if (e.target.value != optionObject.name) {
-                optionObject.name = e.target.value;
-              }*/
               setNameField(e.target.value);
             }}
           >
@@ -114,28 +112,41 @@ const GenerateOptionList = (options) => {
   ));
 };
 
-const PollDraftWrapper = ({ children, ...props }) => {
+const PollConfig = ({ children, ...props }) => {
+  const [options, setOptions] = useState(default_options);
+  const [optionCounter, setOptionCounter] = useState(1);
+
+  let test_option_components = GenerateOptionList(options);
+
   return (
     <GroupWrapper>
       <HeaderGroup>
         <HeaderText>{"Poll Title"}</HeaderText>
       </HeaderGroup>
-      <PollTitlePanel />
+      <PollTitlePanel titleText={default_title} />
       <HeaderGroup>
         <HeaderText>{"Create options for your poll."}</HeaderText>
         <HeaderInfoIcon src={InfoIcon} />
       </HeaderGroup>
-      {children}
+      {test_option_components}
       <Button
         secondary
         buttonWidth={"175px"}
         buttonHeight={"36px"}
         onClick={() => {
-          /*
-          setRoleIdCounter(roleIdCounter + 1);
-          let newPerms = createRoleObject(roleIdCounter);
+          if (options.length >= max_options) {
+            alert(
+              "The maximum number of poll options is " +
+                max_options.toString() +
+                "."
+            );
+          } else {
+            let newOption = "New Option " + optionCounter.toString();
+            setOptions([...options, newOption]);
+            setOptionCounter(optionCounter + 1);
+          }
 
-          LazyFetch({
+          /*LazyFetch({
             type: "post",
             endpoint: "/api/courses/" + courseId + "/roles",
             data: {
@@ -154,8 +165,7 @@ const PollDraftWrapper = ({ children, ...props }) => {
             onFailure: (err) => {
               console.log("Failed to Post Roles.", err?.response);
             },
-          });
-        */
+          });*/
         }}
       >
         + Add a New Option
@@ -163,14 +173,11 @@ const PollDraftWrapper = ({ children, ...props }) => {
     </GroupWrapper>
   );
 };
-
+/*
 const PollConfig = ({ ...props }) => {
-  let test_option_components = GenerateOptionList(default_options);
 
-  const [optionCount, setOptionCount] = useState(default_options);
-
-  return <PollDraftWrapper>{test_option_components}</PollDraftWrapper>;
-};
+  return <PollDraftWrapper></PollDraftWrapper>;
+};*/
 
 export default PollConfig;
 
