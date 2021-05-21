@@ -11,33 +11,33 @@ import DraftTextArea from "../../common/DraftTextArea";
 import Button from "../../common/Button";
 
 const PollOptionPanel = ({
-  roleObject,
-  roleName,
+  optionObject,
+  optionText,
   panelOutlineColor,
-  courseRoles,
-  setCourseRoles,
   ...props
 }) => {
   const urlParams = useParams();
 
-  const [nameField, setNameField] = useState(roleName);
+  const [nameField, setNameField] = useState(optionText);
   const [nameFieldState, setNameFieldState] = useState(true);
 
   // console.log("This role id: ", props.value);
 
   return (
-    <OptionPanelWrapper panelOutlineColor={panelOutlineColor}>
-      <OptionNameWrapper>
+    <PollOptionPanelWrapper panelOutlineColor={panelOutlineColor}>
+      <PollOptionNameWrapper>
         {nameFieldState ? (
-          <OptionName style={{ margin: `0 1rem 0 0` }}>{nameField}</OptionName>
+          <PollOptionName style={{ margin: `0 1rem 0 0` }}>
+            {nameField}
+          </PollOptionName>
         ) : (
           <DraftTextArea
             minRows={1}
             style={{ width: `150px`, marginRight: `1em` }}
             onChange={(e) => {
               // console.log(e.target.value);
-              if (e.target.value != roleObject.name) {
-                roleObject.name = e.target.value;
+              if (e.target.value != optionObject.name) {
+                optionObject.name = e.target.value;
               }
               setNameField(e.target.value);
             }}
@@ -55,35 +55,40 @@ const PollOptionPanel = ({
         >
           <ChangeNameIcon src={PencilIcon} />
         </Button>
-      </OptionNameWrapper>
+      </PollOptionNameWrapper>
 
       <Button primary buttonColor={"rgba(0, 0, 0, 0.0)"} onClick={() => {}}>
         <ChangeNameIcon src={CloseButtonIcon} />
       </Button>
-    </OptionPanelWrapper>
+    </PollOptionPanelWrapper>
   );
 };
 
-const test_options = [];
+const test_options = [
+  "Spaghetti",
+  "Burrito",
+  "Lasagna",
+  "Pizza",
+  "Salad",
+  "Sandwich",
+];
 
 /**
  * Generates a list of Poll Option Components for State Management
  */
-const GenerateOptionList = (roles, setRoles, userList, setUserList) => {
-  return roles.map((role, index) => (
+const GenerateOptionList = (options) => {
+  return options.map((option, index) => (
     <PollOptionPanel
       key={index}
       value={index}
-      roleObject={role}
-      roleName={role?.name}
-      panelOutlineColor={role?.roleColor}
-      courseRoles={roles}
-      setCourseRoles={setRoles}
+      optionObject={{ name: option }}
+      optionText={option}
+      panelOutlineColor={"#000000"}
     />
   ));
 };
 
-const PollConfig = ({ panelHeader, children, ...props }) => {
+const PollDraftWrapper = ({ panelHeader, children, ...props }) => {
   return (
     <GroupWrapper>
       <HeaderGroup>
@@ -100,6 +105,14 @@ const PollConfig = ({ panelHeader, children, ...props }) => {
         + Add a New Option
       </Button>
     </GroupWrapper>
+  );
+};
+
+const PollConfig = ({ ...props }) => {
+  return (
+    <PollDraftWrapper
+      panelHeader={"Create options for your poll."}
+    ></PollDraftWrapper>
   );
 };
 
@@ -133,9 +146,9 @@ const HeaderInfoIcon = styled.img`
   height: 16px;
 `;
 
-// Styles for the Poll Options panels - modelled after role panel styles
+// Styles for the Poll Options panels - same as role panel styles
 
-const OptionPanelWrapper = styled.div`
+const PollOptionPanelWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -147,14 +160,14 @@ const OptionPanelWrapper = styled.div`
   border-radius: 5px;
 `;
 
-const OptionNameWrapper = styled.div`
+const PollOptionNameWrapper = styled.div`
   display: flex;
   align-items: center;
 
   margin: 1rem;
 `;
 
-const OptionName = styled.p`
+const PollOptionName = styled.p`
   font-size: 16px;
   font-weight: 700;
 `;

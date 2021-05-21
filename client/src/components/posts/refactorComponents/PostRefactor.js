@@ -4,6 +4,7 @@ import Options from "../Options";
 import OptionsPanel from "./OptionsPanel";
 import PostWrapper from "./PostWrapper";
 import Poll from "react-polls";
+import PollConfig from "./PollConfig";
 import Button from "../../common/Button";
 import LineWidthImg from "../../../imgs/line-width.svg";
 import { Editor } from "react-draft-wysiwyg";
@@ -73,6 +74,14 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
   //#region TEST_POSTS
   const TestPosts = (
     <>
+      <PostWrapper
+        // contentObject={{ postType: "Question" }}
+        // isRead
+        postObject={testAnonymousPostObject}
+        postType={"Poll config test"}
+        contentObject={{ idk: false }}
+        content={<PollConfig />}
+      />
       <PostWrapper
         // contentObject={{ postType: "Question" }}
         // isRead
