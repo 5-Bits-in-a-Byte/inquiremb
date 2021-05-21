@@ -20,6 +20,7 @@ const createPost = (postType, postData, userRole) => {
 
 const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
   const [pollAns, setPollAns] = useState(pollAnswers);
+  const [condensed, setCondensed] = useState(false);
 
   const [content, setContent] = useState({
     type: "Question",
@@ -77,7 +78,7 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
         // isRead
         postObject={testAnonymousPostObject}
         postType={"Question"}
-        contentObject={{ idk: false }}
+        condensed={condensed}
         content={
           <Editor
             readOnly
@@ -112,7 +113,7 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
         // isRead
         postObject={testPostObject}
         isAnonymous={false}
-        contentObject={{ idk: false }}
+        condensed={condensed}
         content={
           <Editor
             readOnly
@@ -147,7 +148,7 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
         postType={"Announcement"}
       />
       <PostWrapper
-        contentObject={{ postType: "Question" }}
+        condensed={condensed}
         // isRead
         postObject={testPostObject}
         postType={"Poll"}
@@ -179,7 +180,7 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
                   secondary={true}
                   onClick={() => {
                     // setCondensedState(!isCondensed);
-                    alert("This feature is a work in progress.");
+                    setCondensed(!condensed);
                   }}
                 >
                   <img src={LineWidthImg} />

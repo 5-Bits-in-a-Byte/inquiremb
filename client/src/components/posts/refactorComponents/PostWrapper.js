@@ -37,7 +37,7 @@ const handleEdit = () => {
 };
 
 const PostWrapper = ({
-  contentObject,
+  condensed,
   postType,
   isRead,
   content,
@@ -63,7 +63,7 @@ const PostWrapper = ({
           </Dropdown>
         </DropDownContainer>
       </HeaderContentWrapper>
-      {contentObject ? (
+      {!condensed ? (
         <ContentWrapper postType={postType}>{content}</ContentWrapper>
       ) : (
         <></>
@@ -211,8 +211,8 @@ const UserDescription = styled.h5`
   margin-left: 0.5em;
 
   user-select: none;
-  color: ${(props) => (props.isInstructor ? "#FF9900" : "#A7A7A7")};
-  opacity: 80%;
+  color: ${(props) => (props.isInstructor ? "#FF9900" : "#162b55")};
+  /* opacity: 80%; */
   font-size: 15px;
 `;
 
