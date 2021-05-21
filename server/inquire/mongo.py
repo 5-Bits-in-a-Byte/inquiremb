@@ -20,7 +20,40 @@ import datetime
 from bson.objectid import ObjectId
 import os
 import sys
-script_dir = os.path.dirname(__file__) 
+script_dir = os.path.dirname(__file__)
+
+
+def post_content_validator(content):
+    post_type = content.get("type", None)
+    if post_type == "poll":
+        return True
+    elif post_type == "question":
+        return True
+    elif post_type == "announcement":
+        return True
+    else:
+        raise ValidationError("Post type not recognized")
+
+
+def role_validator(d, example=None):
+    """For use with the Roles Model"""
+    # Loop through each field
+    #   if field exists:
+    #       role_validator(field, example_field)
+    if example == None:
+        example = student
+    for key, item in example.items():
+        if key in d:
+            if type(item) == dict and type(d[key]) == dict:
+                if not role_validator(d[key], example=item):
+                    raise ValidationError("Missing key")
+            elif type(item) != bool or type(d[key]) != bool:
+                raise ValidationError(f"Wrong type in permission field: {key}")
+        else:
+            raise ValidationError(f"Missing permission field: {key}")
+
+    return True
+
 
 class User(MongoModel):
     _id = fields.CharField(primary_key=True)
@@ -31,7 +64,6 @@ class User(MongoModel):
     picture = fields.URLField()
     courses = fields.EmbeddedDocumentListField(
         'UserCourse', blank=True, required=True)
-
 
     def get_course(self, courseId):
         for course in self.courses:
@@ -72,12 +104,14 @@ class Post(MongoModel):
     courseId = fields.CharField()
     postedBy = fields.DictField()
     title = fields.CharField(required=True)
-    content = fields.CharField(required=True)
+    content = fields.DictField(required=True, validators=[
+                               post_content_validator])
     isInstructor = fields.BooleanField(default=False)
     isPinned = fields.BooleanField(default=False)
     isPrivate = fields.BooleanField()
     instructorCommented = fields.BooleanField(default=False)
-    reactions = fields.DictField(default={"likes": []})
+    reactions = fields.DictField(
+        default={"likes": [], 'goods': [], 'helpfuls': []})
     comments = fields.IntegerField(default=0)
     createdDate = fields.DateTimeField(default=datetime.datetime.now)
     updatedDate = fields.DateTimeField(default=datetime.datetime.now)
@@ -98,7 +132,8 @@ class Comment(MongoModel):
     postedBy = fields.DictField()
     endorsed = fields.BooleanField(default=False)
     replies = fields.EmbeddedDocumentListField('Reply', blank=True)
-    reactions = fields.DictField(default={'likes': []})
+    reactions = fields.DictField(
+        default={'likes': [], 'goods': [], 'helpfuls': []})
 
     class Meta:
         write_concern = WriteConcern(j=True)
@@ -127,31 +162,12 @@ class Course(MongoModel):
 
         indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
 
-def role_validator(d, example=None):
-    """For use with the Roles Model"""
-    # Loop through each field
-    #   if field exists:
-    #       role_validator(field, example_field)
-    if example == None:
-        example = student
-    for key, item in example.items():
-        if key in d:
-            if type(item) == dict and type(d[key]) == dict:
-                if not role_validator(d[key], example=item):
-                    raise ValidationError("Missing key")
-            elif type(item) != bool or type(d[key]) != bool:
-                raise ValidationError(f"Wrong type in permission field: {key}")
-        else:
-            raise ValidationError(f"Missing permission field: {key}")
-
-    return True
 
 class Role(MongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
     name = fields.CharField(required=True)
     permissions = fields.DictField(default=False, validators=[role_validator])
+
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'my-app'
-
-

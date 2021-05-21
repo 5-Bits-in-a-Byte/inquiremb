@@ -53,6 +53,7 @@ const Wrapper = styled.div`
   align-items: center;
 
   margin: 0 1em;
+  padding: 0.6em 0px;
 
   background-color: #f1f1f1;
   /* border: 2px solid red; */

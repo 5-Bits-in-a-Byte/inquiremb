@@ -94,6 +94,70 @@ This component handles setting up all of our MongoDB models so that each collect
 }
 ```
 
+### New Post Model: Polls
+
+```json
+{
+  "_id": "oasif-jo12j-asdjf-asdf9",
+  "courseId": "vonqJNDJ07yPyiagvKlR",
+  "postedBy": {
+    "first": "Alec",
+    "last": "Springel",
+    "_id": "oasif-jo12j-asdjf-asdf9",
+    "anonymous": false,
+    "picture": "profile-picture-url.com"
+  },
+  "title": "example",
+  "content": {
+    "type": "poll",
+    "fields": {
+        "Cancel final": {
+            "votes": 3,
+            "users": [userIds....],
+            "option": "Cancel final"
+        },
+        "Make final harder": {
+            "users": [userIds....], // Delete users before sending?
+            "votes": 3,
+            "option": "Make final harder"
+        }
+    }
+  },
+  "isInstructor": false,
+  "isPinned": false,
+  "isPrivate": false,
+  "instructorCommented": false,
+  "reactions": {
+    "likes": ["userid123"]
+  },
+  "comments": 3,
+  "createdDate": "2021-03-08 17:46:53.289000",
+  "updatedDate": "2021-03-08 18:26:33.128000"
+}
+```
+
+### New Post Content Model: Question
+
+```json
+{
+  "content": {
+    "type": "question",
+    "text": "????????????????????"
+  }
+}
+```
+
+### New Post Content Model: Announcement
+
+```json
+{
+  "content": {
+    "type": "announcement",
+    "text": "????????????????????"
+  }
+}
+```
+
 ### Comment Model
 
 ```json
@@ -250,4 +314,10 @@ This component handles setting up all of our MongoDB models so that each collect
     }
   ]
 }
+```
+
+### POST get request
+
+```
+[full of posts] (polls will have users omitted)
 ```

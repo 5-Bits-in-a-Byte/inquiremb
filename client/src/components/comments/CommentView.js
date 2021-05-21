@@ -6,12 +6,16 @@ import {
 } from "../context/UserRoleProvider";
 import styled from "styled-components";
 import Post from "../posts/Post";
+import PostWrapper from "../posts/refactorComponents/PostWrapper";
 import Sidebar from "../posts/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
+import Draft from "../posts/refactorComponents/Draft";
+import { Editor } from "react-draft-wysiwyg";
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 
 const renderComments = (data, userRole) => {
   let ret = [];
@@ -87,8 +91,15 @@ const CommentView = ({ classroomName }) => {
   let location = useLocation();
   let post;
   if (location.state) {
+    console.log("L State: ", location.state);
     post = location.state.post;
   }
+
+  const convertToUpper = (postType) => {
+    var first = postType[0].toUpperCase();
+    var rest = postType.slice(1);
+    return first + rest;
+  };
 
   // Fetch comments
   useEffect(() => {
@@ -224,11 +235,48 @@ const CommentView = ({ classroomName }) => {
                   </Button>
                 )}
               </OptionsContainer>
-              <Post
-                post={post}
-                isCondensed={false}
-                isDraft={postid === "new"}
-              />
+              {postid === "new" ? (
+                <Draft />
+              ) : (
+                <PostWrapper
+                  // isRead
+                  postObject={post}
+                  postType={convertToUpper(post.content.type)}
+                  condensed={false}
+                  content={
+                    <Editor
+                      readOnly
+                      toolbarHidden
+                      name="content"
+                      editorState={EditorState.createWithContent(
+                        convertFromRaw(post.content.raw)
+                      )}
+                      // editorState={EditorState.createEmpty()}
+                      editorStyle={{
+                        // backgroundColor: "#f1f1f1",
+                        minHeight: "100px",
+                        padding: "0 8px",
+                        // maxHeight: "200px",
+                        overflow: "hidden",
+                        border: "2px solid #e7e7e7",
+                        borderRadius: "5px",
+                      }}
+                      // placeholder="Details"
+                      // onEditorStateChange={handleContentChange}
+                      toolbar={{
+                        options: [
+                          "inline",
+                          "list",
+                          "link",
+                          "emoji",
+                          "history",
+                          "blockType",
+                        ],
+                      }}
+                    />
+                  }
+                />
+              )}
               {comments}
             </MaxWidth>
           </ScrollingDiv>

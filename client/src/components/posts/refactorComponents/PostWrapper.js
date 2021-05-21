@@ -3,6 +3,22 @@ import styled, { css } from "styled-components";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Icon from "../../common/Icon";
 import OptionDots from "../../../imgs/option-dots.svg";
+import Reaction from "../../common/Reaction";
+import CommentImg from "../../../imgs/comment.svg";
+import { useHistory } from "react-router";
+
+const accentColor = (type) => {
+  switch (type) {
+    case "Question":
+      return "#4a86fa";
+    case "Announcement":
+      return "#FA6A4A";
+    case "Poll":
+      return "#4CAF50";
+    default:
+      return "#4a86fa";
+  }
+};
 
 const handleDelete = () => {
   // LazyFetch({
@@ -22,38 +38,83 @@ const handleEdit = () => {
 };
 
 const PostWrapper = ({
-  contentObject,
-  accentColor,
+  condensed,
   postType,
   isRead,
   content,
+  postObject,
   ...props
 }) => {
+  const history = useHistory();
+  const navigateToPost = (post) => {
+    history.push({
+      pathname: "/course/" + post.courseId + "/post/" + post._id,
+      state: { post },
+    });
+  };
+
   const dropdownOptions = [
     { onClick: handleDelete, label: "Delete post" },
     { onClick: handleEdit, label: "Edit post" },
   ];
 
   return (
-    <Wrapper sideBarColor={accentColor ? accentColor : "#4a86fa"}>
+    <Wrapper
+      onClick={() => {
+        navigateToPost(postObject);
+      }}
+      sideBarColor={accentColor(postType)}
+    >
       <HeaderContentWrapper>
-        <CircleIcon
-          isRead={isRead}
-          accentColor={accentColor ? accentColor : "#4a86fa"}
-        />
-        <PostFlag accentColor={accentColor ? accentColor : "#4a86fa"}>
+        <CircleIcon isRead={isRead} accentColor={accentColor(postType)} />
+        <PostFlag accentColor={accentColor(postType)}>
           {postType ? postType : "Question"}
         </PostFlag>
-        <PostTitle>This is the post title</PostTitle>
+        <PostTitle>
+          {postObject.title ? postObject.title : "Big ol bungus energy"}
+        </PostTitle>
         <DropDownContainer>
           <Dropdown options={dropdownOptions}>
             <Icon src={OptionDots} style={{ cursor: "pointer" }} />
           </Dropdown>
         </DropDownContainer>
       </HeaderContentWrapper>
-      {contentObject ? <ContentWrapper>{content}</ContentWrapper> : <></>}
+      {!condensed ? (
+        <ContentWrapper postType={postType}>{content}</ContentWrapper>
+      ) : (
+        <></>
+      )}
       <HRSeperator />
-      <FooterContentWrapper>THIS WILL HOLD FOOTER CONTENT</FooterContentWrapper>
+      <FooterContentWrapper>
+        {postObject.postedBy.isAnonymous ? null : (
+          <UserIcon src={postObject.postedBy.picture} />
+        )}
+        <UserDescription isInstructor={postObject.isInstructor}>
+          Posted by {postObject.postedBy.first} {postObject.postedBy.last}
+        </UserDescription>
+        <ReactionSection>
+          <Reaction
+            reactions={postObject.reactions}
+            type="post"
+            id={postObject._id}
+            postid={postObject._id}
+          />
+          <Icon
+            alt={"Number of comments"}
+            src={CommentImg}
+            width={"22px"}
+            style={{
+              float: "left",
+              marginRight: "8px",
+              marginLeft: "20px",
+              userSelect: "none",
+            }}
+          />
+          <h5 style={{ color: "#8c8c8c", marginRight: "1em" }}>
+            {postObject.comments}
+          </h5>
+        </ReactionSection>
+      </FooterContentWrapper>
     </Wrapper>
   );
 };
@@ -61,10 +122,10 @@ const PostWrapper = ({
 export default PostWrapper;
 
 const Wrapper = styled.div`
-  margin: 1em;
+  margin: 2em;
   padding: 0.5em;
-  width: 719px;
-  max-width: 900px;
+  width: 100%px;
+  /* max-width: 900px; */
   /* min-height: 255px; */
   /* height: 255px; */
 
@@ -129,9 +190,10 @@ const DropDownContainer = styled.div`
 
 const ContentWrapper = styled.div`
   padding: 5px;
-  min-height: 145px;
-  border: 2px solid #e7e7e7;
-  border-radius: 5px;
+  min-height: 100px;
+
+  border: ${(props) => (props.postType == "Poll" ? "2px solid #e7e7e7" : "")};
+  border-radius: ${(props) => (props.postType == "Poll" ? "5px" : "")};
 `;
 
 const HRSeperator = styled.hr`
@@ -139,6 +201,15 @@ const HRSeperator = styled.hr`
   padding: 0 0 0 0;
   border: 1px solid #e7e7e7;
   border-radius: 5px;
+`;
+
+const UserIcon = styled.img`
+  /* float: left; */
+  width: 36px;
+  height: 36px;
+  margin-left: 0.5em;
+  border-radius: 50%;
+  user-select: none;
 `;
 
 const FooterContentWrapper = styled.div`
@@ -149,4 +220,20 @@ const FooterContentWrapper = styled.div`
   height: 50px;
 
   /* border: 1px solid orange; */
+`;
+
+const UserDescription = styled.h5`
+  margin-left: 0.5em;
+
+  user-select: none;
+  color: ${(props) => (props.isInstructor ? "#FF9900" : "#162b55")};
+  /* opacity: 80%; */
+  font-size: 15px;
+`;
+
+const ReactionSection = styled.div`
+  display: inline-flex;
+  margin-left: auto;
+  height: 100%;
+  align-items: center;
 `;

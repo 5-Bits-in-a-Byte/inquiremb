@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import UnlikedImg from "../../imgs/like_grey.svg";
 import LikedImg from "../../imgs/like_blue.svg";
+import LightbulbImg from "../../imgs/lightbulb.svg";
+import GreenPlusImg from "../../imgs/green-plus.svg";
+import GreyPlusImg from "../../imgs/grey-plus.svg";
+import GreyLightbulbImg from "../../imgs/lightbulb-grey.svg";
 import { UserContext } from "../context/UserProvider";
 import LazyFetch from "./requests/LazyFetch";
 
@@ -16,12 +20,17 @@ import LazyFetch from "./requests/LazyFetch";
  * @returns Reaction Component
  */
 const Reaction = ({ reactions, type, id, postid }) => {
+  console.log("reactions: ", reactions);
   const urlParams = useParams();
   const user = useContext(UserContext);
   const [reactionState, setReactions] = useState(reactions);
   const [reactClicked, setClicked] = useState({
     liked: reactions.likes.includes(user._id),
+    // Add more here
+    gooded: reactions.goods.includes(user._id),
+    helpfuled: reactions.helpfuls.includes(user._id),
   });
+  console.log("reactClicked: ", reactClicked);
 
   let endpoint = "/api/courses/" + urlParams.courseId + "/reactions";
 
@@ -40,35 +49,123 @@ const Reaction = ({ reactions, type, id, postid }) => {
   }
 
   const handleLike = () => {
-    LazyFetch({
-      type: "put",
-      endpoint: endpoint,
-      data: null,
-      onSuccess: (data) => {
-        setReactions(data.reactions);
-      },
-    });
+    // LazyFetch({
+    //   type: "put",
+    //   endpoint: endpoint,
+    //   data: null,
+    //   onSuccess: (data) => {
+    //     setReactions(data.reactions);
+    //   },
+    // });
 
-    var loc = reactionState.likes.indexOf(user._id);
+    var likedLoc = reactionState.likes.indexOf(user._id);
+
+    if (likedLoc === -1) {
+      setClicked({
+        liked: true,
+        gooded: reactClicked.gooded,
+        helpfuled: reactClicked.helpfuled,
+      });
+    } else {
+      setClicked({
+        liked: false,
+        gooded: reactClicked.gooded,
+        helpfuled: reactClicked.helpfuled,
+      });
+    }
+  };
+
+  const handleGood = () => {
+    // LazyFetch({
+    //   type: "put",
+    //   endpoint: endpoint,
+    //   data: null,
+    //   onSuccess: (data) => {
+    //     setReactions(data.reactions);
+    //   },
+    // });
+
+    var loc = reactionState.goods.indexOf(user._id);
 
     if (loc === -1) {
-      setClicked({ liked: true });
+      setClicked({
+        liked: reactClicked.liked,
+        gooded: true,
+        helpfuled: reactClicked.helpfuled,
+      });
     } else {
-      setClicked({ liked: false });
+      setClicked({
+        liked: reactClicked.liked,
+        gooded: false,
+        helpfuled: reactClicked.helpfuled,
+      });
+    }
+  };
+
+  const handleHelpful = () => {
+    // LazyFetch({
+    //   type: "put",
+    //   endpoint: endpoint,
+    //   data: null,
+    //   onSuccess: (data) => {
+    //     setReactions(data.reactions);
+    //   },
+    // });
+
+    var loc = reactionState.goods.indexOf(user._id);
+
+    if (loc === -1) {
+      setClicked({
+        liked: reactClicked.liked,
+        gooded: reactClicked.gooded,
+        helpfuled: true,
+      });
+    } else {
+      setClicked({
+        liked: reactClicked.liked,
+        gooded: reactClicked.gooded,
+        helpfuled: false,
+      });
     }
   };
 
   return (
     <>
-      <ReactImg
-        src={reactClicked.liked ? LikedImg : UnlikedImg}
-        onClick={(event) => {
-          event.stopPropagation();
-          handleLike();
-        }}
-        clicked={reactClicked.liked}
-        postid={postid}
-      />
+      <a title={"Good post"}>
+        <ReactImg
+          src={reactClicked.gooded ? LightbulbImg : GreyLightbulbImg}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleGood();
+          }}
+          clicked={reactClicked.gooded}
+          postid={postid}
+        />
+      </a>
+      <ReactValue>{reactionState.goods.length}</ReactValue>
+      <a title={"Helpful post"}>
+        <ReactImg
+          src={reactClicked.helpfuled ? GreenPlusImg : GreyPlusImg}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleHelpful();
+          }}
+          clicked={reactClicked.helpfuled}
+          postid={postid}
+        />
+      </a>
+      <ReactValue>{reactionState.helpfuls.length}</ReactValue>
+      <a title={"Like post"}>
+        <ReactImg
+          src={reactClicked.liked ? LikedImg : UnlikedImg}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleLike();
+          }}
+          clicked={reactClicked.liked}
+          postid={postid}
+        />
+      </a>
       <ReactValue>{reactionState.likes.length}</ReactValue>
     </>
   );
@@ -78,8 +175,8 @@ export default Reaction;
 
 const ReactImg = styled.img`
   float: left;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   margin-right: 8px;
   margin-left: 20px;
   user-select: none;
