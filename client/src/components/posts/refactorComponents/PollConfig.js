@@ -182,7 +182,7 @@ const PollConfig = ({ children, ...props }) => {
     let newOptions = [...options];
     newOptions.splice(index, 1);
 
-    //console.log(newOptions);
+    console.log(newOptions);
     if (newOptions.length > 0) {
       setOptions(newOptions);
     } else {
@@ -192,14 +192,41 @@ const PollConfig = ({ children, ...props }) => {
 
   // Adding options; don't permit more than the max amount
   const AddOption = () => {
-    if (options.length >= max_options) {
+    const len = options.length;
+
+    if (len >= max_options) {
       alert(
         "The maximum number of poll options is " + max_options.toString() + "."
       );
     } else {
       let newOption = "New Option " + optionCounter.toString();
+
+      var conflict = true;
+      var offset = 0;
+
+      while (conflict) {
+        var match = false;
+
+        for (var i = 0; i < len; i++) {
+          console.log(newOption + " vs " + options[i]);
+
+          if (newOption == options[i]) {
+            match = true;
+            break;
+          }
+        }
+
+        offset++;
+
+        if (match) {
+          newOption = "New Option " + (optionCounter + offset).toString();
+        } else {
+          conflict = false;
+        }
+      }
+
+      setOptionCounter(optionCounter + offset);
       setOptions([...options, newOption]);
-      setOptionCounter(optionCounter + 1);
     }
   };
 
@@ -217,7 +244,12 @@ const PollConfig = ({ children, ...props }) => {
       <PollTitlePanel titleText={default_title} />
       <HeaderGroup>
         <HeaderText>{"Create options for your poll."}</HeaderText>
-        <HeaderInfoIcon src={InfoIcon} />
+        <HeaderInfoIcon
+          src={InfoIcon}
+          onClick={() => {
+            console.log(options);
+          }}
+        />
       </HeaderGroup>
       {test_option_components}
       <Button
