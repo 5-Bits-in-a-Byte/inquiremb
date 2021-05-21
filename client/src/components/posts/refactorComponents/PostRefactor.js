@@ -4,6 +4,7 @@ import Options from "../Options";
 import OptionsPanel from "./OptionsPanel";
 import PostWrapper from "./PostWrapper";
 import Poll from "react-polls";
+import PollConfig from "./PollConfig";
 import Button from "../../common/Button";
 import LineWidthImg from "../../../imgs/line-width.svg";
 import { Editor } from "react-draft-wysiwyg";
@@ -70,9 +71,38 @@ const PostRefactor = ({ userRole, highlightedSection, ...props }) => {
     isInstructor: false,
   };
 
+  var pollDraftDemo = {
+    _id: "000111222",
+    postedBy: {
+      firstName: "Aaron",
+      lastName: "Van Cleave",
+      picture: "https://avatars.githubusercontent.com/u/46456517?v=4",
+      isAnonymous: false,
+      _id: "108734863236913803139",
+    },
+    comments: 0,
+    reactions: { likes: ["108734863236913803139"], goods: [], helpfuls: [] },
+    isInstructor: false,
+  };
+
   //#region TEST_POSTS
   const TestPosts = (
     <>
+      <PostWrapper
+        // contentObject={{ postType: "Question" }}
+        // isRead
+        postObject={pollDraftDemo}
+        postType={"Poll Draft Demo"}
+        contentObject={{ idk: false }}
+        content={
+          <>
+            <h4>
+              It's really weird for this to be here ngl but check it out I guess
+            </h4>
+            <PollConfig />
+          </>
+        }
+      />
       <PostWrapper
         // contentObject={{ postType: "Question" }}
         // isRead
