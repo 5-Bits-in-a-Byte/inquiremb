@@ -4,7 +4,7 @@ from inquire.mongo import *
 
 class Poll(Resource):
     @permission_layer(require_login=True, required_permissions=["participation-voteInPoll"])
-    def put(self, courseId=None, postId=None):
+    def put(self, courseId=None):
         # Parse the request
         parser = reqparse.RequestParser()
         parser.add_argument('selectedOption')
