@@ -5,10 +5,22 @@ import PencilIcon from "../../../imgs/pencil.svg";
 import CloseButtonIcon from "../../../imgs/close.svg";
 import DraftTextArea from "../../common/DraftTextArea";
 import Button from "../../common/Button";
+import Checkbox from "../../common/Checkbox";
+import LazyFetch from "../../common/requests/LazyFetch";
+import { useHistory, useParams } from "react-router";
 
 const max_options = 6;
 const default_title = "Inquire is a great website!";
 const default_options = ["Yes", "No", "Maybe"];
+
+const accentColor = (type) => {
+  switch (type) {
+    case "Poll":
+      return "#4CAF50";
+    default:
+      return "#4CAF50";
+  }
+};
 
 const PollTitlePanel = ({ titleText, setTitle }) => {
   const [nameField, setNameField] = useState(titleText);
@@ -163,9 +175,13 @@ const StringConflictCheck = (newOptions) => {
 };
 
 const PollConfig = ({ children, ...props }) => {
+  const type = "Poll";
   const [options, setOptions] = useState(default_options);
   const [title, setTitle] = useState(default_title);
   const [optionCounter, setOptionCounter] = useState(1);
+  const [isAnonymous, toggleAnonymous] = useState(false);
+  const { courseId } = useParams();
+  const history = useHistory();
 
   const TestNewOption = (index, newOption) => {
     var newOptions = [...options];
@@ -235,6 +251,30 @@ const PollConfig = ({ children, ...props }) => {
     }
   };
 
+  const handleSubmit = () => {
+    LazyFetch({
+      type: "post",
+      endpoint: "/api/courses/" + courseId + "/posts",
+      data: {
+        isAnonymous: isAnonymous,
+        isPrivate: false,
+        title: title,
+        content: {
+          type: type.toLowerCase(),
+          fields: options,
+        },
+      },
+      onSuccess: (data) => {
+        console.log(data);
+        data.new = true;
+        history.push({
+          pathname: "/course/" + data.courseId + "/post/" + data._id,
+          state: { post: data },
+        });
+      },
+    });
+  };
+
   let test_option_components = GenerateOptionList(
     options,
     TestNewOption,
@@ -242,42 +282,138 @@ const PollConfig = ({ children, ...props }) => {
   );
 
   return (
-    <GroupWrapper>
-      <HeaderGroup>
-        <HeaderText>{"Poll Title"}</HeaderText>
-      </HeaderGroup>
-      <PollTitlePanel titleText={title} setTitle={setTitle} />
-      <HeaderGroup>
-        <HeaderText>{"Create options for your poll."}</HeaderText>
-        <HeaderInfoIcon
-          src={InfoIcon}
+    <Wrapper sideBarColor={accentColor(type)}>
+      <HeaderContentWrapper>
+        <CircleIcon accentColor={accentColor(type)} />
+        <PostFlag accentColor={accentColor(type)} selected={type === "Poll"}>
+          Poll
+        </PostFlag>
+      </HeaderContentWrapper>
+      <GroupWrapper>
+        <HeaderGroup>
+          <HeaderText>{"Poll Title"}</HeaderText>
+        </HeaderGroup>
+        <PollTitlePanel titleText={title} setTitle={setTitle} />
+        <HeaderGroup>
+          <HeaderText>{"Create options for your poll."}</HeaderText>
+          <HeaderInfoIcon
+            src={InfoIcon}
+            onClick={() => {
+              console.log("Config data: ", title, options);
+            }}
+          />
+        </HeaderGroup>
+        {test_option_components}
+        <Button
+          secondary
+          buttonWidth={"175px"}
+          buttonHeight={"36px"}
           onClick={() => {
-            console.log("Config data: ", title, options);
+            AddOption();
           }}
-        />
-      </HeaderGroup>
-      {test_option_components}
-      <Button
-        secondary
-        buttonWidth={"175px"}
-        buttonHeight={"36px"}
-        onClick={() => {
-          AddOption();
-        }}
-      >
-        + Add a New Option
-      </Button>
-    </GroupWrapper>
+        >
+          + Add a New Option
+        </Button>
+      </GroupWrapper>
+      <HRSeperator />
+      <FooterContentWrapper>
+        <ButtonSection>
+          <Checkbox
+            checkboxName="isAnonymous"
+            labelText={"Make Anonymous"}
+            onChange={() => {
+              toggleAnonymous(!isAnonymous);
+            }}
+            checkStatus={isAnonymous}
+          />
+          <Button primary onClick={handleSubmit} style={{ margin: "0 1em" }}>
+            Submit
+          </Button>
+        </ButtonSection>
+      </FooterContentWrapper>
+    </Wrapper>
   );
 };
 
 export default PollConfig;
 
+const Wrapper = styled.div`
+  margin: 2em;
+  padding: 0.5em;
+  width: 719px;
+  max-width: 900px;
+  /* min-height: 255px; */
+  /* height: 255px; */
+
+  background-color: #fff;
+  /* border: 1px solid red; */
+  border-left: ${(props) =>
+    props.sideBarColor
+      ? "5px solid " + props.sideBarColor
+      : "5px solid #e7e7e7"};
+  border-radius: 5px;
+  box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
+`;
+
+const HeaderContentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+
+  padding: 5px;
+  height: 40px;
+
+  /* border: 1px solid #4a86fa; */
+`;
+
+const CircleIcon = styled.div`
+  padding: 5px;
+  width: 10px;
+  height: 10px;
+
+  background-color: ${(props) =>
+    props.accentColor ? props.accentColor : "#e7e7e7"};
+
+  border-radius: 50%;
+`;
+
+const PostFlag = styled.div`
+  margin-left: 1em;
+  padding: 2px 5px;
+  color: ${(props) => (props.selected ? "#fff" : "#000")};
+  background-color: ${(props) =>
+    props.selected ? props.accentColor : "#e7e7e7"};
+  border-radius: 2px;
+`;
+
+const HRSeperator = styled.hr`
+  margin: 5px 0;
+  padding: 0 0 0 0;
+  border: 1px solid #e7e7e7;
+  border-radius: 5px;
+`;
+
+const FooterContentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+
+  /* padding: 5px; */
+  height: 50px;
+
+  /* border: 1px solid orange; */
+`;
+
+const ButtonSection = styled.div`
+  display: inline-flex;
+  margin-left: auto;
+  height: 100%;
+  align-items: center;
+`;
+
 // Styles for the Poll config wrapper component - very similar to the roles configuration panel styles
 
 const GroupWrapper = styled.div`
-  width: 50%;
-  margin: 1rem;
+  width: 100%;
+  margin: 1rem 1rem 1rem 0;
   padding: 2rem;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);

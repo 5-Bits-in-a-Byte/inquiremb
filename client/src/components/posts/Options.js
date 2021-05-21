@@ -39,7 +39,7 @@ const Options = ({ userRole, courseId }) => {
             textDecoration: "none",
             display: "flex",
           }}
-          to={"/course/" + courseId + "/post/new"}
+          to={"/course/" + courseId + "/post/newQorA"}
         >
           <Button primary autoWidth enableMargin={"0.5em"}>
             Draft Post
@@ -51,14 +51,9 @@ const Options = ({ userRole, courseId }) => {
             textDecoration: "none",
             display: "flex",
           }}
-          to={"#"}
+          to={"/course/" + courseId + "/post/newPoll"}
         >
-          <Button
-            primary
-            autoWidth
-            enableMargin={"0.5em"}
-            onClick={() => alert("The feature has not yet been implemented...")}
-          >
+          <Button primary autoWidth enableMargin={"0.5em"}>
             Draft Poll
           </Button>
         </Link>

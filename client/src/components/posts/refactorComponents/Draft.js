@@ -16,8 +16,6 @@ const accentColor = (type) => {
       return "#4a86fa";
     case "Announcement":
       return "#FA6A4A";
-    case "Poll":
-      return "#4CAF50";
     default:
       return "#4a86fa";
   }
@@ -71,7 +69,6 @@ const Draft = () => {
       onSuccess: (data) => {
         /* data.new is used after the redirect to prevent 
         a request for comments (new posts have 0 comments)*/
-        console.log("data:", data);
         data.new = true;
         history.push({
           pathname: "/course/" + data.courseId + "/post/" + data._id,

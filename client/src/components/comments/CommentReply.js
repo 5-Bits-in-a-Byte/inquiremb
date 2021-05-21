@@ -18,7 +18,7 @@ const CommentReply = ({
   commentid,
   userRole,
 }) => {
-  console.log("Comment Reply Role Object: ", userRole);
+  // console.log("Comment Reply Role Object: ", userRole);
   const user = useContext(UserContext);
   const [draft, setDraft] = useState("");
   const { courseId } = useParams();

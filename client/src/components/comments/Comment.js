@@ -13,7 +13,7 @@ import OptionDots from "../../imgs/option-dots.svg";
 import { UserContext } from "../context/UserProvider";
 
 const Comment = ({ comment, isDraft, callback, userRole }) => {
-  console.log("Comment Role Object: ", userRole);
+  // console.log("Comment Role Object: ", userRole);
   const { courseId, postid } = useParams();
   const [content, setContent] = useState("");
   const user = useContext(UserContext);
