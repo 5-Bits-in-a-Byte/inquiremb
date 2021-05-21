@@ -101,6 +101,8 @@ const PollOptionPanel = ({
         buttonColor={"rgba(0, 0, 0, 0.0)"}
         onClick={() => {
           removeOption(value);
+          setNameField(optionText);
+          setcachedNameField(optionText);
         }}
       >
         <ChangeNameIcon src={CloseButtonIcon} />
@@ -115,7 +117,7 @@ const PollOptionPanel = ({
 const GenerateOptionList = (options, testNewOption, removeOption) => {
   return options.map((option, index) => (
     <PollOptionPanel
-      key={index}
+      key={option}
       value={index}
       optionText={option}
       /*options={options}*/
@@ -178,7 +180,7 @@ const PollConfig = ({ children, ...props }) => {
   };
 
   const RemoveOption = (index) => {
-    var newOptions = [...options];
+    let newOptions = [...options];
     newOptions.splice(index, 1);
 
     console.log(newOptions);
