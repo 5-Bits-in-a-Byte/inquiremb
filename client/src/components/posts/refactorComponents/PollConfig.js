@@ -12,7 +12,7 @@ import Button from "../../common/Button";
 
 const max_options = 6;
 const default_title = "Poll Title";
-const default_options = ["Yes", "No", "Maybe", "I don't know", "I don't care"];
+const default_options = ["Yes", "No", "Maybe", "I don't know", "yes"];
 
 const PollTitlePanel = ({ titleText }) => {
   const [nameField, setNameField] = useState(titleText);
@@ -51,8 +51,44 @@ const PollTitlePanel = ({ titleText }) => {
   );
 };
 
-const PollOptionPanel = ({ optionObject, optionText, ...props }) => {
-  const urlParams = useParams();
+const PollOptionPanel = ({
+  optionObject,
+  optionText,
+  options,
+  setOptions,
+  ...props
+}) => {
+  /*const urlParams = useParams();*/
+
+  /**
+   * Quick and dirty iteration through the string list to detect any duplicates.
+   * DISREGARDS case by converting to uppercase first.
+   */
+  const StringConflictCheck = (newOptions) => {
+    var upperNewOptions = [...newOptions];
+
+    console.log(upperNewOptions);
+
+    var len = upperNewOptions.length;
+
+    for (var i = 0; i < len; i++) {
+      upperNewOptions[i] = upperNewOptions[i].toUpperCase();
+    }
+
+    console.log(upperNewOptions);
+
+    for (var i = 0; i < len - 1; i++) {
+      for (var j = i + 1; j < len; j++) {
+        console.log(upperNewOptions[i] + " vs " + upperNewOptions[j]);
+
+        if (upperNewOptions[i] == upperNewOptions[j]) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  };
 
   const [nameField, setNameField] = useState(optionText);
   const [nameFieldState, setNameFieldState] = useState(true);
@@ -69,11 +105,14 @@ const PollOptionPanel = ({ optionObject, optionText, ...props }) => {
             minRows={1}
             style={{ width: `150px`, marginRight: `1em` }}
             onChange={(e) => {
-              // console.log(e.target.value);
-              if (e.target.value != optionObject.name) {
+              /*if (e.target.value != optionObject.name) {
                 optionObject.name = e.target.value;
-              }
+              }*/
               setNameField(e.target.value);
+
+              console.log(
+                StringConflictCheck(options) ? "Conflict" : "No conflict"
+              );
             }}
           >
             {nameField}
@@ -101,13 +140,15 @@ const PollOptionPanel = ({ optionObject, optionText, ...props }) => {
 /**
  * Generates a list of Poll Option Components for State Management
  */
-const GenerateOptionList = (options) => {
+const GenerateOptionList = (options, setOptions) => {
   return options.map((option, index) => (
     <PollOptionPanel
       key={index}
       value={index}
       optionObject={{ name: option }}
       optionText={option}
+      options={options}
+      setOptions={setOptions}
     />
   ));
 };
@@ -116,7 +157,7 @@ const PollConfig = ({ children, ...props }) => {
   const [options, setOptions] = useState(default_options);
   const [optionCounter, setOptionCounter] = useState(1);
 
-  let test_option_components = GenerateOptionList(options);
+  let test_option_components = GenerateOptionList(options, setOptions);
 
   return (
     <GroupWrapper>
@@ -145,27 +186,6 @@ const PollConfig = ({ children, ...props }) => {
             setOptions([...options, newOption]);
             setOptionCounter(optionCounter + 1);
           }
-
-          /*LazyFetch({
-            type: "post",
-            endpoint: "/api/courses/" + courseId + "/roles",
-            data: {
-              name: newPerms.name,
-              permissions: newPerms.permissions,
-            },
-            onSuccess: (data) => {
-              let { status, role } = data;
-              console.log("Roles Post Success: ", status);
-              let newCourseRoles =
-                courseRoles != null ? [...courseRoles, role] : [role];
-              setCourseRoles(newCourseRoles);
-
-              setUserList(GenerateUserList(courseUsers, newCourseRoles));
-            },
-            onFailure: (err) => {
-              console.log("Failed to Post Roles.", err?.response);
-            },
-          });*/
         }}
       >
         + Add a New Option
@@ -173,13 +193,10 @@ const PollConfig = ({ children, ...props }) => {
     </GroupWrapper>
   );
 };
-/*
-const PollConfig = ({ ...props }) => {
-
-  return <PollDraftWrapper></PollDraftWrapper>;
-};*/
 
 export default PollConfig;
+
+// Styles for the Poll config wrapper component - very similar to the roles configuration panel styles
 
 const GroupWrapper = styled.div`
   width: 50%;
@@ -210,7 +227,7 @@ const HeaderInfoIcon = styled.img`
   height: 16px;
 `;
 
-// Styles for the Poll Options panels - very similar to role panel styles
+// Styles for the Poll Options and Poll Title panels - very similar to role panel styles
 
 const PollAttributeWrapper = styled.div`
   display: flex;
