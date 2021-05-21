@@ -7,7 +7,7 @@ import DraftTextArea from "../../common/DraftTextArea";
 import Button from "../../common/Button";
 
 const max_options = 6;
-const default_title = "Poll Title";
+const default_title = "Inquire is a great website!";
 const default_options = ["Yes", "No", "Maybe"];
 
 const PollTitlePanel = ({ titleText }) => {
@@ -50,7 +50,6 @@ const PollTitlePanel = ({ titleText }) => {
 const PollOptionPanel = ({
   value,
   optionText,
-  /*options,*/
   testNewOption,
   removeOption,
   ...props
@@ -120,7 +119,6 @@ const GenerateOptionList = (options, testNewOption, removeOption) => {
       key={option}
       value={index}
       optionText={option}
-      /*options={options}*/
       testNewOption={testNewOption}
       removeOption={removeOption}
     />
@@ -179,14 +177,20 @@ const PollConfig = ({ children, ...props }) => {
     return true;
   };
 
+  // Removing options, require users to have at least one
   const RemoveOption = (index) => {
     let newOptions = [...options];
     newOptions.splice(index, 1);
 
-    console.log(newOptions);
-    setOptions(newOptions);
+    //console.log(newOptions);
+    if (newOptions.length > 0) {
+      setOptions(newOptions);
+    } else {
+      alert("A Poll must have at least one option.");
+    }
   };
 
+  // Adding options; don't permit more than the max amount
   const AddOption = () => {
     if (options.length >= max_options) {
       alert(
@@ -213,12 +217,7 @@ const PollConfig = ({ children, ...props }) => {
       <PollTitlePanel titleText={default_title} />
       <HeaderGroup>
         <HeaderText>{"Create options for your poll."}</HeaderText>
-        <HeaderInfoIcon
-          src={InfoIcon}
-          onClick={() => {
-            console.log(options);
-          }}
-        />
+        <HeaderInfoIcon src={InfoIcon} />
       </HeaderGroup>
       {test_option_components}
       <Button
