@@ -23,6 +23,38 @@ import sys
 script_dir = os.path.dirname(__file__)
 
 
+def post_content_validator(content):
+    post_type = content.get("type", None)
+    if post_type == "poll":
+        return True
+    elif post_type == "question":
+        return True
+    elif post_type == "announcement":
+        return True
+    else:
+        raise ValidationError("Post type not recognized")
+
+
+def role_validator(d, example=None):
+    """For use with the Roles Model"""
+    # Loop through each field
+    #   if field exists:
+    #       role_validator(field, example_field)
+    if example == None:
+        example = student
+    for key, item in example.items():
+        if key in d:
+            if type(item) == dict and type(d[key]) == dict:
+                if not role_validator(d[key], example=item):
+                    raise ValidationError("Missing key")
+            elif type(item) != bool or type(d[key]) != bool:
+                raise ValidationError(f"Wrong type in permission field: {key}")
+        else:
+            raise ValidationError(f"Missing permission field: {key}")
+
+    return True
+
+
 class User(MongoModel):
     _id = fields.CharField(primary_key=True)
     anonymousId = fields.CharField(required=True, default=ObjectId)
@@ -71,7 +103,8 @@ class Post(MongoModel):
     courseId = fields.CharField()
     postedBy = fields.DictField()
     title = fields.CharField(required=True)
-    content = fields.DictField(required=True, validators=[post_content_validator])
+    content = fields.DictField(required=True, validators=[
+                               post_content_validator])
     isInstructor = fields.BooleanField(default=False)
     isPinned = fields.BooleanField(default=False)
     isPrivate = fields.BooleanField()
@@ -127,35 +160,6 @@ class Course(MongoModel):
         indexes = [pymongo.IndexModel([('$**', pymongo.TEXT)])]
 
 
-def role_validator(d, example=None):
-    """For use with the Roles Model"""
-    # Loop through each field
-    #   if field exists:
-    #       role_validator(field, example_field)
-    if example == None:
-        example = student
-    for key, item in example.items():
-        if key in d:
-            if type(item) == dict and type(d[key]) == dict:
-                if not role_validator(d[key], example=item):
-                    raise ValidationError("Missing key")
-            elif type(item) != bool or type(d[key]) != bool:
-                raise ValidationError(f"Wrong type in permission field: {key}")
-        else:
-            raise ValidationError(f"Missing permission field: {key}")
-
-    return True
-
-def post_content_validator(content):
-    post_type = content.get("type", None)
-    if post_type == "poll":
-        return True
-    elif post_type == "question":
-        return True
-    elif post_type == "announcement":
-        return True
-    else:
-        raise ValidationError("Post type not recognized")
 class Role(MongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
     name = fields.CharField(required=True)
