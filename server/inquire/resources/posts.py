@@ -89,7 +89,7 @@ class Posts(Resource):
         # Checking if post content needs to be manipulated before being stored in the database
         if args.content.get("type") == "poll":
             field_names = args.content["fields"]
-            content = {"type": "poll",
+            args.content = {"type": "poll",
                        "fields": self.create_poll_fields(field_names)}
 
         # Trying to add the post to the DB
