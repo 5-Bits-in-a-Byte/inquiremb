@@ -40,11 +40,12 @@ const handleEdit = () => {
 const PostWrapper = ({
   condensed,
   postType,
-  isRead,
   content,
   postObject,
   ...props
 }) => {
+  console.log("IsRead: ", postObject);
+
   const history = useHistory();
   const navigateToPost = (post) => {
     history.push({
@@ -66,7 +67,10 @@ const PostWrapper = ({
       sideBarColor={accentColor(postType)}
     >
       <HeaderContentWrapper>
-        <CircleIcon isRead={isRead} accentColor={accentColor(postType)} />
+        <CircleIcon
+          isRead={postObject.read}
+          accentColor={accentColor(postType)}
+        />
         <PostFlag accentColor={accentColor(postType)}>
           {postType ? postType : "Question"}
         </PostFlag>

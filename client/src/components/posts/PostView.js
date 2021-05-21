@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Options from "./Options";
 import Post from "./Post";
 import Button from "../common/Button";
@@ -23,7 +23,6 @@ const createPost = (post, userRole, isCondensed) => {
   return (
     // <Post userRole={userRole} post={post} key={post._id} isCondensed={false} />
     <PostWrapper
-      // isRead
       postObject={post}
       postType={convertToUpper(post.content.type)}
       condensed={isCondensed}
@@ -178,10 +177,10 @@ const PostView = ({ userRole, highlightedSection }) => {
             )}
             {posts.other}
             <Options userRole={userRole} courseId={courseId} />
+            <OverflowCounter offsetAmount={"0.25rem"} />
           </CenterWrapper>
         </ScrollingDiv>
       </PostFeed>
-      {/* Displays options panel on the right of the webpage */}
     </>
   );
 };
@@ -233,4 +232,14 @@ const PostGroupingHeader = styled.div`
   margin: 2.2em 0 0em 0;
   font-size: 1.25em;
   font-weight: 500;
+`;
+
+/** THIS ACCOUNTS FOR WEIRD SCROLLING DIV STUFF */
+const OverflowCounter = styled.div`
+  width: 100%;
+  ${(props) =>
+    props.offsetAmount &&
+    css`
+      padding: ${props.offsetAmount};
+    `}/* border: 3px solid black; */
 `;

@@ -239,7 +239,6 @@ const CommentView = ({ classroomName }) => {
                 <Draft />
               ) : (
                 <PostWrapper
-                  // isRead
                   postObject={post}
                   postType={convertToUpper(post.content.type)}
                   condensed={false}

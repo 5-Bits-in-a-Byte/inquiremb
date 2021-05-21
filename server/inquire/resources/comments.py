@@ -44,7 +44,8 @@ class Comments(Resource):
         if post is None:
             return abort(400, errors=["Bad post id"])
         # Marking that the current_user just viewed this post
-        if (course := current_user.get_course(courseId)) != None:
+        course = current_user.get_course(courseId)
+        if course != None:
             course.viewed[postId] = datetime.datetime.now()
             current_user.save()
 

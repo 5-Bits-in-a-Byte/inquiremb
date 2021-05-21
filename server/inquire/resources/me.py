@@ -14,6 +14,12 @@ from inquire.mongo import *
 
 
 class Me(Resource):
+    def __serialize(self, user):
+        result = user.to_son()
+        for course in result["courses"]:
+            course.pop("viewed")
+        return result
+
     @permission_layer(require_login=True)
     def get(self):
         """
@@ -42,4 +48,4 @@ class Me(Resource):
               $ref: '#/definitions/403Response'
         """
 
-        return current_user.to_son().to_dict()
+        return self.__serialize(current_user).to_dict()
