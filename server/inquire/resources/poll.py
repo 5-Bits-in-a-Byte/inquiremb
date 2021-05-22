@@ -22,12 +22,11 @@ class Poll(Resource):
             return {'voted': False, 'increment': False, 'errors': f"Post is not a poll"}, 400
         option = args['selectedOption']
         if option in post.content['fields']:
-            user_list = post.content['fields'][option]['users']
-            if current_user._id in user_list:
-                return {'voted': True, 'increment': False}, 200
-            else:
-                user_list.append(current_user._id)
+            voted = post.content["user_votes"].get(current_user._id, None)
+            if not voted:
+                post.content["user_votes"][current_user._id] = option
                 post.content['fields'][option]['votes'] += 1
                 post.save()
                 return {'voted': True, 'increment': True}, 200
+            return {'voted': True, 'increment': False}, 200
         return {'voted': False, 'increment': False, 'errors': f"Option is not available in the poll"}, 400
