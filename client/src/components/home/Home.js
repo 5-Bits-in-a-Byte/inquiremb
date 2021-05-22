@@ -3,10 +3,65 @@ import styled from "styled-components";
 import RecentGroup from "./RecentGroup";
 import Fetch from "../common/requests/Fetch";
 import Post from "../posts/Post";
+import { Editor } from "react-draft-wysiwyg";
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
+import PostWrapper from "../posts/refactorComponents/PostWrapper";
+import PollWrapper from "../posts/refactorComponents/PollWrapper";
+
+const convertToUpper = (postType) => {
+  var first = postType[0].toUpperCase();
+  var rest = postType.slice(1);
+  return first + rest;
+};
 
 // Create the post using the Post component
-const createPost = (post) => {
-  return <Post post={post} key={post._id} isCondensed={false} />;
+const createPost = (post, userRole, isCondensed) => {
+  const postType = convertToUpper(post.content.type);
+
+  var content;
+  // console.log("postType: ", postType);
+  if (
+    post.content.type === "question" ||
+    post.content.type === "announcement"
+  ) {
+    content = (
+      <Editor
+        readOnly
+        toolbarHidden
+        name="content"
+        editorState={EditorState.createWithContent(
+          convertFromRaw(post.content.raw)
+        )}
+        // editorState={EditorState.createEmpty()}
+        editorStyle={{
+          // backgroundColor: "#f1f1f1",
+          minHeight: "100px",
+          padding: "0 8px",
+          maxHeight: "200px",
+          overflow: "hidden",
+          border: "2px solid #e7e7e7",
+          borderRadius: "5px",
+        }}
+        // placeholder="Details"
+        // onEditorStateChange={handleContentChange}
+        toolbar={{
+          options: ["inline", "list", "link", "emoji", "history", "blockType"],
+        }}
+      />
+    );
+  } else if (post.content.type === "poll") {
+    content = <PollWrapper post={post} />;
+  }
+
+  return (
+    // <Post userRole={userRole} post={post} key={post._id} isCondensed={false} />
+    <PostWrapper
+      postObject={post}
+      postType={postType}
+      condensed={true}
+      content={content}
+    />
+  );
 };
 
 // Create a group of posts with the RecentGroup component
