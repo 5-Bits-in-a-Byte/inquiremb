@@ -133,7 +133,7 @@ class Comment(MongoModel):
     endorsed = fields.BooleanField(default=False)
     replies = fields.EmbeddedDocumentListField('Reply', blank=True)
     reactions = fields.DictField(
-        default={'likes': []})
+        default={"likes": [], 'goods': [], 'helpfuls': []})
 
     class Meta:
         write_concern = WriteConcern(j=True)
@@ -144,7 +144,8 @@ class Reply(EmbeddedMongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
     content = fields.CharField(required=True, default="")
     postedBy = fields.DictField()
-    reactions = fields.DictField(default={'likes': []})
+    reactions = fields.DictField(
+        default={"likes": [], 'goods': [], 'helpfuls': []})
 
 
 class Course(MongoModel):
