@@ -87,7 +87,8 @@ class Posts(Resource):
         if args.content.get("type") == "poll":
             field_names = args.content["fields"]
             args.content = {"type": "poll",
-                            "fields": self.create_poll_fields(field_names)}
+                            "fields": self.create_poll_fields(field_names),
+                            "user_votes": {}}
 
         # Trying to add the post to the DB
         try:
@@ -461,14 +462,14 @@ class Posts(Resource):
         return post_id in viewed and viewed[post_id] > updatedDate
 
     def anonymize_poll_content(self, poll):
-        for field_name in poll["fields"]:
-            poll["fields"][field_name].pop("users")
+        poll["vote"] = poll["user_votes"].get(current_user._id, None)
+        poll.pop("user_votes")
 
     def create_poll_fields(self, field_name_list):
         poll = {}
         for field in field_name_list:
             if type(field) == str:
-                poll[field] = {"users": [], "votes": 0, "option": field}
+                poll[field] = {"votes": 0, "option": field}
             else:
                 raise TypeError("Non string poll option submitted")
         return poll
