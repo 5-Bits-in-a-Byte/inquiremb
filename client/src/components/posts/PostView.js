@@ -21,36 +21,11 @@ const convertToUpper = (postType) => {
   return first + rest;
 };
 
-const createPost = (post, userRole, isCondensed, pollAns, setPollAns) => {
+const createPost = (post, userRole, isCondensed) => {
   const postType = convertToUpper(post.content.type);
 
-  // const establishPollAns = (post) => {
-  //   let initialPollAns = [];
-  //   Object.keys(post.content.fields).map((key) => {
-  //     initialPollAns.push(post.content.fields[key]);
-  //   });
-  //   return initialPollAns;
-  // };
-
-  // if (postType === "Poll") {
-  //   var pollEntry = { ...pollAns };
-  //   pollEntry[post._id] = establishPollAns(post);
-  //   console.log(pollEntry);
-  //   setPollAns(pollEntry);
-  // }
-
-  // const handleVote = (voteAnswer) => {
-  //   var pa = pollAns;
-  //   const newPollAnswers = pa.map((answer) => {
-  //     if (answer.option === voteAnswer) answer.votes++;
-  //     return answer;
-  //   });
-  //   setPollAns(newPollAnswers);
-  // };
-
   var content;
-  var question = "question";
-  console.log("postType: ", postType);
+  // console.log("postType: ", postType);
   if (
     post.content.type === "question" ||
     post.content.type === "announcement"
@@ -83,43 +58,7 @@ const createPost = (post, userRole, isCondensed, pollAns, setPollAns) => {
   } else if (post.content.type === "poll") {
     content = <PollWrapper post={post} />;
   }
-  // switch (post.content.type) {
-  //   case question:
-  //     content = (
-  //       <Editor
-  //         readOnly
-  //         toolbarHidden
-  //         name="content"
-  //         editorState={EditorState.createWithContent(
-  //           convertFromRaw(post.content.raw)
-  //         )}
-  //         // editorState={EditorState.createEmpty()}
-  //         editorStyle={{
-  //           // backgroundColor: "#f1f1f1",
-  //           minHeight: "100px",
-  //           padding: "0 8px",
-  //           maxHeight: "200px",
-  //           overflow: "hidden",
-  //           border: "2px solid #e7e7e7",
-  //           borderRadius: "5px",
-  //         }}
-  //         // placeholder="Details"
-  //         // onEditorStateChange={handleContentChange}
-  //         toolbar={{
-  //           options: [
-  //             "inline",
-  //             "list",
-  //             "link",
-  //             "emoji",
-  //             "history",
-  //             "blockType",
-  //           ],
-  //         }}
-  //       />
-  //     );
-  //   case "poll":
-  //     content = <PollWrapper post={post} />;
-  // }
+
   return (
     // <Post userRole={userRole} post={post} key={post._id} isCondensed={false} />
     <PostWrapper
@@ -132,18 +71,14 @@ const createPost = (post, userRole, isCondensed, pollAns, setPollAns) => {
 };
 
 // Sorts the posts by pinned/date
-const generateSections = (data, userRole, isCondensed, pa) => {
+const generateSections = (data, userRole, isCondensed) => {
   let posts = { pinned: [], other: [] };
   if (data) {
     data.forEach((post) => {
       if (post.isPinned) {
-        posts.pinned.push(
-          createPost(post, userRole, isCondensed, pa.pollAns, pa.setPollAns)
-        );
+        posts.pinned.push(createPost(post, userRole, isCondensed));
       } else {
-        posts.other.push(
-          createPost(post, userRole, isCondensed, pa.pollAns, pa.setPollAns)
-        );
+        posts.other.push(createPost(post, userRole, isCondensed));
       }
     });
   }
@@ -211,12 +146,8 @@ const PostView = ({ userRole, highlightedSection }) => {
     console.log("DATA: ", data);
     data = [...socketPosts, ...data];
   }
-  let posts = generateSections(data, userRole, isCondensed, {
-    pollAns,
-    setPollAns,
-  });
-  let pinnedLen = posts.pinned.length;
-  let otherLen = posts.other.length;
+
+  let posts = generateSections(data, userRole, isCondensed);
 
   return (
     <>

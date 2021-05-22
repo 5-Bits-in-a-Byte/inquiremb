@@ -74,8 +74,8 @@ const PostWrapper = ({
         <PostFlag accentColor={accentColor(postType)}>
           {postType ? postType : "Question"}
         </PostFlag>
-        <PostTitle>
-          {postObject.title ? postObject.title : "Big ol bungus energy"}
+        <PostTitle style={{ cursor: "pointer" }}>
+          {postObject.title ? postObject.title : "Error getting post title"}
         </PostTitle>
         <DropDownContainer>
           <Dropdown options={dropdownOptions}>
@@ -84,7 +84,14 @@ const PostWrapper = ({
         </DropDownContainer>
       </HeaderContentWrapper>
       {!condensed ? (
-        <ContentWrapper postType={postType}>{content}</ContentWrapper>
+        <ContentWrapper
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+          postType={postType}
+        >
+          {content}
+        </ContentWrapper>
       ) : (
         <></>
       )}
