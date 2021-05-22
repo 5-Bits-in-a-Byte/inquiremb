@@ -26,28 +26,6 @@ const handleEdit = () => {
   alert("This feature is still a work in progress. Check back soon!");
 };
 
-const handlePin = (postObject, pin) => {
-  LazyFetch({
-    type: "put",
-    endpoint: "/api/courses/" + postObject.courseId + "/posts",
-    data: {
-      _id: postObject._id,
-      title: postObject.title,
-      content: postObject.content,
-      isPinned: !pin.pinnedStatus,
-    },
-    onSuccess: (data) => {
-      console.log("Success: ", data);
-      pin.setPinnedStatus(!pin.pinnedStatus);
-      window.location.reload();
-    },
-    onFailure: (err) => {
-      alert("Error pinning / unpinning post.");
-      console.log("Err: ", err);
-    },
-  });
-};
-
 const PostWrapper = ({
   condensed,
   postType,
@@ -64,6 +42,28 @@ const PostWrapper = ({
     history.push({
       pathname: "/course/" + post.courseId + "/post/" + post._id,
       state: { post },
+    });
+  };
+
+  const handlePin = (postObject, courseId, pin) => {
+    LazyFetch({
+      type: "put",
+      endpoint: "/api/courses/" + postObject.courseId + "/posts",
+      data: {
+        _id: postObject._id,
+        title: postObject.title,
+        content: postObject.content,
+        isPinned: !pin.pinnedStatus,
+      },
+      onSuccess: (data) => {
+        console.log("Success: ", data);
+        pin.setPinnedStatus(!pin.pinnedStatus);
+        if (!postid) window.location.reload();
+      },
+      onFailure: (err) => {
+        alert("Error pinning / unpinning post.");
+        console.log("Err: ", err);
+      },
     });
   };
 
@@ -94,7 +94,10 @@ const PostWrapper = ({
     { onClick: handleEdit, label: "Edit post" },
     {
       onClick: () => {
-        handlePin(postObject, { pinnedStatus, setPinnedStatus });
+        handlePin(postObject, postObject.courseId, {
+          pinnedStatus,
+          setPinnedStatus,
+        });
       },
       label: pinnedStatus ? "Unpin Post" : "Pin Post",
     },
