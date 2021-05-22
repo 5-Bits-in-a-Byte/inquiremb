@@ -8,7 +8,6 @@ import CommentImg from "../../../imgs/comment.svg";
 import { useHistory, useParams } from "react-router";
 import LazyFetch from "../../common/requests/LazyFetch";
 import PinIcon from "../../../imgs/pin.svg";
-import HollowPinIcon from "../../../imgs/pin-hollow.svg";
 
 const accentColor = (type) => {
   switch (type) {
