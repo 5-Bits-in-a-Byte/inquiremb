@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Icon from "../../common/Icon";
@@ -7,6 +7,8 @@ import Reaction from "../../common/Reaction";
 import CommentImg from "../../../imgs/comment.svg";
 import { useHistory, useParams } from "react-router";
 import LazyFetch from "../../common/requests/LazyFetch";
+import PinIcon from "../../../imgs/pin.svg";
+import HollowPinIcon from "../../../imgs/pin-hollow.svg";
 
 const accentColor = (type) => {
   switch (type) {
@@ -25,6 +27,28 @@ const handleEdit = () => {
   alert("This feature is still a work in progress. Check back soon!");
 };
 
+const handlePin = (postObject, pin) => {
+  LazyFetch({
+    type: "put",
+    endpoint: "/api/courses/" + postObject.courseId + "/posts",
+    data: {
+      _id: postObject._id,
+      title: postObject.title,
+      content: postObject.content,
+      isPinned: !pin.pinnedStatus,
+    },
+    onSuccess: (data) => {
+      console.log("Success: ", data);
+      pin.setPinnedStatus(!pin.pinnedStatus);
+      window.location.reload();
+    },
+    onFailure: (err) => {
+      alert("Error pinning / unpinning post.");
+      console.log("Err: ", err);
+    },
+  });
+};
+
 const PostWrapper = ({
   condensed,
   postType,
@@ -32,6 +56,8 @@ const PostWrapper = ({
   postObject,
   ...props
 }) => {
+  const [pinnedStatus, setPinnedStatus] = useState(postObject.isPinned);
+
   // console.log("IsRead: ", postObject);
   const { postid } = useParams();
   const history = useHistory();
@@ -67,6 +93,12 @@ const PostWrapper = ({
       label: "Delete post",
     },
     { onClick: handleEdit, label: "Edit post" },
+    {
+      onClick: () => {
+        handlePin(postObject, { pinnedStatus, setPinnedStatus });
+      },
+      label: pinnedStatus ? "Unpin Post" : "Pin Post",
+    },
   ];
 
   return (
@@ -88,6 +120,18 @@ const PostWrapper = ({
           {postObject.title ? postObject.title : "Error getting post title"}
         </PostTitle>
         <DropDownContainer>
+          {pinnedStatus ? (
+            <img
+              src={PinIcon}
+              style={{
+                margin: `0 1em 0 0`,
+                width: `18px`,
+                height: `18px`,
+              }}
+            />
+          ) : (
+            <></>
+          )}
           <Dropdown options={dropdownOptions}>
             <Icon src={OptionDots} style={{ cursor: "pointer" }} />
           </Dropdown>

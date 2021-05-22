@@ -361,10 +361,11 @@ class Posts(Resource):
         # Parse the request
         parser = reqparse.RequestParser()
         parser.add_argument('title')
-        parser.add_argument('content')
+        parser.add_argument('content', type=dict)
         parser.add_argument('isPinned', type=bool)
         parser.add_argument('_id')
         args = parser.parse_args()
+        print(args.content)
 
         # Validate the args
         errors = self.validate_post(args)
@@ -380,9 +381,9 @@ class Posts(Resource):
             return {'updated': False, 'errors': f"Duplicate post detected, multiple posts in database with id {args['_id']}"}, 400
 
         new_content_type = args["content"]["type"]
-        if new_content_type != post["content"]["type"]:
+        if new_content_type != post.content["type"]:
             return {'updated': False, 'errors': f"Cannot change post type"}, 400
-        if post["content"]["type"] == "poll":
+        if post.content["type"] == "poll":
             return {'updated': False, 'errors': f"Cannot modify polls"}, 400
 
         id_match = current_user._id == post.postedBy[
