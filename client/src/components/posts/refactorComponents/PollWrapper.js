@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import Poll from "react-polls";
+import { useParams } from "react-router";
+import LazyFetch from "../../common/requests/LazyFetch";
 
 const PollWrapper = ({ post }) => {
+  const { courseId } = useParams();
+
   console.log("pollWrapper post: ", post);
   const establishPollAns = (post) => {
     let initialPollAns = [];
@@ -20,7 +24,19 @@ const PollWrapper = ({ post }) => {
       if (answer.option === voteAnswer) answer.votes++;
       return answer;
     });
-    setPollAns(newPollAnswers);
+
+    LazyFetch({
+      type: "put",
+      endpoint: "/api/courses/" + courseId + "/polls",
+      data: { selectedOption: voteAnswer, postId: post._id },
+      onSuccess: (data) => {
+        console.log("Data: ", data);
+        setPollAns(newPollAnswers);
+      },
+      onFailure: (err) => {
+        console.log("Err: ", err);
+      },
+    });
   };
   console.log("pollAns: ", pollAns);
 
@@ -30,10 +46,11 @@ const PollWrapper = ({ post }) => {
         question={post.title}
         answers={pollAns}
         onVote={handleVote}
+        vote={post.content.vote}
+        noStorage
         onClick={(event) => {
           event.stopPropagation();
         }}
-        noStorage
       />
     </>
   );

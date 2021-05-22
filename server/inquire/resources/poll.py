@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
 

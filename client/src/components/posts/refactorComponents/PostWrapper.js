@@ -5,7 +5,8 @@ import Icon from "../../common/Icon";
 import OptionDots from "../../../imgs/option-dots.svg";
 import Reaction from "../../common/Reaction";
 import CommentImg from "../../../imgs/comment.svg";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
+import LazyFetch from "../../common/requests/LazyFetch";
 
 const accentColor = (type) => {
   switch (type) {
@@ -20,19 +21,6 @@ const accentColor = (type) => {
   }
 };
 
-const handleDelete = () => {
-  // LazyFetch({
-  //   type: "delete",
-  //   endpoint: endpoint,
-  //   data: { _id: postid },
-  //   onSuccess: (data) => {
-  //     let path = "/course/" + courseId;
-  //     history.push(path);
-  //   },
-  // });
-  alert("Post Delete.");
-};
-
 const handleEdit = () => {
   alert("This feature is still a work in progress. Check back soon!");
 };
@@ -45,7 +33,7 @@ const PostWrapper = ({
   ...props
 }) => {
   // console.log("IsRead: ", postObject);
-
+  const { postid } = useParams();
   const history = useHistory();
   const navigateToPost = (post) => {
     history.push({
@@ -54,8 +42,30 @@ const PostWrapper = ({
     });
   };
 
+  const handleDelete = (postId, courseId) => {
+    LazyFetch({
+      type: "delete",
+      endpoint: "/api/courses/" + courseId + "/posts",
+      data: { _id: postId },
+      onSuccess: (data) => {
+        console.log("Success: ", data);
+        if (postid) history.push("/course/" + courseId);
+        else window.location.reload();
+      },
+      onFailure: (err) => {
+        alert("Error deleting post.");
+        console.log("Err: ", err);
+      },
+    });
+  };
+
   const dropdownOptions = [
-    { onClick: handleDelete, label: "Delete post" },
+    {
+      onClick: () => {
+        handleDelete(postObject._id, postObject.courseId);
+      },
+      label: "Delete post",
+    },
     { onClick: handleEdit, label: "Edit post" },
   ];
 
