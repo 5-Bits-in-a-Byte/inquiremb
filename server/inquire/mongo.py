@@ -19,7 +19,7 @@ import shortuuid
 import datetime
 from bson.objectid import ObjectId
 import os
-import sys
+
 script_dir = os.path.dirname(__file__)
 
 
@@ -85,7 +85,7 @@ class UserCourse(EmbeddedMongoModel):
     nickname = fields.CharField(blank=True)
     color = fields.CharField(blank=True)
     role = fields.CharField(required=True)
-    viewed = fields.DictField(default={})
+    viewed = fields.DictField(required=True, default={"": None})
 
 
 '''
