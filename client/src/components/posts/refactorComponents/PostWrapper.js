@@ -22,10 +22,6 @@ const accentColor = (type) => {
   }
 };
 
-const handleEdit = () => {
-  alert("This feature is still a work in progress. Check back soon!");
-};
-
 const PostWrapper = ({
   condensed,
   postType,
@@ -82,6 +78,10 @@ const PostWrapper = ({
         console.log("Err: ", err);
       },
     });
+  };
+
+  const handleEdit = () => {
+    alert("This feature is still a work in progress. Check back soon!");
   };
 
   const dropdownOptions = [

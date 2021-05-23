@@ -14,6 +14,7 @@ import Poll from "react-polls";
 import { Editor } from "react-draft-wysiwyg";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import PollWrapper from "./refactorComponents/PollWrapper";
+import EditorWrapper from "./refactorComponents/EditorWrapper";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();
@@ -30,31 +31,32 @@ const createPost = (post, userRole, isCondensed) => {
     post.content.type === "question" ||
     post.content.type === "announcement"
   ) {
-    content = (
-      <Editor
-        readOnly
-        toolbarHidden
-        name="content"
-        editorState={EditorState.createWithContent(
-          convertFromRaw(post.content.raw)
-        )}
-        // editorState={EditorState.createEmpty()}
-        editorStyle={{
-          // backgroundColor: "#f1f1f1",
-          minHeight: "100px",
-          padding: "0 8px",
-          maxHeight: "200px",
-          overflow: "hidden",
-          border: "2px solid #e7e7e7",
-          borderRadius: "5px",
-        }}
-        // placeholder="Details"
-        // onEditorStateChange={handleContentChange}
-        toolbar={{
-          options: ["inline", "list", "link", "emoji", "history", "blockType"],
-        }}
-      />
-    );
+    content = <EditorWrapper post={post} edit={true} />;
+    // content = (
+    //   <Editor
+    //     readOnly
+    //     toolbarHidden
+    //     name="content"
+    //     editorState={EditorState.createWithContent(
+    //       convertFromRaw(post.content.raw)
+    //     )}
+    //     // editorState={EditorState.createEmpty()}
+    //     editorStyle={{
+    //       // backgroundColor: "#f1f1f1",
+    //       minHeight: "100px",
+    //       padding: "0 8px",
+    //       maxHeight: "200px",
+    //       overflow: "hidden",
+    //       border: "2px solid #e7e7e7",
+    //       borderRadius: "5px",
+    //     }}
+    //     // placeholder="Details"
+    //     // onEditorStateChange={handleContentChange}
+    //     toolbar={{
+    //       options: ["inline", "list", "link", "emoji", "history", "blockType"],
+    //     }}
+    //   />
+    // );
   } else if (post.content.type === "poll") {
     content = <PollWrapper post={post} />;
   }
