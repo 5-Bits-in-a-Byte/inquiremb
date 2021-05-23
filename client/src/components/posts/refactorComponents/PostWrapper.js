@@ -82,7 +82,7 @@ const PostWrapper = ({
   };
 
   const handleEdit = () => {
-    setIsEditing(!isEditing);
+    setIsEditing(true);
   };
 
   const dropdownOptions = [
@@ -148,7 +148,7 @@ const PostWrapper = ({
           postType={postType}
         >
           {postType == "Question" || postType == "Announcement"
-            ? React.cloneElement(content, { edit: isEditing })
+            ? React.cloneElement(content, { edit: { isEditing, setIsEditing } })
             : content}
         </ContentWrapper>
       ) : (
