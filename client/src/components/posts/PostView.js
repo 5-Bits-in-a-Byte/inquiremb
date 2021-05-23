@@ -31,7 +31,7 @@ const createPost = (post, userRole, isCondensed) => {
     post.content.type === "question" ||
     post.content.type === "announcement"
   ) {
-    content = <EditorWrapper post={post} edit={true} />;
+    content = <EditorWrapper post={post} edit={false} />;
     // content = (
     //   <Editor
     //     readOnly

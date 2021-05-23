@@ -29,6 +29,7 @@ const PostWrapper = ({
   postObject,
   ...props
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [pinnedStatus, setPinnedStatus] = useState(postObject.isPinned);
 
   // console.log("IsRead: ", postObject);
@@ -81,7 +82,7 @@ const PostWrapper = ({
   };
 
   const handleEdit = () => {
-    alert("This feature is still a work in progress. Check back soon!");
+    setIsEditing(!isEditing);
   };
 
   const dropdownOptions = [
@@ -146,7 +147,9 @@ const PostWrapper = ({
           }}
           postType={postType}
         >
-          {content}
+          {postType == "Question" || postType == "Announcement"
+            ? React.cloneElement(content, { edit: isEditing })
+            : content}
         </ContentWrapper>
       ) : (
         <></>
