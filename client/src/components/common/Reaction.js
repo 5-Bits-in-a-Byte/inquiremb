@@ -49,84 +49,51 @@ const Reaction = ({ reactions, type, id, postid }) => {
   }
 
   const handleLike = () => {
-    // LazyFetch({
-    //   type: "put",
-    //   endpoint: endpoint,
-    //   data: null,
-    //   onSuccess: (data) => {
-    //     setReactions(data.reactions);
-    //   },
-    // });
+    LazyFetch({
+      type: "put",
+      endpoint: endpoint,
+      data: { reactionType: "like" },
+      onSuccess: (data) => {
+        setReactions(data.reactions);
+      },
+    });
 
-    var likedLoc = reactionState.likes.indexOf(user._id);
-
-    if (likedLoc === -1) {
-      setClicked({
-        liked: true,
-        gooded: reactClicked.gooded,
-        helpfuled: reactClicked.helpfuled,
-      });
-    } else {
-      setClicked({
-        liked: false,
-        gooded: reactClicked.gooded,
-        helpfuled: reactClicked.helpfuled,
-      });
-    }
+    setClicked({
+      ...reactClicked,
+      liked: !reactClicked.liked,
+    });
   };
 
   const handleGood = () => {
-    // LazyFetch({
-    //   type: "put",
-    //   endpoint: endpoint,
-    //   data: null,
-    //   onSuccess: (data) => {
-    //     setReactions(data.reactions);
-    //   },
-    // });
+    LazyFetch({
+      type: "put",
+      endpoint: endpoint,
+      data: { reactionType: "good" },
+      onSuccess: (data) => {
+        setReactions(data.reactions);
+      },
+    });
 
-    var loc = reactionState.goods.indexOf(user._id);
-
-    if (loc === -1) {
-      setClicked({
-        liked: reactClicked.liked,
-        gooded: true,
-        helpfuled: reactClicked.helpfuled,
-      });
-    } else {
-      setClicked({
-        liked: reactClicked.liked,
-        gooded: false,
-        helpfuled: reactClicked.helpfuled,
-      });
-    }
+    setClicked({
+      ...reactClicked,
+      gooded: !reactClicked.gooded,
+    });
   };
 
   const handleHelpful = () => {
-    // LazyFetch({
-    //   type: "put",
-    //   endpoint: endpoint,
-    //   data: null,
-    //   onSuccess: (data) => {
-    //     setReactions(data.reactions);
-    //   },
-    // });
+    LazyFetch({
+      type: "put",
+      endpoint: endpoint,
+      data: { reactionType: "helpful" },
+      onSuccess: (data) => {
+        setReactions(data.reactions);
+      },
+    });
 
-    var loc = reactionState.goods.indexOf(user._id);
-
-    if (loc === -1) {
-      setClicked({
-        liked: reactClicked.liked,
-        gooded: reactClicked.gooded,
-        helpfuled: true,
-      });
-    } else {
-      setClicked({
-        liked: reactClicked.liked,
-        gooded: reactClicked.gooded,
-        helpfuled: false,
-      });
-    }
+    setClicked({
+      ...reactClicked,
+      helpfuled: !reactClicked.helpfuled,
+    });
   };
 
   return (

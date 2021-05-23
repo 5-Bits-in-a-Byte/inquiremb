@@ -85,24 +85,43 @@ const PostWrapper = ({
     setIsEditing(true);
   };
 
-  const dropdownOptions = [
-    {
-      onClick: () => {
-        handleDelete(postObject._id, postObject.courseId);
-      },
-      label: "Delete post",
-    },
-    { onClick: handleEdit, label: "Edit post" },
-    {
-      onClick: () => {
-        handlePin(postObject, postObject.courseId, {
-          pinnedStatus,
-          setPinnedStatus,
-        });
-      },
-      label: pinnedStatus ? "Unpin Post" : "Pin Post",
-    },
-  ];
+  const dropdownOptions =
+    postType == "Poll"
+      ? [
+          {
+            onClick: () => {
+              handleDelete(postObject._id, postObject.courseId);
+            },
+            label: "Delete post",
+          },
+          {
+            onClick: () => {
+              handlePin(postObject, postObject.courseId, {
+                pinnedStatus,
+                setPinnedStatus,
+              });
+            },
+            label: pinnedStatus ? "Unpin Post" : "Pin Post",
+          },
+        ]
+      : [
+          {
+            onClick: () => {
+              handleDelete(postObject._id, postObject.courseId);
+            },
+            label: "Delete post",
+          },
+          { onClick: handleEdit, label: "Edit post" },
+          {
+            onClick: () => {
+              handlePin(postObject, postObject.courseId, {
+                pinnedStatus,
+                setPinnedStatus,
+              });
+            },
+            label: pinnedStatus ? "Unpin Post" : "Pin Post",
+          },
+        ];
 
   return (
     <Wrapper

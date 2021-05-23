@@ -62,6 +62,12 @@ class Reactions(Resource):
         postid = request.args.get('postid')
         commentid = request.args.get('commentid')
         replyid = request.args.get('replyid')
+        
+        parser = reqparse.RequestParser()
+        parser.add_argument('reactionType')
+        args = parser.parse_args()
+
+        # print("Reaction Type: ", args.reactionType)
 
         # Post reaction handler
         if postid:
@@ -75,15 +81,10 @@ class Reactions(Resource):
                 return {"errors": [f"No posts with id {postid}"]}, 400
             # Get the post and the likes associated with it
             post = query.first()
-            likes = post.reactions['likes']
-            # Check if the user's id is already in likes (this also shouldn't be possible)
-            if current_user._id in likes:
-                likes.remove(current_user._id)
-            else:
-                likes.append(current_user._id)
-            # Save the changes to the post
+            likes, goods, helpfuls = self.__updateReactions(post, args.reactionType)
+            
             post.save()
-            return {"reactions": {"likes": likes}}, 200
+            return {"reactions": {"likes": likes, 'goods': goods, 'helpfuls': helpfuls}}, 200
 
         # Comment reaction handler
         elif commentid:
@@ -98,15 +99,10 @@ class Reactions(Resource):
                 return {"errors": [f"No comments with id {commentid}"]}, 400
             # Get the post and the likes associated with it
             comment = query.first()
-            likes = comment.reactions['likes']
-            # Check if the user's id is already in likes and remove it if it is
-            if current_user._id in likes:
-                likes.remove(current_user._id)
-            else:
-                likes.append(current_user._id)
-            # Save the changes to the comment
+            likes, goods, helpfuls = self.__updateReactions(comment, args.reactionType)
+            
             comment.save()
-            return {"reactions": {"likes": likes}}, 200
+            return {"reactions": {"likes": likes, 'goods': goods, 'helpfuls': helpfuls}}, 200
 
         # Reply reaction handler
         elif replyid:
@@ -124,16 +120,39 @@ class Reactions(Resource):
             for reply in comment.replies:
                 if reply._id == replyid:
                     break
-            # Check if the user's id is already in likes and remove it if so
-            likes = reply.reactions['likes']
-            if current_user._id in likes:
-                likes.remove(current_user._id)
-            else:
-                likes.append(current_user._id)
-            # Save the changes to the comment
+            likes, goods, helpfuls = self.__updateReactions(reply, args.reactionType)
+            
             comment.save()
-            return {"reactions": {"likes": likes}}, 200
+            return {"reactions": {"likes": likes, 'goods': goods, 'helpfuls': helpfuls}}, 200
 
         # No id handler
         else:
             return {"errors": ["No id provided"]}, 400
+
+    def __updateReactions(self, objectToUpdate, reactionType):
+        likes = objectToUpdate.reactions['likes']
+        goods = objectToUpdate.reactions['goods']
+        helpfuls = objectToUpdate.reactions['helpfuls']
+
+        # print("LIKES: ", likes)
+        # print("GOODS: ", goods)
+        # print("HELPFULS: ", helpfuls)
+
+        # Check if the user's id is already in likes (this also shouldn't be possible)
+        if reactionType == "like":
+            if current_user._id in likes:
+                likes.remove(current_user._id)
+            else:
+                likes.append(current_user._id)
+        elif reactionType == "good":
+            if current_user._id in goods:
+                goods.remove(current_user._id)
+            else:
+                goods.append(current_user._id)
+        elif reactionType == "helpful":
+            if current_user._id in helpfuls:
+                helpfuls.remove(current_user._id)
+            else:
+                helpfuls.append(current_user._id)
+        
+        return likes, goods, helpfuls
