@@ -340,8 +340,8 @@ export default PollConfig;
 const Wrapper = styled.div`
   margin: 2em;
   padding: 0.5em;
-  width: 719px;
-  max-width: 900px;
+  /* width: 719px; */
+  /* max-width: 900px; */
   /* min-height: 255px; */
   /* height: 255px; */
 

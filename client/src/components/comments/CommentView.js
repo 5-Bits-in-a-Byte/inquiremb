@@ -280,6 +280,7 @@ const CommentView = ({ classroomName }) => {
                         question={post.title}
                         answers={pollAns}
                         onVote={handleVote}
+                        vote={post.content.vote}
                         noStorage
                       />
                     }
