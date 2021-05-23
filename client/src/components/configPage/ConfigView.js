@@ -189,6 +189,23 @@ const ConfigView = ({ props }) => {
         )}
 
         {userIsAdmin ? (
+          <ConfigButtonPanel panelText="Press here to navigate back to the course page.">
+            <Button
+              primary
+              buttonWidth={"200px"}
+              buttonHeight={"2.2rem"}
+              onClick={() => {
+                history.push("/course/" + courseId);
+              }}
+            >
+              Back To Course View
+            </Button>
+          </ConfigButtonPanel>
+        ) : (
+          <></>
+        )}
+
+        {userIsAdmin ? (
           // <CenterContent>
           <ConfigPanel
             courseId={courseId}
@@ -200,23 +217,6 @@ const ConfigView = ({ props }) => {
           ></ConfigPanel>
         ) : (
           // </CenterContent>
-          <></>
-        )}
-
-        {userIsAdmin ? (
-          <ConfigButtonPanel panelText="This is the button description for the 'other' button. It does nothing.">
-            <Button
-              primary
-              buttonWidth={"200px"}
-              buttonHeight={"2.2rem"}
-              onClick={() => {
-                alert("This literally doesn't do anything...");
-              }}
-            >
-              Other Button
-            </Button>
-          </ConfigButtonPanel>
-        ) : (
           <></>
         )}
 

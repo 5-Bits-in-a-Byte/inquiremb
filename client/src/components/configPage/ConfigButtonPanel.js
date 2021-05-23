@@ -27,7 +27,7 @@ const ConfigPanelWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  max-width: 900px;
+  max-width: 1200px;
   margin: 1em 0;
   padding: 0.5em;
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
