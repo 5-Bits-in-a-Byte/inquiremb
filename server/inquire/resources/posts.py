@@ -371,6 +371,8 @@ class Posts(Resource):
         errors = self.validate_post(args)
         if(bool(errors)):
             return {"errors": errors}, 400
+        
+        # print("AFTER VALIDATION")
 
         # Get the post you want to update
         try:
@@ -380,16 +382,22 @@ class Posts(Resource):
         except Post.MultipleObjectsReturned:
             return {'updated': False, 'errors': f"Duplicate post detected, multiple posts in database with id {args['_id']}"}, 400
 
+        # print("AFTER DUPLICATE POST DETECTION TEST")
+
         new_content_type = args["content"]["type"]
         if new_content_type != post.content["type"]:
             return {'updated': False, 'errors': f"Cannot change post type"}, 400
         if post.content["type"] == "poll":
             return {'updated': False, 'errors': f"Cannot modify polls"}, 400
+        
+        # print("AFTER CHANGE / MODIFY TEST")
 
         id_match = current_user._id == post.postedBy[
             '_id'] or current_user.anonymousId == post.postedBy['_id']
         if not id_match:
-            return {'updated': False, 'errors': f"Cannot modify other users posts"}, 400
+            return {'updated': False, 'errors': [f"Cannot modify other users posts"]}, 400
+
+        # print("AFTER Other users test")
 
         post.title = args['title']
         post.content = args['content']

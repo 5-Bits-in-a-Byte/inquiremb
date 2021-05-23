@@ -41,15 +41,13 @@ const EditorWrapper = ({ post, edit }) => {
       },
       onSuccess: (data) => {
         console.log(data);
+        edit.setIsEditing(false);
       },
       onFailure: (err) => {
-        console.log(err);
+        console.log("Error: ", err.errors ? err.errors : err);
+        alert("Error updating post.");
       },
     });
-  };
-
-  const handleSubmit = () => {
-    alert("W.I.P.");
   };
 
   const handleCancel = () => {
