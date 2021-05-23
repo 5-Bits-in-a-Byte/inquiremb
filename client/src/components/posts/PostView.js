@@ -26,43 +26,16 @@ const createPost = (post, userRole, isCondensed) => {
   const postType = convertToUpper(post.content.type);
 
   var content;
-  // console.log("postType: ", postType);
   if (
     post.content.type === "question" ||
     post.content.type === "announcement"
   ) {
     content = <EditorWrapper post={post} edit={false} />;
-    // content = (
-    //   <Editor
-    //     readOnly
-    //     toolbarHidden
-    //     name="content"
-    //     editorState={EditorState.createWithContent(
-    //       convertFromRaw(post.content.raw)
-    //     )}
-    //     // editorState={EditorState.createEmpty()}
-    //     editorStyle={{
-    //       // backgroundColor: "#f1f1f1",
-    //       minHeight: "100px",
-    //       padding: "0 8px",
-    //       maxHeight: "200px",
-    //       overflow: "hidden",
-    //       border: "2px solid #e7e7e7",
-    //       borderRadius: "5px",
-    //     }}
-    //     // placeholder="Details"
-    //     // onEditorStateChange={handleContentChange}
-    //     toolbar={{
-    //       options: ["inline", "list", "link", "emoji", "history", "blockType"],
-    //     }}
-    //   />
-    // );
   } else if (post.content.type === "poll") {
     content = <PollWrapper post={post} />;
   }
 
   return (
-    // <Post userRole={userRole} post={post} key={post._id} isCondensed={false} />
     <PostWrapper
       postObject={post}
       postType={postType}
