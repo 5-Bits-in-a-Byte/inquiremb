@@ -5,7 +5,6 @@ import {
   UserRoleDispatchContext,
 } from "../context/UserRoleProvider";
 import styled from "styled-components";
-import Post from "../posts/Post";
 import PostWrapper from "../posts/refactorComponents/PostWrapper";
 import Sidebar from "../posts/Sidebar";
 import Button from "../common/Button";
@@ -14,10 +13,9 @@ import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
 import Draft from "../posts/refactorComponents/Draft";
-import { Editor } from "react-draft-wysiwyg";
-import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import PollConfig from "../posts/refactorComponents/PollConfig";
-import Poll from "react-polls";
+import PollWrapper from "../posts/refactorComponents/PollWrapper";
+import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
 
 const renderComments = (data, userRole) => {
   let ret = [];
@@ -275,53 +273,14 @@ const CommentView = ({ classroomName }) => {
                     // isRead
                     postObject={post}
                     postType={"Poll"}
-                    content={
-                      <Poll
-                        question={post.title}
-                        answers={pollAns}
-                        onVote={handleVote}
-                        vote={post.content.vote}
-                        noStorage
-                      />
-                    }
+                    content={<PollWrapper post={post} />}
                   />
                 ) : (
                   <PostWrapper
                     postObject={post}
                     postType={convertToUpper(post.content.type)}
                     condensed={false}
-                    content={
-                      <Editor
-                        readOnly
-                        toolbarHidden
-                        name="content"
-                        editorState={EditorState.createWithContent(
-                          convertFromRaw(post.content.raw)
-                        )}
-                        // editorState={EditorState.createEmpty()}
-                        editorStyle={{
-                          // backgroundColor: "#f1f1f1",
-                          minHeight: "100px",
-                          padding: "0 8px",
-                          // maxHeight: "200px",
-                          overflow: "hidden",
-                          border: "2px solid #e7e7e7",
-                          borderRadius: "5px",
-                        }}
-                        // placeholder="Details"
-                        // onEditorStateChange={handleContentChange}
-                        toolbar={{
-                          options: [
-                            "inline",
-                            "list",
-                            "link",
-                            "emoji",
-                            "history",
-                            "blockType",
-                          ],
-                        }}
-                      />
-                    }
+                    content={<EditorWrapper post={post} edit={false} />}
                   />
                 ))}
               {comments}
