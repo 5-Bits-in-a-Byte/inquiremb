@@ -29,12 +29,12 @@ const LeftNavBar = () => {
           img={CourseImg}
           active={active === "/"}
         />
-        <MenuItem
+        {/* <MenuItem
           to="/home"
           label="Messages"
           img={MessagesImg}
           active={active === "/home"}
-        />
+        /> */}
       </Wrapper>
     </Nav>
   );
