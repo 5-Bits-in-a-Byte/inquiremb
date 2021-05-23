@@ -57,12 +57,12 @@ class Home(Resource):
         if count == 0:
             return []
 
-        result = [self.serialize(post) for post in query]
+        result = [self.serialize(post, viewed=course.viewed) for post in query]
 
         # Serialize and return the posts
         return result, 200
 
-    def serialize(self, post):
+    def serialize(self, post, viewed=None):
         # Get the JSON format
         result = post.to_son()
 
@@ -78,10 +78,61 @@ class Home(Resource):
         result['courseName'] = course.courseName
         result['color'] = course.color
 
+        if viewed:
+            updated_date = result["updatedDate"]
+            result["read"] = self.calc_read(
+                result["_id"], updated_date, viewed)
+
         # Convert datetime to a string
         date = str(result['createdDate'])
         result['createdDate'] = date
 
         date = str(result['updatedDate'])
         result['updatedDate'] = date
+
+        # Post content type specific modifications
+        post_type = result["content"]["type"]
+        if post_type == "poll":
+            self.anonymize_poll_content(result["content"])
         return result
+
+    def calc_read(self, post_id, updatedDate, viewed):
+        """Modifies a dictionary representing a post by setting a new key-value
+        pair of either "read": True or "read": False depending on the contents
+        of the viewed dict.
+
+        Args:
+            post (dict): Dictionary representing a post
+            viewed (dict): Dictionary representing the last time a user viewed the comments on a post.
+            Keys are post id strings, values are datetime objects. If post id is not a key in the dict, 
+            the user has never viewed the post.
+        """
+        return post_id in viewed and viewed[post_id] > updatedDate
+
+    def anonymize_poll_content(self, poll):
+        poll["vote"] = poll["user_votes"].get(current_user._id, None)
+        poll.pop("user_votes")
+
+    # def old_serialize(self, post):
+    #     # Get the JSON format
+    #     result = post.to_son()
+
+    #     # Get the list of user courses
+    #     courses = current_user.courses
+
+    #     # Loop through until we find the course id that matches with the course id for the post
+    #     for course in courses:
+    #         if post.courseId == course.courseId:
+    #             break
+
+    #     # Add the course name and color to the resulting json we'll send back to the client
+    #     result['courseName'] = course.courseName
+    #     result['color'] = course.color
+
+    #     # Convert datetime to a string
+    #     date = str(result['createdDate'])
+    #     result['createdDate'] = date
+
+    #     date = str(result['updatedDate'])
+    #     result['updatedDate'] = date
+    #     return result

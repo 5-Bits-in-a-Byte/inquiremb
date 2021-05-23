@@ -6,7 +6,7 @@ import LazyFetch from "../../common/requests/LazyFetch";
 const PollWrapper = ({ post }) => {
   const { courseId } = useParams();
 
-  console.log("pollWrapper post: ", post);
+  // console.log("pollWrapper post: ", post);
   const establishPollAns = (post) => {
     let initialPollAns = [];
     Object.keys(post.content.fields).map((key) => {

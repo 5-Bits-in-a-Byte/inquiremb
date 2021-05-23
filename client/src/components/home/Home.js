@@ -7,6 +7,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import PostWrapper from "../posts/refactorComponents/PostWrapper";
 import PollWrapper from "../posts/refactorComponents/PollWrapper";
+import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();
@@ -19,36 +20,11 @@ const createPost = (post, userRole, isCondensed) => {
   const postType = convertToUpper(post.content.type);
 
   var content;
-  // console.log("postType: ", postType);
   if (
     post.content.type === "question" ||
     post.content.type === "announcement"
   ) {
-    content = (
-      <Editor
-        readOnly
-        toolbarHidden
-        name="content"
-        editorState={EditorState.createWithContent(
-          convertFromRaw(post.content.raw)
-        )}
-        // editorState={EditorState.createEmpty()}
-        editorStyle={{
-          // backgroundColor: "#f1f1f1",
-          minHeight: "100px",
-          padding: "0 8px",
-          maxHeight: "200px",
-          overflow: "hidden",
-          border: "2px solid #e7e7e7",
-          borderRadius: "5px",
-        }}
-        // placeholder="Details"
-        // onEditorStateChange={handleContentChange}
-        toolbar={{
-          options: ["inline", "list", "link", "emoji", "history", "blockType"],
-        }}
-      />
-    );
+    content = <EditorWrapper post={post} edit={false} />;
   } else if (post.content.type === "poll") {
     content = <PollWrapper post={post} />;
   }
@@ -59,7 +35,7 @@ const createPost = (post, userRole, isCondensed) => {
       postObject={post}
       postType={postType}
       condensed={true}
-      content={content}
+      content={null}
     />
   );
 };
@@ -102,14 +78,17 @@ const generateSections = (data) => {
 
     // Place posts in the Post Grouping dictionary
     data.forEach((post) => {
-      if (post.courseName in postG) {
+      if (post.courseName in postG && !post.read) {
         postG[post.courseName].push(createPost(post));
       }
     });
 
     // Build the class groups
     for (let i = 0; i < classes.class.length; i++) {
-      if (!groups.includes(classes.class[i])) {
+      if (
+        !groups.includes(classes.class[i]) &&
+        postG[classes.class[i]].length > 0
+      ) {
         groups.push(
           createGroup(
             postG[classes.class[i]],
@@ -138,6 +117,8 @@ const Home = () => {
     endpoint: endpoint,
   });
 
+  console.log("Home Data: ", data);
+
   let groups =
     data != null && data.length == 0 ? (
       <h2 align="center">
@@ -156,7 +137,13 @@ const Home = () => {
             <h1 align="center" style={{ margin: "1em" }}>
               Recent Posts
             </h1>
-            {groups}
+            {groups.length > 0 ? (
+              groups
+            ) : (
+              <h2 align="center">
+                You currently have no unread posts to view.
+              </h2>
+            )}
           </MaxWidth>
         </ScrollingDiv>
       </ViewWrapper>
