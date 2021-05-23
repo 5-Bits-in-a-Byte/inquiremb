@@ -77,9 +77,7 @@ const EditorWrapper = ({ post, edit }) => {
           readOnly
           toolbarHidden
           name="content"
-          editorState={EditorState.createWithContent(
-            convertFromRaw(post.content.raw)
-          )}
+          editorState={editorStateTest}
           editorStyle={{
             minHeight: "100px",
             padding: "0 8px",
