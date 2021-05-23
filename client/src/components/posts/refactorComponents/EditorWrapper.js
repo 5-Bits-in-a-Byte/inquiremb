@@ -17,10 +17,20 @@ const EditorWrapper = ({ post, edit }) => {
     plainText: post.content.plainText,
   });
 
+  const [editorStateTest, setEditorStateTest] = useState(
+    EditorState.createWithContent(convertFromRaw(post.content.raw))
+  );
+
   const handleContentChange = (e) => {
-    console.log("e: ", e);
-    const plainText = e.getCurrentContent().getPlainText();
-    setContent({ ...content, raw: e, plainText: plainText });
+    // console.log("e: ", e);
+    // setContent({
+    //   ...content,
+    //   raw: convertToRaw(e.getCurrentContent()),
+    //   plainText: e.getCurrentContent().getPlainText(),
+    // });
+    // console.log("Content: ", content.raw);
+    // console.log("Post.Content: ", post.content.raw);
+    setEditorStateTest(e);
   };
 
   return (
@@ -28,10 +38,13 @@ const EditorWrapper = ({ post, edit }) => {
       {edit ? (
         <Editor
           name="content"
-          editorState={EditorState.createWithContent(
-            convertFromRaw(post.content.raw)
-          )}
-          // editorState={EditorState.createEmpty()}
+          // editorState={EditorState.createWithContent(
+          //   convertFromRaw(content.raw)
+          // )}
+          // editorState={EditorState.createWithContent(
+          //   convertFromRaw(post.content.raw)
+          // )}
+          editorState={editorStateTest}
           editorStyle={{
             // backgroundColor: "#f1f1f1",
             minHeight: "100px",
@@ -61,7 +74,6 @@ const EditorWrapper = ({ post, edit }) => {
           editorState={EditorState.createWithContent(
             convertFromRaw(post.content.raw)
           )}
-          // editorState={EditorState.createEmpty()}
           editorStyle={{
             // backgroundColor: "#f1f1f1",
             minHeight: "100px",
