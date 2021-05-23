@@ -57,12 +57,12 @@ class Home(Resource):
         if count == 0:
             return []
 
-        result = [self.serialize(post, viewed=course.viewed) for post in query]
+        result = [self.serialize(post) for post in query]
 
         # Serialize and return the posts
         return result, 200
 
-    def serialize(self, post, viewed=None):
+    def serialize(self, post):
         # Get the JSON format
         result = post.to_son()
 
@@ -77,6 +77,8 @@ class Home(Resource):
         # Add the course name and color to the resulting json we'll send back to the client
         result['courseName'] = course.courseName
         result['color'] = course.color
+
+        viewed = course.viewed
 
         if viewed:
             updated_date = result["updatedDate"]
