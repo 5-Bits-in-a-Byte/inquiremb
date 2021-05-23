@@ -3,6 +3,8 @@ import styled, { css } from "styled-components";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
 import Button from "../../common/Button";
+import LazyFetch from "../../common/requests/LazyFetch";
+import { useParams } from "react-router";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();
@@ -11,28 +13,39 @@ const convertToUpper = (postType) => {
 };
 
 const EditorWrapper = ({ post, edit }) => {
-  const postType = convertToUpper(post.content.type);
-
-  const [content, setContent] = useState({
-    type: postType,
-    raw: post.content.raw,
-    plainText: post.content.plainText,
-  });
-
+  const { courseId } = useParams();
   const [editorStateTest, setEditorStateTest] = useState(
     EditorState.createWithContent(convertFromRaw(post.content.raw))
   );
 
+  const [plainText, setPlainText] = useState(post.content.plainText);
+
   const handleContentChange = (e) => {
-    // console.log("e: ", e);
-    // setContent({
-    //   ...content,
-    //   raw: convertToRaw(e.getCurrentContent()),
-    //   plainText: e.getCurrentContent().getPlainText(),
-    // });
-    // console.log("Content: ", content.raw);
-    // console.log("Post.Content: ", post.content.raw);
     setEditorStateTest(e);
+    setPlainText(e.getCurrentContent().getPlainText());
+  };
+
+  const handleSubmit = () => {
+    LazyFetch({
+      type: "put",
+      endpoint: "/api/courses/" + courseId + "/posts",
+      data: {
+        content: {
+          type: post.content.type,
+          raw: convertToRaw(editorStateTest.getCurrentContent()),
+          plainText: plainText,
+        },
+        title: post.title,
+        isPinned: post.isPinned,
+        _id: post._id,
+      },
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onFailure: (err) => {
+        console.log(err);
+      },
+    });
   };
 
   const handleSubmit = () => {
@@ -51,15 +64,8 @@ const EditorWrapper = ({ post, edit }) => {
       {edit.isEditing ? (
         <Editor
           name="content"
-          // editorState={EditorState.createWithContent(
-          //   convertFromRaw(content.raw)
-          // )}
-          // editorState={EditorState.createWithContent(
-          //   convertFromRaw(post.content.raw)
-          // )}
           editorState={editorStateTest}
           editorStyle={{
-            // backgroundColor: "#f1f1f1",
             minHeight: "100px",
             padding: "0 8px",
             maxHeight: "200px",
@@ -86,7 +92,6 @@ const EditorWrapper = ({ post, edit }) => {
           name="content"
           editorState={editorStateTest}
           editorStyle={{
-            // backgroundColor: "#f1f1f1",
             minHeight: "100px",
             padding: "0 8px",
             maxHeight: "200px",
@@ -94,8 +99,6 @@ const EditorWrapper = ({ post, edit }) => {
             border: "2px solid #e7e7e7",
             borderRadius: "5px",
           }}
-          // placeholder="Details"
-          // onEditorStateChange={handleContentChange}
           toolbar={{
             options: [
               "inline",
