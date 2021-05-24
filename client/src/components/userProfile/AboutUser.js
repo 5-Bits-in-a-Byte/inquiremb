@@ -110,6 +110,7 @@ const VerticalFlex = styled.div`
   justify-content: space-around;
   align-items: center;
 
+  margin: 0 0.5em 0 1em;
   height: 300px;
 `;
 
