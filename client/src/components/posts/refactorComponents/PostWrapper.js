@@ -34,7 +34,7 @@ const PostWrapper = ({
   postObject,
   ...props
 }) => {
-  console.log("PostObject: ", postObject);
+  // console.log("PostObject: ", postObject);
 
   const user = useContext(UserContext);
   const userRole = useContext(UserRoleContext);

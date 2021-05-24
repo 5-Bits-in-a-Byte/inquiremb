@@ -68,25 +68,6 @@ const CommentView = ({ classroomName }) => {
     setPollAns(newPollAnswers);
   };
 
-  // const attemptGetUserRole = (courseId) => {
-  //   LazyFetch({
-  //     type: "get",
-  //     endpoint: "/api/userRole/" + courseId,
-  //     onSuccess: (role) => {
-  //       if (role) {
-  //         setUserRole(role);
-  //       }
-  //     },
-  //     onFailure: (err) => {
-  //       console.log(
-  //         "Error getting user role object from {" + courseId + "}:",
-  //         err
-  //       );
-  //       setUserRole(null);
-  //     },
-  //   });
-  // };
-
   const redirect = (sectionFilter) => {
     history.push({
       pathname: "/course/" + courseId,
@@ -99,9 +80,9 @@ const CommentView = ({ classroomName }) => {
   let location = useLocation();
   let post;
   if (location.state) {
-    console.log("L State: ", location.state);
+    // console.log("L State: ", location.state);
     post = location.state.post;
-    console.log(post);
+    // console.log(post);
   }
 
   const establishPollAns = (post) => {
@@ -109,12 +90,12 @@ const CommentView = ({ classroomName }) => {
     Object.keys(post.content.fields).map((key) => {
       initialPollAns.push(post.content.fields[key]);
     });
-    console.log("InitialPollAns in CommentView:", initialPollAns);
+    // console.log("InitialPollAns in CommentView:", initialPollAns);
     return initialPollAns;
   };
 
   useEffect(() => {
-    if (post && post.content.type == "poll") {
+    if (!pollAns && post && post.content.type == "poll") {
       setPollAns(establishPollAns(post));
     }
   });
@@ -127,7 +108,7 @@ const CommentView = ({ classroomName }) => {
 
   // Fetch comments
   useEffect(() => {
-    if (post) {
+    if (!post) {
       LazyFetch({
         type: "get",
         endpoint:
@@ -177,13 +158,6 @@ const CommentView = ({ classroomName }) => {
     });
   }, [commentData]);
 
-  // useEffect(() => {
-  //   // console.log("rendered");
-  //   if (!userRole) {
-  //     attemptGetUserRole(courseId);
-  //   }
-  // }, [userRole]);
-
   const draftNewComment = () => {
     setNewComments({
       draft: true,
@@ -210,7 +184,6 @@ const CommentView = ({ classroomName }) => {
       });
     }
   };
-  //console.log(commentData);
 
   let comments = [...commentData];
   if (newComments.draft) {

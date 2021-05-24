@@ -22,7 +22,7 @@ const convertToUpper = (postType) => {
   return first + rest;
 };
 
-const createPost = (post, userRole, isCondensed) => {
+const createPost = (post, userRole, isCondensed, key) => {
   const postType = convertToUpper(post.content.type);
 
   var content;
@@ -41,6 +41,7 @@ const createPost = (post, userRole, isCondensed) => {
       postType={postType}
       condensed={isCondensed}
       content={content}
+      key={key}
     />
   );
 };
@@ -48,16 +49,22 @@ const createPost = (post, userRole, isCondensed) => {
 // Sorts the posts by pinned/date
 const generateSections = (data, userRole, isCondensed) => {
   let posts = { pinned: [], other: [] };
+  let key = 0;
   if (data) {
     data.forEach((post) => {
-      if (post.isPinned && post.isPrivate && userRole.privacy.private) {
-        posts.pinned.push(createPost(post, userRole, isCondensed));
+      if (post.isPinned) {
+        if (post.isPrivate && userRole.privacy.private)
+          posts.pinned.push(createPost(post, userRole, isCondensed, key));
+        else if (!post.isPrivate)
+          posts.pinned.push(createPost(post, userRole, isCondensed, key));
       } else if (
         (post.isPrivate && userRole.privacy.private) ||
         !post.isPrivate
       ) {
-        posts.other.push(createPost(post, userRole, isCondensed));
+        posts.other.push(createPost(post, userRole, isCondensed, key));
       }
+
+      key = key + 1;
     });
   }
   return posts;
