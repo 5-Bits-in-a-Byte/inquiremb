@@ -21,9 +21,7 @@ const renderComments = (data, userRole) => {
   let ret = [];
   if (data) {
     data.forEach((comment) => {
-      ret.push(
-        <Comment comment={comment} key={comment._id} userRole={userRole} />
-      );
+      ret.push(<Comment comment={comment} key={comment._id} />);
     });
   }
   return ret;
@@ -57,7 +55,7 @@ const CommentView = ({ classroomName }) => {
   const [highlightedSection, setHighlightedSection] = useState("");
   const [pollAns, setPollAns] = useState([{ option: "dummy", votes: 0 }]);
 
-  const setUserRole = useContext(UserRoleDispatchContext);
+  // const setUserRole = useContext(UserRoleDispatchContext);
   const userRole = useContext(UserRoleContext);
   // console.log("Comment View Role Object: ", userRole);
 
@@ -70,24 +68,24 @@ const CommentView = ({ classroomName }) => {
     setPollAns(newPollAnswers);
   };
 
-  const attemptGetUserRole = (courseId) => {
-    LazyFetch({
-      type: "get",
-      endpoint: "/api/userRole/" + courseId,
-      onSuccess: (role) => {
-        if (role) {
-          setUserRole(role);
-        }
-      },
-      onFailure: (err) => {
-        console.log(
-          "Error getting user role object from {" + courseId + "}:",
-          err
-        );
-        setUserRole(null);
-      },
-    });
-  };
+  // const attemptGetUserRole = (courseId) => {
+  //   LazyFetch({
+  //     type: "get",
+  //     endpoint: "/api/userRole/" + courseId,
+  //     onSuccess: (role) => {
+  //       if (role) {
+  //         setUserRole(role);
+  //       }
+  //     },
+  //     onFailure: (err) => {
+  //       console.log(
+  //         "Error getting user role object from {" + courseId + "}:",
+  //         err
+  //       );
+  //       setUserRole(null);
+  //     },
+  //   });
+  // };
 
   const redirect = (sectionFilter) => {
     history.push({
@@ -157,7 +155,7 @@ const CommentView = ({ classroomName }) => {
         // console.log(commentData);
         setCommentData([
           ...commentData,
-          <Comment comment={comment} key={comment._id} userRole={userRole} />,
+          <Comment comment={comment} key={comment._id} />,
         ]);
       }
     });
@@ -171,9 +169,7 @@ const CommentView = ({ classroomName }) => {
         // console.log(allComments[i], "in for loop");
         if (allComments[i].props.comment._id === comment._id) {
           // console.log("found a match");
-          allComments[i] = (
-            <Comment comment={comment} key={comment._id} userRole={userRole} />
-          );
+          allComments[i] = <Comment comment={comment} key={comment._id} />;
           break;
         }
       }
@@ -181,12 +177,12 @@ const CommentView = ({ classroomName }) => {
     });
   }, [commentData]);
 
-  useEffect(() => {
-    // console.log("rendered");
-    if (!userRole) {
-      attemptGetUserRole(courseId);
-    }
-  }, [userRole]);
+  // useEffect(() => {
+  //   // console.log("rendered");
+  //   if (!userRole) {
+  //     attemptGetUserRole(courseId);
+  //   }
+  // }, [userRole]);
 
   const draftNewComment = () => {
     setNewComments({
@@ -208,7 +204,7 @@ const CommentView = ({ classroomName }) => {
           setNewComments({ draft: false });
           setCommentData([
             ...commentData,
-            <Comment comment={data} key={data._id} userRole={userRole} />,
+            <Comment comment={data} key={data._id} />,
           ]);
         },
       });
@@ -232,7 +228,6 @@ const CommentView = ({ classroomName }) => {
         isDraft={true}
         callback={finishComment}
         key="draft"
-        userRole={userRole}
       />
     );
   }

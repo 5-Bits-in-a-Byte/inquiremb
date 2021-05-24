@@ -11,12 +11,14 @@ import Dropdown from "../common/dropdown/Dropdown";
 import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 import { UserContext } from "../context/UserProvider";
+import { UserRoleContext } from "../context/UserRoleProvider";
 
-const Comment = ({ comment, isDraft, callback, userRole }) => {
+const Comment = ({ comment, isDraft, callback }) => {
   // console.log("Comment Role Object: ", userRole);
   const { courseId, postid } = useParams();
   const [content, setContent] = useState("");
   const user = useContext(UserContext);
+  const userRole = useContext(UserRoleContext);
 
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
@@ -113,10 +115,37 @@ const Comment = ({ comment, isDraft, callback, userRole }) => {
     alert("This feature is still a work in progress. Check back soon!");
   };
 
-  const options = [
-    { onClick: handleDelete, label: "Delete comment" },
-    { onClick: handleEdit, label: "Edit comment" },
-  ];
+  const generateDropdownOptions = () => {
+    if (userRole) {
+      let deleteOption =
+        userRole.delete.postComment && comment.postedBy._id == user._id
+          ? {
+              onClick: handleDelete,
+              label: "Delete Comment",
+            }
+          : null;
+      let editOption =
+        userRole.edit.postComment && comment.postedBy._id == user._id
+          ? { onClick: handleEdit, label: "Edit Comment" }
+          : null;
+
+      let result = [];
+
+      if (deleteOption) result.push(deleteOption);
+      if (editOption) result.push(editOption);
+
+      if (result.length == 0) return null;
+
+      return result;
+    }
+    return null;
+  };
+
+  var options = generateDropdownOptions();
+  // = [
+  //   { onClick: handleDelete, label: "Delete comment" },
+  //   { onClick: handleEdit, label: "Edit comment" },
+  // ];
 
   // Initialize viewOptions to see if a user should be able to see dropdown options
   var viewOptions = false;

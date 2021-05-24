@@ -55,7 +55,7 @@ const CommentReply = ({
         window.location.reload();
       },
       onFailure: (err) => {
-        alert(err.response);
+        alert("Error deleting Reply, Response: ", err.response);
       },
     });
   };
@@ -64,10 +64,37 @@ const CommentReply = ({
     alert("This feature is still a work in progress. Check back soon!");
   };
 
-  const options = [
-    { onClick: handleDelete, label: "Delete reply" },
-    { onClick: handleEdit, label: "Edit reply" },
-  ];
+  const generateDropdownOptions = () => {
+    if (userRole) {
+      let deleteOption =
+        userRole.delete.reply && reply.postedBy._id == user._id
+          ? {
+              onClick: handleDelete,
+              label: "Delete reply",
+            }
+          : null;
+      let editOption =
+        userRole.edit.reply && reply.postedBy._id == user._id
+          ? { onClick: handleEdit, label: "Edit Reply" }
+          : null;
+
+      let result = [];
+
+      if (deleteOption) result.push(deleteOption);
+      if (editOption) result.push(editOption);
+
+      if (result.length == 0) return null;
+
+      return result;
+    }
+    return null;
+  };
+
+  var options = generateDropdownOptions();
+  // = [
+  //   { onClick: handleDelete, label: "Delete reply" },
+  //   { onClick: handleEdit, label: "Edit reply" },
+  // ];
 
   // Initialize viewOptions to see if a user should be able to see dropdown options
   var viewOptions = false;

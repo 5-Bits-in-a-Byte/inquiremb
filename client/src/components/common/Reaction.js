@@ -9,6 +9,7 @@ import GreyPlusImg from "../../imgs/grey-plus.svg";
 import GreyLightbulbImg from "../../imgs/lightbulb-grey.svg";
 import { UserContext } from "../context/UserProvider";
 import LazyFetch from "./requests/LazyFetch";
+import { UserRoleContext } from "../context/UserRoleProvider";
 
 /** Reaction Component
  * @brief Intended to be used above "Input" components to label them
@@ -23,6 +24,7 @@ const Reaction = ({ reactions, type, id, postid }) => {
   // console.log("reactions: ", reactions);
   const urlParams = useParams();
   const user = useContext(UserContext);
+  const userRole = useContext(UserRoleContext);
   const [reactionState, setReactions] = useState(reactions);
   const [reactClicked, setClicked] = useState({
     liked: reactions.likes.includes(user._id),
@@ -49,6 +51,11 @@ const Reaction = ({ reactions, type, id, postid }) => {
   }
 
   const handleLike = () => {
+    if (!userRole.participation.reactions) {
+      alert("You cannot react to Posts/Comments/Replies/Polls.");
+      return;
+    }
+
     LazyFetch({
       type: "put",
       endpoint: endpoint,
@@ -65,6 +72,11 @@ const Reaction = ({ reactions, type, id, postid }) => {
   };
 
   const handleGood = () => {
+    if (!userRole.participation.reactions) {
+      alert("You cannot react to Posts/Comments/Replies/Polls.");
+      return;
+    }
+
     LazyFetch({
       type: "put",
       endpoint: endpoint,
@@ -81,6 +93,11 @@ const Reaction = ({ reactions, type, id, postid }) => {
   };
 
   const handleHelpful = () => {
+    if (!userRole.participation.reactions) {
+      alert("You cannot react to Posts/Comments/Replies/Polls.");
+      return;
+    }
+
     LazyFetch({
       type: "put",
       endpoint: endpoint,

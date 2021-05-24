@@ -12,7 +12,7 @@ const PollWrapper = ({ post }) => {
     Object.keys(post.content.fields).map((key) => {
       initialPollAns.push(post.content.fields[key]);
     });
-    console.log("InitialPollAns:", initialPollAns);
+    // console.log("InitialPollAns:", initialPollAns);
     return initialPollAns;
   };
 
@@ -30,7 +30,7 @@ const PollWrapper = ({ post }) => {
       endpoint: "/api/courses/" + courseId + "/polls",
       data: { selectedOption: voteAnswer, postId: post._id },
       onSuccess: (data) => {
-        console.log("Data: ", data);
+        // console.log("Data: ", data);
         setPollAns(newPollAnswers);
       },
       onFailure: (err) => {
@@ -38,7 +38,7 @@ const PollWrapper = ({ post }) => {
       },
     });
   };
-  console.log("pollAns: ", pollAns);
+  // console.log("pollAns: ", pollAns);
 
   return (
     <>

@@ -47,31 +47,31 @@ const ClassView = ({ props }) => {
   const setUserRole = useContext(UserRoleDispatchContext);
   const userRole = useContext(UserRoleContext);
 
-  const attemptGetUserRole = (courseId) => {
-    LazyFetch({
-      type: "get",
-      endpoint: "/api/userRole/" + courseId,
-      onSuccess: (role) => {
-        if (role) {
-          setUserRole(role);
-        }
-      },
-      onFailure: (err) => {
-        console.log(
-          "Error getting user role object from {" + courseId + "}:",
-          err
-        );
-        setUserRole(false);
-      },
-    });
-  };
+  // const attemptGetUserRole = (courseId) => {
+  //   LazyFetch({
+  //     type: "get",
+  //     endpoint: "/api/userRole/" + courseId,
+  //     onSuccess: (role) => {
+  //       if (role) {
+  //         setUserRole(role);
+  //       }
+  //     },
+  //     onFailure: (err) => {
+  //       console.log(
+  //         "Error getting user role object from {" + courseId + "}:",
+  //         err
+  //       );
+  //       setUserRole(false);
+  //     },
+  //   });
+  // };
 
-  useEffect(() => {
-    // console.log("rendered");
-    if (!userRole) {
-      attemptGetUserRole(urlParams.courseId);
-    }
-  });
+  // useEffect(() => {
+  //   // console.log("rendered");
+  //   if (!userRole) {
+  //     attemptGetUserRole(urlParams.courseId);
+  //   }
+  // });
 
   console.log("Role object: ", userRole);
 
