@@ -198,7 +198,9 @@ const PostWrapper = ({
       )}
       <HRSeperator />
       <FooterContentWrapper>
-        {postObject.postedBy.isAnonymous ? null : (
+        {postObject.postedBy.anonymous ? (
+          <></>
+        ) : (
           <UserIcon src={postObject.postedBy.picture} />
         )}
         <UserDescription isInstructor={postObject.isInstructor}>
