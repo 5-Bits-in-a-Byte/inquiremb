@@ -117,7 +117,7 @@ const Home = () => {
     endpoint: endpoint,
   });
 
-  console.log("Home Data: ", data);
+  // console.log("Home Data: ", data);
 
   let groups =
     data != null && data.length == 0 ? (
