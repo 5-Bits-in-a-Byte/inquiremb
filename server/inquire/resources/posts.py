@@ -387,10 +387,14 @@ class Posts(Resource):
         new_content_type = args["content"]["type"]
         if new_content_type != post.content["type"]:
             return {'updated': False, 'errors': f"Cannot change post type"}, 400
-        if post.content["type"] == "poll":
-            return {'updated': False, 'errors': f"Cannot modify polls"}, 400
+        # if post.content["type"] == "poll":
+        #     return {'updated': False, 'errors': f"Cannot modify polls"}, 400
         
         # print("AFTER CHANGE / MODIFY TEST")
+
+        if current_user.permissions['participation']['pin']:
+            post.isPinned = args['isPinned']
+            post.save()
 
         id_match = current_user._id == post.postedBy[
             '_id'] or current_user.anonymousId == post.postedBy['_id']
@@ -398,13 +402,15 @@ class Posts(Resource):
             return {'updated': False, 'errors': [f"Cannot modify other users posts"]}, 400
 
         # print("AFTER Other users test")
-
-        post.title = args['title']
-        post.content = args['content']
-        post.updatedDate = datetime.datetime.now()
-        if current_user.permissions['participation']['pin']:
-            post.isPinned = args['isPinned']
-        post.save()
+        if post.content["type"] != "poll":
+            if post.title != args['title']:
+                post.title = args['title']
+                post.updatedDate = datetime.datetime.now()
+            if post.content != args['content']:
+                post.content = args['content']
+                post.updatedDate = datetime.datetime.now()
+            post.save()
+            
         result = self.serialize(post)
         return result, 200
 

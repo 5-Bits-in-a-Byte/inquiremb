@@ -66,7 +66,7 @@ class Roles(Resource):
         # Loop through all roles in the request
         for role in data['roles']:
             # Query for a matching role
-            _id = ObjectId(role["_id"])
+            _id = role["_id"]
             try:
                 saved = Role.objects.get({"_id": _id})
             except Role.DoesNotExist:
