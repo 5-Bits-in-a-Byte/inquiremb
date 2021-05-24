@@ -20,7 +20,7 @@ student = {
 		"poll": True
 	},
 	"privacy": {
-		"private": True,
+		"private": False,
 		"anonymous": True
 	},
 	"admin": {
