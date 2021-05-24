@@ -327,7 +327,7 @@ const RolePanel = ({
           items: [
             {
               stateLabel: "private",
-              itemLabel: "Post Privately",
+              itemLabel: "View Private Posts",
               changeRoleVal: (val) => {
                 roleObject.permissions.privacy.private = val;
                 setPrivacyCheckedState({
@@ -338,7 +338,7 @@ const RolePanel = ({
             },
             {
               stateLabel: "anonymous",
-              itemLabel: "Post Anonymously",
+              itemLabel: "View Anonymous Posts",
               changeRoleVal: (val) => {
                 roleObject.permissions.privacy.anonymous = val;
                 setPrivacyCheckedState({

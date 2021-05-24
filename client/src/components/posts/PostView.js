@@ -50,9 +50,12 @@ const generateSections = (data, userRole, isCondensed) => {
   let posts = { pinned: [], other: [] };
   if (data) {
     data.forEach((post) => {
-      if (post.isPinned) {
+      if (post.isPinned && post.isPrivate && userRole.privacy.private) {
         posts.pinned.push(createPost(post, userRole, isCondensed));
-      } else {
+      } else if (
+        (post.isPrivate && userRole.privacy.private) ||
+        !post.isPrivate
+      ) {
         posts.other.push(createPost(post, userRole, isCondensed));
       }
     });
@@ -63,7 +66,6 @@ const generateSections = (data, userRole, isCondensed) => {
 const PostView = ({ userRole, highlightedSection }) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
-  const [pollAns, setPollAns] = useState(null);
 
   useEffect(() => {
     io.emit("join", { room: courseId, room_type: "course" });
