@@ -54,6 +54,7 @@ const Comment = ({ comment, isDraft, callback }) => {
               key={data._id}
               postid={postid}
               userRole={userRole}
+              commentid={comment._id}
             />,
           ]);
         },
@@ -93,6 +94,7 @@ const Comment = ({ comment, isDraft, callback }) => {
         postid={postid}
         key={0}
         userRole={userRole}
+        commentid={comment._id}
       />
     );
   }
