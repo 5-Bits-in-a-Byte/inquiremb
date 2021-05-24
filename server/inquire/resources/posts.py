@@ -362,7 +362,6 @@ class Posts(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('title')
         parser.add_argument('content', type=dict)
-        parser.add_argument('isPinned', type=bool)
         parser.add_argument('_id')
         args = parser.parse_args()
         print(args.content)
@@ -391,10 +390,6 @@ class Posts(Resource):
         #     return {'updated': False, 'errors': f"Cannot modify polls"}, 400
         
         # print("AFTER CHANGE / MODIFY TEST")
-
-        if current_user.permissions['participation']['pin']:
-            post.isPinned = args['isPinned']
-            post.save()
 
         id_match = current_user._id == post.postedBy[
             '_id'] or current_user.anonymousId == post.postedBy['_id']
