@@ -17,7 +17,15 @@ const ProfileDropdown = () => {
     window.location.href = link;
   };
 
-  const options = [{ onClick: handleSignOut, label: "Sign Out" }];
+  const options = [
+    {
+      onClick: () => {
+        alert("This feature is in progress.");
+      },
+      label: "User Profile",
+    },
+    { onClick: handleSignOut, label: "Sign Out" },
+  ];
 
   return (
     <Wrapper>

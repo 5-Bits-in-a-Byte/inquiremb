@@ -234,9 +234,9 @@ const PostWrapper = ({
 export default PostWrapper;
 
 const Wrapper = styled.div`
-  margin: 2em;
+  margin: 2em 0;
   padding: 0.5em;
-  width: 100%px;
+  width: 100%;
   /* max-width: 900px; */
   /* min-height: 255px; */
   /* height: 255px; */
