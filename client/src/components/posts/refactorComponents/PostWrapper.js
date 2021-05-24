@@ -55,15 +55,16 @@ const PostWrapper = ({
   const handlePin = (postObject, courseId, pin) => {
     LazyFetch({
       type: "put",
-      endpoint: "/api/courses/" + postObject.courseId + "/posts",
+      endpoint: "/api/courses/" + postObject.courseId + "/pin",
       data: {
         _id: postObject._id,
-        title: postObject.title,
-        content: postObject.content,
         isPinned: !pin.pinnedStatus,
       },
       onSuccess: (data) => {
-        console.log("Success: ", data);
+        console.log(
+          "(PUT, 'pin') Response: ",
+          data.status ? data.status : data
+        );
         pin.setPinnedStatus(!pin.pinnedStatus);
         if (!postid) window.location.reload();
       },

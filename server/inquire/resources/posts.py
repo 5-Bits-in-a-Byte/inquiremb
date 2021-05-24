@@ -399,7 +399,7 @@ class Posts(Resource):
         id_match = current_user._id == post.postedBy[
             '_id'] or current_user.anonymousId == post.postedBy['_id']
         if not id_match:
-            return {'updated': False, 'errors': [f"Cannot modify other users posts"]}, 400
+            return {'updated': False, 'errors': f"Cannot modify other users posts"}, 400
 
         # print("AFTER Other users test")
         if post.content["type"] != "poll":
