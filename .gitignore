@@ -117,7 +117,7 @@ server/test-output.xml
 
 #vscode
 **.vscode
-
+docker-env
 run-dev-client.sh
 run-dev-server.sh
 server/docker-env
