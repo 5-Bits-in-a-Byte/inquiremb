@@ -120,3 +120,4 @@ server/test-output.xml
 
 run-dev-client.sh
 run-dev-server.sh
+server/docker-env
