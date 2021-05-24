@@ -118,7 +118,7 @@ const PostView = ({ userRole, highlightedSection }) => {
     endpoint: endpoint,
   });
   if (data) {
-    console.log("DATA: ", data);
+    // console.log("DATA: ", data);
     data = [...socketPosts, ...data];
   }
 

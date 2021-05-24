@@ -17,41 +17,45 @@ function App() {
   return (
     <Router>
       <UserProvider>
-        <UserRoleProvider>
-          <Switch>
-            <PrivateRoute path="/home" exact>
-              <NavigationWrapper>
-                <Home />
-              </NavigationWrapper>
-            </PrivateRoute>
-            <PrivateRoute path="/" exact>
-              <NavigationWrapper>
-                <Courses />
-              </NavigationWrapper>
-            </PrivateRoute>
-            <Route path="/signup" exact>
-              <SignUp />
-            </Route>
-            <Route path="/login" exact>
-              <Login />
-            </Route>
-            <PrivateRoute path="/course/:courseId" exact>
+        <Switch>
+          <PrivateRoute path="/home" exact>
+            <NavigationWrapper>
+              <Home />
+            </NavigationWrapper>
+          </PrivateRoute>
+          <PrivateRoute path="/" exact>
+            <NavigationWrapper>
+              <Courses />
+            </NavigationWrapper>
+          </PrivateRoute>
+          <Route path="/signup" exact>
+            <SignUp />
+          </Route>
+          <Route path="/login" exact>
+            <Login />
+          </Route>
+          <PrivateRoute path="/course/:courseId" exact>
+            <UserRoleProvider>
               <NavigationWrapper>
                 <ClassView />
               </NavigationWrapper>
-            </PrivateRoute>
-            <PrivateRoute path="/course/:courseId/post/:postid" exact>
+            </UserRoleProvider>
+          </PrivateRoute>
+          <PrivateRoute path="/course/:courseId/post/:postid" exact>
+            <UserRoleProvider>
               <NavigationWrapper>
                 <CommentView />
               </NavigationWrapper>
-            </PrivateRoute>
-            <PrivateRoute path="/course/:courseId/config">
+            </UserRoleProvider>
+          </PrivateRoute>
+          <PrivateRoute path="/course/:courseId/config">
+            <UserRoleProvider>
               <NavigationWrapper>
                 <ConfigView />
               </NavigationWrapper>
-            </PrivateRoute>
-          </Switch>
-        </UserRoleProvider>
+            </UserRoleProvider>
+          </PrivateRoute>
+        </Switch>
       </UserProvider>
     </Router>
   );
