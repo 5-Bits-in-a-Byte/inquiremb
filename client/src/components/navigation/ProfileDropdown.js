@@ -20,7 +20,8 @@ const ProfileDropdown = () => {
   const options = [
     {
       onClick: () => {
-        alert("This feature is in progress.");
+        window.location.href =
+          process.env.REACT_APP_CLIENT_URL + "/userProfile";
       },
       label: "User Profile",
     },

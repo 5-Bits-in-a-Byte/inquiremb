@@ -12,6 +12,7 @@ import { UserProvider } from "./components/context/UserProvider";
 import { UserRoleProvider } from "./components/context/UserRoleProvider";
 import PrivateRoute from "./PrivateRoute";
 import ConfigView from "./components/configPage/ConfigView";
+import UserProfile from "./components/userProfile/UserProfile";
 
 function App() {
   return (
@@ -34,6 +35,11 @@ function App() {
           <Route path="/login" exact>
             <Login />
           </Route>
+          <PrivateRoute path="/userProfile" exact>
+            <NavigationWrapper>
+              <UserProfile />
+            </NavigationWrapper>
+          </PrivateRoute>
           <PrivateRoute path="/course/:courseId" exact>
             <UserRoleProvider>
               <NavigationWrapper>
