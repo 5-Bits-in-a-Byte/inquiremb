@@ -13,7 +13,7 @@ const convertToUpper = (postType) => {
 };
 
 const EditorWrapper = ({ post, edit }) => {
-  const { courseId } = useParams();
+  const { courseId, postid } = useParams();
   const [editorStateTest, setEditorStateTest] = useState(
     EditorState.createWithContent(convertFromRaw(post.content.raw))
   );
@@ -57,20 +57,33 @@ const EditorWrapper = ({ post, edit }) => {
     );
   };
 
+  /** This variable is used to determine whether or not to force a maximum height for this containing element. */
+  var editorStyle =
+    edit.isEditing || postid
+      ? {
+          minHeight: "100px",
+          padding: "0 8px",
+          // maxHeight: "200px",
+          overflow: "hidden",
+          border: "2px solid #e7e7e7",
+          borderRadius: "5px",
+        }
+      : {
+          minHeight: "100px",
+          padding: "0 8px",
+          maxHeight: "200px",
+          overflow: "hidden",
+          border: "2px solid #e7e7e7",
+          borderRadius: "5px",
+        };
+
   return (
     <>
       {edit.isEditing ? (
         <Editor
           name="content"
           editorState={editorStateTest}
-          editorStyle={{
-            minHeight: "100px",
-            padding: "0 8px",
-            maxHeight: "200px",
-            overflow: "hidden",
-            border: "2px solid #e7e7e7",
-            borderRadius: "5px",
-          }}
+          editorStyle={editorStyle}
           toolbar={{
             options: [
               "inline",
@@ -89,14 +102,7 @@ const EditorWrapper = ({ post, edit }) => {
           toolbarHidden
           name="content"
           editorState={editorStateTest}
-          editorStyle={{
-            minHeight: "100px",
-            padding: "0 8px",
-            maxHeight: "200px",
-            overflow: "hidden",
-            border: "2px solid #e7e7e7",
-            borderRadius: "5px",
-          }}
+          editorStyle={editorStyle}
           toolbar={{
             options: [
               "inline",

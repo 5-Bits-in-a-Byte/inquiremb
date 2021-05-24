@@ -33,7 +33,8 @@ class CourseCard extends React.Component {
     this.setState({ courseColor: colors.hex });
   };
 
-  toggleColorDisplay = () => {
+  toggleColorDisplay = (e) => {
+    // console.log("Event: ", e);
     this.setState({ displayColorSelector: !this.state.displayColorSelector });
   };
 
@@ -79,7 +80,7 @@ class CourseCard extends React.Component {
   };
 
   handleNicknameChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     this.setState({ nickname: e.target.value });
   };
 
@@ -104,13 +105,20 @@ class CourseCard extends React.Component {
                 width={"25em"}
                 onClick={() =>
                   alert(
-                    "You clicked the Unread Messages icon for " +
+                    'You clicked the Unread Messages icon for "' +
                       this.props.courseName +
-                      ".\nThis feature is a work in progress."
+                      '".\nThis feature is a work in progress.'
                   )
                 }
               ></Icon>
-              {this.state.numMsgs > 0 && this.state.numMsgs}
+              {this.state.numMsgs > 0 && this.state.numMsgs ? (
+                <h3 style={{ color: `#f8f8f8`, lineHeight: `1.2em` }}>
+                  {this.state.numMsgs}
+                </h3>
+              ) : (
+                // <h3 style={{ color: `#f8f8f8`, lineHeight: `1.2em` }}>0</h3>
+                <></>
+              )}
             </MessageDiv>
           </ColorDiv>
           <CourseInfo>
@@ -191,6 +199,7 @@ class CourseCard extends React.Component {
             ref={this.colorFocus}
             tabIndex="0"
             onBlur={this.toggleColorDisplay}
+            // onBlur={this.setState({ displayColorSelector: false })}
           >
             <ChromePicker
               onChange={this.handleColorChange}
