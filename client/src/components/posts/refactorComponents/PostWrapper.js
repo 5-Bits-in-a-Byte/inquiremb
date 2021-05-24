@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled, { css } from "styled-components";
+import { UserContext } from "../../context/UserProvider";
+import {
+  UserRoleContext,
+  UserRoleDispatchContext,
+} from "../../context/UserRoleProvider";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Icon from "../../common/Icon";
 import OptionDots from "../../../imgs/option-dots.svg";
@@ -29,7 +34,10 @@ const PostWrapper = ({
   postObject,
   ...props
 }) => {
-  // console.log("PostObject: ", postObject);
+  console.log("PostObject: ", postObject);
+
+  const user = useContext(UserContext);
+  const userRole = useContext(UserRoleContext);
 
   const [isEditing, setIsEditing] = useState(false);
   const [pinnedStatus, setPinnedStatus] = useState(postObject.isPinned);
@@ -87,34 +95,23 @@ const PostWrapper = ({
     setIsEditing(true);
   };
 
-  const dropdownOptions =
-    postType == "Poll"
-      ? [
-          {
-            onClick: () => {
-              handleDelete(postObject._id, postObject.courseId);
-            },
-            label: "Delete post",
-          },
-          {
-            onClick: () => {
-              handlePin(postObject, postObject.courseId, {
-                pinnedStatus,
-                setPinnedStatus,
-              });
-            },
-            label: pinnedStatus ? "Unpin Post" : "Pin Post",
-          },
-        ]
-      : [
-          {
-            onClick: () => {
-              handleDelete(postObject._id, postObject.courseId);
-            },
-            label: "Delete post",
-          },
-          { onClick: handleEdit, label: "Edit post" },
-          {
+  const generateDropdownOptions = () => {
+    if (userRole) {
+      let deleteOption =
+        userRole.delete.postComment && postObject.postedBy._id == user._id
+          ? {
+              onClick: () => {
+                handleDelete(postObject._id, postObject.courseId);
+              },
+              label: "Delete post",
+            }
+          : null;
+      let editOption =
+        userRole.edit.postComment && postObject.postedBy._id == user._id
+          ? { onClick: handleEdit, label: "Edit post" }
+          : null;
+      let pinOption = userRole.participation.pin
+        ? {
             onClick: () => {
               handlePin(postObject, postObject.courseId, {
                 pinnedStatus,
@@ -122,8 +119,28 @@ const PostWrapper = ({
               });
             },
             label: pinnedStatus ? "Unpin Post" : "Pin Post",
-          },
-        ];
+          }
+        : null;
+
+      let result = [];
+
+      if (postType == "Poll") {
+        if (deleteOption) result.push(deleteOption);
+        if (pinOption) result.push(pinOption);
+      } else {
+        if (deleteOption) result.push(deleteOption);
+        if (editOption) result.push(editOption);
+        if (pinOption) result.push(pinOption);
+      }
+
+      if (result.length == 0) return null;
+
+      return result;
+    }
+    return null;
+  };
+
+  var dropdownOptions = generateDropdownOptions();
 
   return (
     <Wrapper
@@ -143,23 +160,27 @@ const PostWrapper = ({
         <PostTitle style={{ cursor: "pointer" }}>
           {postObject.title ? postObject.title : "Error getting post title"}
         </PostTitle>
-        <DropDownContainer>
-          {pinnedStatus ? (
-            <img
-              src={PinIcon}
-              style={{
-                margin: `0 1em 0 0`,
-                width: `18px`,
-                height: `18px`,
-              }}
-            />
-          ) : (
-            <></>
-          )}
-          <Dropdown options={dropdownOptions}>
-            <Icon src={OptionDots} style={{ cursor: "pointer" }} />
-          </Dropdown>
-        </DropDownContainer>
+        {userRole && dropdownOptions ? (
+          <DropDownContainer>
+            {pinnedStatus ? (
+              <img
+                src={PinIcon}
+                style={{
+                  margin: `0 1em 0 0`,
+                  width: `18px`,
+                  height: `18px`,
+                }}
+              />
+            ) : (
+              <></>
+            )}
+            <Dropdown options={dropdownOptions}>
+              <Icon src={OptionDots} style={{ cursor: "pointer" }} />
+            </Dropdown>
+          </DropDownContainer>
+        ) : (
+          <></>
+        )}
       </HeaderContentWrapper>
       {!condensed ? (
         <ContentWrapper
