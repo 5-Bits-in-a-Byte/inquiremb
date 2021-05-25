@@ -126,12 +126,12 @@ const PostWrapper = ({
       let result = [];
 
       if (postType == "Poll") {
-        if (deleteOption) result.push(deleteOption);
         if (pinOption) result.push(pinOption);
+        if (deleteOption) result.push(deleteOption);
       } else {
-        if (deleteOption) result.push(deleteOption);
-        if (editOption) result.push(editOption);
         if (pinOption) result.push(pinOption);
+        if (editOption) result.push(editOption);
+        if (deleteOption) result.push(deleteOption);
       }
 
       if (result.length == 0) return null;
