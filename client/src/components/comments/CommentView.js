@@ -108,7 +108,7 @@ const CommentView = ({ classroomName }) => {
 
   // Fetch comments
   useEffect(() => {
-    if (!post) {
+    if (post) {
       LazyFetch({
         type: "get",
         endpoint:

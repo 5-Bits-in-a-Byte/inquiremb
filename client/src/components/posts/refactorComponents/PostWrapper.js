@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { UserContext } from "../../context/UserProvider";
 import {
@@ -34,7 +34,7 @@ const PostWrapper = ({
   postObject,
   ...props
 }) => {
-  // console.log("PostObject: ", postObject);
+  console.log("PostObject: ", postObject);
 
   const user = useContext(UserContext);
   const userRole = useContext(UserRoleContext);
@@ -143,6 +143,10 @@ const PostWrapper = ({
 
   var dropdownOptions = generateDropdownOptions();
 
+  useEffect(() => {
+    console.log("Pinned Status: ", pinnedStatus);
+  });
+
   return (
     <Wrapper
       onClick={() => {
@@ -161,27 +165,27 @@ const PostWrapper = ({
         <PostTitle style={{ cursor: "pointer" }}>
           {postObject.title ? postObject.title : "Error getting post title"}
         </PostTitle>
-        {userRole && dropdownOptions ? (
-          <DropDownContainer>
-            {pinnedStatus ? (
-              <img
-                src={PinIcon}
-                style={{
-                  margin: `0 1em 0 0`,
-                  width: `18px`,
-                  height: `18px`,
-                }}
-              />
-            ) : (
-              <></>
-            )}
+        <DropDownContainer>
+          {pinnedStatus ? (
+            <img
+              src={PinIcon}
+              style={{
+                margin: `0 1em 0 0`,
+                width: `18px`,
+                height: `18px`,
+              }}
+            />
+          ) : (
+            <></>
+          )}
+          {userRole && dropdownOptions ? (
             <Dropdown options={dropdownOptions}>
               <Icon src={OptionDots} style={{ cursor: "pointer" }} />
             </Dropdown>
-          </DropDownContainer>
-        ) : (
-          <></>
-        )}
+          ) : (
+            <></>
+          )}
+        </DropDownContainer>
       </HeaderContentWrapper>
       {!condensed ? (
         <ContentWrapper
