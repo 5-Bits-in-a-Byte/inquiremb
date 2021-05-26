@@ -109,6 +109,15 @@ const PostView = ({ userRole, highlightedSection }) => {
     case "My Upvoted":
       endpoint += "?filterby=myupvoted";
       break;
+    case "Announcements":
+      endpoint += "?filterby=announcement";
+      break;
+    case "Questions":
+      endpoint += "?filterby=question";
+      break;
+    case "Polls":
+      endpoint += "?filterby=poll";
+      break;
     default:
     // Don't add a filter to endpoint
   }

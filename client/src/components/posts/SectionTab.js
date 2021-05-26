@@ -44,7 +44,7 @@ export default SectionTab;
 const Tab = styled.div`
   display: flex;
   // border: 1px solid grey;
-  width: 80%;
+  width: 95%;
   height: 1.75em;
   margin: 0.25rem 0;
   align-items: center;
