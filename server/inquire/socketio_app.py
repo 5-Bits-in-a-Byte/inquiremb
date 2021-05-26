@@ -41,6 +41,7 @@ def disconnect():
 @io.on('join')
 def on_join(data):
     room = data['room']
+    print("SOCKETIO TEST: ", room)
     room_type = data['room_type']
     status = False
     if room_type == "course":

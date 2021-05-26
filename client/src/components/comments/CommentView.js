@@ -115,13 +115,16 @@ const CommentView = ({ classroomName }) => {
           "/api/courses/" + courseId + "/posts/" + post._id + "/comments",
         onSuccess: (data) => {
           setCommentData([...renderComments(data, userRole)]);
+          io.emit("join", { room: post._id, room_type: "post" });
         },
       });
     }
-    io.emit("join", { room: postid, room_type: "post" });
-    return () => {
-      io.emit("leave", { room: postid });
-    };
+    // io.emit("join", { room: post._id, room_type: "post" });
+    if (post) {
+      return () => {
+        io.emit("leave", { room: post._id });
+      };
+    }
   }, [post]);
 
   useEffect(() => {

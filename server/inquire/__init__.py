@@ -109,7 +109,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
 
 
 if __name__ == '__main__':
-    if False:
+    if True:
         io, app = create_app()
         io.run(app, host="0.0.0.0", debug=True, log_output=True)
     else:

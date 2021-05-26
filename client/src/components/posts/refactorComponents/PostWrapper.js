@@ -34,7 +34,7 @@ const PostWrapper = ({
   postObject,
   ...props
 }) => {
-  console.log("PostObject: ", postObject);
+  // console.log("PostObject: ", postObject);
 
   const user = useContext(UserContext);
   const userRole = useContext(UserRoleContext);
@@ -143,9 +143,9 @@ const PostWrapper = ({
 
   var dropdownOptions = generateDropdownOptions();
 
-  useEffect(() => {
-    console.log("Pinned Status: ", pinnedStatus);
-  });
+  // useEffect(() => {
+  //   console.log("Pinned Status: ", pinnedStatus);
+  // });
 
   return (
     <Wrapper
