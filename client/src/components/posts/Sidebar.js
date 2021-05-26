@@ -7,6 +7,9 @@ import { UserContext } from "../context/UserProvider";
 import GlassesImg from "../../imgs/glasses.svg";
 import NoteImg from "../../imgs/note.svg";
 import HeartImg from "../../imgs/heart.svg";
+import AnnouncementsImg from "../../imgs/announcements.svg";
+import QuestionsImg from "../../imgs/questions.svg";
+import PollsImg from "../../imgs/polls.svg";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
 const Sidebar = ({ userRole, setHighlightedSection, highlightedSection }) => {
@@ -46,6 +49,24 @@ const Sidebar = ({ userRole, setHighlightedSection, highlightedSection }) => {
           <SectionTab
             tabText={"Instructor"}
             imageLocation={GlassesImg}
+            setHighlightedSection={setHighlightedSection}
+            highlightedSection={highlightedSection}
+          />
+          <SectionTab
+            tabText={"Announcements"}
+            imageLocation={AnnouncementsImg}
+            setHighlightedSection={setHighlightedSection}
+            highlightedSection={highlightedSection}
+          />
+          <SectionTab
+            tabText={"Questions"}
+            imageLocation={QuestionsImg}
+            setHighlightedSection={setHighlightedSection}
+            highlightedSection={highlightedSection}
+          />
+          <SectionTab
+            tabText={"Polls"}
+            imageLocation={PollsImg}
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
           />
