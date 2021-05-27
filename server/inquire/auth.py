@@ -143,13 +143,13 @@ def permission_layer(required_permissions=None, require_login=True, require_join
 
 @ auth_routes.route('/login')
 def login():
-    redirect_uri = url_for('auth_blueprint.auth', _external=True)
+    redirect_uri = url_for('api_bp.auth_blueprint.auth', _external=True)
     return oauth.google.authorize_redirect(redirect_uri)
 
 
 @ auth_routes.route('/github-login')
 def github_login():
-    redirect_uri = url_for('auth_blueprint.github_auth', _external=True)
+    redirect_uri = url_for('api_bp.auth_blueprint.github_auth', _external=True)
     return oauth.github.authorize_redirect(redirect_uri)
 
 
