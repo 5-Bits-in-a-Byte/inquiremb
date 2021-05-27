@@ -54,7 +54,7 @@ const SignUp = () => {
 
         {/* Github Login Button */}
         <Buttons
-          href={process.env.REACT_APP_SERVER_URL + "/apit/auth/github-login"}
+          href={process.env.REACT_APP_SERVER_URL + "/api/auth/github-login"}
         >
           <Icon src={GithubLogo} />
           <BtnText>Sign up with Github</BtnText>
