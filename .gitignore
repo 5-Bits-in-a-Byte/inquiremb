@@ -121,3 +121,4 @@ docker-env
 run-dev-client.sh
 run-dev-server.sh
 server/docker-env
+inquire-server.yaml
