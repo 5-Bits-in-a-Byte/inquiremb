@@ -7,7 +7,7 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
-from flask import Flask
+from flask import Flask, Blueprint
 from flask_restful import Api
 from flasgger import Swagger
 
@@ -19,6 +19,8 @@ def create_app(override_config=None, testing=False, include_socketio=True):
 
     # CORS
     app.config['CORS_HEADERS'] = 'Content-Type'
+    api_bp = Blueprint("api_bp", __name__, url_prefix="/api")
+    
 
     @app.after_request
     def after_request(response):
@@ -51,9 +53,9 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     # Importing blueprints
     from inquire.auth import auth_routes
     from inquire.socketio_app import socketio_blueprint
-    # Adding blueprints to app blueprints
-    app.register_blueprint(auth_routes)
-    app.register_blueprint(socketio_blueprint)
+    # Adding blueprints to api_bp blueprints
+    api_bp.register_blueprint(auth_routes, url_prefix="auth")
+    api_bp.register_blueprint(socketio_blueprint, url_prefix="socketio")
 
     from inquire.auth import oauth
     # Configuring OAuth object
@@ -76,10 +78,10 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     )
     from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home, Roles, MeRole, CourseUsers, Poll, Pin
 
-    api = Api(app, prefix="/api")
+    api = Api(api_bp)
 
-    # Adding Swagger API docs to app
-    swagger = Swagger(app, config=config.swagger_config)
+    # # Adding Swagger API docs to app
+    # swagger = Swagger(app, config=config.swagger_config)
 
     # register endpoints from /resources folder here:
     api.add_resource(Roles, '/courses/<string:courseId>/roles')
@@ -98,6 +100,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     api.add_resource(
         Replies, '/courses/<string:courseId>/posts/<string:postId>/comments/<string:comment_id>/replies')
     api.add_resource(Join, '/join')
+    app.register_blueprint(api_bp)
     if include_socketio:
         # Wrapping flask app in socketio wrapper
         from inquire.socketio_app import io
