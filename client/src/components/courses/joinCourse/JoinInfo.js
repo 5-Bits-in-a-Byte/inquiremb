@@ -38,7 +38,7 @@ const JoinCourse = ({ joinCourse }) => {
     setTimeout(() => {
       LazyFetch({
         type: "post",
-        endpoint: "/api/join",
+        endpoint: "/join",
         data: { courseName: form.courseName, accessCode: form.accessCode },
         onSuccess: (data) => {
           joinCourse(data);

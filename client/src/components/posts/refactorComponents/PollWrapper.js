@@ -27,7 +27,7 @@ const PollWrapper = ({ post }) => {
 
     LazyFetch({
       type: "put",
-      endpoint: "/api/courses/" + courseId + "/polls",
+      endpoint: "/courses/" + courseId + "/polls",
       data: { selectedOption: voteAnswer, postId: post._id },
       onSuccess: (data) => {
         // console.log("Data: ", data);

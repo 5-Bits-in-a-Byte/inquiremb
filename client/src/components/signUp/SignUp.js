@@ -47,14 +47,14 @@ const SignUp = () => {
         <Welcome>Welcome to Inquire!</Welcome>
 
         {/* Google Login Button */}
-        <Buttons href={process.env.REACT_APP_SERVER_URL + "/api/auth/login"}>
+        <Buttons href={process.env.REACT_APP_SERVER_URL + "/auth/login"}>
           <Icon src={GoogleLogo} />
           <BtnText>Sign up with Google</BtnText>
         </Buttons>
 
         {/* Github Login Button */}
         <Buttons
-          href={process.env.REACT_APP_SERVER_URL + "/api/auth/github-login"}
+          href={process.env.REACT_APP_SERVER_URL + "/auth/github-login"}
         >
           <Icon src={GithubLogo} />
           <BtnText>Sign up with Github</BtnText>

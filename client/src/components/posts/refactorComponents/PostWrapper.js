@@ -55,7 +55,7 @@ const PostWrapper = ({
   const handlePin = (postObject, courseId, pin) => {
     LazyFetch({
       type: "put",
-      endpoint: "/api/courses/" + postObject.courseId + "/pin",
+      endpoint: "/courses/" + postObject.courseId + "/pin",
       data: {
         _id: postObject._id,
         isPinned: !pin.pinnedStatus,
@@ -78,7 +78,7 @@ const PostWrapper = ({
   const handleDelete = (postId, courseId) => {
     LazyFetch({
       type: "delete",
-      endpoint: "/api/courses/" + courseId + "/posts",
+      endpoint: "/courses/" + courseId + "/posts",
       data: { _id: postId },
       onSuccess: (data) => {
         console.log("Success: ", data);

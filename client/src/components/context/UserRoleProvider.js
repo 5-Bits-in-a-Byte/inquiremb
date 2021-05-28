@@ -8,7 +8,7 @@ const UserRoleDispatchContext = createContext(undefined);
 const attemptGetUserRole = (courseId, setUserRole) => {
   LazyFetch({
     type: "get",
-    endpoint: "/api/userRole/" + courseId,
+    endpoint: "/userRole/" + courseId,
     onSuccess: (role) => {
       if (role) {
         setUserRole(role);

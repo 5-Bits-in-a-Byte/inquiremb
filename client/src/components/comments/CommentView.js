@@ -33,7 +33,7 @@ const CommentView = ({ classroomName }) => {
 
   // LazyFetch({
   //   type: "get",
-  //   endpoint: "/api/userRole/" + courseId,
+  //   endpoint: "/userRole/" + courseId,
   //   onSuccess: (role) => {
   //     if (role) {
   //       roleAfterGetRequest = role;
@@ -112,7 +112,7 @@ const CommentView = ({ classroomName }) => {
       LazyFetch({
         type: "get",
         endpoint:
-          "/api/courses/" + courseId + "/posts/" + post._id + "/comments",
+          "/courses/" + courseId + "/posts/" + post._id + "/comments",
         onSuccess: (data) => {
           setCommentData([...renderComments(data, userRole)]);
           io.emit("join", { room: post._id, room_type: "post" });
@@ -175,7 +175,7 @@ const CommentView = ({ classroomName }) => {
       LazyFetch({
         type: "post",
         endpoint:
-          "/api/courses/" + courseId + "/posts/" + post._id + "/comments",
+          "/courses/" + courseId + "/posts/" + post._id + "/comments",
         data: { isAnonymous: false, content: content },
         onSuccess: (data) => {
           setNewComments({ draft: false });

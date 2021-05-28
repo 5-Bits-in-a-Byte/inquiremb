@@ -59,7 +59,7 @@ const Draft = () => {
     };
     LazyFetch({
       type: "post",
-      endpoint: "/api/courses/" + courseId + "/posts",
+      endpoint: "/courses/" + courseId + "/posts",
       data: {
         title: draft.title,
         isAnonymous: draft.isAnonymous,

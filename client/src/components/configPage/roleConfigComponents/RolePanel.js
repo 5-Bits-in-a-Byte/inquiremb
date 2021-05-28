@@ -424,7 +424,7 @@ const RolePanel = ({
           // alert("This feature is work in progress.");
           LazyFetch({
             type: "delete",
-            endpoint: "/api/courses/" + urlParams.courseId + "/roles",
+            endpoint: "/courses/" + urlParams.courseId + "/roles",
             data: {
               roleId: roleObject._id,
             },
