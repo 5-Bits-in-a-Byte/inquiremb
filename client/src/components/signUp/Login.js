@@ -46,22 +46,14 @@ const SignUp = () => {
         <LogoImg src={Logo} />
 
         {/* Google Login Button */}
-<<<<<<< HEAD
         <Buttons href={process.env.REACT_APP_SERVER_URL + "/auth/login"}>
-=======
-        <Buttons href={process.env.REACT_APP_SERVER_URL + "/api/auth/login"}>
->>>>>>> e1ce2b41a8e881201f33974bec1546431283cdce
           <Icon src={GoogleLogo} />
           <BtnText>Sign in with Google</BtnText>
         </Buttons>
 
         {/* Github Login Button */}
         <Buttons
-<<<<<<< HEAD
           href={process.env.REACT_APP_SERVER_URL + "/auth/github-login"}
-=======
-          href={process.env.REACT_APP_SERVER_URL + "/api/auth/github-login"}
->>>>>>> e1ce2b41a8e881201f33974bec1546431283cdce
         >
           <Icon src={GithubLogo} />
           <BtnText>Sign in with Github</BtnText>
