@@ -18,7 +18,6 @@ Flask-SocketIO==5.0.1
 greenlet==1.0.0
 idna==2.10
 iniconfig==1.1.1
--e git+git@github.com:5-Bits-in-a-Byte/message-board.git@e73c0611e13d123b457b1ad42d98cf56b2fd2fd7#egg=inquire_backend&subdirectory=server
 itsdangerous==2.0.1
 Jinja2==3.0.1
 jsonschema==3.2.0
