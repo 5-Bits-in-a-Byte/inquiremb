@@ -13,8 +13,7 @@ const ProfileDropdown = () => {
 
   /** @brief Wrapper for handling signout routing. */
   const handleSignOut = () => {
-    // const link = process.env.REACT_APP_SERVER_URL + "/api/auth/logout";
-    const link = "/api/auth/logout";
+    const link = process.env.REACT_APP_SERVER_URL + "/api/auth/logout";
     window.location.href = link;
   };
 
