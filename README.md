@@ -4,7 +4,7 @@
 
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 [![Version](https://badge.fury.io/gh/tterb%2FHyde.svg)](https://badge.fury.io/gh/tterb%2FHyde)
-[![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.inquiremb.com/)
+[![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://inquire-server-6p24p.ondigitalocean.app/)
 
 
 Welcome to Inquire, a message board/forum for course instructors and students to post questions, provide answers, connect, and communicate.
