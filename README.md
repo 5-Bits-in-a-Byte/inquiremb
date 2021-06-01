@@ -1,6 +1,6 @@
 ![Inquire Logo](/client/src/imgs/inquire-logo.png)
 
-## [Click me to view site!](https://inquiremb.com "Inquire Webapp")
+## [Click me to view site!](https://inquire-server-6p24p.ondigitalocean.app/ "Inquire Webapp")
 
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 [![Version](https://badge.fury.io/gh/tterb%2FHyde.svg)](https://badge.fury.io/gh/tterb%2FHyde)
