@@ -1,0 +1,65 @@
+name: inquire-server
+region: sfo
+
+static_sites:
+  - name: frontend
+    dockerfile_path: client/Dockerfile.prod
+    # environment_slug: html
+    github:
+      branch: staging
+      deploy_on_push: true
+      repo: 5-Bits-in-a-Byte/message-board
+    source_dir: /client
+    output_dir: /app/build
+    index_document: index.html
+    error_document: index.html
+    routes:
+      - path: /
+    envs:
+      - key: REACT_APP_SERVER_URL
+        scope: RUN_AND_BUILD_TIME
+        value: ${backend.PUBLIC_URL}
+      - key: REACT_APP_CLIENT_URL
+        scope: RUN_AND_BUILD_TIME
+        value: ${frontend.PUBLIC_URL}
+
+services:
+  - dockerfile_path: server/Dockerfile
+    envs:
+      - key: GOOGLE_CLIENT_ID
+        scope: RUN_AND_BUILD_TIME
+        value: 472162809688-jtt71evdvnd03esoi0j1sl2uj75rhsnp.apps.googleusercontent.com
+      - key: GOOGLE_CLIENT_SECRET
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+        value: EV[1:6t/okf0KkUlSlfsD6hWr37X8C7Bts1qB:2BoUUPKNBm1oNO0wHpE+QH9fliF/rah2n8ZMf7+neXqsettG1NJQKA==]
+      - key: GITHUB_CLIENT_ID
+        scope: RUN_AND_BUILD_TIME
+        value: 224cb6eb30a4c123b2d1
+      - key: GITHUB_CLIENT_SECRET
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+        value: EV[1:s0Yf77Q5AbrIHnY7q7Ot1h+EvamoQ3gy:4EL5iCrwpRuJ8V3Jdiai/T9tVDk0c/J2O99vZ/MADgD7z/s3WbdHYuxbZ1vEidSwRt+HMT4QUSk=]
+      - key: HS_256_KEY
+        scope: RUN_AND_BUILD_TIME
+        value: I8T2mW6rRp90B5Zwb6ApC4pZYs9Hl9MP
+      - key: MONGO_URI
+        scope: RUN_AND_BUILD_TIME
+        value: mongodb+srv://dbUser:VsMhhLL7XpTSfb4r@cluster0.vhg6h.mongodb.net/main?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE
+      - key: CLIENT_URL
+        scope: RUN_AND_BUILD_TIME
+        value: ${frontend.PUBLIC_URL}
+      - key: TEST_MONGO_URI
+        scope: RUN_AND_BUILD_TIME
+        value: mongodb+srv://dbUser:VsMhhLL7XpTSfb4r@cluster0.vhg6h.mongodb.net/tests?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE
+    github:
+      branch: staging
+      deploy_on_push: true
+      repo: 5-Bits-in-a-Byte/message-board
+    http_port: 5000
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    name: backend
+    routes:
+      - path: /api
+    source_dir: /server
