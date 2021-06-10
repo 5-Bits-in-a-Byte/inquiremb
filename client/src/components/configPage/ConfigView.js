@@ -68,7 +68,7 @@ const ConfigView = ({ props }) => {
   const attemptGetUserRole = (courseId) => {
     LazyFetch({
       type: "get",
-      endpoint: "/api/userRole/" + courseId,
+      endpoint: "/userRole/" + courseId,
       onSuccess: (role) => {
         if (role) {
           setUserRole(role);
@@ -100,7 +100,7 @@ const ConfigView = ({ props }) => {
   const attemptGetCourseUsers = (courseId) => {
     LazyFetch({
       type: "get",
-      endpoint: "/api/courses/" + courseId + "/users",
+      endpoint: "/courses/" + courseId + "/users",
       onSuccess: (data) => {
         setCourseUsers(data.data);
       },
@@ -116,7 +116,7 @@ const ConfigView = ({ props }) => {
   const attemptGetCourseRoles = (courseId) => {
     LazyFetch({
       type: "get",
-      endpoint: "/api/courses/" + courseId + "/roles",
+      endpoint: "/courses/" + courseId + "/roles",
       onSuccess: (roles) => {
         console.log("Successfully fetched Course Roles: ", roles);
         setCourseRoles(roles);
@@ -238,7 +238,7 @@ const ConfigView = ({ props }) => {
                 if (c == true) {
                   LazyFetch({
                     type: "delete",
-                    endpoint: "/api/courses?courseId=" + courseId,
+                    endpoint: "/courses?courseId=" + courseId,
                     onSuccess: (data) => {
                       alert("delete request success.");
                       let userCopy = user;

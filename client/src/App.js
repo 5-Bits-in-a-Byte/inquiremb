@@ -15,6 +15,8 @@ import ConfigView from "./components/configPage/ConfigView";
 import UserProfile from "./components/userProfile/UserProfile";
 
 function App() {
+  // Hello :)
+
   return (
     <Router>
       <UserProvider>

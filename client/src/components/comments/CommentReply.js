@@ -25,7 +25,7 @@ const CommentReply = ({
 
   // '/posts/<string:postId>/comments/<string:comment_id>/replies'
   const endpoint =
-    "/api/courses/" +
+    "/courses/" +
     courseId +
     "/posts/" +
     postid +

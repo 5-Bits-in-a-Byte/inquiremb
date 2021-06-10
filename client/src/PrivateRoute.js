@@ -20,7 +20,7 @@ const PrivateRoute = (props) => {
   const attemptSignIn = (token) => {
     LazyFetch({
       type: "get",
-      endpoint: "/api/me",
+      endpoint: "/me",
       onSuccess: (data) => {
         if (data && data._id) {
           setUser(data);

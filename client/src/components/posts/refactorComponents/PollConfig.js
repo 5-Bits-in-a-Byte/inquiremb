@@ -254,7 +254,7 @@ const PollConfig = ({ children, ...props }) => {
   const handleSubmit = () => {
     LazyFetch({
       type: "post",
-      endpoint: "/api/courses/" + courseId + "/posts",
+      endpoint: "/courses/" + courseId + "/posts",
       data: {
         isAnonymous: isAnonymous,
         isPrivate: false,

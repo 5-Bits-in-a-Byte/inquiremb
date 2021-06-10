@@ -57,7 +57,7 @@ PrivateRoute is a wrapper Router to route user data from the backend to each res
 ```js
 const attemptSignIn = (token) => {
   axios
-    .get(process.env.REACT_APP_SERVER_URL + "/api/me", {
+    .get(process.env.REACT_APP_SERVER_URL + "/me", {
       withCredentials: true,
     })
     // User has an active cookie from server, sign in success

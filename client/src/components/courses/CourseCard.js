@@ -26,7 +26,7 @@ class CourseCard extends React.Component {
       nicknameActive: false,
       nickname: this.props.nickname,
     };
-    this.endpoint = "/api/courses?courseId=" + this.props.id;
+    this.endpoint = "/courses?courseId=" + this.props.id;
   }
 
   handleColorChange = (colors) => {

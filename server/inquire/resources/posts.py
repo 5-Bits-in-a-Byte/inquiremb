@@ -95,7 +95,7 @@ class Posts(Resource):
             post = Post(courseId=courseId, postedBy=postedBy, title=args.title,
                         isPrivate=args.isPrivate, content=args.content, isInstructor=highlighted).save()
         except ValidationError as exc:
-            return {"errors": str(exc)}
+            return {"errors": str(exc)}, 400
 
         result = self.serialize(post)
 

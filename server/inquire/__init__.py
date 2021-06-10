@@ -13,13 +13,14 @@ from flasgger import Swagger
 
 
 def create_app(override_config=None, testing=False, include_socketio=True):
+    from inquire import config
     app = Flask(__name__, static_url_path="",
                 static_folder='../client/build',
                 template_folder='../client/build')
 
     # CORS
     app.config['CORS_HEADERS'] = 'Content-Type'
-    api_bp = Blueprint("api_bp", __name__, url_prefix="/api")
+    api_bp = Blueprint("api_bp", __name__, url_prefix=config.ROUTING_PREFIX)
     
 
     @app.after_request
@@ -33,15 +34,14 @@ def create_app(override_config=None, testing=False, include_socketio=True):
                              'GET,PUT,POST,DELETE,OPTIONS')
         return response
 
-    # Adding secret key to app
-    app.secret_key = '!secret'
-    from inquire import config
+
     # Configuring flask app
     if override_config:
         app.config.from_object(override_config)
     else:
         app.config.from_object(config)
-
+    # Adding secret key to app
+    app.secret_key = config.HS_256_KEY
     app.config['include_socketio'] = include_socketio
 
     import pymodm.connection
@@ -114,7 +114,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
 if __name__ == '__main__':
     if True:
         io, app = create_app()
-        io.run(app, host="0.0.0.0", debug=True, log_output=True)
+        io.run(app, host="0.0.0.0", log_output=True)
     else:
         app = create_app(include_socketio=False)
-        app.run(host="0.0.0.0", debug=True)
+        app.run(host="0.0.0.0")

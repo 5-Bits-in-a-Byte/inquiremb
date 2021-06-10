@@ -17,7 +17,7 @@ const GenerateRoleOptions = (roles, courseId, userId) => {
     onClick: () => {
       LazyFetch({
         type: "put",
-        endpoint: "/api/courses/" + courseId + "/users",
+        endpoint: "/courses/" + courseId + "/users",
         data: {
           role: role._id,
           user: userId,
