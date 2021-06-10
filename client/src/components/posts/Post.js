@@ -121,7 +121,7 @@ const Post = ({ userRole, post, isCondensed, isDraft }) => {
   const history = useHistory();
   const user = useContext(UserContext);
   const { courseId, postid } = useParams();
-  let endpoint = "/api/courses/" + courseId + "/posts";
+  let endpoint = "/courses/" + courseId + "/posts";
 
   // State and handler for drafting posts
   const [draft, setDraft] = useState({

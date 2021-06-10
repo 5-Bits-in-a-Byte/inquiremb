@@ -26,7 +26,7 @@ from authlib.integrations.flask_client import OAuth
 from authlib.jose import jwt
 from flask import Blueprint, session, url_for, redirect, request, make_response, jsonify, g, current_app
 from flask_restful import abort
-
+from inquire.utils.prefix_url_for import better_url_for
 
 # Authlib logging
 log = logging.getLogger('authlib')
@@ -143,13 +143,16 @@ def permission_layer(required_permissions=None, require_login=True, require_join
 
 @ auth_routes.route('/login')
 def login():
-    redirect_uri = url_for('auth_blueprint.auth', _external=True)
+    redirect_uri = "http://inquire-server-6p24p.ondigitalocean.app/api/auth/auth"
+    # redirect_uri = better_url_for(request.base_url, 'api_bp.auth_blueprint.auth', missing_prefix="/api")
+    print(redirect_uri)
     return oauth.google.authorize_redirect(redirect_uri)
 
 
 @ auth_routes.route('/github-login')
 def github_login():
-    redirect_uri = url_for('auth_blueprint.github_auth', _external=True)
+    redirect_uri = "http://inquire-server-6p24p.ondigitalocean.app/api/auth/github-auth"
+    # redirect_uri = better_url_for(request.base_url, 'api_bp.auth_blueprint.github_auth', missing_prefix="/api")
     return oauth.github.authorize_redirect(redirect_uri)
 
 

@@ -109,7 +109,7 @@ const generateSections = (data) => {
  * @returns Home Component
  */
 const Home = () => {
-  let endpoint = "/api/home";
+  let endpoint = "/home";
 
   // Load posts from course
   const { data, errors, loading } = Fetch({

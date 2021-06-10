@@ -39,7 +39,7 @@ const CourseInfo = ({ setCourse }) => {
     setTimeout(() => {
       LazyFetch({
         type: "post",
-        endpoint: "/api/courses",
+        endpoint: "/courses",
         data: { course: form.course, canJoinById: form.canJoinById },
         onSuccess: (data) => {
           let userCopy = user;

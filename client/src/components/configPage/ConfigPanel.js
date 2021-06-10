@@ -181,7 +181,7 @@ const ConfigPanel = ({
 
             LazyFetch({
               type: "post",
-              endpoint: "/api/courses/" + courseId + "/roles",
+              endpoint: "/courses/" + courseId + "/roles",
               data: {
                 name: newPerms.name,
                 permissions: newPerms.permissions,
@@ -222,7 +222,7 @@ const ConfigPanel = ({
             // alert("Feature is work in progress.");
             LazyFetch({
               type: "put",
-              endpoint: "/api/courses/" + courseId + "/roles",
+              endpoint: "/courses/" + courseId + "/roles",
               data: {
                 roles: testList,
               },

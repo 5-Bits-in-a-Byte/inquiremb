@@ -28,7 +28,7 @@ const EditorWrapper = ({ post, edit }) => {
   const handleSubmit = () => {
     LazyFetch({
       type: "put",
-      endpoint: "/api/courses/" + courseId + "/posts",
+      endpoint: "/courses/" + courseId + "/posts",
       data: {
         content: {
           type: post.content.type,

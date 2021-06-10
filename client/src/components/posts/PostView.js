@@ -97,7 +97,7 @@ const PostView = ({ userRole, highlightedSection }) => {
   const [sortByMostRecent, toggleSort] = useState(true);
   // Retrieves the courseId from the url parameters
   const { courseId } = useParams();
-  let endpoint = "/api/courses/" + courseId + "/posts";
+  let endpoint = "/courses/" + courseId + "/posts";
 
   switch (highlightedSection) {
     case "Instructor":

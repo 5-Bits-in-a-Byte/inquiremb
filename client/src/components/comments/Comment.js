@@ -24,7 +24,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   const [isReplying, toggleReply] = useState(false);
 
   const endpoint =
-    "/api/courses/" + courseId + "/posts/" + postid + "/comments";
+    "/courses/" + courseId + "/posts/" + postid + "/comments";
 
   const renderContent = () => {
     if (isDraft) {

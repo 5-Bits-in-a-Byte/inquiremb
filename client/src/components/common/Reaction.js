@@ -34,7 +34,7 @@ const Reaction = ({ reactions, type, id, postid }) => {
   });
   // console.log("reactClicked: ", reactClicked);
 
-  let endpoint = "/api/courses/" + urlParams.courseId + "/reactions";
+  let endpoint = "/courses/" + urlParams.courseId + "/reactions";
 
   switch (type) {
     case "post":
