@@ -21,7 +21,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     # CORS
     app.config['CORS_HEADERS'] = 'Content-Type'
     api_bp = Blueprint("api_bp", __name__, url_prefix=config.ROUTING_PREFIX)
-    
+
 
     @app.after_request
     def after_request(response):
@@ -54,8 +54,8 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     from inquire.auth import auth_routes
     from inquire.socketio_app import socketio_blueprint
     # Adding blueprints to api_bp blueprints
-    api_bp.register_blueprint(auth_routes, url_prefix="auth")
-    api_bp.register_blueprint(socketio_blueprint, url_prefix="socketio")
+    api_bp.register_blueprint(auth_routes, url_prefix="/auth")
+    api_bp.register_blueprint(socketio_blueprint, url_prefix="/socketio")
 
     from inquire.auth import oauth
     # Configuring OAuth object
