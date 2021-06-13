@@ -20,7 +20,8 @@ def create_app(override_config=None, testing=False, include_socketio=True):
 
     # CORS
     app.config['CORS_HEADERS'] = 'Content-Type'
-    api_bp = Blueprint("api_bp", __name__, url_prefix=config.ROUTING_PREFIX)
+    # api_bp = Blueprint("api_bp", __name__, url_prefix='/' + config.ROUTING_PREFIX)
+    api_bp = Blueprint("api_bp", __name__, url_prefix='/api')
 
 
     @app.after_request
