@@ -109,6 +109,4 @@ If you have a Google or GitHub account you can log into our site at https://inqu
 
 ## Directory Structure
 
-There are two main directories in this project: client and server. Client contains all of the frontend work including package.json files and all of the components we created that interact with eachother. Some of these components have to interact with the server in the backend. The server directory is where you'll find code pertaining to this. You'll also see the OAuth2 setup and the models for our MongoDB collections. Below is a visual of the directory structure:
-
-![comment draft](/client/src/imgs/md-directory-layout.png)
+There are two main directories in this project: client and server. Client contains all of the frontend work including package.json files and all of the components we created that interact with eachother. Some of these components have to interact with the server in the backend. The server directory is where you'll find code pertaining to this. You'll also see the OAuth2 setup and the models for our MongoDB collections.
