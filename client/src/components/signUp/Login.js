@@ -52,9 +52,7 @@ const SignUp = () => {
         </Buttons>
 
         {/* Github Login Button */}
-        <Buttons
-          href={process.env.REACT_APP_SERVER_URL + "/auth/github-login"}
-        >
+        <Buttons href={process.env.REACT_APP_SERVER_URL + "/auth/github-login"}>
           <Icon src={GithubLogo} />
           <BtnText>Sign in with Github</BtnText>
         </Buttons>
@@ -62,7 +60,7 @@ const SignUp = () => {
         {/* Account related message */}
         <Message>
           Don't have an account?&nbsp;
-          <a href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign up</a>
+          <a href={process.env.REACT_APP_CLIENT_URL + "signup"}>Sign up</a>
         </Message>
       </CenterBlock>
 

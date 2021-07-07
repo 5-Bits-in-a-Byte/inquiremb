@@ -37,7 +37,7 @@ function App() {
           <Route path="/login" exact>
             <Login />
           </Route>
-          <PrivateRoute path="/userProfile" exact>
+          <PrivateRoute path="userProfile" exact>
             <NavigationWrapper>
               <UserProfile />
             </NavigationWrapper>
