@@ -143,7 +143,7 @@ def permission_layer(required_permissions=None, require_login=True, require_join
 
 @ auth_routes.route('/login')
 def login():
-    redirect_uri = "http://inquire-server-6p24p.ondigitalocean.app/api/auth/auth"
+    redirect_uri = "http://inquiremb.com/api/auth/auth"
     # redirect_uri = better_url_for(request.base_url, 'api_bp.auth_blueprint.auth', missing_prefix="/api")
     print(redirect_uri)
     return oauth.google.authorize_redirect(redirect_uri)
@@ -151,7 +151,7 @@ def login():
 
 @ auth_routes.route('/github-login')
 def github_login():
-    redirect_uri = "http://inquire-server-6p24p.ondigitalocean.app/api/auth/github-auth"
+    redirect_uri = "http://inquiremb.com/api/auth/github-auth"
     # redirect_uri = better_url_for(request.base_url, 'api_bp.auth_blueprint.github_auth', missing_prefix="/api")
     return oauth.github.authorize_redirect(redirect_uri)
 
