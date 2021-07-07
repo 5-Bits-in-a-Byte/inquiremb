@@ -16,6 +16,7 @@ from inquire.socketio_app import io
 
 import datetime
 
+
 class Comments(Resource):
     @permission_layer(require_joined_course=True)
     def get(self, courseId=None, postId=None):
@@ -82,9 +83,11 @@ class Comments(Resource):
         if post is None:
             return abort(400, errors=["Bad post id"])
         parser = reqparse.RequestParser()
-        parser.add_argument('content')
+        parser.add_argument('content', type=dict)
         parser.add_argument('isAnonymous', type=bool)
         args = parser.parse_args()
+
+        #{"content":{"raw": {"blocks": [], "entityMap": {}}, "plainText": ""}, "isAnonymous": false}
 
         # Validate the args
         errors = self.validate_comment(args)
@@ -249,8 +252,27 @@ class Comments(Resource):
 
     def validate_comment(self, args):
         errors = []
-        if args.content is None or len(args.content) == 0:
-            errors.append("Please give your comment content")
+        # Make sure the content field is provided (must return if it's not)
+        if args.content is None:
+            errors.append("Please give your post content")
+            return errors
+        # Make sure type is provided (must return if it's not)
+        if "type" not in args.content or args.content["type"] is None:
+            errors.append("Please provide a type for the post")
+            return errors
+        # Validate the type. Types include question, announcement, and poll.
+        if not (args.content["type"] == "question" or args.content["type"] == "announcement" or args.content["type"] == "poll"):
+            errors.append(
+                "Invalid type provided. Valid types are: question, announcement, or poll.")
+        # Make sure text field is provided for questions and announcements
+        if (args.content["type"] == "question" or args.content["type"] == "announcement"):
+            raw = args.content.get("raw")
+            plaintext = args.content.get("plainText")
+            if not (raw and plaintext and type(raw) == dict and type(plaintext) == str):
+                errors.append("Please give your post message content")
+        # Make sure fields dict is provided
+        if args.content["type"] == "poll" and ("fields" not in args.content or args.content["fields"] is None):
+            errors.append("Please provide options for your poll")
         return errors
 
     def retrieve_post(self, postId):
