@@ -72,7 +72,7 @@ class Posts(Resource):
             return {"errors": errors}, 400
 
         # Controls whether the post should be highlighted orange for isntructor
-        highlighted = current_user.permissions["admin"]["highlightPost"]
+        highlighted = current_user.permissions["admin"]["highlightName"]
 
         # Adding user info to dict
         anonymous = args['isAnonymous']
@@ -370,7 +370,7 @@ class Posts(Resource):
         errors = self.validate_post(args)
         if(bool(errors)):
             return {"errors": errors}, 400
-        
+
         # print("AFTER VALIDATION")
 
         # Get the post you want to update
@@ -388,7 +388,7 @@ class Posts(Resource):
             return {'updated': False, 'errors': f"Cannot change post type"}, 400
         # if post.content["type"] == "poll":
         #     return {'updated': False, 'errors': f"Cannot modify polls"}, 400
-        
+
         # print("AFTER CHANGE / MODIFY TEST")
 
         id_match = current_user._id == post.postedBy[
@@ -405,7 +405,7 @@ class Posts(Resource):
                 post.content = args['content']
                 post.updatedDate = datetime.datetime.now()
             post.save()
-            
+
         result = self.serialize(post)
         return result, 200
 

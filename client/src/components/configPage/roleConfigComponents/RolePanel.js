@@ -99,7 +99,7 @@ const RolePanel = ({
     removeUsers: roleObject.permissions.admin.removeUsers,
     announce: roleObject.permissions.admin.announce,
     configure: roleObject.permissions.admin.configure,
-    highlightPost: roleObject.permissions.admin.highlightPost,
+    highlightName: roleObject.permissions.admin.highlightName,
   });
   // --------------------------------------------
 
@@ -403,13 +403,13 @@ const RolePanel = ({
               },
             },
             {
-              stateLabel: "highlightPost",
-              itemLabel: "Highlight Posts",
+              stateLabel: "highlightName",
+              itemLabel: "Highlight Name",
               changeRoleVal: (val) => {
-                roleObject.permissions.admin.highlightPost = val;
+                roleObject.permissions.admin.highlightName = val;
                 setAdminCheckedState({
                   ...adminCheckedState,
-                  highlightPost: val,
+                  highlightName: val,
                 });
               },
             },

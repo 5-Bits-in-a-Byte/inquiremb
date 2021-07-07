@@ -87,7 +87,8 @@ class Comments(Resource):
         parser.add_argument('isAnonymous', type=bool)
         args = parser.parse_args()
 
-        #{"content":{"raw": {"blocks": [], "entityMap": {}}, "plainText": ""}, "isAnonymous": false}
+        # Controls whether the comment should be highlighted orange for isntructor
+        highlighted = current_user.permissions["admin"]["highlightName"]
 
         # Validate the args
         errors = self.validate_comment(args)
@@ -103,9 +104,12 @@ class Comments(Resource):
             postedBy = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
-        # Add post to MongoDB
-        comment = Comment(postId=postId, postedBy=postedBy,
-                          content=args.content).save()
+        # Trying to add the comment to the DB
+        try:
+            comment = Comment(postId=postId, postedBy=postedBy,
+                              content=args.content, isInstructor=highlighted).save()
+        except ValidationError as exc:
+            return {"errors": str(exc)}, 400
 
         # Incrementing post comment count, updating date
         post.updatedDate = datetime.datetime.now()
@@ -254,25 +258,13 @@ class Comments(Resource):
         errors = []
         # Make sure the content field is provided (must return if it's not)
         if args.content is None:
-            errors.append("Please give your post content")
+            errors.append("Please give your comment content")
             return errors
-        # Make sure type is provided (must return if it's not)
-        if "type" not in args.content or args.content["type"] is None:
-            errors.append("Please provide a type for the post")
-            return errors
-        # Validate the type. Types include question, announcement, and poll.
-        if not (args.content["type"] == "question" or args.content["type"] == "announcement" or args.content["type"] == "poll"):
-            errors.append(
-                "Invalid type provided. Valid types are: question, announcement, or poll.")
         # Make sure text field is provided for questions and announcements
-        if (args.content["type"] == "question" or args.content["type"] == "announcement"):
-            raw = args.content.get("raw")
-            plaintext = args.content.get("plainText")
-            if not (raw and plaintext and type(raw) == dict and type(plaintext) == str):
-                errors.append("Please give your post message content")
-        # Make sure fields dict is provided
-        if args.content["type"] == "poll" and ("fields" not in args.content or args.content["fields"] is None):
-            errors.append("Please provide options for your poll")
+        raw = args.content.get("raw")
+        plaintext = args.content.get("plainText")
+        if not (raw and plaintext and type(raw) == dict and type(plaintext) == str):
+            errors.append("Please give your comment message content")
         return errors
 
     def retrieve_post(self, postId):
