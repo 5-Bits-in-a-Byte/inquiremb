@@ -91,7 +91,7 @@ const Comment = ({ comment, isDraft, callback }) => {
       LazyFetch({
         type: "post",
         endpoint: endpoint + "/" + comment._id + "/replies",
-        data: { content: newContent, isAnonymous: false },
+        data: { content: newContent, isAnonymous: newContent.isAnonymous },
         onSuccess: (data) => {
           console.log("data:", data);
           toggleReply(false);

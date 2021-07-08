@@ -11,6 +11,7 @@ import OptionDots from "../../imgs/option-dots.svg";
 import { Editor } from "react-draft-wysiwyg";
 import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
 import { EditorState } from "draft-js";
+import Checkbox from "../common/Checkbox";
 
 const CommentReply = ({
   reply,
@@ -24,6 +25,7 @@ const CommentReply = ({
   const { courseId } = useParams();
 
   const [content, setContent] = useState({
+    isAnonymous: false,
     raw: EditorState.createEmpty(),
     plainText: EditorState.createEmpty(),
   });
@@ -96,14 +98,18 @@ const CommentReply = ({
   const generateDropdownOptions = () => {
     if (userRole) {
       let deleteOption =
-        userRole.delete.reply && reply.postedBy._id == user._id
+        userRole.delete.reply &&
+        (reply.postedBy._id == user._id ||
+          reply.postedBy._id == user.anonymousId)
           ? {
               onClick: handleDelete,
               label: "Delete reply",
             }
           : null;
       let editOption =
-        userRole.edit.reply && reply.postedBy._id == user._id
+        userRole.edit.reply &&
+        (reply.postedBy._id == user._id ||
+          reply.postedBy._id == user.anonymousId)
           ? { onClick: handleEdit, label: "Edit Reply" }
           : null;
 
@@ -194,9 +200,9 @@ const CommentReply = ({
       <ReplyMetaContentWrapper className="meta">
         <UserDescription isInstructor={reply.isInstructor}>
           by{" "}
-          {reply &&
-            reply.postedBy &&
-            reply.postedBy.first + " " + reply.postedBy.last}
+          {!content.isAnonymous
+            ? reply.postedBy.first + " " + reply.postedBy.last
+            : "Anonymous"}
         </UserDescription>
 
         <MetaIconWrapper>
@@ -209,6 +215,17 @@ const CommentReply = ({
               >
                 Cancel
               </Button>
+              <Checkbox
+                checkboxName="isAnonymous"
+                labelText={"Make Anonymous"}
+                onChange={() => {
+                  setContent({
+                    ...content,
+                    isAnonymous: !content.isAnonymous,
+                  });
+                }}
+                checkStatus={content.isAnonymous}
+              />
               <Button primary onClick={() => submitReply(content)}>
                 Submit
               </Button>
