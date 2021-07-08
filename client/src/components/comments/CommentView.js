@@ -16,6 +16,7 @@ import Draft from "../posts/refactorComponents/Draft";
 import PollConfig from "../posts/refactorComponents/PollConfig";
 import PollWrapper from "../posts/refactorComponents/PollWrapper";
 import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
+import { convertToRaw } from "draft-js";
 
 const renderComments = (data, userRole) => {
   let ret = [];
@@ -111,8 +112,7 @@ const CommentView = ({ classroomName }) => {
     if (post) {
       LazyFetch({
         type: "get",
-        endpoint:
-          "/courses/" + courseId + "/posts/" + post._id + "/comments",
+        endpoint: "/courses/" + courseId + "/posts/" + post._id + "/comments",
         onSuccess: (data) => {
           setCommentData([...renderComments(data, userRole)]);
           io.emit("join", { room: post._id, room_type: "post" });
@@ -172,12 +172,17 @@ const CommentView = ({ classroomName }) => {
     if (!content) {
       setNewComments({ draft: false });
     } else {
+      const newContent = {
+        ...content,
+        raw: convertToRaw(content.raw.getCurrentContent()),
+      };
       LazyFetch({
         type: "post",
-        endpoint:
-          "/courses/" + courseId + "/posts/" + post._id + "/comments",
-        data: { isAnonymous: false, content: content },
+        endpoint: "/courses/" + courseId + "/posts/" + post._id + "/comments",
+        data: { isAnonymous: false, content: newContent },
         onSuccess: (data) => {
+          console.log("data:", data);
+          console.log(data);
           setNewComments({ draft: false });
           setCommentData([
             ...commentData,
@@ -251,7 +256,7 @@ const CommentView = ({ classroomName }) => {
                     postObject={post}
                     postType={convertToUpper(post.content.type)}
                     condensed={false}
-                    content={<EditorWrapper post={post} edit={false} />}
+                    content={<EditorWrapper messageData={post} edit={false} />}
                   />
                 ))}
               {comments}

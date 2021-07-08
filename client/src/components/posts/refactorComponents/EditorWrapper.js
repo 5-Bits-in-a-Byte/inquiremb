@@ -12,32 +12,35 @@ const convertToUpper = (postType) => {
   return first + rest;
 };
 
-const EditorWrapper = ({ post, edit }) => {
+const EditorWrapper = ({ messageData, edit }) => {
   const { courseId, postid } = useParams();
+  if (messageData.postId) {
+    console.log("messageData:", messageData);
+  }
   const [editorStateTest, setEditorStateTest] = useState(
-    EditorState.createWithContent(convertFromRaw(post.content.raw))
+    EditorState.createWithContent(convertFromRaw(messageData.content.raw))
   );
 
-  const [plainText, setPlainText] = useState(post.content.plainText);
+  const [plainText, setPlainText] = useState(messageData.content.plainText);
 
   const handleContentChange = (e) => {
     setEditorStateTest(e);
     setPlainText(e.getCurrentContent().getPlainText());
   };
 
-  const handleSubmit = () => {
+  const handlePostSubmit = () => {
     LazyFetch({
       type: "put",
       endpoint: "/courses/" + courseId + "/posts",
       data: {
         content: {
-          type: post.content.type,
+          type: messageData.content.type,
           raw: convertToRaw(editorStateTest.getCurrentContent()),
           plainText: plainText,
         },
-        title: post.title,
-        isPinned: post.isPinned,
-        _id: post._id,
+        title: messageData.title,
+        isPinned: messageData.isPinned,
+        _id: messageData._id,
       },
       onSuccess: (data) => {
         console.log(data);
@@ -50,10 +53,35 @@ const EditorWrapper = ({ post, edit }) => {
     });
   };
 
+  // const handleCommentSubmit = () => {
+  //   LazyFetch({
+  //     type: "put",
+  //     endpoint: "/courses/" + courseId + "/posts",
+  //     data: {
+  //       content: {
+  //         type: messageData.content.type,
+  //         raw: convertToRaw(editorStateTest.getCurrentContent()),
+  //         plainText: plainText,
+  //       },
+  //       title: messageData.title,
+  //       isPinned: messageData.isPinned,
+  //       _id: messageData._id,
+  //     },
+  //     onSuccess: (data) => {
+  //       console.log(data);
+  //       edit.setIsEditing(false);
+  //     },
+  //     onFailure: (err) => {
+  //       console.log("Error: ", err.errors ? err.errors : err);
+  //       alert("Error updating post.");
+  //     },
+  //   });
+  // };
+
   const handleCancel = () => {
     edit.setIsEditing(false);
     setEditorStateTest(
-      EditorState.createWithContent(convertFromRaw(post.content.raw))
+      EditorState.createWithContent(convertFromRaw(messageData.content.raw))
     );
   };
 
@@ -131,7 +159,7 @@ const EditorWrapper = ({ post, edit }) => {
               primary
               buttonWidth={`10em`}
               buttonHeight={`2.5em`}
-              onClick={handleSubmit}
+              onClick={handlePostSubmit}
             >
               Submit Changes
             </Button>

@@ -12,27 +12,64 @@ import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 import { UserContext } from "../context/UserProvider";
 import { UserRoleContext } from "../context/UserRoleProvider";
+import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
+import { Editor } from "react-draft-wysiwyg";
+import { convertToRaw, EditorState } from "draft-js";
 
 const Comment = ({ comment, isDraft, callback }) => {
   // console.log("Comment Role Object: ", userRole);
   const { courseId, postid } = useParams();
-  const [content, setContent] = useState("");
   const user = useContext(UserContext);
   const userRole = useContext(UserRoleContext);
 
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
 
-  const endpoint =
-    "/courses/" + courseId + "/posts/" + postid + "/comments";
+  const [content, setContent] = useState({
+    raw: EditorState.createEmpty(),
+    plainText: EditorState.createEmpty(),
+  });
+
+  const endpoint = "/courses/" + courseId + "/posts/" + postid + "/comments";
+
+  const handleContentChange = (e) => {
+    const plainText = e.getCurrentContent().getPlainText();
+    setContent({ raw: e, plainText: plainText });
+    // console.log(content);
+  };
 
   const renderContent = () => {
     if (isDraft) {
-      return <DraftTextBox onChange={handleChange} />;
+      // return <DraftTextBox onChange={handleChange} />;
+      return (
+        <Editor
+          name="content"
+          editorStyle={{
+            // backgroundColor: "#f1f1f1",
+            minHeight: "100px",
+            padding: "0 8px",
+            border: "2px solid #e7e7e7",
+            borderRadius: "5px",
+          }}
+          // placeholder="Details"
+          onEditorStateChange={handleContentChange}
+          toolbar={{
+            options: [
+              "inline",
+              "list",
+              "link",
+              "emoji",
+              "history",
+              "blockType",
+            ],
+          }}
+        />
+      );
     }
     // Otherwise, the post has been fetched from the API so return the content
     else {
-      return comment.content;
+      // return comment.content;
+      return <EditorWrapper messageData={comment} edit={false} />;
     }
   };
 
