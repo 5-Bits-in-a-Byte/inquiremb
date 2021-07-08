@@ -35,12 +35,10 @@ const Comment = ({ comment, isDraft, callback }) => {
   const handleContentChange = (e) => {
     const plainText = e.getCurrentContent().getPlainText();
     setContent({ raw: e, plainText: plainText });
-    // console.log(content);
   };
 
   const renderContent = () => {
     if (isDraft) {
-      // return <DraftTextBox onChange={handleChange} />;
       return (
         <Editor
           name="content"
@@ -68,7 +66,6 @@ const Comment = ({ comment, isDraft, callback }) => {
     }
     // Otherwise, the post has been fetched from the API so return the content
     else {
-      // return comment.content;
       return <EditorWrapper messageData={comment} edit={false} />;
     }
   };
@@ -218,7 +215,7 @@ const Comment = ({ comment, isDraft, callback }) => {
       </Content>
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
-          <UserDescription>
+          <UserDescription isInstructor={comment.isInstructor}>
             by {comment.postedBy.first + " " + comment.postedBy.last}
           </UserDescription>
           <MetaIconWrapper>
@@ -296,7 +293,7 @@ const PostMetaContentWrapper = styled.div`
 `;
 
 const UserDescription = styled.h5`
-  color: #8c8c8c;
+  color: ${(props) => (props.isInstructor ? "#FF9900" : "#162b55")};
 `;
 
 const ReplyBtn = styled.h5`
