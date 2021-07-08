@@ -6,12 +6,6 @@ import Button from "../../common/Button";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { useParams } from "react-router";
 
-// const convertToUpper = (postType) => {
-//   var first = postType[0].toUpperCase();
-//   var rest = postType.slice(1);
-//   return first + rest;
-// };
-
 const EditorWrapper = ({ messageData, messageType, edit }) => {
   const { courseId, postid } = useParams();
   const [editorStateTest, setEditorStateTest] = useState(
