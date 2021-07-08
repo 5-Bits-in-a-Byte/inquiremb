@@ -7,6 +7,7 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
+# from server.inquire.mongo import Comment
 from flask import jsonify, current_app
 from flask_restful import Resource, abort, reqparse
 
@@ -150,7 +151,7 @@ class Comments(Resource):
         post = self.retrieve_post(postId)
 
         parser = reqparse.RequestParser()
-        parser.add_argument('content')
+        parser.add_argument('content', type=dict)
         parser.add_argument('_id')
         args = parser.parse_args()
 
@@ -158,27 +159,27 @@ class Comments(Resource):
         errors = self.validate_comment(args)
         if(bool(errors)):
             return {"errors": errors}, 400
+
         _id = ObjectId(args['_id'])
-        query = Comment.objects.raw({'_id': _id})
-        count = query.count()
-        if count > 1:
-            raise Exception(
-                f'Duplicate comment detected, multiple comments in database with id {args["_id"]}')
-        elif count == 1:
-            comment = query.first()
-            id_match = current_user._id == comment.postedBy[
-                '_id'] or current_user.anonymousId == comment.postedBy['_id']
-            if id_match:
-                comment.content = args['content']
-                post.updatedDate = datetime.datetime.now()
-                comment.save()
-                post.save()
-                result = self.serialize(comment)
-                return result, 200
-            else:
-                return {"errors": ['Insufficient permission to edit comment']}, 400
-        else:
-            raise Exception(f'No comment with id')
+
+        # Get the post you want to update
+        try:
+            comment = Comment.objects.get({'_id': _id})
+        except Comment.DoesNotExist:
+            return {'updated': False, 'errors': f"No comment with id {args['_id']}"}, 403
+        except Comment.MultipleObjectsReturned:
+            return {'updated': False, 'errors': f"Duplicate comment detected, multiple comments in database with id {args['_id']}"}, 400
+
+        id_match = current_user._id == comment.postedBy[
+            '_id'] or current_user.anonymousId == comment.postedBy['_id']
+        if not id_match:
+            return {'updated': False, 'errors': f"Cannot modify other users posts"}, 400
+        comment.content = args['content']
+        post.updatedDate = datetime.datetime.now()
+        comment.save()
+        post.save()
+        result = self.serialize(comment)
+        return result, 200
 
     @permission_layer(required_permissions=["delete-postComment"])
     def delete(self, courseId=None, postId=None):

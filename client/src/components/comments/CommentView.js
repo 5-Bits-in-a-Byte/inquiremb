@@ -256,7 +256,13 @@ const CommentView = ({ classroomName }) => {
                     postObject={post}
                     postType={convertToUpper(post.content.type)}
                     condensed={false}
-                    content={<EditorWrapper messageData={post} edit={false} />}
+                    content={
+                      <EditorWrapper
+                        messageData={post}
+                        messageType="post"
+                        edit={false}
+                      />
+                    }
                   />
                 ))}
               {comments}

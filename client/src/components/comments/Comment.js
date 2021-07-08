@@ -30,6 +30,8 @@ const Comment = ({ comment, isDraft, callback }) => {
     plainText: EditorState.createEmpty(),
   });
 
+  const [isEditing, setIsEditing] = useState(false);
+
   const endpoint = "/courses/" + courseId + "/posts/" + postid + "/comments";
 
   const handleContentChange = (e) => {
@@ -66,7 +68,14 @@ const Comment = ({ comment, isDraft, callback }) => {
     }
     // Otherwise, the post has been fetched from the API so return the content
     else {
-      return <EditorWrapper messageData={comment} edit={false} />;
+      const content = (
+        <EditorWrapper
+          messageData={comment}
+          messageType="comment"
+          edit={false}
+        />
+      );
+      return React.cloneElement(content, { edit: { isEditing, setIsEditing } });
     }
   };
 
@@ -148,7 +157,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   };
 
   const handleEdit = () => {
-    alert("This feature is still a work in progress. Check back soon!");
+    setIsEditing(true);
   };
 
   const generateDropdownOptions = () => {

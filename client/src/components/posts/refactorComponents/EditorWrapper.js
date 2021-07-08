@@ -12,11 +12,8 @@ const convertToUpper = (postType) => {
   return first + rest;
 };
 
-const EditorWrapper = ({ messageData, edit }) => {
+const EditorWrapper = ({ messageData, messageType, edit }) => {
   const { courseId, postid } = useParams();
-  if (messageData.postId) {
-    console.log("messageData:", messageData);
-  }
   const [editorStateTest, setEditorStateTest] = useState(
     EditorState.createWithContent(convertFromRaw(messageData.content.raw))
   );
@@ -53,30 +50,27 @@ const EditorWrapper = ({ messageData, edit }) => {
     });
   };
 
-  // const handleCommentSubmit = () => {
-  //   LazyFetch({
-  //     type: "put",
-  //     endpoint: "/courses/" + courseId + "/posts",
-  //     data: {
-  //       content: {
-  //         type: messageData.content.type,
-  //         raw: convertToRaw(editorStateTest.getCurrentContent()),
-  //         plainText: plainText,
-  //       },
-  //       title: messageData.title,
-  //       isPinned: messageData.isPinned,
-  //       _id: messageData._id,
-  //     },
-  //     onSuccess: (data) => {
-  //       console.log(data);
-  //       edit.setIsEditing(false);
-  //     },
-  //     onFailure: (err) => {
-  //       console.log("Error: ", err.errors ? err.errors : err);
-  //       alert("Error updating post.");
-  //     },
-  //   });
-  // };
+  const handleCommentSubmit = () => {
+    LazyFetch({
+      type: "put",
+      endpoint: "/courses/" + courseId + "/posts/" + postid + "/comments",
+      data: {
+        content: {
+          raw: convertToRaw(editorStateTest.getCurrentContent()),
+          plainText: plainText,
+        },
+        _id: messageData._id,
+      },
+      onSuccess: (data) => {
+        console.log(data);
+        edit.setIsEditing(false);
+      },
+      onFailure: (err) => {
+        console.log("Error: ", err.errors ? err.errors : err);
+        alert("Error updating comment.");
+      },
+    });
+  };
 
   const handleCancel = () => {
     edit.setIsEditing(false);
@@ -159,7 +153,16 @@ const EditorWrapper = ({ messageData, edit }) => {
               primary
               buttonWidth={`10em`}
               buttonHeight={`2.5em`}
-              onClick={handlePostSubmit}
+              onClick={() => {
+                if (messageType == "post") {
+                  handlePostSubmit();
+                } else if (messageType == "comment") {
+                  handleCommentSubmit();
+                }
+                // else if (messageType == "reply") {
+                //   handleReplySubmit();
+                // }
+              }}
             >
               Submit Changes
             </Button>

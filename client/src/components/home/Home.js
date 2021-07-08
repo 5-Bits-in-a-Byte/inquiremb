@@ -24,7 +24,9 @@ const createPost = (post, userRole, isCondensed) => {
     post.content.type === "question" ||
     post.content.type === "announcement"
   ) {
-    content = <EditorWrapper messageData={post} edit={false} />;
+    content = (
+      <EditorWrapper messageData={post} messageType="post" edit={false} />
+    );
   } else if (post.content.type === "poll") {
     content = <PollWrapper post={post} />;
   }
