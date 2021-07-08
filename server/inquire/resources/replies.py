@@ -124,7 +124,7 @@ class Replies(Resource):
 
         # Parse the request
         parser = reqparse.RequestParser()
-        parser.add_argument('content')
+        parser.add_argument('content', type=dict)
         parser.add_argument('_id')
         args = parser.parse_args()
 
@@ -259,15 +259,14 @@ class Replies(Resource):
 
     def retrieve_comment(self, comment_id):
         _id = ObjectId(comment_id)
-        query = Comment.objects.raw({'_id': _id})
-        count = query.count()
-        if count == 1:
-            return query.first()
-        elif count == 0:
-            return None
-        else:
-            raise Exception(
-                f'Multiple comments with the same id found, id: {comment_id}')
+        # Get the post you want to update
+        try:
+            comment = Comment.objects.get({'_id': _id})
+        except Comment.DoesNotExist:
+            return {'updated': False, 'errors': f"No comment with id {args['_id']}"}, 403
+        except Comment.MultipleObjectsReturned:
+            return {'updated': False, 'errors': f"Duplicate comment detected, multiple comments in database with id {args['_id']}"}, 400
+        return comment
 
     def serialize(self, comment):
         d = comment.to_son().to_dict()

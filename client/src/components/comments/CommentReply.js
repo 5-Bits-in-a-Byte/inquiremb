@@ -90,7 +90,7 @@ const CommentReply = ({
   };
 
   const handleEdit = () => {
-    alert("This feature is still a work in progress. Check back soon!");
+    setIsEditing(true);
   };
 
   const generateDropdownOptions = () => {
@@ -165,7 +165,12 @@ const CommentReply = ({
     // Otherwise, the post has been fetched from the API so return the content
     else {
       const content = (
-        <EditorWrapper messageData={reply} messageType="reply" edit={false} />
+        <EditorWrapper
+          messageData={reply}
+          messageType="reply"
+          edit={false}
+          commentId={commentid}
+        />
       );
       return React.cloneElement(content, { edit: { isEditing, setIsEditing } });
     }

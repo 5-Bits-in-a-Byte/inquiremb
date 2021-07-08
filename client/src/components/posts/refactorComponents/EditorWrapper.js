@@ -6,7 +6,7 @@ import Button from "../../common/Button";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { useParams } from "react-router";
 
-const EditorWrapper = ({ messageData, messageType, edit }) => {
+const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
   const { courseId, postid } = useParams();
   const [editorStateTest, setEditorStateTest] = useState(
     EditorState.createWithContent(convertFromRaw(messageData.content.raw))
@@ -48,6 +48,35 @@ const EditorWrapper = ({ messageData, messageType, edit }) => {
     LazyFetch({
       type: "put",
       endpoint: "/courses/" + courseId + "/posts/" + postid + "/comments",
+      data: {
+        content: {
+          raw: convertToRaw(editorStateTest.getCurrentContent()),
+          plainText: plainText,
+        },
+        _id: messageData._id,
+      },
+      onSuccess: (data) => {
+        console.log(data);
+        edit.setIsEditing(false);
+      },
+      onFailure: (err) => {
+        console.log("Error: ", err.errors ? err.errors : err);
+        alert("Error updating comment.");
+      },
+    });
+  };
+
+  const handleReplySubmit = () => {
+    LazyFetch({
+      type: "put",
+      endpoint:
+        "/courses/" +
+        courseId +
+        "/posts/" +
+        postid +
+        "/comments/" +
+        commentId +
+        "/replies",
       data: {
         content: {
           raw: convertToRaw(editorStateTest.getCurrentContent()),
@@ -152,10 +181,9 @@ const EditorWrapper = ({ messageData, messageType, edit }) => {
                   handlePostSubmit();
                 } else if (messageType == "comment") {
                   handleCommentSubmit();
+                } else if (messageType == "reply") {
+                  handleReplySubmit();
                 }
-                // else if (messageType == "reply") {
-                //   handleReplySubmit();
-                // }
               }}
             >
               Submit Changes
