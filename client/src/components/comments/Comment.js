@@ -45,13 +45,11 @@ const Comment = ({ comment, isDraft, callback }) => {
         <Editor
           name="content"
           editorStyle={{
-            // backgroundColor: "#f1f1f1",
             minHeight: "100px",
             padding: "0 8px",
             border: "2px solid #e7e7e7",
             borderRadius: "5px",
           }}
-          // placeholder="Details"
           onEditorStateChange={handleContentChange}
           toolbar={{
             options: [
@@ -84,11 +82,16 @@ const Comment = ({ comment, isDraft, callback }) => {
     if (!content) {
       toggleReply(false);
     } else {
+      const newContent = {
+        ...content,
+        raw: convertToRaw(content.raw.getCurrentContent()),
+      };
       LazyFetch({
         type: "post",
         endpoint: endpoint + "/" + comment._id + "/replies",
-        data: { content, isAnonymous: false },
+        data: { content: newContent, isAnonymous: false },
         onSuccess: (data) => {
+          console.log("data:", data);
           toggleReply(false);
           setNewReplies([
             ...newReplies,
@@ -113,6 +116,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   // Collect replies from comment data and append any newly created replies (if applicable)
   let replies = [];
   if (comment.replies && comment.replies.length > 0) {
+    console.log("inside reply loader");
     comment.replies.forEach((reply) => {
       replies.push(
         <CommentReply
@@ -130,6 +134,7 @@ const Comment = ({ comment, isDraft, callback }) => {
 
   // If the user clicks reply, insert a drafted reply
   if (isReplying) {
+    console.log("in isReplying section");
     replies.push(
       <CommentReply
         isDraft
@@ -302,7 +307,7 @@ const PostMetaContentWrapper = styled.div`
 `;
 
 const UserDescription = styled.h5`
-  color: ${(props) => (props.isInstructor ? "#FF9900" : "#162b55")};
+  color: ${(props) => (props.isInstructor ? "#FF9900" : "#8c8c8c")};
 `;
 
 const ReplyBtn = styled.h5`

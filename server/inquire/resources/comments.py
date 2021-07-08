@@ -261,7 +261,7 @@ class Comments(Resource):
         if args.content is None:
             errors.append("Please give your comment content")
             return errors
-        # Make sure text field is provided for questions and announcements
+        # Make sure text field is provided
         raw = args.content.get("raw")
         plaintext = args.content.get("plainText")
         if not (raw and plaintext and type(raw) == dict and type(plaintext) == str):

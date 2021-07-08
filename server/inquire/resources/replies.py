@@ -50,7 +50,7 @@ class Replies(Resource):
         if post is None:
             return abort(400, errors=["Bad post id"])
         parser = reqparse.RequestParser()
-        parser.add_argument('content')
+        parser.add_argument('content', type=dict)
         parser.add_argument('isAnonymous', type=bool)
         args = parser.parse_args()
 
@@ -58,6 +58,9 @@ class Replies(Resource):
         errors = self.validate_reply(args)
         if(bool(errors)):
             return {"errors": errors}, 400
+
+        # Controls whether the comment should be highlighted orange for isntructor
+        highlighted = current_user.permissions["admin"]["highlightName"]
 
         # Adding user info to dict
         anonymous = args['isAnonymous']
@@ -69,7 +72,8 @@ class Replies(Resource):
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
         # Add reply to MongoDB and retrieve the comment
-        reply = Reply(postedBy=postedBy, content=args.content)
+        reply = Reply(postedBy=postedBy, content=args.content,
+                      isInstructor=highlighted)
         comment = self.retrieve_comment(comment_id)
 
         # Append reply to the comment and save it to the database
@@ -231,8 +235,15 @@ class Replies(Resource):
 
     def validate_reply(self, args):
         errors = []
+        # Make sure the content field is provided (must return if it's not)
         if args.content is None:
             errors.append("Please give your comment content")
+            return errors
+        # Make sure the text field is provided
+        raw = args.content.get("raw")
+        plaintext = args.content.get("plainText")
+        if not (raw and plaintext and type(raw) == dict and type(plaintext) == str):
+            errors.append("Please give your comment message content")
         return errors
 
     def retrieve_post(self, postId):

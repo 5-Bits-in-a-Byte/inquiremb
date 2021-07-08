@@ -143,8 +143,9 @@ class Comment(MongoModel):
 
 class Reply(EmbeddedMongoModel):
     _id = fields.CharField(primary_key=True, default=ObjectId)
-    content = fields.CharField(required=True, default="")
+    content = fields.DictField(required=True)
     postedBy = fields.DictField()
+    isInstructor = fields.BooleanField(default=False)
     reactions = fields.DictField(
         default={"likes": [], 'goods': [], 'helpfuls': []})
 
