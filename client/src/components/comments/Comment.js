@@ -15,6 +15,7 @@ import { UserRoleContext } from "../context/UserRoleProvider";
 import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
 import { Editor } from "react-draft-wysiwyg";
 import { convertToRaw, EditorState } from "draft-js";
+import Checkbox from "../common/Checkbox";
 
 const Comment = ({ comment, isDraft, callback }) => {
   // console.log("Comment Role Object: ", userRole);
@@ -26,6 +27,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   const [isReplying, toggleReply] = useState(false);
 
   const [content, setContent] = useState({
+    isAnonymous: false,
     raw: EditorState.createEmpty(),
     plainText: EditorState.createEmpty(),
   });
@@ -168,14 +170,18 @@ const Comment = ({ comment, isDraft, callback }) => {
   const generateDropdownOptions = () => {
     if (userRole) {
       let deleteOption =
-        userRole.delete.postComment && comment.postedBy._id == user._id
+        userRole.delete.postComment &&
+        (comment.postedBy._id == user._id ||
+          comment.postedBy._id == user.anonymousId)
           ? {
               onClick: handleDelete,
               label: "Delete Comment",
             }
           : null;
       let editOption =
-        userRole.edit.postComment && comment.postedBy._id == user._id
+        userRole.edit.postComment &&
+        (comment.postedBy._id == user._id ||
+          comment.postedBy._id == user.anonymousId)
           ? { onClick: handleEdit, label: "Edit Comment" }
           : null;
 
@@ -213,6 +219,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   ) {
     viewOptions = true;
   }
+  console.log("content.isAnonymous:", content.isAnonymous);
 
   return (
     <CommentWrapper>
@@ -230,7 +237,10 @@ const Comment = ({ comment, isDraft, callback }) => {
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
           <UserDescription isInstructor={comment.isInstructor}>
-            by {comment.postedBy.first + " " + comment.postedBy.last}
+            by{" "}
+            {!content.isAnonymous
+              ? comment.postedBy.first + " " + comment.postedBy.last
+              : "Anonymous"}
           </UserDescription>
           <MetaIconWrapper>
             {isDraft ? (
@@ -244,6 +254,17 @@ const Comment = ({ comment, isDraft, callback }) => {
                 >
                   Cancel
                 </Button>
+                <Checkbox
+                  checkboxName="isAnonymous"
+                  labelText={"Make Anonymous"}
+                  onChange={() => {
+                    setContent({
+                      ...content,
+                      isAnonymous: !content.isAnonymous,
+                    });
+                  }}
+                  checkStatus={content.isAnonymous}
+                />
                 <Button
                   primary
                   onClick={() => {

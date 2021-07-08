@@ -179,7 +179,7 @@ const CommentView = ({ classroomName }) => {
       LazyFetch({
         type: "post",
         endpoint: "/courses/" + courseId + "/posts/" + post._id + "/comments",
-        data: { isAnonymous: false, content: newContent },
+        data: { isAnonymous: newContent.isAnonymous, content: newContent },
         onSuccess: (data) => {
           console.log("data:", data);
           console.log(data);
