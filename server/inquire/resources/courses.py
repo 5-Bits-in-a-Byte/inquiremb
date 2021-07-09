@@ -80,20 +80,21 @@ class Courses(Resource):
         # Creating initial roles available in course
         student_role = Role(name="student", permissions=student).save()
         admin_role = Role(name="admin", permissions=admin).save()
-        roles = {student_role._id:[], admin_role._id:[current_user._id]}
+        roles = {student_role._id: [], admin_role._id: [current_user._id]}
 
         # Add the course to the user's course list and create the course
         course = Course(course=args.course,
-                        canJoinById=args.canJoinById, instructorID=current_user._id, roles=roles, defaultRole=student_role._id).save()
+                        canJoinById=args.canJoinById, instructorID=current_user._id, roles=roles, defaultRole=student_role._id, blacklist=[]).save()
 
         # Appends the course with permissions to the user who created it
-        user_course = UserCourse(courseId=course._id, courseName=args.course, color=color, role=admin_role._id)
+        user_course = UserCourse(
+            courseId=course._id, courseName=args.course, color=color, role=admin_role._id)
         current_user.courses.append(user_course)
         current_user.save()
 
         return {"courseId": course._id, "courseName": args.course,
                 "color": color}, 200
-    
+
     def get(self):
         return {"status": "dummy object"}
 

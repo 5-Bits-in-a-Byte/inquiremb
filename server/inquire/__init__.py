@@ -23,7 +23,6 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     # api_bp = Blueprint("api_bp", __name__, url_prefix='/' + config.ROUTING_PREFIX)
     api_bp = Blueprint("api_bp", __name__, url_prefix='/api')
 
-
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Origin',
@@ -34,7 +33,6 @@ def create_app(override_config=None, testing=False, include_socketio=True):
         response.headers.add('Access-Control-Allow-Methods',
                              'GET,PUT,POST,DELETE,OPTIONS')
         return response
-
 
     # Configuring flask app
     if override_config:
@@ -77,7 +75,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
         api_base_url='https://api.github.com/',
         client_kwargs={'scope': 'read:user user:email'},
     )
-    from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home, Roles, MeRole, CourseUsers, Poll, Pin
+    from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home, Roles, MeRole, CourseUsers, Poll, Pin, BanRemove
 
     api = Api(api_bp)
 
@@ -101,6 +99,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     api.add_resource(
         Replies, '/courses/<string:courseId>/posts/<string:postId>/comments/<string:comment_id>/replies')
     api.add_resource(Join, '/join')
+    api.add_resource(BanRemove, '/courses/<string:courseId>/ban-remove')
     app.register_blueprint(api_bp)
     if include_socketio:
         # Wrapping flask app in socketio wrapper
