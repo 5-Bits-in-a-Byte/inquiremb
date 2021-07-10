@@ -58,7 +58,7 @@ class BanRemove(Resource):
                 course.blacklist.remove(args['userId'])
                 course.save()
                 filler = "unbanned"
-        return {"success": f"{user.first} {user.last} was successfully {filler} from the course."}
+        return {"success": [f"{user.first} {user.last} was successfully {filler} from the course."]}, 200
 
     def validate_args(self, args):
         errors = []

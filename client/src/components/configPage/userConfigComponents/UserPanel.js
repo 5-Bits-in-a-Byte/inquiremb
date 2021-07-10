@@ -6,6 +6,7 @@ import Button from "../../common/Button";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Arrow from "../../../imgs/carrot-down-secondary.svg";
 import LazyFetch from "../../common/requests/LazyFetch";
+import Modal from "../../common/Modal";
 
 // Hardcoded dummy values
 // Ultimately the goal is to pull these from the permissions object in the user context
@@ -59,56 +60,140 @@ const UserPanel = ({
         ];
 
   const [roleOptions, setRoleOptions] = useState(realRoleOptions);
+  const [success, toggleSuccess] = useState(null);
+  const [errors, toggleErrors] = useState(null);
+  const [modalIsShown, toggleModal] = useState(false);
+  const [ban, toggleBan] = useState(false);
+  const [display, toggleDisplay] = useState("flex");
+
+  const handleBanRemove = (banOrRemove) => {
+    LazyFetch({
+      type: "put",
+      endpoint: "/courses/" + courseId + "/ban-remove",
+      data: { type: banOrRemove, userId: userId },
+      onSuccess: (data) => {
+        console.log("data.success:", data.success);
+        toggleSuccess(data.success);
+        toggleDisplay("none");
+      },
+      onFailure: (err) => {
+        if (err.response && err.response.data) {
+          toggleErrors(err.response.data.errors);
+        } else {
+          var filler;
+          if (banOrRemove == "remove") {
+            filler = "removing";
+          } else {
+            filler = "banning";
+          }
+          toggleErrors([
+            "There was an error " +
+              filler +
+              " " +
+              userName +
+              " from the course.",
+          ]);
+        }
+      },
+    });
+  };
 
   return (
-    <UserPanelWrapper>
-      <UserIcon src={userImg} />
-      <UserNameWrapper>
-        <UserName>{userName}</UserName>
-      </UserNameWrapper>
-      <UserRoleWrapper
-        borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
-      >
-        <Dropdown options={roleOptions}>
-          <DropdownWrapper className="flex-row align">
-            <RoleDisplay className="font-regular" style={{ cursor: `pointer` }}>
-              {userRole.name}
-            </RoleDisplay>
-            <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
-          </DropdownWrapper>
-        </Dropdown>
-      </UserRoleWrapper>
+    <>
+      <UserPanelWrapper>
+        <UserIcon src={userImg} />
+        <UserNameWrapper>
+          <UserName>{userName}</UserName>
+        </UserNameWrapper>
+        <UserRoleWrapper
+          borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
+        >
+          <Dropdown options={roleOptions}>
+            <DropdownWrapper className="flex-row align">
+              <RoleDisplay
+                className="font-regular"
+                style={{ cursor: `pointer` }}
+              >
+                {userRole.name}
+              </RoleDisplay>
+              <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
+            </DropdownWrapper>
+          </Dropdown>
+        </UserRoleWrapper>
 
-      <AdminActionsWrapper>
-        {UserPerms.canBan && (
-          <Button
-            style={{ margin: `0 0.5em`, color: `#DC2B2B`, fontWeight: `600` }}
-            outlineSecondary
-            buttonColor={"#DC2B2B"}
-            buttonWidth={"125px"}
-            buttonHeight={"2rem"}
-            onClick={() => {
-              alert("Feature is work in progress.");
-            }}
-          >
-            Ban User
-          </Button>
-        )}
-        {UserPerms.canRemove && (
-          <Button
-            primary
-            buttonColor={"#DC2B2B"}
-            buttonWidth={"125px"}
-            buttonHeight={"2rem"}
-            onClick={() => {
-              alert("Feature is work in progress.");
-            }}
-          >
-            Remove User
-          </Button>
-        )}
-      </AdminActionsWrapper>
-    </UserPanelWrapper>
+        <AdminActionsWrapper>
+          {UserPerms.canBan && (
+            <Button
+              style={{ margin: `0 0.5em`, color: `#DC2B2B`, fontWeight: `600` }}
+              outlineSecondary
+              buttonColor={"#DC2B2B"}
+              buttonWidth={"125px"}
+              buttonHeight={"2rem"}
+              onClick={() => {
+                toggleModal(true);
+                toggleBan(true);
+              }}
+            >
+              Ban User
+            </Button>
+          )}
+          {UserPerms.canRemove && (
+            <Button
+              primary
+              buttonColor={"#DC2B2B"}
+              buttonWidth={"125px"}
+              buttonHeight={"2rem"}
+              onClick={() => {
+                toggleModal(true);
+              }}
+            >
+              Remove User
+            </Button>
+          )}
+        </AdminActionsWrapper>
+      </UserPanelWrapper>
+      {modalIsShown && (
+        <Modal
+          close={() => {
+            toggleModal(false);
+            toggleBan(false);
+            toggleDisplay("flex");
+          }}
+          data-testid={"ban-remove-modal"}
+        >
+          <Wrapper className="flex-col align justify">
+            <Title style={{ display: display }}>
+              CONFIRM {ban ? "BAN" : "REMOVAL"}
+            </Title>
+            <Success
+              style={
+                display == "none" ? { display: "block" } : { display: "none" }
+              }
+            >
+              {success}
+            </Success>
+            <ContentSection style={{ display: display }}>
+              Are you sure you want to {ban ? "ban" : "remove"} {userName} from
+              this course?
+            </ContentSection>
+            <Button
+              primary
+              autoWidth
+              style={{ marginTop: "10px", display: display }}
+              onClick={() => {
+                if (ban) {
+                  handleBanRemove("ban");
+                } else {
+                  handleBanRemove("remove");
+                }
+              }}
+            >
+              Confirm
+            </Button>
+          </Wrapper>
+        </Modal>
+      )}
+    </>
   );
 };
 
@@ -118,6 +203,26 @@ UserPanel.propTypes = {
 };
 
 export default UserPanel;
+
+const Wrapper = styled.div``;
+
+const Title = styled.h4`
+  font-size: 25px;
+  padding: 0px 0px 10px 0px;
+`;
+
+const ContentSection = styled.div`
+  background-color: #f8f8f8;
+  padding: 15px;
+  border-radius: 4px;
+  text-align: center;
+`;
+
+const Success = styled.div`
+  display: none;
+  text-align: center;
+  font-size: 25px;
+`;
 
 const UserPanelWrapper = styled.div`
   display: flex;

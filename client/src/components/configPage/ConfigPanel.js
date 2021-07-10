@@ -129,6 +129,19 @@ const GenerateUserList = (users, roles) => {
   });
 };
 
+const GenerateBannedUserList = (users) => {
+  return users.map((user, index) => {
+    return (
+      <UserPanel
+        key={index}
+        userId={user.userId}
+        userName={user.userName}
+        userImg={user.userImg}
+      />
+    );
+  });
+};
+
 const ConfigPanel = ({
   courseId,
   courseUsers,
