@@ -203,7 +203,7 @@ const CommentView = ({ classroomName }) => {
       },
       replies: [],
     };
-    comments.push(
+    comments.unshift(
       <Comment
         comment={draft}
         isDraft={true}

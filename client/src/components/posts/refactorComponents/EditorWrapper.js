@@ -6,7 +6,13 @@ import Button from "../../common/Button";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { useParams } from "react-router";
 
-const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
+const EditorWrapper = ({
+  messageData,
+  messageType,
+  edit,
+  commentId,
+  isDraft,
+}) => {
   const { courseId, postid } = useParams();
   const [editorStateTest, setEditorStateTest] = useState(
     EditorState.createWithContent(convertFromRaw(messageData.content.raw))
@@ -105,14 +111,23 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
   /** This variable is used to determine whether or not to force a maximum height for this containing element. */
   var editorStyle =
     edit.isEditing || postid
-      ? {
-          minHeight: "100px",
-          padding: "0 8px",
-          // maxHeight: "200px",
-          overflow: "hidden",
-          border: "2px solid #e7e7e7",
-          borderRadius: "5px",
-        }
+      ? messageType == "comment" || messageType == "reply"
+        ? {
+            // minHeight: "100px",
+            padding: "0 8px",
+            // maxHeight: "200px",
+            overflow: "hidden",
+            // border: "2px solid #e7e7e7",
+            borderRadius: "5px",
+          }
+        : {
+            minHeight: "100px",
+            padding: "0 8px",
+            // maxHeight: "200px",
+            overflow: "hidden",
+            border: "2px solid #e7e7e7",
+            borderRadius: "5px",
+          }
       : {
           minHeight: "100px",
           padding: "0 8px",
@@ -160,7 +175,7 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
           }}
         />
       )}
-      {edit.isEditing ? (
+      {edit.isEditing && !isDraft ? (
         <SubmitButtonContainer>
           <ButtonContainer style={{ marginLeft: `auto` }}>
             <Button
