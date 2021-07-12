@@ -38,6 +38,7 @@ class BanRemove(Resource):
             return {"errors": errors}, 400
 
         # NOTE: maybe add something to check if the user id is even in the class?
+        # NOTE: REMOVE USERS FROM COURSE.ROLES
 
         filler = ""
         if args['type'] == "remove":

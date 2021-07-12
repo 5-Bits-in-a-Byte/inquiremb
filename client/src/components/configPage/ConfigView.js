@@ -152,6 +152,7 @@ const ConfigView = ({ props }) => {
 
   var userIsAdmin = false;
   if (userRole) userIsAdmin = userRole.admin.configure;
+  console.log("courseUsers:", courseUsers);
 
   /**
    * Redirects the user to the landing page
