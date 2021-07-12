@@ -1,5 +1,6 @@
 {
   "name": "message-board",
+  "homepage": "https://inquiremb.com/app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

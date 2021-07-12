@@ -18,7 +18,7 @@ function App() {
   // Hello :)
 
   return (
-    <Router>
+    <Router basename={"/app"}>
       <UserProvider>
         <Switch>
           <PrivateRoute path="/home" exact>
