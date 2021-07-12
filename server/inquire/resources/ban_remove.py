@@ -38,7 +38,6 @@ class BanRemove(Resource):
             return {"errors": errors}, 400
 
         # NOTE: maybe add something to check if the user id is even in the class?
-        # NOTE: REMOVE USERS FROM COURSE.ROLES
 
         filler = ""
         if args['type'] == "remove":
@@ -52,7 +51,7 @@ class BanRemove(Resource):
                 course.blacklist.append(args['userId'])
                 course.save()
                 # Remove the user from the course
-                self.remove_user(user, courseId)
+                self.remove_user(user, course)
                 filler = "banned"
             # Unbanning students
             else:
@@ -69,9 +68,12 @@ class BanRemove(Resource):
         return errors
 
     def remove_user(self, user, course):
-        for role in course.roles:
-            if user._id in role:
-                role.remove(user._id)
+        # Remove the user from their role in the course
+        for role_id in course.roles:
+            if user._id in course.roles[role_id]:
+                course.roles[role_id].remove(user._id)
+                course.save()
+        # Remove the user from the course itself
         for c in user.courses:
             if c.courseId == course._id:
                 pop_idx = user.courses.index(c)
