@@ -43,7 +43,7 @@ class BanRemove(Resource):
         filler = ""
         if args['type'] == "remove":
             # Removing students
-            self.remove_user(user, courseId)
+            self.remove_user(user, course)
             filler = "removed"
         elif args['type'] == "ban":
             # Banning students
@@ -68,9 +68,12 @@ class BanRemove(Resource):
                 "Invalid type. Type can be either \'ban\' or \'remove\'")
         return errors
 
-    def remove_user(self, user, courseId):
+    def remove_user(self, user, course):
+        for role in course.roles:
+            if user._id in role:
+                role.remove(user._id)
         for c in user.courses:
-            if c.courseId == courseId:
+            if c.courseId == course._id:
                 pop_idx = user.courses.index(c)
                 user.courses.pop(pop_idx)
                 user.save()

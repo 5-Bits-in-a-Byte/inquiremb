@@ -129,6 +129,16 @@ class Courses(Resource):
                         pop_idx = user.courses.index(course)
                         user.courses.pop(pop_idx)
                 user.save()
+
+            # Remove all roles associated with a course
+            for role_id in courseToDelete.roles:
+                try:
+                    role_to_delete = Role.objects.get({"_id": role_id})
+                except Role.DoesNotExist:
+                    return {"errors": "Error: Role with id " + role_id + " does not exist."}, 400
+                except Role.MultipleObjectsReturned:
+                    return {"errors": "Error: Multiple roles with id " + role_id + " were found."}, 400
+                role_to_delete.delete()
         else:
             return {"errors": ["No users with this course"]}, 400
 
