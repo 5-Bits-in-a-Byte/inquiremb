@@ -15,6 +15,7 @@ class BanRemove(Resource):
         parser.add_argument('type')
         parser.add_argument('userId')
         args = parser.parse_args()
+        print("userId:", args['userId'])
 
         # Validate course exists and store it in course variable
         try:
@@ -59,6 +60,28 @@ class BanRemove(Resource):
                 course.save()
                 filler = "unbanned"
         return {"success": [f"{user.first} {user.last} was successfully {filler} from the course."]}, 200
+
+    def get(self, courseId):
+        try:
+            course = Course.objects.get({"_id": courseId})
+        except Course.DoesNotExist:
+            return {"errors": "Error: Course with id " + courseId + " does not exist."}, 400
+        except Course.MultipleObjectsReturned:
+            return {"errors": "Error: Multiple objects with id " + courseId + " were found."}, 400
+
+        return_list = []
+        for bannedId in course.blacklist:
+            try:
+                user = User.objects.get({"_id": bannedId})
+            except User.DoesNotExist:
+                return {"errors": "Error: User with id " + args['userId'] + " does not exist."}, 400
+            except User.MultipleObjectsReturned:
+                return {"errors": "Error: Multiple users with id " + args['userId'] + " were found."}, 400
+            necessary_fields = {
+                "userId": user._id, "userName": user.first + " " + user.last, "userImg": user.picture}
+            return_list.append(necessary_fields)
+
+        return {"success": return_list}, 200
 
     def validate_args(self, args):
         errors = []

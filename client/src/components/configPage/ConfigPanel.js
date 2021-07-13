@@ -107,8 +107,6 @@ const GenerateRoleList = (roles, setRoles, userList, setUserList) => {
  * Generates a list of User Components for State Management
  */
 const GenerateUserList = (users, roles) => {
-  var test_simple_role = { roleName: "Regular User", roleColor: "#55cc88" };
-
   var userRole = { name: "null", roleColor: "#e7e7e7" };
 
   return users.map((user, index) => {
@@ -124,19 +122,25 @@ const GenerateUserList = (users, roles) => {
         userImg={user.userImg}
         userRole={userRole}
         allRoles={roles}
+        unbanList={false}
       />
     );
   });
 };
 
-const GenerateBannedUserList = (users) => {
-  return users.map((user, index) => {
+const GenerateBannedUserList = (blacklist) => {
+  if (!blacklist) {
+    return <></>;
+  }
+  return blacklist.map((bannedUser, index) => {
+    console.log("bannedUser:", bannedUser);
     return (
       <UserPanel
         key={index}
-        userId={user.userId}
-        userName={user.userName}
-        userImg={user.userImg}
+        userId={bannedUser.userId}
+        userName={bannedUser.userName}
+        userImg={bannedUser.userImg}
+        unbanList={true}
       />
     );
   });
@@ -153,11 +157,39 @@ const ConfigPanel = ({
 }) => {
   const [loadingIcons, setLoadingIcons] = useState(true);
 
-  // State for users
-  let realUserList = GenerateUserList(courseUsers, courseRoles);
+  const [bannedUserList, setBannedUserList] = useState(null);
+  const [numBannedUsers, changeNumBanned] = useState(0);
+  const [displayBanned, setDisplayBanned] = useState(false);
+  // Grab the instructor ID for display purposes later
+  useEffect(() => {
+    if (!bannedUserList) {
+      LazyFetch({
+        type: "get",
+        endpoint: "/courses/" + courseId + "/ban-remove",
+        onSuccess: (data) => {
+          if (data.success.length > 0) {
+            setDisplayBanned(true);
+            changeNumBanned(data.success.length);
+          }
+          setBannedUserList(GenerateBannedUserList(data.success));
+        },
+        onFailure: () => {
+          console.log(
+            "There was a problem getting the blacklist info for the course with id " +
+              courseId
+          );
+        },
+      });
+    }
+  }, []);
 
+  let realUserList = GenerateUserList(
+    courseUsers,
+    courseRoles,
+    numBannedUsers,
+    changeNumBanned
+  );
   const [userList, setUserList] = useState(realUserList);
-  //const [cachedUserList, setCachedUserList] = useState(userList);
 
   // State for roles ------------------------------------------------------
   let realRoleList =
@@ -258,6 +290,13 @@ const ConfigPanel = ({
       >
         <UserContainer>{userList}</UserContainer>
       </ConfigPanelGroup>
+      {displayBanned ? (
+        <ConfigPanelGroup panelHeader={"Banned users."}>
+          <UserContainer>{bannedUserList}</UserContainer>
+        </ConfigPanelGroup>
+      ) : (
+        <></>
+      )}
     </PanelWrapper>
   );
 };

@@ -46,9 +46,12 @@ const UserPanel = ({
   userImg,
   userId,
   allRoles,
+  unbanList,
   ...props
 }) => {
   const { courseId } = useParams();
+
+  const name = userRole ? userRole.name : null;
 
   // State variables
   const [success, toggleSuccess] = useState(null);
@@ -58,7 +61,7 @@ const UserPanel = ({
   const [display, toggleDisplay] = useState("flex");
   const [removed, toggleRemoved] = useState(false);
   const [instructorId, setInstructorId] = useState(null);
-  const [roleName, setRoleName] = useState(userRole.name);
+  const [roleName, setRoleName] = useState(name);
 
   // Varaible to store all of the dropdown options
   let realRoleOptions =
@@ -77,20 +80,22 @@ const UserPanel = ({
 
   // Grab the instructor ID for display purposes later
   useEffect(() => {
-    LazyFetch({
-      type: "get",
-      endpoint: "/courses?courseId=" + courseId,
-      onSuccess: (data) => {
-        setInstructorId(data.success.instructorID);
-      },
-      onFailure: () => {
-        console.log(
-          "There was a problem fetching the course with id",
-          courseId
-        );
-      },
-    });
-  });
+    if (instructorId == null) {
+      LazyFetch({
+        type: "get",
+        endpoint: "/courses?courseId=" + courseId,
+        onSuccess: (data) => {
+          setInstructorId(data.success.instructorID);
+        },
+        onFailure: () => {
+          console.log(
+            "There was a problem fetching the course with id",
+            courseId
+          );
+        },
+      });
+    }
+  }, [instructorId]);
 
   // Handler for banning/removing users in the course
   const handleBanRemove = (banOrRemove) => {
@@ -127,6 +132,7 @@ const UserPanel = ({
 
   // Variable to identify the course creator
   const isCourseCreator = instructorId == userId;
+  const banOrUnban = unbanList ? "unban" : "ban";
 
   return (
     <>
@@ -137,7 +143,7 @@ const UserPanel = ({
             <UserName>{userName}</UserName>
           </UserNameWrapper>
 
-          {!isCourseCreator ? (
+          {!isCourseCreator && !unbanList ? (
             <UserRoleWrapper
               borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
             >
@@ -174,10 +180,10 @@ const UserPanel = ({
                   toggleBan(true);
                 }}
               >
-                Ban User
+                {unbanList ? "Unban User" : "Ban User"}
               </Button>
             )}
-            {UserPerms.canRemove && !isCourseCreator && (
+            {UserPerms.canRemove && !isCourseCreator && !unbanList && (
               <Button
                 primary
                 buttonColor={"#DC2B2B"}
@@ -216,8 +222,8 @@ const UserPanel = ({
               {success}
             </Success>
             <ContentSection style={{ display: display }}>
-              Are you sure you want to {ban ? "ban" : "remove"} {userName} from
-              this course?
+              Are you sure you want to {ban ? banOrUnban : "remove"} {userName}{" "}
+              from this course?
             </ContentSection>
             <Button
               primary

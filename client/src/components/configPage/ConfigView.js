@@ -120,7 +120,6 @@ const ConfigView = ({ props }) => {
       onSuccess: (roles) => {
         console.log("Successfully fetched Course Roles: ", roles);
         setCourseRoles(roles);
-        console.log(roles);
       },
       onFailure: (err) => {
         console.log("Failed to fetch Course Roles. ", err);
@@ -152,7 +151,6 @@ const ConfigView = ({ props }) => {
 
   var userIsAdmin = false;
   if (userRole) userIsAdmin = userRole.admin.configure;
-  console.log("courseUsers:", courseUsers);
 
   /**
    * Redirects the user to the landing page
