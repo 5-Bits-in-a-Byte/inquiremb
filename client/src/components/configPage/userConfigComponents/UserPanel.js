@@ -15,7 +15,7 @@ import Errors from "../../common/Errors";
 const UserPerms = { canBan: true, canRemove: true };
 
 /* Handle Role selection in the dropdown */
-const GenerateRoleOptions = (roles, courseId, userId) => {
+const GenerateRoleOptions = (roles, courseId, userId, setRoleName) => {
   return roles.map((role) => ({
     onClick: () => {
       LazyFetch({
@@ -28,6 +28,7 @@ const GenerateRoleOptions = (roles, courseId, userId) => {
         onSuccess: (data) => {
           console.log("Successful PUT (UserPanel). Status: ", data.status);
           alert(role.name + " Role selected and updated.");
+          setRoleName(role.name);
         },
         onFailure: (err) => {
           console.log("ERROR: failed PUT (UserPanel): ", err.response);
@@ -49,9 +50,20 @@ const UserPanel = ({
 }) => {
   const { courseId } = useParams();
 
+  // State variables
+  const [success, toggleSuccess] = useState(null);
+  const [errors, toggleErrors] = useState(null);
+  const [modalIsShown, toggleModal] = useState(false);
+  const [ban, toggleBan] = useState(false);
+  const [display, toggleDisplay] = useState("flex");
+  const [removed, toggleRemoved] = useState(false);
+  const [instructorId, setInstructorId] = useState(null);
+  const [roleName, setRoleName] = useState(userRole.name);
+
+  // Varaible to store all of the dropdown options
   let realRoleOptions =
     allRoles != null
-      ? GenerateRoleOptions(allRoles, courseId, userId)
+      ? GenerateRoleOptions(allRoles, courseId, userId, setRoleName)
       : [
           {
             onClick: () => {
@@ -62,16 +74,9 @@ const UserPanel = ({
         ];
 
   const [roleOptions, setRoleOptions] = useState(realRoleOptions);
-  const [success, toggleSuccess] = useState(null);
-  const [errors, toggleErrors] = useState(null);
-  const [modalIsShown, toggleModal] = useState(false);
-  const [ban, toggleBan] = useState(false);
-  const [display, toggleDisplay] = useState("flex");
-  const [removed, toggleRemoved] = useState(false);
-  const [instructorId, setInstructorId] = useState(null);
 
+  // Grab the instructor ID for display purposes later
   useEffect(() => {
-    console.log("courseId:", courseId);
     LazyFetch({
       type: "get",
       endpoint: "/courses?courseId=" + courseId,
@@ -87,6 +92,7 @@ const UserPanel = ({
     });
   });
 
+  // Handler for banning/removing users in the course
   const handleBanRemove = (banOrRemove) => {
     LazyFetch({
       type: "put",
@@ -119,6 +125,7 @@ const UserPanel = ({
     });
   };
 
+  // Variable to identify the course creator
   const isCourseCreator = instructorId == userId;
 
   return (
@@ -140,7 +147,7 @@ const UserPanel = ({
                     className="font-regular"
                     style={{ cursor: `pointer` }}
                   >
-                    {userRole.name}
+                    {roleName}
                   </RoleDisplay>
                   <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
                 </DropdownWrapper>
