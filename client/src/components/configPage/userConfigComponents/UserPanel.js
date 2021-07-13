@@ -65,6 +65,7 @@ const UserPanel = ({
   const [modalIsShown, toggleModal] = useState(false);
   const [ban, toggleBan] = useState(false);
   const [display, toggleDisplay] = useState("flex");
+  const [removed, toggleRemoved] = useState(false);
 
   const handleBanRemove = (banOrRemove) => {
     LazyFetch({
@@ -75,6 +76,7 @@ const UserPanel = ({
         console.log("data.success:", data.success);
         toggleSuccess(data.success);
         toggleDisplay("none");
+        toggleRemoved(true);
       },
       onFailure: (err) => {
         if (err.response && err.response.data) {
@@ -100,58 +102,66 @@ const UserPanel = ({
 
   return (
     <>
-      <UserPanelWrapper>
-        <UserIcon src={userImg} />
-        <UserNameWrapper>
-          <UserName>{userName}</UserName>
-        </UserNameWrapper>
-        <UserRoleWrapper
-          borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
-        >
-          <Dropdown options={roleOptions}>
-            <DropdownWrapper className="flex-row align">
-              <RoleDisplay
-                className="font-regular"
-                style={{ cursor: `pointer` }}
-              >
-                {userRole.name}
-              </RoleDisplay>
-              <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
-            </DropdownWrapper>
-          </Dropdown>
-        </UserRoleWrapper>
+      {!removed ? (
+        <UserPanelWrapper>
+          <UserIcon src={userImg} />
+          <UserNameWrapper>
+            <UserName>{userName}</UserName>
+          </UserNameWrapper>
+          <UserRoleWrapper
+            borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
+          >
+            <Dropdown options={roleOptions}>
+              <DropdownWrapper className="flex-row align">
+                <RoleDisplay
+                  className="font-regular"
+                  style={{ cursor: `pointer` }}
+                >
+                  {userRole.name}
+                </RoleDisplay>
+                <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
+              </DropdownWrapper>
+            </Dropdown>
+          </UserRoleWrapper>
 
-        <AdminActionsWrapper>
-          {UserPerms.canBan && (
-            <Button
-              style={{ margin: `0 0.5em`, color: `#DC2B2B`, fontWeight: `600` }}
-              outlineSecondary
-              buttonColor={"#DC2B2B"}
-              buttonWidth={"125px"}
-              buttonHeight={"2rem"}
-              onClick={() => {
-                toggleModal(true);
-                toggleBan(true);
-              }}
-            >
-              Ban User
-            </Button>
-          )}
-          {UserPerms.canRemove && (
-            <Button
-              primary
-              buttonColor={"#DC2B2B"}
-              buttonWidth={"125px"}
-              buttonHeight={"2rem"}
-              onClick={() => {
-                toggleModal(true);
-              }}
-            >
-              Remove User
-            </Button>
-          )}
-        </AdminActionsWrapper>
-      </UserPanelWrapper>
+          <AdminActionsWrapper>
+            {UserPerms.canBan && (
+              <Button
+                style={{
+                  margin: `0 0.5em`,
+                  color: `#DC2B2B`,
+                  fontWeight: `600`,
+                }}
+                outlineSecondary
+                buttonColor={"#DC2B2B"}
+                buttonWidth={"125px"}
+                buttonHeight={"2rem"}
+                onClick={() => {
+                  toggleModal(true);
+                  toggleBan(true);
+                }}
+              >
+                Ban User
+              </Button>
+            )}
+            {UserPerms.canRemove && (
+              <Button
+                primary
+                buttonColor={"#DC2B2B"}
+                buttonWidth={"125px"}
+                buttonHeight={"2rem"}
+                onClick={() => {
+                  toggleModal(true);
+                }}
+              >
+                Remove User
+              </Button>
+            )}
+          </AdminActionsWrapper>
+        </UserPanelWrapper>
+      ) : (
+        <></>
+      )}
       {modalIsShown && (
         <Modal
           close={() => {
