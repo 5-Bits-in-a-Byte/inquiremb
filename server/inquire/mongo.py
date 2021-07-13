@@ -85,7 +85,7 @@ class UserCourse(EmbeddedMongoModel):
     nickname = fields.CharField(blank=True)
     color = fields.CharField(blank=True)
     role = fields.CharField(required=True)
-    viewed = fields.DictField(required=True, default={"": None})
+    viewed = fields.DictField(required=True, default={"": None}, blank=True)
 
 
 '''
@@ -157,6 +157,7 @@ class Course(MongoModel):
     instructorID = fields.CharField()
     roles = fields.DictField(required=True)
     defaultRole = fields.CharField(required=True)
+    blacklist = fields.ListField(default=[], blank=True, required=True)
     _id = fields.CharField(primary_key=True, default=shortuuid.uuid)
 
     class Meta:

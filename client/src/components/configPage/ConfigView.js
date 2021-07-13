@@ -120,7 +120,6 @@ const ConfigView = ({ props }) => {
       onSuccess: (roles) => {
         console.log("Successfully fetched Course Roles: ", roles);
         setCourseRoles(roles);
-        console.log(roles);
       },
       onFailure: (err) => {
         console.log("Failed to fetch Course Roles. ", err);
