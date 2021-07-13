@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
@@ -14,8 +14,9 @@ import { UserContext } from "../context/UserProvider";
 import { UserRoleContext } from "../context/UserRoleProvider";
 import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
 import { Editor } from "react-draft-wysiwyg";
-import { convertToRaw, EditorState } from "draft-js";
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import Checkbox from "../common/Checkbox";
+import createPalette from "@material-ui/core/styles/createPalette";
 
 const Comment = ({ comment, isDraft, callback }) => {
   // console.log("Comment Role Object: ", userRole);
@@ -35,6 +36,10 @@ const Comment = ({ comment, isDraft, callback }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const endpoint = "/courses/" + courseId + "/posts/" + postid + "/comments";
+
+  useEffect(() => {
+    console.log("Comment Object: ", comment);
+  });
 
   const handleContentChange = (e) => {
     const plainText = e.getCurrentContent().getPlainText();
@@ -69,11 +74,7 @@ const Comment = ({ comment, isDraft, callback }) => {
     // Otherwise, the post has been fetched from the API so return the content
     else {
       const content = (
-        <EditorWrapper
-          messageData={comment}
-          messageType="comment"
-          edit={false}
-        />
+        <EditorWrapper messageData={comment} messageType="comment" />
       );
       return React.cloneElement(content, { edit: { isEditing, setIsEditing } });
     }
@@ -137,7 +138,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   // If the user clicks reply, insert a drafted reply
   if (isReplying) {
     console.log("in isReplying section");
-    replies.push(
+    replies.unshift(
       <CommentReply
         isDraft
         submitReply={submitReply}
