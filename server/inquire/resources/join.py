@@ -136,34 +136,34 @@ class Join(Resource):
         parser.add_argument('courseId')
         args = parser.parse_args()
 
-        query = Course.objects.raw({"_id": args['courseId']})
-        count = query.count()
+        try:
+            course_to_add = Course.objects.get({"_id": args['courseId']})
+        except Course.DoesNotExist:
+            return {"errors": "Error: Course with id " + args['courseId'] + " does not exist."}, 400
+        except Course.MultipleObjectsReturned:
+            return {"errors": "Error: Multiple objects with id " + args['courseId'] + " were found."}, 400
 
-        # Error checking even though these errors shouldn't be possible based on the post request
-        if count > 1:
-            return {"errors": ["Multiple courses with this course id"]}, 400
-        elif count == 0:
-            return {"errors": [f"Course with id {args['courseId']} does not exist"]}, 400
-        else:
+        if current_user._id in course_to_add.blacklist:
+            return {"errors": ["You are banned from joining this course."]}, 400
 
-            for course in current_user.courses:
-                if args['courseId'] == course.courseId:
-                    return {"errors": ["You have already joined this class"]}, 400
+        for course in current_user.courses:
+            if args['courseId'] == course.courseId:
+                return {"errors": ["You have already joined this class"]}, 400
 
-            course_to_add = query.first()
-            color = pick_color(DEFAULT_COLORS)
+        color = pick_color(DEFAULT_COLORS)
 
-            user_course = UserCourse(
-                courseId=args['courseId'], courseName=course_to_add.course, color=color, role=course_to_add.defaultRole)
+        user_course = UserCourse(
+            courseId=args['courseId'], courseName=course_to_add.course, color=color, role=course_to_add.defaultRole)
 
-            current_user.courses.append(user_course)
+        current_user.courses.append(user_course)
 
-            current_user.save()
+        current_user.save()
 
-            course_to_add.roles[course_to_add.defaultRole].append(current_user._id)
+        course_to_add.roles[course_to_add.defaultRole].append(
+            current_user._id)
 
-            course_to_add.save()
+        course_to_add.save()
 
-            result = user_course.to_son()
+        result = user_course.to_son()
 
-            return {"success": ["Course joined successfully"], "course": result}, 200
+        return {"success": ["Course joined successfully"], "course": result}, 200
