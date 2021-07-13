@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
@@ -6,7 +6,9 @@ import Button from "../../common/Button";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Arrow from "../../../imgs/carrot-down-secondary.svg";
 import LazyFetch from "../../common/requests/LazyFetch";
+import Fetch from "../../common/requests/Fetch";
 import Modal from "../../common/Modal";
+import Errors from "../../common/Errors";
 
 // Hardcoded dummy values
 // Ultimately the goal is to pull these from the permissions object in the user context
@@ -66,6 +68,24 @@ const UserPanel = ({
   const [ban, toggleBan] = useState(false);
   const [display, toggleDisplay] = useState("flex");
   const [removed, toggleRemoved] = useState(false);
+  const [instructorId, setInstructorId] = useState(null);
+
+  useEffect(() => {
+    console.log("courseId:", courseId);
+    LazyFetch({
+      type: "get",
+      endpoint: "/courses?courseId=" + courseId,
+      onSuccess: (data) => {
+        setInstructorId(data.success.instructorID);
+      },
+      onFailure: () => {
+        console.log(
+          "There was a problem fetching the course with id",
+          courseId
+        );
+      },
+    });
+  });
 
   const handleBanRemove = (banOrRemove) => {
     LazyFetch({
@@ -73,7 +93,6 @@ const UserPanel = ({
       endpoint: "/courses/" + courseId + "/ban-remove",
       data: { type: banOrRemove, userId: userId },
       onSuccess: (data) => {
-        console.log("data.success:", data.success);
         toggleSuccess(data.success);
         toggleDisplay("none");
         toggleRemoved(true);
@@ -100,6 +119,8 @@ const UserPanel = ({
     });
   };
 
+  const isCourseCreator = instructorId == userId;
+
   return (
     <>
       {!removed ? (
@@ -108,24 +129,29 @@ const UserPanel = ({
           <UserNameWrapper>
             <UserName>{userName}</UserName>
           </UserNameWrapper>
-          <UserRoleWrapper
-            borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
-          >
-            <Dropdown options={roleOptions}>
-              <DropdownWrapper className="flex-row align">
-                <RoleDisplay
-                  className="font-regular"
-                  style={{ cursor: `pointer` }}
-                >
-                  {userRole.name}
-                </RoleDisplay>
-                <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
-              </DropdownWrapper>
-            </Dropdown>
-          </UserRoleWrapper>
+
+          {!isCourseCreator ? (
+            <UserRoleWrapper
+              borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
+            >
+              <Dropdown options={roleOptions}>
+                <DropdownWrapper className="flex-row align">
+                  <RoleDisplay
+                    className="font-regular"
+                    style={{ cursor: `pointer` }}
+                  >
+                    {userRole.name}
+                  </RoleDisplay>
+                  <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
+                </DropdownWrapper>
+              </Dropdown>
+            </UserRoleWrapper>
+          ) : (
+            <></>
+          )}
 
           <AdminActionsWrapper>
-            {UserPerms.canBan && (
+            {UserPerms.canBan && !isCourseCreator && (
               <Button
                 style={{
                   margin: `0 0.5em`,
@@ -144,7 +170,7 @@ const UserPanel = ({
                 Ban User
               </Button>
             )}
-            {UserPerms.canRemove && (
+            {UserPerms.canRemove && !isCourseCreator && (
               <Button
                 primary
                 buttonColor={"#DC2B2B"}
@@ -200,6 +226,7 @@ const UserPanel = ({
             >
               Confirm
             </Button>
+            <Errors errors={errors} />
           </Wrapper>
         </Modal>
       )}

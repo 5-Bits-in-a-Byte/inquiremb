@@ -96,7 +96,23 @@ class Courses(Resource):
                 "color": color}, 200
 
     def get(self):
-        return {"status": "dummy object"}
+        # Parse arguments
+        # parser = reqparse.RequestParser()
+        # parser.add_argument('courseId')
+        # args = parser.parse_args()
+        courseId = request.args.get('courseId')
+
+        # print("args[courseId]:", args['courseId'])
+
+        # Get the course object that corresponds to the courseId
+        try:
+            course = Course.objects.get({"_id": courseId})
+        except Course.DoesNotExist:
+            return {"errors": "Error: Course with id " + courseId + " does not exist."}, 400
+        except Course.MultipleObjectsReturned:
+            return {"errors": "Error: Multiple courses with id " + courseId + " were found."}, 400
+
+        return {"success": course.to_son()}, 200
 
     def delete(self):
         # Parse argument
