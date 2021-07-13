@@ -6,6 +6,35 @@ import Button from "../../common/Button";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { useParams } from "react-router";
 
+const generateStyle = (edit, postid, messageType) => {
+  var styling;
+  if ((messageType == "comment" || messageType == "reply") && !edit.isEditing) {
+    styling = {
+      padding: "0 8px",
+      overflow: "hidden",
+      borderRadius: "5px",
+    };
+  } else if (!edit.isEditing && !postid) {
+    styling = {
+      minHeight: "100px",
+      padding: "0 8px",
+      maxHeight: "200px",
+      overflow: "hidden",
+      border: "2px solid #e7e7e7",
+      borderRadius: "5px",
+    };
+  } else {
+    styling = {
+      minHeight: "100px",
+      padding: "0 8px",
+      overflow: "hidden",
+      border: "2px solid #e7e7e7",
+      borderRadius: "5px",
+    };
+  }
+  return styling;
+};
+
 const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
   const { courseId, postid } = useParams();
   const [editorStateTest, setEditorStateTest] = useState(
@@ -103,24 +132,7 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
   };
 
   /** This variable is used to determine whether or not to force a maximum height for this containing element. */
-  var editorStyle =
-    edit.isEditing || postid
-      ? {
-          minHeight: "100px",
-          padding: "0 8px",
-          // maxHeight: "200px",
-          overflow: "hidden",
-          border: "2px solid #e7e7e7",
-          borderRadius: "5px",
-        }
-      : {
-          minHeight: "100px",
-          padding: "0 8px",
-          maxHeight: "200px",
-          overflow: "hidden",
-          border: "2px solid #e7e7e7",
-          borderRadius: "5px",
-        };
+  var editorStyle = generateStyle(edit, postid, messageType);
 
   return (
     <>
