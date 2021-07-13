@@ -280,7 +280,7 @@ This component handles setting up all of our MongoDB models so that each collect
       "removeUsers": true,
       "announce": true,
       "configure": true,
-      "highlightPost": true
+      "highlightName": true
     }
   }
 }

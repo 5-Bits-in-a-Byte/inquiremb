@@ -6,38 +6,61 @@ import Button from "../../common/Button";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { useParams } from "react-router";
 
-const convertToUpper = (postType) => {
-  var first = postType[0].toUpperCase();
-  var rest = postType.slice(1);
-  return first + rest;
+const generateStyle = (edit, postid, messageType) => {
+  var styling;
+  if ((messageType == "comment" || messageType == "reply") && !edit.isEditing) {
+    styling = {
+      padding: "0 8px",
+      overflow: "hidden",
+      borderRadius: "5px",
+    };
+  } else if (!edit.isEditing && !postid) {
+    styling = {
+      minHeight: "100px",
+      padding: "0 8px",
+      maxHeight: "200px",
+      overflow: "hidden",
+      border: "2px solid #e7e7e7",
+      borderRadius: "5px",
+    };
+  } else {
+    styling = {
+      minHeight: "100px",
+      padding: "0 8px",
+      overflow: "hidden",
+      border: "2px solid #e7e7e7",
+      borderRadius: "5px",
+    };
+  }
+  return styling;
 };
 
-const EditorWrapper = ({ post, edit }) => {
+const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
   const { courseId, postid } = useParams();
   const [editorStateTest, setEditorStateTest] = useState(
-    EditorState.createWithContent(convertFromRaw(post.content.raw))
+    EditorState.createWithContent(convertFromRaw(messageData.content.raw))
   );
 
-  const [plainText, setPlainText] = useState(post.content.plainText);
+  const [plainText, setPlainText] = useState(messageData.content.plainText);
 
   const handleContentChange = (e) => {
     setEditorStateTest(e);
     setPlainText(e.getCurrentContent().getPlainText());
   };
 
-  const handleSubmit = () => {
+  const handlePostSubmit = () => {
     LazyFetch({
       type: "put",
       endpoint: "/courses/" + courseId + "/posts",
       data: {
         content: {
-          type: post.content.type,
+          type: messageData.content.type,
           raw: convertToRaw(editorStateTest.getCurrentContent()),
           plainText: plainText,
         },
-        title: post.title,
-        isPinned: post.isPinned,
-        _id: post._id,
+        title: messageData.title,
+        isPinned: messageData.isPinned,
+        _id: messageData._id,
       },
       onSuccess: (data) => {
         console.log(data);
@@ -50,32 +73,66 @@ const EditorWrapper = ({ post, edit }) => {
     });
   };
 
+  const handleCommentSubmit = () => {
+    LazyFetch({
+      type: "put",
+      endpoint: "/courses/" + courseId + "/posts/" + postid + "/comments",
+      data: {
+        content: {
+          raw: convertToRaw(editorStateTest.getCurrentContent()),
+          plainText: plainText,
+        },
+        _id: messageData._id,
+      },
+      onSuccess: (data) => {
+        console.log(data);
+        edit.setIsEditing(false);
+      },
+      onFailure: (err) => {
+        console.log("Error: ", err.errors ? err.errors : err);
+        alert("Error updating comment.");
+      },
+    });
+  };
+
+  const handleReplySubmit = () => {
+    LazyFetch({
+      type: "put",
+      endpoint:
+        "/courses/" +
+        courseId +
+        "/posts/" +
+        postid +
+        "/comments/" +
+        commentId +
+        "/replies",
+      data: {
+        content: {
+          raw: convertToRaw(editorStateTest.getCurrentContent()),
+          plainText: plainText,
+        },
+        _id: messageData._id,
+      },
+      onSuccess: (data) => {
+        console.log(data);
+        edit.setIsEditing(false);
+      },
+      onFailure: (err) => {
+        console.log("Error: ", err.errors ? err.errors : err);
+        alert("Error updating comment.");
+      },
+    });
+  };
+
   const handleCancel = () => {
     edit.setIsEditing(false);
     setEditorStateTest(
-      EditorState.createWithContent(convertFromRaw(post.content.raw))
+      EditorState.createWithContent(convertFromRaw(messageData.content.raw))
     );
   };
 
   /** This variable is used to determine whether or not to force a maximum height for this containing element. */
-  var editorStyle =
-    edit.isEditing || postid
-      ? {
-          minHeight: "100px",
-          padding: "0 8px",
-          // maxHeight: "200px",
-          overflow: "hidden",
-          border: "2px solid #e7e7e7",
-          borderRadius: "5px",
-        }
-      : {
-          minHeight: "100px",
-          padding: "0 8px",
-          maxHeight: "200px",
-          overflow: "hidden",
-          border: "2px solid #e7e7e7",
-          borderRadius: "5px",
-        };
+  var editorStyle = generateStyle(edit, postid, messageType);
 
   return (
     <>
@@ -131,7 +188,15 @@ const EditorWrapper = ({ post, edit }) => {
               primary
               buttonWidth={`10em`}
               buttonHeight={`2.5em`}
-              onClick={handleSubmit}
+              onClick={() => {
+                if (messageType == "post") {
+                  handlePostSubmit();
+                } else if (messageType == "comment") {
+                  handleCommentSubmit();
+                } else if (messageType == "reply") {
+                  handleReplySubmit();
+                }
+              }}
             >
               Submit Changes
             </Button>

@@ -7,6 +7,7 @@ Group Name: 5 Bits in a Byte
 
 Last Modified Date: 03/12/2021
 '''
+# from server.inquire.mongo import Comment
 from flask import jsonify, current_app
 from flask_restful import Resource, abort, reqparse
 
@@ -15,6 +16,7 @@ from inquire.mongo import *
 from inquire.socketio_app import io
 
 import datetime
+
 
 class Comments(Resource):
     @permission_layer(require_joined_course=True)
@@ -82,9 +84,12 @@ class Comments(Resource):
         if post is None:
             return abort(400, errors=["Bad post id"])
         parser = reqparse.RequestParser()
-        parser.add_argument('content')
+        parser.add_argument('content', type=dict)
         parser.add_argument('isAnonymous', type=bool)
         args = parser.parse_args()
+
+        # Controls whether the comment should be highlighted orange for isntructor
+        highlighted = current_user.permissions["admin"]["highlightName"]
 
         # Validate the args
         errors = self.validate_comment(args)
@@ -100,9 +105,12 @@ class Comments(Resource):
             postedBy = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
 
-        # Add post to MongoDB
-        comment = Comment(postId=postId, postedBy=postedBy,
-                          content=args.content).save()
+        # Trying to add the comment to the DB
+        try:
+            comment = Comment(postId=postId, postedBy=postedBy,
+                              content=args.content, isInstructor=highlighted).save()
+        except ValidationError as exc:
+            return {"errors": str(exc)}, 400
 
         # Incrementing post comment count, updating date
         post.updatedDate = datetime.datetime.now()
@@ -143,7 +151,7 @@ class Comments(Resource):
         post = self.retrieve_post(postId)
 
         parser = reqparse.RequestParser()
-        parser.add_argument('content')
+        parser.add_argument('content', type=dict)
         parser.add_argument('_id')
         args = parser.parse_args()
 
@@ -151,27 +159,27 @@ class Comments(Resource):
         errors = self.validate_comment(args)
         if(bool(errors)):
             return {"errors": errors}, 400
+
         _id = ObjectId(args['_id'])
-        query = Comment.objects.raw({'_id': _id})
-        count = query.count()
-        if count > 1:
-            raise Exception(
-                f'Duplicate comment detected, multiple comments in database with id {args["_id"]}')
-        elif count == 1:
-            comment = query.first()
-            id_match = current_user._id == comment.postedBy[
-                '_id'] or current_user.anonymousId == comment.postedBy['_id']
-            if id_match:
-                comment.content = args['content']
-                post.updatedDate = datetime.datetime.now()
-                comment.save()
-                post.save()
-                result = self.serialize(comment)
-                return result, 200
-            else:
-                return {"errors": ['Insufficient permission to edit comment']}, 400
-        else:
-            raise Exception(f'No comment with id')
+
+        # Get the post you want to update
+        try:
+            comment = Comment.objects.get({'_id': _id})
+        except Comment.DoesNotExist:
+            return {'updated': False, 'errors': f"No comment with id {args['_id']}"}, 403
+        except Comment.MultipleObjectsReturned:
+            return {'updated': False, 'errors': f"Duplicate comment detected, multiple comments in database with id {args['_id']}"}, 400
+
+        id_match = current_user._id == comment.postedBy[
+            '_id'] or current_user.anonymousId == comment.postedBy['_id']
+        if not id_match:
+            return {'updated': False, 'errors': f"Cannot modify other users posts"}, 400
+        comment.content = args['content']
+        post.updatedDate = datetime.datetime.now()
+        comment.save()
+        post.save()
+        result = self.serialize(comment)
+        return result, 200
 
     @permission_layer(required_permissions=["delete-postComment"])
     def delete(self, courseId=None, postId=None):
@@ -249,8 +257,15 @@ class Comments(Resource):
 
     def validate_comment(self, args):
         errors = []
-        if args.content is None or len(args.content) == 0:
+        # Make sure the content field is provided (must return if it's not)
+        if args.content is None:
             errors.append("Please give your comment content")
+            return errors
+        # Make sure text field is provided
+        raw = args.content.get("raw")
+        plaintext = args.content.get("plainText")
+        if not (raw and plaintext and type(raw) == dict and type(plaintext) == str):
+            errors.append("Please give your comment message content")
         return errors
 
     def retrieve_post(self, postId):

@@ -76,7 +76,7 @@ const createRoleObject = (itemId) => {
         removeUsers: false,
         announce: false,
         configure: false,
-        highlightPost: false,
+        highlightName: false,
       },
     },
   };

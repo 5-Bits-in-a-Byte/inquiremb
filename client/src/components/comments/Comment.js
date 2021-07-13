@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import CommentReply from "./CommentReply";
@@ -12,27 +12,71 @@ import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 import { UserContext } from "../context/UserProvider";
 import { UserRoleContext } from "../context/UserRoleProvider";
+import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
+import { Editor } from "react-draft-wysiwyg";
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
+import Checkbox from "../common/Checkbox";
+import createPalette from "@material-ui/core/styles/createPalette";
 
 const Comment = ({ comment, isDraft, callback }) => {
   // console.log("Comment Role Object: ", userRole);
   const { courseId, postid } = useParams();
-  const [content, setContent] = useState("");
   const user = useContext(UserContext);
   const userRole = useContext(UserRoleContext);
 
   const [newReplies, setNewReplies] = useState([]);
   const [isReplying, toggleReply] = useState(false);
 
-  const endpoint =
-    "/courses/" + courseId + "/posts/" + postid + "/comments";
+  const [content, setContent] = useState({
+    isAnonymous: false,
+    raw: EditorState.createEmpty(),
+    plainText: EditorState.createEmpty(),
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const endpoint = "/courses/" + courseId + "/posts/" + postid + "/comments";
+
+  useEffect(() => {
+    console.log("Comment Object: ", comment);
+  });
+
+  const handleContentChange = (e) => {
+    const plainText = e.getCurrentContent().getPlainText();
+    setContent({ raw: e, plainText: plainText });
+  };
 
   const renderContent = () => {
     if (isDraft) {
-      return <DraftTextBox onChange={handleChange} />;
+      return (
+        <Editor
+          name="content"
+          editorStyle={{
+            minHeight: "100px",
+            padding: "0 8px",
+            border: "2px solid #e7e7e7",
+            borderRadius: "5px",
+          }}
+          onEditorStateChange={handleContentChange}
+          toolbar={{
+            options: [
+              "inline",
+              "list",
+              "link",
+              "emoji",
+              "history",
+              "blockType",
+            ],
+          }}
+        />
+      );
     }
     // Otherwise, the post has been fetched from the API so return the content
     else {
-      return comment.content;
+      const content = (
+        <EditorWrapper messageData={comment} messageType="comment" />
+      );
+      return React.cloneElement(content, { edit: { isEditing, setIsEditing } });
     }
   };
 
@@ -41,11 +85,16 @@ const Comment = ({ comment, isDraft, callback }) => {
     if (!content) {
       toggleReply(false);
     } else {
+      const newContent = {
+        ...content,
+        raw: convertToRaw(content.raw.getCurrentContent()),
+      };
       LazyFetch({
         type: "post",
         endpoint: endpoint + "/" + comment._id + "/replies",
-        data: { content, isAnonymous: false },
+        data: { content: newContent, isAnonymous: newContent.isAnonymous },
         onSuccess: (data) => {
+          console.log("data:", data);
           toggleReply(false);
           setNewReplies([
             ...newReplies,
@@ -70,6 +119,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   // Collect replies from comment data and append any newly created replies (if applicable)
   let replies = [];
   if (comment.replies && comment.replies.length > 0) {
+    console.log("inside reply loader");
     comment.replies.forEach((reply) => {
       replies.push(
         <CommentReply
@@ -87,7 +137,8 @@ const Comment = ({ comment, isDraft, callback }) => {
 
   // If the user clicks reply, insert a drafted reply
   if (isReplying) {
-    replies.push(
+    console.log("in isReplying section");
+    replies.unshift(
       <CommentReply
         isDraft
         submitReply={submitReply}
@@ -114,20 +165,24 @@ const Comment = ({ comment, isDraft, callback }) => {
   };
 
   const handleEdit = () => {
-    alert("This feature is still a work in progress. Check back soon!");
+    setIsEditing(true);
   };
 
   const generateDropdownOptions = () => {
     if (userRole) {
       let deleteOption =
-        userRole.delete.postComment && comment.postedBy._id == user._id
+        userRole.delete.postComment &&
+        (comment.postedBy._id == user._id ||
+          comment.postedBy._id == user.anonymousId)
           ? {
               onClick: handleDelete,
               label: "Delete Comment",
             }
           : null;
       let editOption =
-        userRole.edit.postComment && comment.postedBy._id == user._id
+        userRole.edit.postComment &&
+        (comment.postedBy._id == user._id ||
+          comment.postedBy._id == user.anonymousId)
           ? { onClick: handleEdit, label: "Edit Comment" }
           : null;
 
@@ -165,6 +220,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   ) {
     viewOptions = true;
   }
+  console.log("content.isAnonymous:", content.isAnonymous);
 
   return (
     <CommentWrapper>
@@ -181,8 +237,11 @@ const Comment = ({ comment, isDraft, callback }) => {
       </Content>
       <ReplyContainer>
         <PostMetaContentWrapper className="meta">
-          <UserDescription>
-            by {comment.postedBy.first + " " + comment.postedBy.last}
+          <UserDescription isInstructor={comment.isInstructor}>
+            by{" "}
+            {!content.isAnonymous
+              ? comment.postedBy.first + " " + comment.postedBy.last
+              : "Anonymous"}
           </UserDescription>
           <MetaIconWrapper>
             {isDraft ? (
@@ -196,6 +255,17 @@ const Comment = ({ comment, isDraft, callback }) => {
                 >
                   Cancel
                 </Button>
+                <Checkbox
+                  checkboxName="isAnonymous"
+                  labelText={"Make Anonymous"}
+                  onChange={() => {
+                    setContent({
+                      ...content,
+                      isAnonymous: !content.isAnonymous,
+                    });
+                  }}
+                  checkStatus={content.isAnonymous}
+                />
                 <Button
                   primary
                   onClick={() => {
@@ -259,7 +329,7 @@ const PostMetaContentWrapper = styled.div`
 `;
 
 const UserDescription = styled.h5`
-  color: #8c8c8c;
+  color: ${(props) => (props.isInstructor ? "#FF9900" : "#8c8c8c")};
 `;
 
 const ReplyBtn = styled.h5`
