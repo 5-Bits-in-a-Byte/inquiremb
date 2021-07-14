@@ -16,17 +16,25 @@
 
 A message board for course instructors and students to post questions, provide answers, connect, and communicate. We hope to make your learning experience a better place one message at a time.
 
+---
+
 ## Founders
 
-Brian Gunnarson: https://github.com/bgunnar5
+Full Stack Devs
 
-Sam Peters: https://github.com/sampeters747
+- Brian Gunnarson: https://github.com/bgunnar5
+- Seth Tal: https://github.com/Sephta
+- Alec Springel: https://github.com/alecspringel
 
-Alec Springel: https://github.com/alecspringel
+Backend Devs
 
-Seth Tal: https://github.com/Sephta
+- Sam Peters: https://github.com/sampeters747
 
-Aaron Van Cleave: https://github.com/AARONJVC
+Frontend Dev:
+
+- Aaron Van Cleave: https://github.com/AARONJVC
+
+---
 
 ## Creation Date
 
@@ -36,6 +44,8 @@ Date the site was first publicly launched: 03/11/2021
 
 Date of the first live test in a real classroom: FALL 2021
 
+---
+
 ## Context
 
 Inquire started as a group project @ University of Oregon in Professor Juan Flores's "CIS 422: Software Methodology" course. For the second major assignment in the course we were tasked with forming groups and creating a project from scratch utilizing all of the Software Methodologies we had learned up until that point. The project idea was approved by Juan Flores, and we very quickly mocked up designs for the platform. In a total of 4 weeks we had a fully functioning live website with a vertical slice of what the platform could be. We incorporated 2 unique OAuth systems for user sign-in. We had the basics of our course / user / and content backend models. Most importantly we had the basic message board functionality working with socketio in mind.
@@ -43,6 +53,8 @@ Inquire started as a group project @ University of Oregon in Professor Juan Flor
 ## System Architecture
 
 Inquire is set up with a React frontend client and Flask backend server. We incorporated an OAuth2 authentication system for security measures using Google's and (alternatively) GitHub's Oauth systems. Additionally, we utilize a MongoDB document oriented database to store user information, course content, and more. On top of this, to make flow of the website smooth and friendly for all users we included web sockets with socketio.
+
+---
 
 ## Deploying Locally with Docker
 
