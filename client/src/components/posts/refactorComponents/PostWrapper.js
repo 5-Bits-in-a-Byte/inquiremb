@@ -96,21 +96,72 @@ const PostWrapper = ({
     setIsEditing(true);
   };
 
+  const generateEditDeleteOption = (optionType) => {
+    var resultingOption;
+    var role = optionType == "delete" ? userRole.delete : userRole.edit;
+    if (
+      postType == "Question" &&
+      role.question &&
+      postObject.postedBy._id == user._id
+    ) {
+      resultingOption = {
+        onClick: () => {
+          optionType == "delete"
+            ? handleDelete(postObject._id, postObject.courseId)
+            : handleEdit();
+        },
+        label: optionType == "delete" ? "Delete question" : "Edit question",
+      };
+    } else if (
+      postType == "Announcement" &&
+      role.announcement &&
+      postObject.postedBy._id == user._id
+    ) {
+      resultingOption = {
+        onClick: () => {
+          optionType == "delete"
+            ? handleDelete(postObject._id, postObject.courseId)
+            : handleEdit();
+        },
+        label:
+          optionType == "delete" ? "Delete announcement" : "Edit announcement",
+      };
+    } else if (
+      postType == "Poll" &&
+      role.poll &&
+      postObject.postedBy._id == user._id
+    ) {
+      resultingOption = {
+        onClick: () => {
+          optionType == "delete"
+            ? handleDelete(postObject._id, postObject.courseId)
+            : handleEdit();
+        },
+        label: optionType == "delete" ? "Delete poll" : "Edit poll",
+      };
+    } else if (
+      postType == "General" &&
+      role.general &&
+      postObject.postedBy._id == user._id
+    ) {
+      resultingOption = {
+        onClick: () => {
+          optionType == "delete"
+            ? handleDelete(postObject._id, postObject.courseId)
+            : handleEdit();
+        },
+        label: optionType == "delete" ? "Delete poll" : "Edit poll",
+      };
+    } else {
+      resultingOption = null;
+    }
+    return resultingOption;
+  };
+
   const generateDropdownOptions = () => {
     if (userRole) {
-      let deleteOption =
-        userRole.delete.postComment && postObject.postedBy._id == user._id
-          ? {
-              onClick: () => {
-                handleDelete(postObject._id, postObject.courseId);
-              },
-              label: "Delete post",
-            }
-          : null;
-      let editOption =
-        userRole.edit.postComment && postObject.postedBy._id == user._id
-          ? { onClick: handleEdit, label: "Edit post" }
-          : null;
+      let deleteOption = generateEditDeleteOption("delete");
+      let editOption = generateEditDeleteOption("edit");
       let pinOption = userRole.participation.pin
         ? {
             onClick: () => {
