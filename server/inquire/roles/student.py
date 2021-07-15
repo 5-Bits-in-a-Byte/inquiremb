@@ -1,13 +1,19 @@
 student = {
     "publish": {
-        "postComment": True,
-        "reply": True,
-        "poll": False
+        "question": True,
+        "announcement": True,
+        "poll": False,
+        "general": True,
+        "comment": True,
+        "reply": True
     },
     "delete": {
-        "postComment": True,
-        "reply": True,
-        "poll": False
+        "question": True,
+        "announcement": True,
+        "poll": False,
+        "general": True,
+        "comment": True,
+        "reply": True
     },
     "participation": {
         "reactions": True,
@@ -15,9 +21,12 @@ student = {
         "pin": False
     },
     "edit": {
-        "postComment": True,
-        "reply": True,
-        "poll": True
+        "question": True,
+        "announcement": True,
+        "poll": False,
+        "general": True,
+        "comment": True,
+        "reply": True
     },
     "privacy": {
         "private": False,
@@ -26,6 +35,7 @@ student = {
     "admin": {
         "banUsers": False,
         "removeUsers": False,
+        # "deleteOther": False,
         "announce": False,
         "configure": False,
         "highlightName": False

@@ -63,7 +63,6 @@ def get_current_user():
                     if role:
                         user.permissions = role.permissions
         g.current_user = user
-
     return g.current_user
 
 
@@ -90,11 +89,12 @@ def _deep_access(d, keys):
             return None
     return d
 
+
 def _permission_comparison(user_permissions: dict, required_permissions: list):
     """ 
     Checks if the values in the user_permissions dict are true for the keys specified in the required_permissions list.
     For nested values specify keys in the following format "level1key-level2key-level3key".
-    
+
     Required_permissions can contain a subset of permissions to check.
 
     Example: _permission_comparison({"a":True, b:False, c:{d:True, e:True}}, ["a", "c-e"]) == True
@@ -133,9 +133,11 @@ def permission_layer(required_permissions=None, require_login=True, require_join
                 if not current_user.permissions:
                     missing_permissions = required_permissions
                 else:
-                    missing_permissions = _permission_comparison(current_user.permissions, required_permissions)
+                    missing_permissions = _permission_comparison(
+                        current_user.permissions, required_permissions)
                 if missing_permissions:
-                    abort(401, errors=[f'Resource access restricted: missing course permission(s) {", ".join(missing_permissions)}'])
+                    abort(401, errors=[
+                          f'Resource access restricted: missing course permission(s) {", ".join(missing_permissions)}'])
             return func(*args, **kwargs)
         return wrapper
     return actual_decorator
@@ -227,6 +229,7 @@ def retrieve_user(_id):
     else:
         return None
 
+
 def retrieve_role(_id):
     '''Retrieves the role object from the database'''
     query = Role.objects.raw({'_id': _id})
@@ -238,7 +241,6 @@ def retrieve_role(_id):
         return query.first()
     else:
         return None
-
 
 
 def create_user(data, mode="google"):

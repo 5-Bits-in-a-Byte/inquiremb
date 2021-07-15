@@ -19,7 +19,7 @@ from inquire.socketio_app import io
 
 
 class Posts(Resource):
-    @permission_layer(required_permissions=["publish-postComment"], require_joined_course=True)
+    @permission_layer(require_joined_course=True)
     def post(self, courseId=None):
         """
         Creates a new post
@@ -51,6 +51,10 @@ class Posts(Resource):
                 schema:
                   $ref: '#/definitions/403Response'
         """
+        # Make sure the current user at least has one permission to post
+        if not current_user.permissions['publish']['question'] and not current_user.permissions['publish']['announcement'] and not current_user.permissions['publish']['poll'] and not current_user.permissions['publish']['general']:
+            return {"errors": ["You do not have permission to make any post in this course."]}, 401
+
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('title')
@@ -58,6 +62,11 @@ class Posts(Resource):
         parser.add_argument('isPrivate', type=bool)
         parser.add_argument('isAnonymous', type=bool)
         args = parser.parse_args()
+
+        # Check that the user has permission to make the type of post they wish to make
+        permission_errs = self.check_permissions("publish", args)
+        if (bool(permission_errs)):
+            return {"errors": permission_errs}, 401
 
         # How polls look being sent from frontend
         # {
@@ -250,7 +259,6 @@ class Posts(Resource):
 
         return result, 200
 
-    @permission_layer(required_permissions=["delete-postComment"])
     def delete(self, courseId=None):
         """
         Deletes a post
@@ -297,6 +305,10 @@ class Posts(Resource):
                           description: Whether or not the post was deleted
                           example: false
         """
+        # Make sure the current user at least has one permission to delete
+        if not current_user.permissions['delete']['question'] and not current_user.permissions['delete']['announcement'] and not current_user.permissions['delete']['poll'] and not current_user.permissions['delete']['general']:
+            return {"errors": ["You do not have permission to delete any type of post in this course."]}, 401
+
         # Parse arguments
         parser = reqparse.RequestParser()
         parser.add_argument('_id')
@@ -309,6 +321,11 @@ class Posts(Resource):
             return {'deleted': False, 'errors': f"No post with id {args['_id']}"}, 403
         except Post.MultipleObjectsReturned:
             return {'deleted': False, 'errors': f"Duplicate post detected, multiple posts in database with id {args['_id']}"}, 400
+
+        # Make sure the user has permission to delete the type of post they want to delete
+        permission_errs = self.check_permissions("delete", post)
+        if (bool(permission_errs)):
+            return {"errors": permission_errs}, 401
 
         # Permission check
         # FIX ME: Switch to using something other than "admin-configure" as the admin permission for deleting posts
@@ -326,7 +343,6 @@ class Posts(Resource):
         else:
             return {'deleted': False}, 403
 
-    @permission_layer(required_permissions=["edit-postComment"])
     def put(self, courseId=None):
         """
         Edits a post
@@ -358,20 +374,26 @@ class Posts(Resource):
                 schema:
                   $ref: '#/definitions/403Response'
         """
+        # Make sure the current user at least has one permission to edit
+        if not current_user.permissions['edit']['question'] and not current_user.permissions['edit']['announcement'] and not current_user.permissions['edit']['poll'] and not current_user.permissions['edit']['general']:
+            return {"errors": ["You do not have permission to edit any type of post in this course."]}, 401
+
         # Parse the request
         parser = reqparse.RequestParser()
         parser.add_argument('title')
         parser.add_argument('content', type=dict)
         parser.add_argument('_id')
         args = parser.parse_args()
-        print(args.content)
+
+        # Make sure the user has permission to edit the type of post they wish to edit
+        permission_errs = self.check_permissions("edit", args)
+        if (bool(permission_errs)):
+            return {"errors": permission_errs}, 401
 
         # Validate the args
         errors = self.validate_post(args)
         if(bool(errors)):
             return {"errors": errors}, 400
-
-        # print("AFTER VALIDATION")
 
         # Get the post you want to update
         try:
@@ -381,22 +403,17 @@ class Posts(Resource):
         except Post.MultipleObjectsReturned:
             return {'updated': False, 'errors': f"Duplicate post detected, multiple posts in database with id {args['_id']}"}, 400
 
-        # print("AFTER DUPLICATE POST DETECTION TEST")
-
         new_content_type = args["content"]["type"]
         if new_content_type != post.content["type"]:
             return {'updated': False, 'errors': f"Cannot change post type"}, 400
         # if post.content["type"] == "poll":
         #     return {'updated': False, 'errors': f"Cannot modify polls"}, 400
 
-        # print("AFTER CHANGE / MODIFY TEST")
-
         id_match = current_user._id == post.postedBy[
             '_id'] or current_user.anonymousId == post.postedBy['_id']
         if not id_match:
             return {'updated': False, 'errors': f"Cannot modify other users posts"}, 400
 
-        # print("AFTER Other users test")
         if post.content["type"] != "poll":
             if post.title != args['title']:
                 post.title = args['title']
@@ -408,6 +425,23 @@ class Posts(Resource):
 
         result = self.serialize(post)
         return result, 200
+
+    def check_permissions(self, request_type, post_args):
+        # Check that the user has permission to do what they wish to do
+        errors = []
+        if (not current_user.permissions[request_type]['question']) and (post_args.content.get("type") == "question"):
+            errors.append(
+                f"You do not have permission to {request_type} questions in this course")
+        elif not current_user.permissions[request_type]['announcement'] and (post_args.content.get("type") == "announcement"):
+            errors.append(
+                f"You do not have permission to {request_type} announcements in this course")
+        elif not current_user.permissions[request_type]['poll'] and (post_args.content.get("type") == "poll"):
+            errors.append(
+                f"You do not have permission to {request_type} polls in this course")
+        elif not current_user.permissions[request_type]['general'] and (post_args.content.get("type") == "general"):
+            errors.append(
+                f"You do not have permission to {request_type} general posts in this course")
+        return errors
 
     def validate_post(self, args):
         errors = []
@@ -423,9 +457,9 @@ class Posts(Resource):
             errors.append("Please provide a type for the post")
             return errors
         # Validate the type. Types include question, announcement, and poll.
-        if not (args.content["type"] == "question" or args.content["type"] == "announcement" or args.content["type"] == "poll"):
+        if not (args.content["type"] == "question" or args.content["type"] == "announcement" or args.content["type"] == "poll" or args.content["type"] == "general"):
             errors.append(
-                "Invalid type provided. Valid types are: question, announcement, or poll.")
+                "Invalid type provided. Valid types are: question, announcement, poll, or general.")
         # Make sure text field is provided for questions and announcements
         if (args.content["type"] == "question" or args.content["type"] == "announcement"):
             raw = args.content.get("raw")
