@@ -461,7 +461,7 @@ class Posts(Resource):
             errors.append(
                 "Invalid type provided. Valid types are: question, announcement, poll, or general.")
         # Make sure text field is provided for questions and announcements
-        if (args.content["type"] == "question" or args.content["type"] == "announcement"):
+        if (args.content["type"] == "question" or args.content["type"] == "announcement" or args.content['type'] == "general"):
             raw = args.content.get("raw")
             plaintext = args.content.get("plainText")
             if not (raw and plaintext and type(raw) == dict and type(plaintext) == str):
