@@ -549,16 +549,16 @@ const RolePanel = ({
               );
               // let newRolesList = ;
               let newRolesList = courseRoles.filter((role) => {
-                console.log(
-                  "role._id: ",
-                  role._id,
-                  " , roleObject._id: ",
-                  roleObject._id
-                );
+                // console.log(
+                //   "role._id: ",
+                //   role._id,
+                //   " , roleObject._id: ",
+                //   roleObject._id
+                // );
                 return role._id != roleObject._id;
               });
-              console.log("After Filter: ", newRolesList);
-              setCourseRoles();
+              // console.log("After Filter: ", newRolesList);
+              setCourseRoles(newRolesList);
 
               setUserList(GenerateUserList(userList, newRolesList));
             },

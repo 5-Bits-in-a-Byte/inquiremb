@@ -164,6 +164,7 @@ const ConfigPanel = ({
   setRoleIdCounter,
   ...props
 }) => {
+  console.log("Course Roles: ", courseRoles);
   const [loadingIcons, setLoadingIcons] = useState(true);
 
   const [bannedUserList, setBannedUserList] = useState(null);
