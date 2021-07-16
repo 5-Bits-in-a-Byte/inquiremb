@@ -17,7 +17,7 @@ const accentColor = (type) => {
     case "Announcement":
       return "#FA6A4A";
     case "General":
-      return null;
+      return "#EDEDED";
     default:
       return "#E7E7E7";
   }
@@ -107,7 +107,6 @@ const Draft = ({ userRole }) => {
   return (
     <Wrapper sideBarColor={accent}>
       <HeaderContentWrapper>
-        <CircleIcon accentColor={accent} />
         {displayQuestion && (
           <Button
             signin
@@ -140,7 +139,22 @@ const Draft = ({ userRole }) => {
             </PostFlag>
           </Button>
         )}
-        {/* GENERAL GOES HERE */}
+        {displayGeneral && (
+          <Button
+            signin
+            onClick={() => {
+              setContent({ ...content, type: "General" });
+            }}
+            style={{ margin: "0 2em" }}
+          >
+            <PostFlag
+              accentColor={accent}
+              selected={content.type === "General"}
+            >
+              General
+            </PostFlag>
+          </Button>
+        )}
       </HeaderContentWrapper>
       <DraftTextArea
         minRows={1}
