@@ -113,7 +113,7 @@ const Draft = ({ userRole }) => {
             onClick={() => {
               setContent({ ...content, type: "Question" });
             }}
-            style={{ margin: "0 .5em" }}
+            style={{ margin: "0 1em" }}
           >
             <PostFlag
               accentColor={accent}
@@ -129,7 +129,7 @@ const Draft = ({ userRole }) => {
             onClick={() => {
               setContent({ ...content, type: "Announcement" });
             }}
-            style={{ margin: "0 2em" }}
+            style={{ margin: "0 1em" }}
           >
             <PostFlag
               accentColor={accent}
@@ -145,11 +145,12 @@ const Draft = ({ userRole }) => {
             onClick={() => {
               setContent({ ...content, type: "General" });
             }}
-            style={{ margin: "0 2em" }}
+            style={{ margin: "0 1em" }}
           >
             <PostFlag
               accentColor={accent}
               selected={content.type === "General"}
+              isGeneral={userRole.publish.general}
             >
               General
             </PostFlag>
@@ -243,11 +244,16 @@ const CircleIcon = styled.div`
 `;
 
 const PostFlag = styled.div`
-  margin-left: 1em;
+  /* margin-left: 1em; */
   padding: 2px 5px;
-  color: ${(props) => (props.selected ? "#fff" : "#000")};
+  color: ${(props) =>
+    props.selected ? (props.isGeneral ? "#162B55" : "#ededed") : "#162B55"};
   background-color: ${(props) =>
-    props.selected ? props.accentColor : "#e7e7e7"};
+    props.selected
+      ? props.isGeneral
+        ? "#e7e7e7"
+        : props.accentColor
+      : "#e7e7e7"};
   border-radius: 2px;
 `;
 
