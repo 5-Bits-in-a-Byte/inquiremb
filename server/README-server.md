@@ -329,7 +329,6 @@ This component handles setting up all of our MongoDB models so that each collect
     "admin": {
       "banUsers": true,
       "removeUsers": true,
-      "announce": true,
       "configure": true,
       "highlightName": true
     }

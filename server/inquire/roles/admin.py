@@ -37,7 +37,6 @@ admin = {
         "banUsers": True,
         "removeUsers": True,
         # "deleteOther": False,
-        "announce": True,
         "configure": True,
         "highlightName": True
     }

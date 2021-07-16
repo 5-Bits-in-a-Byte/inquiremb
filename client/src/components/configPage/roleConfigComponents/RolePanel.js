@@ -106,7 +106,6 @@ const RolePanel = ({
   const [adminCheckedState, setAdminCheckedState] = useState({
     banUsers: roleObject.permissions.admin.banUsers,
     removeUsers: roleObject.permissions.admin.removeUsers,
-    announce: roleObject.permissions.admin.announce,
     configure: roleObject.permissions.admin.configure,
     highlightName: roleObject.permissions.admin.highlightName,
   });
@@ -499,17 +498,6 @@ const RolePanel = ({
                 setAdminCheckedState({
                   ...adminCheckedState,
                   removeUsers: val,
-                });
-              },
-            },
-            {
-              stateLabel: "announce",
-              itemLabel: "Draft Announcements",
-              changeRoleVal: (val) => {
-                roleObject.permissions.admin.announce = val;
-                setAdminCheckedState({
-                  ...adminCheckedState,
-                  announce: val,
                 });
               },
             },

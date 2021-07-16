@@ -36,7 +36,6 @@ student = {
         "banUsers": False,
         "removeUsers": False,
         # "deleteOther": False,
-        "announce": False,
         "configure": False,
         "highlightName": False
     }
