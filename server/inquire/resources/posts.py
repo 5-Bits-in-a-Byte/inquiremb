@@ -226,6 +226,16 @@ class Posts(Resource):
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
 
+        # Filter by 'poll'
+        elif filterby == 'general':
+            # Check if the user can see private posts
+            if not user_perms["privacy"]["private"]:
+                queryParams['$or'] = [{'isPrivate': False}, {'postedBy._id': {
+                    '$in': [current_user._id, current_user.anonymousId]}}]
+            queryParams["content.type"] = "general"
+            query = Post.objects.raw(queryParams).order_by(
+                [("isPinned", -1), ("createdDate", sort_date)])
+
         # If the current user can see private posts and there's no search
         elif user_perms["privacy"]["private"] and (req is None):
             query = Post.objects.raw(
