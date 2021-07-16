@@ -48,14 +48,20 @@ const createRoleObject = (itemId) => {
     // roleColor: colorTest[Math.floor(Math.random() * colorTest.length)],
     permissions: {
       publish: {
-        postComment: false,
-        reply: false,
+        question: false,
+        announcement: false,
         poll: false,
+        general: false,
+        comment: false,
+        reply: false,
       },
       delete: {
-        postComment: false,
-        reply: false,
+        question: false,
+        announcement: false,
         poll: false,
+        general: false,
+        comment: false,
+        reply: false,
       },
       participation: {
         reactions: false,
@@ -63,9 +69,12 @@ const createRoleObject = (itemId) => {
         pin: false,
       },
       edit: {
-        postComment: false,
-        reply: false,
+        question: false,
+        announcement: false,
         poll: false,
+        general: false,
+        comment: false,
+        reply: false,
       },
       privacy: {
         private: false,

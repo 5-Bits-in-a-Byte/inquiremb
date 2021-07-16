@@ -315,35 +315,70 @@ const RolePanel = ({
           name: "Edit",
           items: [
             {
-              stateLabel: "postComment",
-              itemLabel: "Edit Posts / Comments",
+              stateLabel: "question",
+              itemLabel: "Users in this role can edit questions that they made",
               changeRoleVal: (val) => {
-                roleObject.permissions.edit.postComment = val;
+                roleObject.permissions.edit.question = val;
                 setEditCheckedState({
                   ...editCheckedState,
-                  postComment: val,
+                  question: val,
                 });
               },
             },
             {
-              stateLabel: "reply",
-              itemLabel: "Edit Replies",
+              stateLabel: "announcement",
+              itemLabel:
+                "Users in this role can edit announcements that they made",
               changeRoleVal: (val) => {
-                roleObject.permissions.edit.reply = val;
+                roleObject.permissions.edit.announcement = val;
                 setEditCheckedState({
                   ...editCheckedState,
-                  reply: val,
+                  announcement: val,
                 });
               },
             },
             {
               stateLabel: "poll",
-              itemLabel: "Edit Polls",
+              itemLabel: "Users in this roll can edit polls that they made",
               changeRoleVal: (val) => {
                 roleObject.permissions.edit.poll = val;
                 setEditCheckedState({
                   ...editCheckedState,
                   poll: val,
+                });
+              },
+            },
+            {
+              stateLabel: "general",
+              itemLabel:
+                "Users in this role can edit general posts that they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.edit.general = val;
+                setEditCheckedState({
+                  ...editCheckedState,
+                  general: val,
+                });
+              },
+            },
+            {
+              stateLabel: "comment",
+              itemLabel: "Users in this role can edit comments that they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.edit.comment = val;
+                setEditCheckedState({
+                  ...editCheckedState,
+                  comment: val,
+                });
+              },
+            },
+            {
+              stateLabel: "reply",
+              itemLabel: "Users in this role can edit replies that they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.edit.reply = val;
+                setEditCheckedState({
+                  ...editCheckedState,
+                  reply: val,
                 });
               },
             },
