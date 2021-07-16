@@ -64,23 +64,32 @@ const RolePanel = ({
   // };
 
   const [publishCheckedState, setPublishCheckedState] = useState({
-    postComment: roleObject.permissions.publish.postComment,
-    reply: roleObject.permissions.publish.reply,
+    question: roleObject.permissions.publish.question,
+    announcement: roleObject.permissions.publish.announcement,
     poll: roleObject.permissions.publish.poll,
+    general: roleObject.permissions.publish.general,
+    comment: roleObject.permissions.publish.comment,
+    reply: roleObject.permissions.publish.reply,
   });
 
   // console.log("Publish init state: ", publishCheckedState);
 
   const [deleteCheckedState, setDeleteCheckedState] = useState({
-    postComment: roleObject.permissions.delete.postComment,
-    reply: roleObject.permissions.delete.reply,
+    question: roleObject.permissions.delete.question,
+    announcement: roleObject.permissions.delete.announcement,
     poll: roleObject.permissions.delete.poll,
+    general: roleObject.permissions.delete.general,
+    comment: roleObject.permissions.delete.comment,
+    reply: roleObject.permissions.delete.reply,
   });
 
   const [editCheckedState, setEditCheckedState] = useState({
-    postComment: roleObject.permissions.edit.postComment,
-    reply: roleObject.permissions.edit.reply,
+    question: roleObject.permissions.edit.question,
+    announcement: roleObject.permissions.edit.announcement,
     poll: roleObject.permissions.edit.poll,
+    general: roleObject.permissions.edit.general,
+    comment: roleObject.permissions.edit.comment,
+    reply: roleObject.permissions.edit.reply,
   });
 
   const [participationCheckedState, setParticipationCheckedState] = useState({
@@ -150,35 +159,68 @@ const RolePanel = ({
           name: "Publish",
           items: [
             {
-              stateLabel: "postComment",
-              itemLabel: "Draft Posts / Comments",
+              stateLabel: "question",
+              itemLabel: "Users in this role can publish Questions",
               changeRoleVal: (val) => {
-                roleObject.permissions.publish.postComment = val;
+                roleObject.permissions.publish.question = val;
                 setPublishCheckedState({
                   ...publishCheckedState,
-                  postComment: val,
+                  question: val,
                 });
               },
             },
             {
-              stateLabel: "reply",
-              itemLabel: "Draft Replies",
+              stateLabel: "announcement",
+              itemLabel: "Users in this role can publish Announcements",
               changeRoleVal: (val) => {
-                roleObject.permissions.publish.reply = val;
+                roleObject.permissions.publish.announcement = val;
                 setPublishCheckedState({
                   ...publishCheckedState,
-                  reply: val,
+                  announcement: val,
                 });
               },
             },
             {
               stateLabel: "poll",
-              itemLabel: "Draft Polls",
+              itemLabel: "Users in this role can publish Polls",
               changeRoleVal: (val) => {
                 roleObject.permissions.publish.poll = val;
                 setPublishCheckedState({
                   ...publishCheckedState,
                   poll: val,
+                });
+              },
+            },
+            {
+              stateLabel: "general",
+              itemLabel: "Users in this role can publish General Posts",
+              changeRoleVal: (val) => {
+                roleObject.permissions.publish.general = val;
+                setPublishCheckedState({
+                  ...publishCheckedState,
+                  general: val,
+                });
+              },
+            },
+            {
+              stateLabel: "comment",
+              itemLabel: "Users in this role can publish comments on posts",
+              changeRoleVal: (val) => {
+                roleObject.permissions.publish.comment = val;
+                setPublishCheckedState({
+                  ...publishCheckedState,
+                  comment: val,
+                });
+              },
+            },
+            {
+              stateLabel: "reply",
+              itemLabel: "Users in this role can reply to comments",
+              changeRoleVal: (val) => {
+                roleObject.permissions.publish.reply = val;
+                setPublishCheckedState({
+                  ...publishCheckedState,
+                  reply: val,
                 });
               },
             },
@@ -194,35 +236,70 @@ const RolePanel = ({
           name: "Delete",
           items: [
             {
-              stateLabel: "postComment",
-              itemLabel: "Delete Posts / Comments",
+              stateLabel: "question",
+              itemLabel: "Users in this role can delete questions they made",
               changeRoleVal: (val) => {
-                roleObject.permissions.delete.postComment = val;
+                roleObject.permissions.delete.question = val;
                 setDeleteCheckedState({
                   ...deleteCheckedState,
-                  postComment: val,
+                  question: val,
                 });
               },
             },
             {
-              stateLabel: "reply",
-              itemLabel: "Delete Replies",
+              stateLabel: "announcement",
+              itemLabel:
+                "Users in this role can delete announcements they made",
               changeRoleVal: (val) => {
-                roleObject.permissions.delete.reply = val;
+                roleObject.permissions.delete.announcement = val;
                 setDeleteCheckedState({
                   ...deleteCheckedState,
-                  reply: val,
+                  announcement: val,
                 });
               },
             },
             {
               stateLabel: "poll",
-              itemLabel: "Delete Polls",
+              itemLabel: "Users in this role can delete polls they made",
               changeRoleVal: (val) => {
                 roleObject.permissions.delete.poll = val;
                 setDeleteCheckedState({
                   ...deleteCheckedState,
                   poll: val,
+                });
+              },
+            },
+            {
+              stateLabel: "general",
+              itemLabel:
+                "Users in this role can delete general posts they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.delete.general = val;
+                setDeleteCheckedState({
+                  ...deleteCheckedState,
+                  general: val,
+                });
+              },
+            },
+            {
+              stateLabel: "comment",
+              itemLabel: "Users in this role can delete comments they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.delete.comment = val;
+                setDeleteCheckedState({
+                  ...deleteCheckedState,
+                  comment: val,
+                });
+              },
+            },
+            {
+              stateLabel: "reply",
+              itemLabel: "Users in this role can delete replies they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.delete.reply = val;
+                setDeleteCheckedState({
+                  ...deleteCheckedState,
+                  reply: val,
                 });
               },
             },

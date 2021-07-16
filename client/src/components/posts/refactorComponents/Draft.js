@@ -16,8 +16,10 @@ const accentColor = (type) => {
       return "#4a86fa";
     case "Announcement":
       return "#FA6A4A";
+    case "General":
+      return null;
     default:
-      return "#4a86fa";
+      return "#E7E7E7";
   }
 };
 
@@ -31,8 +33,19 @@ const Draft = ({ userRole }) => {
     isPrivate: false,
   });
 
+  var defaultType;
+  if (userRole.publish.question) {
+    defaultType = "Question";
+  } else if (userRole.publish.announcement) {
+    defaultType = "Announcement";
+  } else if (userRole.publish.general) {
+    defaultType = "General";
+  } else {
+    // This should never happen
+    defaultType = "Unknown";
+  }
   const [content, setContent] = useState({
-    type: "Question",
+    type: defaultType,
     raw: EditorState.createEmpty(),
     plainText: EditorState.createEmpty(),
   });
@@ -78,7 +91,9 @@ const Draft = ({ userRole }) => {
     });
   };
 
-  var titlePlaceholder = content.type ? content.type + " title" : "Post title";
+  // Styling Variables
+  var titlePlaceholder =
+    content.type != "Unknown" ? content.type + " title" : "Post title";
   var displayQuestion;
   var displayAnnouncement;
   var displayGeneral;
@@ -87,10 +102,12 @@ const Draft = ({ userRole }) => {
     displayAnnouncement = userRole.publish.announcement;
     displayGeneral = userRole.publish.general;
   }
+  var accent = accentColor(content.type);
+
   return (
-    <Wrapper sideBarColor={accentColor(content.type)}>
+    <Wrapper sideBarColor={accent}>
       <HeaderContentWrapper>
-        <CircleIcon accentColor={accentColor(content.type)} />
+        <CircleIcon accentColor={accent} />
         {displayQuestion && (
           <Button
             signin
@@ -100,7 +117,7 @@ const Draft = ({ userRole }) => {
             style={{ margin: "0 .5em" }}
           >
             <PostFlag
-              accentColor={accentColor(content.type)}
+              accentColor={accent}
               selected={content.type === "Question"}
             >
               Question
@@ -116,7 +133,7 @@ const Draft = ({ userRole }) => {
             style={{ margin: "0 2em" }}
           >
             <PostFlag
-              accentColor={accentColor(content.type)}
+              accentColor={accent}
               selected={content.type === "Announcement"}
             >
               Announcement

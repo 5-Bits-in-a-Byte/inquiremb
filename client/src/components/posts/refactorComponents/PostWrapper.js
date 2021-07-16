@@ -102,7 +102,8 @@ const PostWrapper = ({
     if (
       postType == "Question" &&
       role.question &&
-      postObject.postedBy._id == user._id
+      (postObject.postedBy._id == user._id ||
+        postObject.postedBy._id == user.anonymousId)
     ) {
       resultingOption = {
         onClick: () => {
@@ -115,7 +116,8 @@ const PostWrapper = ({
     } else if (
       postType == "Announcement" &&
       role.announcement &&
-      postObject.postedBy._id == user._id
+      (postObject.postedBy._id == user._id ||
+        postObject.postedBy._id == user.anonymousId)
     ) {
       resultingOption = {
         onClick: () => {
@@ -129,7 +131,8 @@ const PostWrapper = ({
     } else if (
       postType == "Poll" &&
       role.poll &&
-      postObject.postedBy._id == user._id
+      (postObject.postedBy._id == user._id ||
+        postObject.postedBy._id == user.anonymousId)
     ) {
       resultingOption = {
         onClick: () => {
@@ -142,7 +145,8 @@ const PostWrapper = ({
     } else if (
       postType == "General" &&
       role.general &&
-      postObject.postedBy._id == user._id
+      (postObject.postedBy._id == user._id ||
+        postObject.postedBy._id == user.anonymousId)
     ) {
       resultingOption = {
         onClick: () => {
