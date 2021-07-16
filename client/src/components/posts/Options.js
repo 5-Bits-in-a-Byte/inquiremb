@@ -16,38 +16,51 @@ const Options = ({ userRole, courseId }) => {
   // console.log("User Object: ", user);
   // console.log("OPTIONS User Role: ", userRole);
 
-  // Will be used to conditionally render the config page button
+  // Will be used to conditionally render the config page button and draft post button
   var userIsAdmin = false;
-  if (userRole) userIsAdmin = userRole.admin.configure;
+  var displayDraftPost = false;
+  var displayDraftPoll = false;
+  if (userRole) {
+    userIsAdmin = userRole.admin.configure;
+    displayDraftPost =
+      userRole.publish.question ||
+      userRole.publish.announcement ||
+      userRole.publish.general;
+    displayDraftPoll = userRole.publish.poll;
+  }
 
   return (
     <OptionsWrapper>
       <OptionsHeader>OPTIONS</OptionsHeader>
       <OptionsPanel>
-        <Link
-          style={{
-            width: "100%",
-            textDecoration: "none",
-            display: "flex",
-          }}
-          to={"/course/" + courseId + "/post/newQorA"}
-        >
-          <Button primary autoWidth enableMargin={"0.5em"}>
-            Draft Post
-          </Button>
-        </Link>
-        <Link
-          style={{
-            width: "100%",
-            textDecoration: "none",
-            display: "flex",
-          }}
-          to={"/course/" + courseId + "/post/newPoll"}
-        >
-          <Button primary autoWidth enableMargin={"0.5em"}>
-            Draft Poll
-          </Button>
-        </Link>
+        {displayDraftPost && (
+          <Link
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+            }}
+            to={"/course/" + courseId + "/post/newQorA"}
+          >
+            <Button primary autoWidth enableMargin={"0.5em"}>
+              Draft Post
+            </Button>
+          </Link>
+        )}
+        {displayDraftPoll && (
+          <Link
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+            }}
+            to={"/course/" + courseId + "/post/newPoll"}
+          >
+            <Button primary autoWidth enableMargin={"0.5em"}>
+              Draft Poll
+            </Button>
+          </Link>
+        )}
 
         {/* The Config page conditionally renders based on whether or not
             the user has ADMIN priviledges for this course */}

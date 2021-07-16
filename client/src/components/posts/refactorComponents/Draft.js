@@ -21,7 +21,7 @@ const accentColor = (type) => {
   }
 };
 
-const Draft = () => {
+const Draft = ({ userRole }) => {
   const { courseId } = useParams();
   const history = useHistory();
   // State and handler for drafting posts
@@ -79,38 +79,51 @@ const Draft = () => {
   };
 
   var titlePlaceholder = content.type ? content.type + " title" : "Post title";
+  var displayQuestion;
+  var displayAnnouncement;
+  var displayGeneral;
+  if (userRole) {
+    displayQuestion = userRole.publish.question;
+    displayAnnouncement = userRole.publish.announcement;
+    displayGeneral = userRole.publish.general;
+  }
   return (
     <Wrapper sideBarColor={accentColor(content.type)}>
       <HeaderContentWrapper>
         <CircleIcon accentColor={accentColor(content.type)} />
-        <Button
-          signin
-          onClick={() => {
-            setContent({ ...content, type: "Question" });
-          }}
-          style={{ margin: "0 .5em" }}
-        >
-          <PostFlag
-            accentColor={accentColor(content.type)}
-            selected={content.type === "Question"}
+        {displayQuestion && (
+          <Button
+            signin
+            onClick={() => {
+              setContent({ ...content, type: "Question" });
+            }}
+            style={{ margin: "0 .5em" }}
           >
-            Question
-          </PostFlag>
-        </Button>
-        <Button
-          signin
-          onClick={() => {
-            setContent({ ...content, type: "Announcement" });
-          }}
-          style={{ margin: "0 2em" }}
-        >
-          <PostFlag
-            accentColor={accentColor(content.type)}
-            selected={content.type === "Announcement"}
+            <PostFlag
+              accentColor={accentColor(content.type)}
+              selected={content.type === "Question"}
+            >
+              Question
+            </PostFlag>
+          </Button>
+        )}
+        {displayAnnouncement && (
+          <Button
+            signin
+            onClick={() => {
+              setContent({ ...content, type: "Announcement" });
+            }}
+            style={{ margin: "0 2em" }}
           >
-            Announcement
-          </PostFlag>
-        </Button>
+            <PostFlag
+              accentColor={accentColor(content.type)}
+              selected={content.type === "Announcement"}
+            >
+              Announcement
+            </PostFlag>
+          </Button>
+        )}
+        {/* GENERAL GOES HERE */}
       </HeaderContentWrapper>
       <DraftTextArea
         minRows={1}
