@@ -117,6 +117,19 @@ const RolePanel = ({
   const [nameField, setNameField] = useState(roleName);
   const [nameFieldState, setNameFieldState] = useState(true);
 
+  const handleKeyDown = (e) => {
+    if (e.key == "Enter") {
+      if (!nameFieldState) {
+        if (nameField.trim() == "") setNameField(roleName);
+      }
+      if (e.target.value != roleObject.name) {
+        roleObject.name = e.target.value;
+      }
+      setNameField(e.target.value);
+      setNameFieldState(true);
+    }
+  };
+
   // console.log("This role id: ", props.value);
 
   return (
@@ -128,13 +141,7 @@ const RolePanel = ({
           <DraftTextArea
             minRows={1}
             style={{ width: `150px`, marginRight: `1em` }}
-            onChange={(e) => {
-              // console.log(e.target.value);
-              if (e.target.value != roleObject.name) {
-                roleObject.name = e.target.value;
-              }
-              setNameField(e.target.value);
-            }}
+            onKeyDown={handleKeyDown}
           >
             {nameField}
           </DraftTextArea>
@@ -144,6 +151,9 @@ const RolePanel = ({
           primary
           buttonColor={"rgba(0, 0, 0, 0.0)"}
           onClick={() => {
+            if (nameFieldState) {
+              if (nameField.trim() == "") setNameField(roleName);
+            }
             setNameFieldState(!nameFieldState);
           }}
         >
