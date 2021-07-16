@@ -121,7 +121,7 @@ const PostView = ({ userRole, highlightedSection }) => {
     case "Polls":
       endpoint += "?filterby=poll";
       break;
-    case "General":
+    case "General Posts":
       endpoint += "?filterby=general";
       break;
     default:

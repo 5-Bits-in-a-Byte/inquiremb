@@ -83,7 +83,6 @@ const createRoleObject = (itemId) => {
       admin: {
         banUsers: false,
         removeUsers: false,
-        announce: false,
         configure: false,
         highlightName: false,
       },
