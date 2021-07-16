@@ -34,12 +34,12 @@ const Draft = ({ userRole }) => {
   });
 
   var defaultType;
-  if (userRole.publish.question) {
+  if (userRole.publish.general) {
+    defaultType = "General";
+  } else if (userRole.publish.question) {
     defaultType = "Question";
   } else if (userRole.publish.announcement) {
     defaultType = "Announcement";
-  } else if (userRole.publish.general) {
-    defaultType = "General";
   } else {
     // This should never happen
     defaultType = "Unknown";
@@ -107,6 +107,23 @@ const Draft = ({ userRole }) => {
   return (
     <Wrapper sideBarColor={accent}>
       <HeaderContentWrapper>
+        {displayGeneral && (
+          <Button
+            signin
+            onClick={() => {
+              setContent({ ...content, type: "General" });
+            }}
+            style={{ margin: "0 1em" }}
+          >
+            <PostFlag
+              accentColor={accent}
+              selected={content.type === "General"}
+              isGeneral={userRole.publish.general}
+            >
+              General
+            </PostFlag>
+          </Button>
+        )}
         {displayQuestion && (
           <Button
             signin
@@ -136,23 +153,6 @@ const Draft = ({ userRole }) => {
               selected={content.type === "Announcement"}
             >
               Announcement
-            </PostFlag>
-          </Button>
-        )}
-        {displayGeneral && (
-          <Button
-            signin
-            onClick={() => {
-              setContent({ ...content, type: "General" });
-            }}
-            style={{ margin: "0 1em" }}
-          >
-            <PostFlag
-              accentColor={accent}
-              selected={content.type === "General"}
-              isGeneral={userRole.publish.general}
-            >
-              General
             </PostFlag>
           </Button>
         )}
