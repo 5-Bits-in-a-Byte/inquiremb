@@ -28,7 +28,8 @@ const createPost = (post, userRole, isCondensed, key) => {
   var content;
   if (
     post.content.type === "question" ||
-    post.content.type === "announcement"
+    post.content.type === "announcement" ||
+    post.content.type === "general"
   ) {
     content = (
       <EditorWrapper messageData={post} messageType="post" edit={false} />

@@ -251,7 +251,9 @@ const PostWrapper = ({
           }}
           postType={postType}
         >
-          {postType == "Question" || postType == "Announcement"
+          {postType == "Question" ||
+          postType == "Announcement" ||
+          postType == "General"
             ? React.cloneElement(content, { edit: { isEditing, setIsEditing } })
             : content}
         </ContentWrapper>
