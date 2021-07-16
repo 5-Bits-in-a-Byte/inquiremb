@@ -216,9 +216,13 @@ const PostWrapper = ({
           isRead={postObject.read}
           accentColor={accentColor(postType)}
         />
-        <PostFlag accentColor={accentColor(postType)}>
-          {postType ? postType : "Question"}
-        </PostFlag>
+        {postType != "General" ? (
+          <PostFlag accentColor={accentColor(postType)}>
+            {postType ? postType : "Question"}
+          </PostFlag>
+        ) : (
+          <></>
+        )}
         <PostTitle style={{ cursor: "pointer" }}>
           {postObject.title ? postObject.title : "Error getting post title"}
         </PostTitle>
@@ -339,7 +343,7 @@ const CircleIcon = styled.div`
 `;
 
 const PostTitle = styled.h1`
-  /* margin-left: 1em; */
+  margin-left: 0.75em;
   padding: 5px;
   font-size: 18px;
 `;
