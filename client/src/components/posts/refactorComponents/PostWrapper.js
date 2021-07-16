@@ -22,6 +22,8 @@ const accentColor = (type) => {
       return "#FA6A4A";
     case "Poll":
       return "#4CAF50";
+    case "General":
+      return "#ededed";
     default:
       return "#4a86fa";
   }
