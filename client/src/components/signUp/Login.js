@@ -29,7 +29,7 @@ const SignUp = () => {
     /* Wrapper for the entire page so we can have the background image */
     <Page>
       {/* Wrapper for the top section of the page */}
-      <Nav>
+      {/* <Nav>
         <SignInLogoImg src={SignInLogo} />
         <div style={{ flex: 1 }}></div>
         <Button signin onClick={handleSignIn}>
@@ -38,32 +38,34 @@ const SignUp = () => {
         <Button primary onClick={handleSignUp} style={{ width: "10%" }}>
           Sign Up
         </Button>
-      </Nav>
+      </Nav> */}
 
       {/* Wrapper for the center sign in block to help styling */}
       <CenterBlock>
         {/* Display the Inquire logo */}
         <LogoImg src={Logo} />
 
-        {/* Google Login Button */}
-        <Buttons href={process.env.REACT_APP_SERVER_URL + "/auth/login"}>
-          <Icon src={GoogleLogo} />
-          <BtnText>Sign in with Google</BtnText>
-        </Buttons>
+        <ButtonContainer>
+          {/* Google Login Button */}
+          <Buttons href={process.env.REACT_APP_SERVER_URL + "/auth/login"}>
+            <Icon src={GoogleLogo} />
+            <BtnText>Sign in with Google</BtnText>
+          </Buttons>
 
-        {/* Github Login Button */}
-        <Buttons
-          href={process.env.REACT_APP_SERVER_URL + "/auth/github-login"}
-        >
-          <Icon src={GithubLogo} />
-          <BtnText>Sign in with Github</BtnText>
-        </Buttons>
-
+          {/* Github Login Button */}
+          <Buttons
+            href={process.env.REACT_APP_SERVER_URL + "/auth/github-login"}
+          >
+            <Icon src={GithubLogo} />
+            <BtnText>Sign in with Github</BtnText>
+          </Buttons>
+        </ButtonContainer>
         {/* Account related message */}
-        <Message>
+        {/* <Message>
           Don't have an account?&nbsp;
           <a href={process.env.REACT_APP_CLIENT_URL + "/signup"}>Sign up</a>
-        </Message>
+        </Message> */}
+        {/* <div style={{ width: `auto`, height: `1em` }}></div> */}
       </CenterBlock>
 
       {/* Copyright message */}
@@ -111,9 +113,19 @@ const CenterBlock = styled.div`
   margin: auto;
 `;
 
+const ButtonContainer = styled.div`
+  margin: 0 0 3em 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 /* Styling for the center Logo */
 const LogoImg = styled.img`
-  height: 35px;
+  width: auto;
+  height: 4rem;
   margin: auto;
 `;
 
