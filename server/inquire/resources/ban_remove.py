@@ -9,13 +9,14 @@ from inquire.socketio_app import io
 
 
 class BanRemove(Resource):
-    @permission_layer(required_permissions=["admin-configure"])
     def put(self, courseId):
+        if not current_user.permissions['admin']['banUsers'] and not current_user.permissions['admin']['removeUsers']:
+            return {"errors": ["You do not have permission to ban or remove users from the course."]}, 401
+
         parser = reqparse.RequestParser()
         parser.add_argument('type')
         parser.add_argument('userId')
         args = parser.parse_args()
-        print("userId:", args['userId'])
 
         # Validate course exists and store it in course variable
         try:
@@ -42,10 +43,14 @@ class BanRemove(Resource):
 
         filler = ""
         if args['type'] == "remove":
+            if not current_user.permissions['admin']['removeUsers']:
+                return {"errors": ["You do not have permission to remove users in this course"]}, 401
             # Removing students
             self.remove_user(user, course)
             filler = "removed"
         elif args['type'] == "ban":
+            if not current_user.permissions['admin']['banUsers']:
+                return {"errors": ["You do not have permission to ban users in this course"]}, 401
             # Banning students
             if args['userId'] not in course.blacklist:
                 # Add the banned user to the blacklist

@@ -485,7 +485,7 @@ const RolePanel = ({
             {
               stateLabel: "banUsers",
               itemLabel:
-                "Users in this role can ban users (does not include course creator and does not work if they can't edit course configurations)",
+                "Users in this role can ban users in the course (does not include course creator)",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.banUsers = val;
                 setAdminCheckedState({
@@ -497,7 +497,7 @@ const RolePanel = ({
             {
               stateLabel: "removeUsers",
               itemLabel:
-                "Users in this role can remove users (does not include course creator and does not work if they can't edit course configurations)",
+                "Users in this role can remove users in the course (does not include course creator)",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.removeUsers = val;
                 setAdminCheckedState({
@@ -509,7 +509,7 @@ const RolePanel = ({
             {
               stateLabel: "configure",
               itemLabel:
-                "Users in this role can edit course configurations (the page you're looking at now)",
+                "Users in this role can edit course configurations (this includes user roles and the ability to delete the course)",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.configure = val;
                 setAdminCheckedState({

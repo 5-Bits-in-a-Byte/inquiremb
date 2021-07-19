@@ -146,7 +146,7 @@ const GenerateUserList = (
   });
 };
 
-const GenerateBannedUserList = (blacklist) => {
+const GenerateBannedUserList = (blacklist, displayBan) => {
   if (!blacklist) {
     return <></>;
   }
@@ -159,6 +159,7 @@ const GenerateBannedUserList = (blacklist) => {
         userName={bannedUser.userName}
         userImg={bannedUser.userImg}
         unbanList={true}
+        displayBan={displayBan}
       />
     );
   });
@@ -191,7 +192,9 @@ const ConfigPanel = ({
             setDisplayBanned(true);
             changeNumBanned(data.success.length);
           }
-          setBannedUserList(GenerateBannedUserList(data.success));
+          setBannedUserList(
+            GenerateBannedUserList(data.success, userRole.admin.banUsers)
+          );
         },
         onFailure: () => {
           console.log(
