@@ -26,6 +26,17 @@ const PollTitlePanel = ({ titleText, setTitle }) => {
   const [nameField, setNameField] = useState(titleText);
   const [nameFieldState, setNameFieldState] = useState(true);
 
+  const handleKeyDown = (e, defaultText) => {
+    if (e.key == "Enter") {
+      if (!nameFieldState) {
+        if (nameField.trim() == "") setNameField(defaultText);
+      }
+
+      setNameField(e.target.value);
+      setNameFieldState(true);
+    }
+  };
+
   return (
     <PollAttributeWrapper id="title-wrapper">
       <PollDetailPanel id="title-field-container">
@@ -39,6 +50,9 @@ const PollTitlePanel = ({ titleText, setTitle }) => {
             style={{ width: `500px`, marginRight: `1em` }}
             onChange={(e) => {
               setNameField(e.target.value);
+            }}
+            onKeyDown={(e, d) => {
+              handleKeyDown(e, d);
             }}
           >
             {nameField}
@@ -74,6 +88,17 @@ const PollOptionPanel = ({
   const [cachedNameField, setcachedNameField] = useState(optionText);
   const [nameFieldState, setNameFieldState] = useState(true);
 
+  const handleKeyDown = (e, defaultText) => {
+    if (e.key == "Enter") {
+      if (!nameFieldState) {
+        if (nameField.trim() == "") setNameField(defaultText);
+      }
+
+      setNameField(e.target.value);
+      setNameFieldState(true);
+    }
+  };
+
   return (
     <PollAttributeWrapper>
       <PollDetailPanel>
@@ -87,6 +112,9 @@ const PollOptionPanel = ({
             style={{ width: `150px`, marginRight: `1em` }}
             onChange={(e) => {
               setNameField(e.target.value);
+            }}
+            onKeyDown={(e, d) => {
+              handleKeyDown(e, d);
             }}
           >
             {nameField}
