@@ -277,12 +277,14 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
-                <Reaction
-                  reactions={comment.reactions}
-                  type="comment"
-                  id={comment._id}
-                  postid={postid}
-                />
+                {userRole.participation.reactions && (
+                  <Reaction
+                    reactions={comment.reactions}
+                    type="comment"
+                    id={comment._id}
+                    postid={postid}
+                  />
+                )}
 
                 <ReplyBtn
                   style={{ marginRight: 10, marginLeft: 20 }}

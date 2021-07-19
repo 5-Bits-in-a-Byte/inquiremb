@@ -275,12 +275,15 @@ const PostWrapper = ({
           Posted by {postObject.postedBy.first} {postObject.postedBy.last}
         </UserDescription>
         <ReactionSection>
-          <Reaction
-            reactions={postObject.reactions}
-            type="post"
-            id={postObject._id}
-            postid={postObject._id}
-          />
+          {userRole && userRole.participation.reactions && (
+            <Reaction
+              reactions={postObject.reactions}
+              type="post"
+              id={postObject._id}
+              postid={postObject._id}
+            />
+          )}
+
           <Icon
             alt={"Number of comments"}
             src={CommentImg}

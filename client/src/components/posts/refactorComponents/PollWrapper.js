@@ -51,7 +51,11 @@ const PollWrapper = ({ post }) => {
         question={post.title}
         answers={pollAns}
         onVote={handleVote}
-        vote={post.content.vote}
+        vote={
+          userRole && userRole.participation.voteInPoll
+            ? post.content.vote
+            : pollAns[0].option
+        }
         noStorage
         onClick={(event) => {
           event.stopPropagation();
