@@ -27,8 +27,8 @@ const PollTitlePanel = ({ titleText, setTitle }) => {
   const [nameFieldState, setNameFieldState] = useState(true);
 
   return (
-    <PollAttributeWrapper>
-      <PollDetailPanel>
+    <PollAttributeWrapper id="title-wrapper">
+      <PollDetailPanel id="title-field-container">
         {nameFieldState ? (
           <PollOptionName style={{ margin: `0 1rem 0 0` }}>
             {nameField}
@@ -36,7 +36,7 @@ const PollTitlePanel = ({ titleText, setTitle }) => {
         ) : (
           <DraftTextArea
             minRows={1}
-            style={{ width: `75%`, marginRight: `1em` }}
+            style={{ width: `500px`, marginRight: `1em` }}
             onChange={(e) => {
               setNameField(e.target.value);
             }}
@@ -283,12 +283,12 @@ const PollConfig = ({ children, ...props }) => {
 
   return (
     <Wrapper sideBarColor={accentColor(type)}>
-      <HeaderContentWrapper>
+      {/* <HeaderContentWrapper>
         <CircleIcon accentColor={accentColor(type)} />
         <PostFlag accentColor={accentColor(type)} selected={type === "Poll"}>
           Poll
         </PostFlag>
-      </HeaderContentWrapper>
+      </HeaderContentWrapper> */}
       <GroupWrapper>
         <HeaderGroup>
           <HeaderText>{"Poll Title"}</HeaderText>
