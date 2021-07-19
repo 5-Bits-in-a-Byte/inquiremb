@@ -150,7 +150,13 @@ const ConfigView = ({ props }) => {
   // ------------------------------------------------------------
 
   var userIsAdmin = false;
-  if (userRole) userIsAdmin = userRole.admin.configure;
+  var userCanBan = false;
+  var userCanRemove = false;
+  if (userRole) {
+    userIsAdmin = userRole.admin.configure;
+    userCanBan = userRole.admin.banUsers;
+    userCanRemove = userRole.admin.removeUsers;
+  }
 
   /**
    * Redirects the user to the landing page
@@ -172,7 +178,7 @@ const ConfigView = ({ props }) => {
     <ConfigWrapper>
       <ScrollingDiv>
         {/* <CenterContent> */}
-        {userIsAdmin ? (
+        {userIsAdmin || userCanBan || userCanRemove ? (
           <h1
             style={{
               margin: `0 0 2rem 0`,
@@ -187,7 +193,7 @@ const ConfigView = ({ props }) => {
           </h1>
         )}
 
-        {userIsAdmin ? (
+        {userIsAdmin || userCanBan || userCanRemove ? (
           <ConfigButtonPanel panelText="Press here to navigate back to the course page.">
             <Button
               primary
@@ -204,7 +210,7 @@ const ConfigView = ({ props }) => {
           <></>
         )}
 
-        {userIsAdmin ? (
+        {userIsAdmin || userCanBan || userCanRemove ? (
           // <CenterContent>
           <ConfigPanel
             courseId={courseId}

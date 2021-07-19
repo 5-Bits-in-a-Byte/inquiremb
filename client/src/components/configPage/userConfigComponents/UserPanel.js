@@ -10,10 +10,7 @@ import Fetch from "../../common/requests/Fetch";
 import Modal from "../../common/Modal";
 import Errors from "../../common/Errors";
 
-// Hardcoded dummy values
-// Ultimately the goal is to pull these from the permissions object in the user context
 const UserPerms = { canBan: true, canRemove: true };
-
 /* Handle Role selection in the dropdown */
 const GenerateRoleOptions = (roles, courseId, userId, setRoleName) => {
   return roles.map((role) => ({
@@ -47,9 +44,19 @@ const UserPanel = ({
   userId,
   allRoles,
   unbanList,
+  displayDropdown,
+  displayBan,
+  displayRemove,
   ...props
 }) => {
   const { courseId } = useParams();
+  // var UserPerms;
+  // if (userRole) {
+  //   UserPerms = {
+  //     canBan: userRole.permissions.admin.banUsers,
+  //     canRemove: userRole.permissions.admin.removeUsers,
+  //   };
+  // }
 
   const name = userRole ? userRole.name : null;
 
@@ -143,7 +150,7 @@ const UserPanel = ({
             <UserName>{userName}</UserName>
           </UserNameWrapper>
 
-          {!isCourseCreator && !unbanList ? (
+          {displayDropdown && !isCourseCreator && !unbanList ? (
             <UserRoleWrapper
               borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
             >
@@ -164,7 +171,7 @@ const UserPanel = ({
           )}
 
           <AdminActionsWrapper>
-            {UserPerms.canBan && !isCourseCreator && (
+            {displayBan && !isCourseCreator && (
               <Button
                 style={{
                   margin: `0 0.5em`,
@@ -183,7 +190,7 @@ const UserPanel = ({
                 {unbanList ? "Unban User" : "Ban User"}
               </Button>
             )}
-            {UserPerms.canRemove && !isCourseCreator && !unbanList && (
+            {displayRemove && !isCourseCreator && !unbanList && (
               <Button
                 primary
                 buttonColor={"#DC2B2B"}

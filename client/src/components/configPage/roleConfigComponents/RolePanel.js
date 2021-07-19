@@ -404,7 +404,8 @@ const RolePanel = ({
           items: [
             {
               stateLabel: "reactions",
-              itemLabel: "React to Posts",
+              itemLabel:
+                "Users in this role can react to all posts, comments, and replies",
               changeRoleVal: (val) => {
                 roleObject.permissions.participation.reactions = val;
                 setParticipationCheckedState({
@@ -415,7 +416,7 @@ const RolePanel = ({
             },
             {
               stateLabel: "voteInPoll",
-              itemLabel: "Vote in Polls",
+              itemLabel: "Users in this role can vote in all polls",
               changeRoleVal: (val) => {
                 roleObject.permissions.participation.voteInPoll = val;
                 setParticipationCheckedState({
@@ -426,7 +427,7 @@ const RolePanel = ({
             },
             {
               stateLabel: "pin",
-              itemLabel: "Pin Posts",
+              itemLabel: "Users in this role can can pin all types of posts",
               changeRoleVal: (val) => {
                 roleObject.permissions.participation.pin = val;
                 setParticipationCheckedState({
@@ -448,7 +449,8 @@ const RolePanel = ({
           items: [
             {
               stateLabel: "private",
-              itemLabel: "View Private Posts",
+              itemLabel:
+                "Users in this role can view all posts marked as private",
               changeRoleVal: (val) => {
                 roleObject.permissions.privacy.private = val;
                 setPrivacyCheckedState({
@@ -459,7 +461,8 @@ const RolePanel = ({
             },
             {
               stateLabel: "anonymous",
-              itemLabel: "View Anonymous Posts",
+              itemLabel:
+                "Users in this role can draft anonymous posts of all types (general posts, questions, announcements, and polls), comments, and replies",
               changeRoleVal: (val) => {
                 roleObject.permissions.privacy.anonymous = val;
                 setPrivacyCheckedState({
@@ -481,7 +484,8 @@ const RolePanel = ({
           items: [
             {
               stateLabel: "banUsers",
-              itemLabel: "Ban Users",
+              itemLabel:
+                "Users in this role can ban users (does not include course creator and does not work if they can't edit course configurations)",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.banUsers = val;
                 setAdminCheckedState({
@@ -492,7 +496,8 @@ const RolePanel = ({
             },
             {
               stateLabel: "removeUsers",
-              itemLabel: "Remove Users",
+              itemLabel:
+                "Users in this role can remove users (does not include course creator and does not work if they can't edit course configurations)",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.removeUsers = val;
                 setAdminCheckedState({
@@ -503,7 +508,8 @@ const RolePanel = ({
             },
             {
               stateLabel: "configure",
-              itemLabel: "Edit Course Configurations",
+              itemLabel:
+                "Users in this role can edit course configurations (the page you're looking at now)",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.configure = val;
                 setAdminCheckedState({
@@ -514,7 +520,8 @@ const RolePanel = ({
             },
             {
               stateLabel: "highlightName",
-              itemLabel: "Highlight Name",
+              itemLabel:
+                "Users in this role with this permission will have their name highlighted orange every time they create a post, comment, or reply",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.highlightName = val;
                 setAdminCheckedState({

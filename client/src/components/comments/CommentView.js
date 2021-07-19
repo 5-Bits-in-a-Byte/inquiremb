@@ -233,9 +233,9 @@ const CommentView = ({ classroomName }) => {
                 >
                   <Button secondary>Back to all Posts</Button>
                 </Link>
-                {postExists && (
+                {postExists && userRole.publish.comment && (
                   <Button onClick={draftNewComment} secondary>
-                    Reply to Post
+                    Comment on Post
                   </Button>
                 )}
               </OptionsContainer>

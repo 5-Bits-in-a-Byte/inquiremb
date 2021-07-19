@@ -156,7 +156,7 @@ const PostWrapper = ({
             ? handleDelete(postObject._id, postObject.courseId)
             : handleEdit();
         },
-        label: optionType == "delete" ? "Delete poll" : "Edit poll",
+        label: optionType == "delete" ? "Delete post" : "Edit post",
       };
     } else {
       resultingOption = null;

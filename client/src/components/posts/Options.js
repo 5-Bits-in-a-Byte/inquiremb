@@ -18,10 +18,14 @@ const Options = ({ userRole, courseId }) => {
 
   // Will be used to conditionally render the config page button and draft post button
   var userIsAdmin = false;
+  var userCanBan = false;
+  var userCanRemove = false;
   var displayDraftPost = false;
   var displayDraftPoll = false;
   if (userRole) {
     userIsAdmin = userRole.admin.configure;
+    userCanBan = userRole.admin.banUsers;
+    userCanRemove = userRole.admin.removeUsers;
     displayDraftPost =
       userRole.publish.question ||
       userRole.publish.announcement ||
@@ -64,7 +68,7 @@ const Options = ({ userRole, courseId }) => {
 
         {/* The Config page conditionally renders based on whether or not
             the user has ADMIN priviledges for this course */}
-        {userIsAdmin && (
+        {(userIsAdmin || userCanBan || userCanRemove) && (
           <Link
             style={{
               width: "100%",

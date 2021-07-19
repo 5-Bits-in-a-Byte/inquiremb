@@ -286,14 +286,16 @@ const Comment = ({ comment, isDraft, callback }) => {
                   />
                 )}
 
-                <ReplyBtn
-                  style={{ marginRight: 10, marginLeft: 20 }}
-                  onClick={() => {
-                    toggleReply(true);
-                  }}
-                >
-                  Reply
-                </ReplyBtn>
+                {userRole.publish.reply && (
+                  <ReplyBtn
+                    style={{ marginRight: 10, marginLeft: 20 }}
+                    onClick={() => {
+                      toggleReply(true);
+                    }}
+                  >
+                    Reply
+                  </ReplyBtn>
+                )}
               </>
             )}
           </MetaIconWrapper>

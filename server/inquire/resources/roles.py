@@ -9,8 +9,10 @@ from inquire.socketio_app import io
 
 
 class Roles(Resource):
-    @permission_layer(required_permissions=["admin-configure"])
     def get(self, courseId):
+        if not current_user.permissions['admin']['configure'] and not current_user.permissions['admin']['banUsers'] and not current_user.permissions['admin']['removeUsers']:
+            return {"errors": ["You do not have permission to view the course configuration page."]}, 401
+
         try:
             course = Course.objects.get({"_id": courseId})
         except Course.DoesNotExist:
@@ -114,14 +116,13 @@ class Roles(Resource):
             try:
                 role = Role.objects.get({"_id": roleId})
                 role.delete()
-                course.roles.pop(roleId,None)
+                course.roles.pop(roleId, None)
                 course.save()
                 return {"deleted": True}
             except Role.DoesNotExist:
                 return {"deleted": False, "error": f"Role with id {str(roleId)} does not exit"}
             except Exception:
                 return {"deleted": False, "error": "Unspecified error occured"}
-        
 
     def _serialize(self, role):
         j = role.to_son()

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Button from "../common/Button";
@@ -7,6 +7,7 @@ import RolePanel from "./roleConfigComponents/RolePanel";
 import UserPanel from "./userConfigComponents/UserPanel";
 import LazyFetch from "../common/requests/LazyFetch";
 import LoadingDots from "../common/animation/LoadingDots";
+import { UserRoleContext } from "../context/UserRoleProvider";
 
 const colorTest = [
   "#dd0000",
@@ -114,7 +115,13 @@ const GenerateRoleList = (roles, setRoles, userList, setUserList) => {
 /**
  * Generates a list of User Components for State Management
  */
-const GenerateUserList = (users, roles) => {
+const GenerateUserList = (
+  users,
+  roles,
+  displayDropdown,
+  displayBan,
+  displayRemove
+) => {
   var userRole = { name: "null", roleColor: "#e7e7e7" };
 
   return users.map((user, index) => {
@@ -131,6 +138,9 @@ const GenerateUserList = (users, roles) => {
         userRole={userRole}
         allRoles={roles}
         unbanList={false}
+        displayDropdown={displayDropdown}
+        displayBan={displayBan}
+        displayRemove={displayRemove}
       />
     );
   });
@@ -164,6 +174,7 @@ const ConfigPanel = ({
   ...props
 }) => {
   console.log("Course Roles: ", courseRoles);
+  const userRole = useContext(UserRoleContext);
   const [loadingIcons, setLoadingIcons] = useState(true);
 
   const [bannedUserList, setBannedUserList] = useState(null);
@@ -195,9 +206,11 @@ const ConfigPanel = ({
   let realUserList = GenerateUserList(
     courseUsers,
     courseRoles,
-    numBannedUsers,
-    changeNumBanned
+    userRole.admin.configure,
+    userRole.admin.banUsers,
+    userRole.admin.removeUsers
   );
+  console.log("realUserList:", realUserList);
   const [userList, setUserList] = useState(realUserList);
 
   // State for roles ------------------------------------------------------
@@ -217,83 +230,90 @@ const ConfigPanel = ({
 
   return (
     <PanelWrapper>
-      <ConfigPanelGroup panelHeader={"Edit the permissions of each role here."}>
-        {loadingIcons ? (
-          <div style={{ margin: `2em 0` }}>
-            <LoadingDots size={24} color={"#4a86fa"} />
-          </div>
-        ) : (
-          realRoleList
-        )}
-        <Button
-          secondary
-          buttonWidth={"207px"}
-          buttonHeight={"48px"}
-          onClick={() => {
-            setRoleIdCounter(roleIdCounter + 1);
-            let newPerms = createRoleObject(roleIdCounter);
-
-            LazyFetch({
-              type: "post",
-              endpoint: "/courses/" + courseId + "/roles",
-              data: {
-                name: newPerms.name,
-                permissions: newPerms.permissions,
-              },
-              onSuccess: (data) => {
-                let { status, role } = data;
-                console.log("Roles Post Success: ", status);
-                let newCourseRoles =
-                  courseRoles != null ? [...courseRoles, role] : [role];
-                setCourseRoles(newCourseRoles);
-
-                setUserList(GenerateUserList(courseUsers, newCourseRoles));
-              },
-              onFailure: (err) => {
-                console.log("Failed to Post Roles.", err?.response);
-              },
-            });
-          }}
+      {userRole.admin.configure && (
+        <ConfigPanelGroup
+          panelHeader={"Edit the permissions of each role here."}
         >
-          + Add a New Role
-        </Button>
-      </ConfigPanelGroup>
-      <ButtonContainer>
-        <Button
-          primary
-          style={{ margin: `0 0.5em` }}
-          buttonWidth={"200px"}
-          buttonHeight={"2.2rem"}
-          onClick={() => {
-            console.log("CourseRoles (Confirm): ", courseRoles);
-            let testList = [];
+          {loadingIcons ? (
+            <div style={{ margin: `2em 0` }}>
+              <LoadingDots size={24} color={"#4a86fa"} />
+            </div>
+          ) : (
+            realRoleList
+          )}
+          <Button
+            secondary
+            buttonWidth={"207px"}
+            buttonHeight={"48px"}
+            onClick={() => {
+              setRoleIdCounter(roleIdCounter + 1);
+              let newPerms = createRoleObject(roleIdCounter);
 
-            for (let i = 0; i < realRoleList.length; i++) {
-              console.log(realRoleList[i].props.roleObject);
-              testList.push(realRoleList[i].props.roleObject);
-            }
+              LazyFetch({
+                type: "post",
+                endpoint: "/courses/" + courseId + "/roles",
+                data: {
+                  name: newPerms.name,
+                  permissions: newPerms.permissions,
+                },
+                onSuccess: (data) => {
+                  let { status, role } = data;
+                  console.log("Roles Post Success: ", status);
+                  let newCourseRoles =
+                    courseRoles != null ? [...courseRoles, role] : [role];
+                  setCourseRoles(newCourseRoles);
 
-            // alert("Feature is work in progress.");
-            LazyFetch({
-              type: "put",
-              endpoint: "/courses/" + courseId + "/roles",
-              data: {
-                roles: testList,
-              },
-              onSuccess: (data) => {
-                console.log("Success PUT Roles: ", data);
-                alert("Changes saved successfully.");
-              },
-              onFailure: (err) => {
-                console.log("Failed PUT Roles. ", err?.response);
-                alert("Error: Changes not saved. Please try again.");
-              },
-            });
-          }}
-        >
-          Confirm
-        </Button>
-      </ButtonContainer>
+                  setUserList(GenerateUserList(courseUsers, newCourseRoles));
+                },
+                onFailure: (err) => {
+                  console.log("Failed to Post Roles.", err?.response);
+                },
+              });
+            }}
+          >
+            + Add a New Role
+          </Button>
+        </ConfigPanelGroup>
+      )}
+      {userRole.admin.configure && (
+        <ButtonContainer>
+          <Button
+            primary
+            style={{ margin: `0 0.5em` }}
+            buttonWidth={"200px"}
+            buttonHeight={"2.2rem"}
+            onClick={() => {
+              console.log("CourseRoles (Confirm): ", courseRoles);
+              let testList = [];
+
+              for (let i = 0; i < realRoleList.length; i++) {
+                console.log(realRoleList[i].props.roleObject);
+                testList.push(realRoleList[i].props.roleObject);
+              }
+
+              // alert("Feature is work in progress.");
+              LazyFetch({
+                type: "put",
+                endpoint: "/courses/" + courseId + "/roles",
+                data: {
+                  roles: testList,
+                },
+                onSuccess: (data) => {
+                  console.log("Success PUT Roles: ", data);
+                  alert("Changes saved successfully.");
+                },
+                onFailure: (err) => {
+                  console.log("Failed PUT Roles. ", err?.response);
+                  alert("Error: Changes not saved. Please try again.");
+                },
+              });
+            }}
+          >
+            Confirm
+          </Button>
+        </ButtonContainer>
+      )}
+
       <ConfigPanelGroup
         panelHeader={"Assign roles to participants of this course here."}
       >
