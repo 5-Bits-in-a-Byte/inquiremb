@@ -113,7 +113,7 @@ const PostWrapper = ({
             ? handleDelete(postObject._id, postObject.courseId)
             : handleEdit();
         },
-        label: optionType == "delete" ? "Delete question" : "Edit question",
+        label: optionType == "delete" ? "Delete post" : "Edit post",
       };
     } else if (
       postType == "Announcement" &&
@@ -127,8 +127,7 @@ const PostWrapper = ({
             ? handleDelete(postObject._id, postObject.courseId)
             : handleEdit();
         },
-        label:
-          optionType == "delete" ? "Delete announcement" : "Edit announcement",
+        label: optionType == "delete" ? "Delete post" : "Edit post",
       };
     } else if (
       postType == "Poll" &&
@@ -142,7 +141,7 @@ const PostWrapper = ({
             ? handleDelete(postObject._id, postObject.courseId)
             : handleEdit();
         },
-        label: optionType == "delete" ? "Delete poll" : "Edit poll",
+        label: optionType == "delete" ? "Delete post" : "Edit post",
       };
     } else if (
       postType == "General" &&
@@ -166,7 +165,14 @@ const PostWrapper = ({
 
   const generateDropdownOptions = () => {
     if (userRole) {
-      let deleteOption = generateEditDeleteOption("delete");
+      let deleteOption = userRole.admin.deleteOther
+        ? {
+            onClick: () => {
+              handleDelete(postObject._id, postObject.courseId);
+            },
+            label: "Delete post",
+          }
+        : generateEditDeleteOption("delete");
       let editOption = generateEditDeleteOption("edit");
       let pinOption = userRole.participation.pin
         ? {
