@@ -255,17 +255,21 @@ const Comment = ({ comment, isDraft, callback }) => {
                 >
                   Cancel
                 </Button>
-                <Checkbox
-                  checkboxName="isAnonymous"
-                  labelText={"Make Anonymous"}
-                  onChange={() => {
-                    setContent({
-                      ...content,
-                      isAnonymous: !content.isAnonymous,
-                    });
-                  }}
-                  checkStatus={content.isAnonymous}
-                />
+                {userRole && userRole.privacy.anonymous ? (
+                  <Checkbox
+                    checkboxName="isAnonymous"
+                    labelText={"Make Anonymous"}
+                    onChange={() => {
+                      setContent({
+                        ...content,
+                        isAnonymous: !content.isAnonymous,
+                      });
+                    }}
+                    checkStatus={content.isAnonymous}
+                  />
+                ) : (
+                  <></>
+                )}
                 <Button
                   primary
                   onClick={() => {
@@ -277,7 +281,7 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
-                {userRole.participation.reactions && (
+                {userRole && userRole.participation.reactions && (
                   <Reaction
                     reactions={comment.reactions}
                     type="comment"
@@ -286,7 +290,7 @@ const Comment = ({ comment, isDraft, callback }) => {
                   />
                 )}
 
-                {userRole.publish.reply && (
+                {userRole && userRole.publish.reply && (
                   <ReplyBtn
                     style={{ marginRight: 10, marginLeft: 20 }}
                     onClick={() => {

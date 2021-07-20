@@ -14,10 +14,12 @@ import Checkbox from "../common/Checkbox";
 import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 import Dropdown from "../common/dropdown/Dropdown";
+import { UserRoleContext } from "../context/UserRoleProvider";
 
 // Checks props to determine if the post is a draft, isPinned, etc.
 const generatePostContent = (
   user,
+  userRole,
   post,
   isDraft,
   handleChange,
@@ -55,14 +57,17 @@ const generatePostContent = (
           Submit
         </Button>
       ),
-      isAnonymous: (
-        <Checkbox
-          checkboxName="isAnonymous"
-          labelText={"Make Anonymous"}
-          onChange={handleChange}
-          checkStatus={isAnon}
-        />
-      ),
+      isAnonymous:
+        userRole && userRole.privacy.anonymous ? (
+          <Checkbox
+            checkboxName="isAnonymous"
+            labelText={"Make Anonymous"}
+            onChange={handleChange}
+            checkStatus={isAnon}
+          />
+        ) : (
+          <></>
+        ),
       isPrivate: (
         <Checkbox
           checkboxName="isPrivate"
@@ -120,6 +125,7 @@ const generatePostContent = (
 const Post = ({ userRole, post, isCondensed, isDraft }) => {
   const history = useHistory();
   const user = useContext(UserContext);
+  // const userRole = useContext(UserRoleContext);
   const { courseId, postid } = useParams();
   let endpoint = "/courses/" + courseId + "/posts";
 
@@ -172,6 +178,7 @@ const Post = ({ userRole, post, isCondensed, isDraft }) => {
   // Determines if post is a draft or not and renders accordingly:
   let render = generatePostContent(
     user,
+    userRole,
     post,
     isDraft,
     handleChange,

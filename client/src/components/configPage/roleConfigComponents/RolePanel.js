@@ -463,7 +463,7 @@ const RolePanel = ({
             {
               stateLabel: "anonymous",
               itemLabel:
-                "Users in this role can draft anonymous posts of all types (general posts, questions, announcements, and polls), comments, and replies",
+                "Users in this role can draft anonymous posts of all types, comments, and replies",
               changeRoleVal: (val) => {
                 roleObject.permissions.privacy.anonymous = val;
                 setPrivacyCheckedState({

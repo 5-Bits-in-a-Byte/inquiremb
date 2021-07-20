@@ -104,6 +104,8 @@ const Draft = ({ userRole }) => {
   }
   var accent = accentColor(content.type);
 
+  // console.log("User Role: ", userRole);
+
   return (
     <Wrapper sideBarColor={accent}>
       <HeaderContentWrapper>
@@ -181,12 +183,16 @@ const Draft = ({ userRole }) => {
       <HRSeperator />
       <FooterContentWrapper>
         <ButtonSection>
-          <Checkbox
-            checkboxName="isAnonymous"
-            labelText={"Make Anonymous"}
-            onChange={handleChange}
-            checkStatus={draft.isAnonymous}
-          />
+          {userRole && userRole.privacy.anonymous ? (
+            <Checkbox
+              checkboxName="isAnonymous"
+              labelText={"Make Anonymous"}
+              onChange={handleChange}
+              checkStatus={draft.isAnonymous}
+            />
+          ) : (
+            <></>
+          )}
           <Checkbox
             checkboxName="isPrivate"
             labelText={"Make Private"}

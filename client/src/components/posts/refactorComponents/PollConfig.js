@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled, { css } from "styled-components";
 import InfoIcon from "../../../imgs/Info_tip.svg";
 import PencilIcon from "../../../imgs/pencil.svg";
@@ -8,6 +8,7 @@ import Button from "../../common/Button";
 import Checkbox from "../../common/Checkbox";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { useHistory, useParams } from "react-router";
+import { UserRoleContext } from "../../context/UserRoleProvider";
 
 const max_options = 6;
 const default_title = "Inquire is a great website!";
@@ -214,6 +215,7 @@ const StringConflictCheck = (newOptions) => {
 };
 
 const PollConfig = ({ children, ...props }) => {
+  const userRole = useContext(UserRoleContext);
   const type = "Poll";
   const [options, setOptions] = useState(default_options);
   const [title, setTitle] = useState(default_title);
@@ -360,14 +362,18 @@ const PollConfig = ({ children, ...props }) => {
       <HRSeperator />
       <FooterContentWrapper>
         <ButtonSection>
-          <Checkbox
-            checkboxName="isAnonymous"
-            labelText={"Make Anonymous"}
-            onChange={() => {
-              toggleAnonymous(!isAnonymous);
-            }}
-            checkStatus={isAnonymous}
-          />
+          {userRole && userRole.privacy.anonymous ? (
+            <Checkbox
+              checkboxName="isAnonymous"
+              labelText={"Make Anonymous"}
+              onChange={() => {
+                toggleAnonymous(!isAnonymous);
+              }}
+              checkStatus={isAnonymous}
+            />
+          ) : (
+            <></>
+          )}
           <Button primary onClick={handleSubmit} style={{ margin: "0 1em" }}>
             Submit
           </Button>

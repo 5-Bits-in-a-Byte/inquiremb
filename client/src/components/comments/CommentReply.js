@@ -12,6 +12,7 @@ import { Editor } from "react-draft-wysiwyg";
 import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
 import { EditorState } from "draft-js";
 import Checkbox from "../common/Checkbox";
+import { UserRoleContext } from "../context/UserRoleProvider";
 
 const CommentReply = ({
   reply,
@@ -215,24 +216,28 @@ const CommentReply = ({
               >
                 Cancel
               </Button>
-              <Checkbox
-                checkboxName="isAnonymous"
-                labelText={"Make Anonymous"}
-                onChange={() => {
-                  setContent({
-                    ...content,
-                    isAnonymous: !content.isAnonymous,
-                  });
-                }}
-                checkStatus={content.isAnonymous}
-              />
+              {userRole && userRole.privacy.anonymous ? (
+                <Checkbox
+                  checkboxName="isAnonymous"
+                  labelText={"Make Anonymous"}
+                  onChange={() => {
+                    setContent({
+                      ...content,
+                      isAnonymous: !content.isAnonymous,
+                    });
+                  }}
+                  checkStatus={content.isAnonymous}
+                />
+              ) : (
+                <></>
+              )}
               <Button primary onClick={() => submitReply(content)}>
                 Submit
               </Button>
             </>
           ) : (
             <>
-              {userRole.participation.reactions && (
+              {userRole && userRole.participation.reactions && (
                 <Reaction
                   reactions={reply.reactions}
                   type="reply"
