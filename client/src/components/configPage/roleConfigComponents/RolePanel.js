@@ -106,6 +106,7 @@ const RolePanel = ({
   const [adminCheckedState, setAdminCheckedState] = useState({
     banUsers: roleObject.permissions.admin.banUsers,
     removeUsers: roleObject.permissions.admin.removeUsers,
+    deleteOther: roleObject.permissions.admin.deleteOther,
     configure: roleObject.permissions.admin.configure,
     highlightName: roleObject.permissions.admin.highlightName,
   });
@@ -503,6 +504,18 @@ const RolePanel = ({
                 setAdminCheckedState({
                   ...adminCheckedState,
                   removeUsers: val,
+                });
+              },
+            },
+            {
+              stateLabel: "deleteOther",
+              itemLabel:
+                "Users in this role can delete other user's posts / comments / replies",
+              changeRoleVal: (val) => {
+                roleObject.permissions.admin.deleteOther = val;
+                setAdminCheckedState({
+                  ...adminCheckedState,
+                  deleteOther: val,
                 });
               },
             },
