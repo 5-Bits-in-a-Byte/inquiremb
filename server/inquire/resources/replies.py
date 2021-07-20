@@ -64,10 +64,12 @@ class Replies(Resource):
 
         # Adding user info to dict
         anonymous = args['isAnonymous']
-        if anonymous:
+        if anonymous and current_user.permissions['privacy']['anonymous']:
             highlighted = False
             postedBy = {"first": "Anonymous", "last": "",
                         "_id": current_user.anonymousId, "anonymous": anonymous}
+        elif anonymous and not current_user.permissions['privacy']['anonymous']:
+            return {"errors": ["You do not have permission to make anonymous replies in this course"]}, 401
         else:
             postedBy = {"first": current_user.first, "last": current_user.last,
                         "_id": current_user._id, "anonymous": anonymous, "picture": current_user.picture}
