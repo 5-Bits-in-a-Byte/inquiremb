@@ -29,9 +29,12 @@ const PollTitlePanel = ({ titleText, setTitle }) => {
   const handleKeyDown = (e, defaultText) => {
     if (e.key == "Enter") {
       if (!nameFieldState) {
-        if (nameField.trim() == "") setNameField(defaultText);
+        if (nameField.trim() == "") {
+          setNameField(defaultText);
+        } else {
+          setTitle(nameField);
+        }
       }
-
       setNameField(e.target.value);
       setNameFieldState(true);
     }
@@ -51,8 +54,8 @@ const PollTitlePanel = ({ titleText, setTitle }) => {
             onChange={(e) => {
               setNameField(e.target.value);
             }}
-            onKeyDown={(e, d) => {
-              handleKeyDown(e, d);
+            onKeyDown={(e, defaultText) => {
+              handleKeyDown(e, defaultText);
             }}
           >
             {nameField}
@@ -91,7 +94,15 @@ const PollOptionPanel = ({
   const handleKeyDown = (e, defaultText) => {
     if (e.key == "Enter") {
       if (!nameFieldState) {
-        if (nameField.trim() == "") setNameField(defaultText);
+        if (nameField.trim() == "") {
+          setNameField(defaultText);
+        } else {
+          if (testNewOption(value, nameField)) {
+            setcachedNameField(nameField);
+          } else {
+            setNameField(cachedNameField);
+          }
+        }
       }
 
       setNameField(e.target.value);
@@ -212,6 +223,7 @@ const PollConfig = ({ children, ...props }) => {
   const history = useHistory();
 
   const TestNewOption = (index, newOption) => {
+    console.log("newOption:", newOption);
     var newOptions = [...options];
     newOptions[index] = newOption;
 
@@ -280,6 +292,8 @@ const PollConfig = ({ children, ...props }) => {
   };
 
   const handleSubmit = () => {
+    console.log("type:", type);
+    console.log("options:", options);
     LazyFetch({
       type: "post",
       endpoint: "/courses/" + courseId + "/posts",
