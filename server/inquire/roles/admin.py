@@ -36,7 +36,7 @@ admin = {
     "admin": {
         "banUsers": True,
         "removeUsers": True,
-        # "deleteOther": False,
+        "deleteOther": False,
         "configure": True,
         "highlightName": True
     }

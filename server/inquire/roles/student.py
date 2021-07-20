@@ -35,7 +35,7 @@ student = {
     "admin": {
         "banUsers": False,
         "removeUsers": False,
-        # "deleteOther": False,
+        "deleteOther": False,
         "configure": False,
         "highlightName": False
     }
