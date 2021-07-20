@@ -31,9 +31,9 @@ function App() {
               <Courses />
             </NavigationWrapper>
           </PrivateRoute>
-          <Route path="/signup" exact>
+          {/* <Route path="/signup" exact>
             <SignUp />
-          </Route>
+          </Route> */}
           <Route path="/login" exact>
             <Login />
           </Route>

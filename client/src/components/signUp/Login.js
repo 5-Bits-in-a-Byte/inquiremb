@@ -49,7 +49,7 @@ const SignUp = () => {
           {/* Google Login Button */}
           <Buttons href={process.env.REACT_APP_SERVER_URL + "/auth/login"}>
             <Icon src={GoogleLogo} />
-            <BtnText>Sign in with Google</BtnText>
+            <BtnText>Login with Google</BtnText>
           </Buttons>
 
           {/* Github Login Button */}
@@ -57,7 +57,7 @@ const SignUp = () => {
             href={process.env.REACT_APP_SERVER_URL + "/auth/github-login"}
           >
             <Icon src={GithubLogo} />
-            <BtnText>Sign in with Github</BtnText>
+            <BtnText>Login with Github</BtnText>
           </Buttons>
         </ButtonContainer>
         {/* Account related message */}
