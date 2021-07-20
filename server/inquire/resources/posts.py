@@ -86,7 +86,9 @@ class Posts(Resource):
 
         # Adding user info to dict
         anonymous = args['isAnonymous']
+
         if anonymous:
+            highlighted = False
             postedBy = {"first": "Anonymous", "last": "",
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
