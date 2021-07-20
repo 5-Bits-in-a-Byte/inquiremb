@@ -319,7 +319,7 @@ class Posts(Resource):
                           example: false
         """
         # Make sure the current user at least has one permission to delete
-        if not current_user.permissions['delete']['question'] and not current_user.permissions['delete']['announcement'] and not current_user.permissions['delete']['poll'] and not current_user.permissions['delete']['general']:
+        if not current_user.permissions['delete']['question'] and not current_user.permissions['delete']['announcement'] and not current_user.permissions['delete']['poll'] and not current_user.permissions['delete']['general'] and not current_user.permissions['admin']['deleteOther']:
             return {"errors": ["You do not have permission to delete any type of post in this course."]}, 401
 
         # Parse arguments
@@ -335,14 +335,16 @@ class Posts(Resource):
         except Post.MultipleObjectsReturned:
             return {'deleted': False, 'errors': f"Duplicate post detected, multiple posts in database with id {args['_id']}"}, 400
 
+        permission_errs = False
         # Make sure the user has permission to delete the type of post they want to delete
-        permission_errs = self.check_permissions("delete", post)
+        if not current_user.permissions['admin']['deleteOther']:
+            permission_errs = self.check_permissions("delete", post)
+
         if (bool(permission_errs)):
             return {"errors": permission_errs}, 401
 
         # Permission check
-        # FIX ME: Switch to using something other than "admin-configure" as the admin permission for deleting posts
-        if current_user._id == post.postedBy['_id'] or current_user.anonymousId == post.postedBy['_id'] or current_user.permissions["admin"]["configure"]:
+        if current_user._id == post.postedBy['_id'] or current_user.anonymousId == post.postedBy['_id'] or current_user.permissions["admin"]["deleteOther"]:
             # Get all comments associated with a post
             comment_query = Comment.objects.raw({"postId": str(post._id)})
             comments = list(comment_query)
