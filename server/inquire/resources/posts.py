@@ -52,6 +52,7 @@ class Posts(Resource):
                   $ref: '#/definitions/403Response'
         """
         # Make sure the current user at least has one permission to post
+        # print("User Perms: ", current_user.permissions)
         if not current_user.permissions['publish']['question'] and not current_user.permissions['publish']['announcement'] and not current_user.permissions['publish']['poll'] and not current_user.permissions['publish']['general']:
             return {"errors": ["You do not have permission to make any post in this course."]}, 401
 
@@ -226,7 +227,7 @@ class Posts(Resource):
             query = Post.objects.raw(queryParams).order_by(
                 [("isPinned", -1), ("createdDate", sort_date)])
 
-        # Filter by 'poll'
+        # Filter by 'general'
         elif filterby == 'general':
             # Check if the user can see private posts
             if not user_perms["privacy"]["private"]:
