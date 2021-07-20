@@ -22,7 +22,7 @@ admin = {
     },
     "edit": {
         "question": True,
-        "announcement": False,
+        "announcement": True,
         "poll": True,
         "general": True,
         "comment": True,
