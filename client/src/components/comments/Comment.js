@@ -171,7 +171,7 @@ const Comment = ({ comment, isDraft, callback }) => {
   const generateDropdownOptions = () => {
     if (userRole) {
       let deleteOption =
-        userRole.delete.postComment &&
+        userRole.delete.comment &&
         (comment.postedBy._id == user._id ||
           comment.postedBy._id == user.anonymousId)
           ? {
@@ -180,7 +180,7 @@ const Comment = ({ comment, isDraft, callback }) => {
             }
           : null;
       let editOption =
-        userRole.edit.postComment &&
+        userRole.edit.comment &&
         (comment.postedBy._id == user._id ||
           comment.postedBy._id == user.anonymousId)
           ? { onClick: handleEdit, label: "Edit Comment" }
@@ -277,21 +277,25 @@ const Comment = ({ comment, isDraft, callback }) => {
               </>
             ) : (
               <>
-                <Reaction
-                  reactions={comment.reactions}
-                  type="comment"
-                  id={comment._id}
-                  postid={postid}
-                />
+                {userRole.participation.reactions && (
+                  <Reaction
+                    reactions={comment.reactions}
+                    type="comment"
+                    id={comment._id}
+                    postid={postid}
+                  />
+                )}
 
-                <ReplyBtn
-                  style={{ marginRight: 10, marginLeft: 20 }}
-                  onClick={() => {
-                    toggleReply(true);
-                  }}
-                >
-                  Reply
-                </ReplyBtn>
+                {userRole.publish.reply && (
+                  <ReplyBtn
+                    style={{ marginRight: 10, marginLeft: 20 }}
+                    onClick={() => {
+                      toggleReply(true);
+                    }}
+                  >
+                    Reply
+                  </ReplyBtn>
+                )}
               </>
             )}
           </MetaIconWrapper>

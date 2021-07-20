@@ -31,6 +31,8 @@ def post_content_validator(content):
         return True
     elif post_type == "announcement":
         return True
+    elif post_type == "general":
+        return True
     else:
         raise ValidationError("Post type not recognized")
 

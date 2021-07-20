@@ -1,13 +1,19 @@
 admin = {
     "publish": {
-        "postComment": True,
-        "reply": True,
-        "poll": True
+        "question": True,
+        "announcement": True,
+        "poll": True,
+        "general": True,
+        "comment": True,
+        "reply": True
     },
     "delete": {
-        "postComment": True,
-        "reply": True,
-        "poll": True
+        "question": True,
+        "announcement": True,
+        "poll": True,
+        "general": True,
+        "comment": True,
+        "reply": True
     },
     "participation": {
         "reactions": True,
@@ -15,18 +21,22 @@ admin = {
         "pin": True
     },
     "edit": {
-        "postComment": True,
-        "reply": True,
-        "poll": True
+        "question": True,
+        "announcement": False,
+        "poll": True,
+        "general": True,
+        "comment": True,
+        "reply": True
     },
     "privacy": {
         "private": True,
+        # Change to anonymous posts/anonymous comments/replies
         "anonymous": True
     },
     "admin": {
         "banUsers": True,
         "removeUsers": True,
-        "announce": True,
+        # "deleteOther": False,
         "configure": True,
         "highlightName": True
     }

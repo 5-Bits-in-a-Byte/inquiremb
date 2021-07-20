@@ -53,7 +53,7 @@ class Comments(Resource):
 
         return [self.serialize(comment) for comment in Comment.objects.raw({'postId': postId})]
 
-    @permission_layer(required_permissions=["publish-postComment"])
+    @permission_layer(required_permissions=["publish-comment"])
     def post(self, courseId=None, postId=None):
         """
         Creates a new comment
@@ -99,6 +99,7 @@ class Comments(Resource):
         # Adding user info to dict
         anonymous = args['isAnonymous']
         if anonymous:
+            highlighted = False
             postedBy = {"first": "Anonymous", "last": "",
                         "_id": current_user.anonymousId, "anonymous": anonymous}
         else:
@@ -121,7 +122,7 @@ class Comments(Resource):
             current_app.socketio.emit('Comment/create', result, room=postId)
         return result, 200
 
-    @permission_layer(required_permissions=["edit-postComment"])
+    @permission_layer(required_permissions=["edit-comment"])
     def put(self, courseId=None, postId=None):
         """
         Updates a comment
@@ -181,7 +182,7 @@ class Comments(Resource):
         result = self.serialize(comment)
         return result, 200
 
-    @permission_layer(required_permissions=["delete-postComment"])
+    @permission_layer(required_permissions=["delete-comment"])
     def delete(self, courseId=None, postId=None):
         """
         Deletes a comment

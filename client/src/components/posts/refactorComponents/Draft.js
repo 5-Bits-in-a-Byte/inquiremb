@@ -16,12 +16,14 @@ const accentColor = (type) => {
       return "#4a86fa";
     case "Announcement":
       return "#FA6A4A";
+    case "General":
+      return "#EDEDED";
     default:
-      return "#4a86fa";
+      return "#E7E7E7";
   }
 };
 
-const Draft = () => {
+const Draft = ({ userRole }) => {
   const { courseId } = useParams();
   const history = useHistory();
   // State and handler for drafting posts
@@ -31,8 +33,19 @@ const Draft = () => {
     isPrivate: false,
   });
 
+  var defaultType;
+  if (userRole.publish.general) {
+    defaultType = "General";
+  } else if (userRole.publish.question) {
+    defaultType = "Question";
+  } else if (userRole.publish.announcement) {
+    defaultType = "Announcement";
+  } else {
+    // This should never happen
+    defaultType = "Unknown";
+  }
   const [content, setContent] = useState({
-    type: "Question",
+    type: defaultType,
     raw: EditorState.createEmpty(),
     plainText: EditorState.createEmpty(),
   });
@@ -78,39 +91,71 @@ const Draft = () => {
     });
   };
 
-  var titlePlaceholder = content.type ? content.type + " title" : "Post title";
+  // Styling Variables
+  var titlePlaceholder =
+    content.type != "Unknown" ? content.type + " title" : "Post title";
+  var displayQuestion;
+  var displayAnnouncement;
+  var displayGeneral;
+  if (userRole) {
+    displayQuestion = userRole.publish.question;
+    displayAnnouncement = userRole.publish.announcement;
+    displayGeneral = userRole.publish.general;
+  }
+  var accent = accentColor(content.type);
+
   return (
-    <Wrapper sideBarColor={accentColor(content.type)}>
+    <Wrapper sideBarColor={accent}>
       <HeaderContentWrapper>
-        <CircleIcon accentColor={accentColor(content.type)} />
-        <Button
-          signin
-          onClick={() => {
-            setContent({ ...content, type: "Question" });
-          }}
-          style={{ margin: "0 .5em" }}
-        >
-          <PostFlag
-            accentColor={accentColor(content.type)}
-            selected={content.type === "Question"}
+        {displayGeneral && (
+          <Button
+            signin
+            onClick={() => {
+              setContent({ ...content, type: "General" });
+            }}
+            style={{ margin: "0 1em" }}
           >
-            Question
-          </PostFlag>
-        </Button>
-        <Button
-          signin
-          onClick={() => {
-            setContent({ ...content, type: "Announcement" });
-          }}
-          style={{ margin: "0 2em" }}
-        >
-          <PostFlag
-            accentColor={accentColor(content.type)}
-            selected={content.type === "Announcement"}
+            <PostFlag
+              accentColor={accent}
+              selected={content.type === "General"}
+              isGeneral={userRole.publish.general}
+            >
+              General
+            </PostFlag>
+          </Button>
+        )}
+        {displayQuestion && (
+          <Button
+            signin
+            onClick={() => {
+              setContent({ ...content, type: "Question" });
+            }}
+            style={{ margin: "0 1em" }}
           >
-            Announcement
-          </PostFlag>
-        </Button>
+            <PostFlag
+              accentColor={accent}
+              selected={content.type === "Question"}
+            >
+              Question
+            </PostFlag>
+          </Button>
+        )}
+        {displayAnnouncement && (
+          <Button
+            signin
+            onClick={() => {
+              setContent({ ...content, type: "Announcement" });
+            }}
+            style={{ margin: "0 1em" }}
+          >
+            <PostFlag
+              accentColor={accent}
+              selected={content.type === "Announcement"}
+            >
+              Announcement
+            </PostFlag>
+          </Button>
+        )}
       </HeaderContentWrapper>
       <DraftTextArea
         minRows={1}
@@ -199,11 +244,16 @@ const CircleIcon = styled.div`
 `;
 
 const PostFlag = styled.div`
-  margin-left: 1em;
+  /* margin-left: 1em; */
   padding: 2px 5px;
-  color: ${(props) => (props.selected ? "#fff" : "#000")};
+  color: ${(props) =>
+    props.selected ? (props.isGeneral ? "#162B55" : "#ededed") : "#162B55"};
   background-color: ${(props) =>
-    props.selected ? props.accentColor : "#e7e7e7"};
+    props.selected
+      ? props.isGeneral
+        ? "#e7e7e7"
+        : props.accentColor
+      : "#e7e7e7"};
   border-radius: 2px;
 `;
 

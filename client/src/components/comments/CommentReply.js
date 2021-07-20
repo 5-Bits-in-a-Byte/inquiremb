@@ -232,12 +232,14 @@ const CommentReply = ({
             </>
           ) : (
             <>
-              <Reaction
-                reactions={reply.reactions}
-                type="reply"
-                id={reply._id}
-                postid={postid}
-              />
+              {userRole.participation.reactions && (
+                <Reaction
+                  reactions={reply.reactions}
+                  type="reply"
+                  id={reply._id}
+                  postid={postid}
+                />
+              )}
             </>
           )}
         </MetaIconWrapper>

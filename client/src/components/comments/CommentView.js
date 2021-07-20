@@ -58,7 +58,7 @@ const CommentView = ({ classroomName }) => {
 
   // const setUserRole = useContext(UserRoleDispatchContext);
   const userRole = useContext(UserRoleContext);
-  // console.log("Comment View Role Object: ", userRole);
+  console.log("Comment View Role Object: ", userRole);
 
   const handleVote = (voteAnswer) => {
     var pa = pollAns;
@@ -233,13 +233,13 @@ const CommentView = ({ classroomName }) => {
                 >
                   <Button secondary>Back to all Posts</Button>
                 </Link>
-                {postExists && (
+                {postExists && userRole.publish.comment && (
                   <Button onClick={draftNewComment} secondary>
-                    Reply to Post
+                    Comment on Post
                   </Button>
                 )}
               </OptionsContainer>
-              {postid === "newQorA" && <Draft />}
+              {postid === "newQorA" && <Draft userRole={userRole} />}
               {/* {postid === "newPoll" && <DraftPoll />} */}
               {postid === "newPoll" && <PollConfig />}
               {postExists &&

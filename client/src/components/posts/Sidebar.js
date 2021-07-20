@@ -10,6 +10,7 @@ import HeartImg from "../../imgs/heart.svg";
 import AnnouncementsImg from "../../imgs/announcements.svg";
 import QuestionsImg from "../../imgs/questions.svg";
 import PollsImg from "../../imgs/polls.svg";
+import GeneralImg from "../../imgs/general.svg";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
 const Sidebar = ({ userRole, setHighlightedSection, highlightedSection }) => {
@@ -61,6 +62,12 @@ const Sidebar = ({ userRole, setHighlightedSection, highlightedSection }) => {
           <SectionTab
             tabText={"Questions"}
             imageLocation={QuestionsImg}
+            setHighlightedSection={setHighlightedSection}
+            highlightedSection={highlightedSection}
+          />
+          <SectionTab
+            tabText={"General Posts"}
+            imageLocation={GeneralImg}
             setHighlightedSection={setHighlightedSection}
             highlightedSection={highlightedSection}
           />

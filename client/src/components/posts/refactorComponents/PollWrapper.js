@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Poll from "react-polls";
 import { useParams } from "react-router";
 import LazyFetch from "../../common/requests/LazyFetch";
+import { UserRoleContext } from "../../context/UserRoleProvider";
 
 const PollWrapper = ({ post }) => {
   const { courseId } = useParams();
+  const userRole = useContext(UserRoleContext);
 
   // console.log("pollWrapper post: ", post);
   const establishPollAns = (post) => {
@@ -25,18 +27,21 @@ const PollWrapper = ({ post }) => {
       return answer;
     });
 
-    LazyFetch({
-      type: "put",
-      endpoint: "/courses/" + courseId + "/polls",
-      data: { selectedOption: voteAnswer, postId: post._id },
-      onSuccess: (data) => {
-        // console.log("Data: ", data);
-        setPollAns(newPollAnswers);
-      },
-      onFailure: (err) => {
-        console.log("Err: ", err);
-      },
-    });
+    // Only send the request to the backend if the user has permission to do so
+    if (userRole.participation.voteInPoll) {
+      LazyFetch({
+        type: "put",
+        endpoint: "/courses/" + courseId + "/polls",
+        data: { selectedOption: voteAnswer, postId: post._id },
+        onSuccess: (data) => {
+          // console.log("Data: ", data);
+          setPollAns(newPollAnswers);
+        },
+        onFailure: (err) => {
+          console.log("Err: ", err);
+        },
+      });
+    }
   };
   // console.log("pollAns: ", pollAns);
 
@@ -46,7 +51,11 @@ const PollWrapper = ({ post }) => {
         question={post.title}
         answers={pollAns}
         onVote={handleVote}
-        vote={post.content.vote}
+        vote={
+          userRole && userRole.participation.voteInPoll
+            ? post.content.vote
+            : pollAns[0].option
+        }
         noStorage
         onClick={(event) => {
           event.stopPropagation();

@@ -244,7 +244,7 @@ This component handles setting up all of our MongoDB models so that each collect
 ]
 ```
 
-### Roles Model (NEW 04.18.21)
+### Roles Model (OLD)
 
 ```json
 {
@@ -279,6 +279,56 @@ This component handles setting up all of our MongoDB models so that each collect
       "banUsers": true,
       "removeUsers": true,
       "announce": true,
+      "configure": true,
+      "highlightName": true
+    }
+  }
+}
+```
+
+### Roles Model (NEW 07.15.21)
+
+```json
+{
+  "_id": "role id goes here",
+  "name": "the name of the role goes here",
+  "permissions": {
+    "publish": {
+      "question": true,
+      "announcement": true,
+      "poll": true,
+      "general": true,
+      "comment": true,
+      "reply": true
+    },
+    "delete": {
+      "question": true,
+      "announcement": true,
+      "poll": true,
+      "general": true,
+      "comment": true,
+      "reply": true
+    },
+    "participation": {
+      "reactions": true,
+      "voteInPoll": true,
+      "pin": true
+    },
+    "edit": {
+      "question": true,
+      "announcement": true,
+      "poll": true,
+      "general": true,
+      "comment": true,
+      "reply": true
+    },
+    "privacy": {
+      "private": true,
+      "anonymous": true
+    },
+    "admin": {
+      "banUsers": true,
+      "removeUsers": true,
       "configure": true,
       "highlightName": true
     }

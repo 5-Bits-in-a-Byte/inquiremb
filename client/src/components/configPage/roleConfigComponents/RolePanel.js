@@ -64,23 +64,32 @@ const RolePanel = ({
   // };
 
   const [publishCheckedState, setPublishCheckedState] = useState({
-    postComment: roleObject.permissions.publish.postComment,
-    reply: roleObject.permissions.publish.reply,
+    question: roleObject.permissions.publish.question,
+    announcement: roleObject.permissions.publish.announcement,
     poll: roleObject.permissions.publish.poll,
+    general: roleObject.permissions.publish.general,
+    comment: roleObject.permissions.publish.comment,
+    reply: roleObject.permissions.publish.reply,
   });
 
   // console.log("Publish init state: ", publishCheckedState);
 
   const [deleteCheckedState, setDeleteCheckedState] = useState({
-    postComment: roleObject.permissions.delete.postComment,
-    reply: roleObject.permissions.delete.reply,
+    question: roleObject.permissions.delete.question,
+    announcement: roleObject.permissions.delete.announcement,
     poll: roleObject.permissions.delete.poll,
+    general: roleObject.permissions.delete.general,
+    comment: roleObject.permissions.delete.comment,
+    reply: roleObject.permissions.delete.reply,
   });
 
   const [editCheckedState, setEditCheckedState] = useState({
-    postComment: roleObject.permissions.edit.postComment,
-    reply: roleObject.permissions.edit.reply,
+    question: roleObject.permissions.edit.question,
+    announcement: roleObject.permissions.edit.announcement,
     poll: roleObject.permissions.edit.poll,
+    general: roleObject.permissions.edit.general,
+    comment: roleObject.permissions.edit.comment,
+    reply: roleObject.permissions.edit.reply,
   });
 
   const [participationCheckedState, setParticipationCheckedState] = useState({
@@ -97,7 +106,6 @@ const RolePanel = ({
   const [adminCheckedState, setAdminCheckedState] = useState({
     banUsers: roleObject.permissions.admin.banUsers,
     removeUsers: roleObject.permissions.admin.removeUsers,
-    announce: roleObject.permissions.admin.announce,
     configure: roleObject.permissions.admin.configure,
     highlightName: roleObject.permissions.admin.highlightName,
   });
@@ -107,6 +115,19 @@ const RolePanel = ({
 
   const [nameField, setNameField] = useState(roleName);
   const [nameFieldState, setNameFieldState] = useState(true);
+
+  const handleKeyDown = (e) => {
+    if (e.key == "Enter") {
+      if (!nameFieldState) {
+        if (nameField.trim() == "") setNameField(roleName);
+      }
+      if (e.target.value != roleObject.name) {
+        roleObject.name = e.target.value;
+      }
+      setNameField(e.target.value);
+      setNameFieldState(true);
+    }
+  };
 
   // console.log("This role id: ", props.value);
 
@@ -119,13 +140,7 @@ const RolePanel = ({
           <DraftTextArea
             minRows={1}
             style={{ width: `150px`, marginRight: `1em` }}
-            onChange={(e) => {
-              // console.log(e.target.value);
-              if (e.target.value != roleObject.name) {
-                roleObject.name = e.target.value;
-              }
-              setNameField(e.target.value);
-            }}
+            onKeyDown={handleKeyDown}
           >
             {nameField}
           </DraftTextArea>
@@ -135,6 +150,9 @@ const RolePanel = ({
           primary
           buttonColor={"rgba(0, 0, 0, 0.0)"}
           onClick={() => {
+            if (nameFieldState) {
+              if (nameField.trim() == "") setNameField(roleName);
+            }
             setNameFieldState(!nameFieldState);
           }}
         >
@@ -150,35 +168,68 @@ const RolePanel = ({
           name: "Publish",
           items: [
             {
-              stateLabel: "postComment",
-              itemLabel: "Draft Posts / Comments",
+              stateLabel: "question",
+              itemLabel: "Users in this role can publish Questions",
               changeRoleVal: (val) => {
-                roleObject.permissions.publish.postComment = val;
+                roleObject.permissions.publish.question = val;
                 setPublishCheckedState({
                   ...publishCheckedState,
-                  postComment: val,
+                  question: val,
                 });
               },
             },
             {
-              stateLabel: "reply",
-              itemLabel: "Draft Replies",
+              stateLabel: "announcement",
+              itemLabel: "Users in this role can publish Announcements",
               changeRoleVal: (val) => {
-                roleObject.permissions.publish.reply = val;
+                roleObject.permissions.publish.announcement = val;
                 setPublishCheckedState({
                   ...publishCheckedState,
-                  reply: val,
+                  announcement: val,
                 });
               },
             },
             {
               stateLabel: "poll",
-              itemLabel: "Draft Polls",
+              itemLabel: "Users in this role can publish Polls",
               changeRoleVal: (val) => {
                 roleObject.permissions.publish.poll = val;
                 setPublishCheckedState({
                   ...publishCheckedState,
                   poll: val,
+                });
+              },
+            },
+            {
+              stateLabel: "general",
+              itemLabel: "Users in this role can publish General Posts",
+              changeRoleVal: (val) => {
+                roleObject.permissions.publish.general = val;
+                setPublishCheckedState({
+                  ...publishCheckedState,
+                  general: val,
+                });
+              },
+            },
+            {
+              stateLabel: "comment",
+              itemLabel: "Users in this role can publish comments on posts",
+              changeRoleVal: (val) => {
+                roleObject.permissions.publish.comment = val;
+                setPublishCheckedState({
+                  ...publishCheckedState,
+                  comment: val,
+                });
+              },
+            },
+            {
+              stateLabel: "reply",
+              itemLabel: "Users in this role can reply to comments",
+              changeRoleVal: (val) => {
+                roleObject.permissions.publish.reply = val;
+                setPublishCheckedState({
+                  ...publishCheckedState,
+                  reply: val,
                 });
               },
             },
@@ -194,35 +245,70 @@ const RolePanel = ({
           name: "Delete",
           items: [
             {
-              stateLabel: "postComment",
-              itemLabel: "Delete Posts / Comments",
+              stateLabel: "question",
+              itemLabel: "Users in this role can delete questions they made",
               changeRoleVal: (val) => {
-                roleObject.permissions.delete.postComment = val;
+                roleObject.permissions.delete.question = val;
                 setDeleteCheckedState({
                   ...deleteCheckedState,
-                  postComment: val,
+                  question: val,
                 });
               },
             },
             {
-              stateLabel: "reply",
-              itemLabel: "Delete Replies",
+              stateLabel: "announcement",
+              itemLabel:
+                "Users in this role can delete announcements they made",
               changeRoleVal: (val) => {
-                roleObject.permissions.delete.reply = val;
+                roleObject.permissions.delete.announcement = val;
                 setDeleteCheckedState({
                   ...deleteCheckedState,
-                  reply: val,
+                  announcement: val,
                 });
               },
             },
             {
               stateLabel: "poll",
-              itemLabel: "Delete Polls",
+              itemLabel: "Users in this role can delete polls they made",
               changeRoleVal: (val) => {
                 roleObject.permissions.delete.poll = val;
                 setDeleteCheckedState({
                   ...deleteCheckedState,
                   poll: val,
+                });
+              },
+            },
+            {
+              stateLabel: "general",
+              itemLabel:
+                "Users in this role can delete general posts they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.delete.general = val;
+                setDeleteCheckedState({
+                  ...deleteCheckedState,
+                  general: val,
+                });
+              },
+            },
+            {
+              stateLabel: "comment",
+              itemLabel: "Users in this role can delete comments they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.delete.comment = val;
+                setDeleteCheckedState({
+                  ...deleteCheckedState,
+                  comment: val,
+                });
+              },
+            },
+            {
+              stateLabel: "reply",
+              itemLabel: "Users in this role can delete replies they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.delete.reply = val;
+                setDeleteCheckedState({
+                  ...deleteCheckedState,
+                  reply: val,
                 });
               },
             },
@@ -238,35 +324,70 @@ const RolePanel = ({
           name: "Edit",
           items: [
             {
-              stateLabel: "postComment",
-              itemLabel: "Edit Posts / Comments",
+              stateLabel: "question",
+              itemLabel: "Users in this role can edit questions that they made",
               changeRoleVal: (val) => {
-                roleObject.permissions.edit.postComment = val;
+                roleObject.permissions.edit.question = val;
                 setEditCheckedState({
                   ...editCheckedState,
-                  postComment: val,
+                  question: val,
                 });
               },
             },
             {
-              stateLabel: "reply",
-              itemLabel: "Edit Replies",
+              stateLabel: "announcement",
+              itemLabel:
+                "Users in this role can edit announcements that they made",
               changeRoleVal: (val) => {
-                roleObject.permissions.edit.reply = val;
+                roleObject.permissions.edit.announcement = val;
                 setEditCheckedState({
                   ...editCheckedState,
-                  reply: val,
+                  announcement: val,
                 });
               },
             },
             {
               stateLabel: "poll",
-              itemLabel: "Edit Polls",
+              itemLabel: "Users in this roll can edit polls that they made",
               changeRoleVal: (val) => {
                 roleObject.permissions.edit.poll = val;
                 setEditCheckedState({
                   ...editCheckedState,
                   poll: val,
+                });
+              },
+            },
+            {
+              stateLabel: "general",
+              itemLabel:
+                "Users in this role can edit general posts that they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.edit.general = val;
+                setEditCheckedState({
+                  ...editCheckedState,
+                  general: val,
+                });
+              },
+            },
+            {
+              stateLabel: "comment",
+              itemLabel: "Users in this role can edit comments that they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.edit.comment = val;
+                setEditCheckedState({
+                  ...editCheckedState,
+                  comment: val,
+                });
+              },
+            },
+            {
+              stateLabel: "reply",
+              itemLabel: "Users in this role can edit replies that they made",
+              changeRoleVal: (val) => {
+                roleObject.permissions.edit.reply = val;
+                setEditCheckedState({
+                  ...editCheckedState,
+                  reply: val,
                 });
               },
             },
@@ -283,7 +404,8 @@ const RolePanel = ({
           items: [
             {
               stateLabel: "reactions",
-              itemLabel: "React to Posts",
+              itemLabel:
+                "Users in this role can react to all posts, comments, and replies",
               changeRoleVal: (val) => {
                 roleObject.permissions.participation.reactions = val;
                 setParticipationCheckedState({
@@ -294,7 +416,7 @@ const RolePanel = ({
             },
             {
               stateLabel: "voteInPoll",
-              itemLabel: "Vote in Polls",
+              itemLabel: "Users in this role can vote in all polls",
               changeRoleVal: (val) => {
                 roleObject.permissions.participation.voteInPoll = val;
                 setParticipationCheckedState({
@@ -305,7 +427,7 @@ const RolePanel = ({
             },
             {
               stateLabel: "pin",
-              itemLabel: "Pin Posts",
+              itemLabel: "Users in this role can can pin all types of posts",
               changeRoleVal: (val) => {
                 roleObject.permissions.participation.pin = val;
                 setParticipationCheckedState({
@@ -327,7 +449,8 @@ const RolePanel = ({
           items: [
             {
               stateLabel: "private",
-              itemLabel: "View Private Posts",
+              itemLabel:
+                "Users in this role can view all posts marked as private",
               changeRoleVal: (val) => {
                 roleObject.permissions.privacy.private = val;
                 setPrivacyCheckedState({
@@ -338,7 +461,8 @@ const RolePanel = ({
             },
             {
               stateLabel: "anonymous",
-              itemLabel: "View Anonymous Posts",
+              itemLabel:
+                "Users in this role can draft anonymous posts of all types (general posts, questions, announcements, and polls), comments, and replies",
               changeRoleVal: (val) => {
                 roleObject.permissions.privacy.anonymous = val;
                 setPrivacyCheckedState({
@@ -360,7 +484,8 @@ const RolePanel = ({
           items: [
             {
               stateLabel: "banUsers",
-              itemLabel: "Ban Users",
+              itemLabel:
+                "Users in this role can ban users in the course (does not include course creator)",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.banUsers = val;
                 setAdminCheckedState({
@@ -371,7 +496,8 @@ const RolePanel = ({
             },
             {
               stateLabel: "removeUsers",
-              itemLabel: "Remove Users",
+              itemLabel:
+                "Users in this role can remove users in the course (does not include course creator)",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.removeUsers = val;
                 setAdminCheckedState({
@@ -381,19 +507,9 @@ const RolePanel = ({
               },
             },
             {
-              stateLabel: "announce",
-              itemLabel: "Draft Announcements",
-              changeRoleVal: (val) => {
-                roleObject.permissions.admin.announce = val;
-                setAdminCheckedState({
-                  ...adminCheckedState,
-                  announce: val,
-                });
-              },
-            },
-            {
               stateLabel: "configure",
-              itemLabel: "Edit Course Configurations",
+              itemLabel:
+                "Users in this role can edit course configurations (this includes user roles and the ability to delete the course)",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.configure = val;
                 setAdminCheckedState({
@@ -404,7 +520,8 @@ const RolePanel = ({
             },
             {
               stateLabel: "highlightName",
-              itemLabel: "Highlight Name",
+              itemLabel:
+                "Users in this role with this permission will have their name highlighted orange every time they create a post, comment, or reply",
               changeRoleVal: (val) => {
                 roleObject.permissions.admin.highlightName = val;
                 setAdminCheckedState({
@@ -437,16 +554,16 @@ const RolePanel = ({
               );
               // let newRolesList = ;
               let newRolesList = courseRoles.filter((role) => {
-                console.log(
-                  "role._id: ",
-                  role._id,
-                  " , roleObject._id: ",
-                  roleObject._id
-                );
+                // console.log(
+                //   "role._id: ",
+                //   role._id,
+                //   " , roleObject._id: ",
+                //   roleObject._id
+                // );
                 return role._id != roleObject._id;
               });
-              console.log("After Filter: ", newRolesList);
-              setCourseRoles();
+              // console.log("After Filter: ", newRolesList);
+              setCourseRoles(newRolesList);
 
               setUserList(GenerateUserList(userList, newRolesList));
             },

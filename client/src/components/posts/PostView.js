@@ -28,7 +28,8 @@ const createPost = (post, userRole, isCondensed, key) => {
   var content;
   if (
     post.content.type === "question" ||
-    post.content.type === "announcement"
+    post.content.type === "announcement" ||
+    post.content.type === "general"
   ) {
     content = (
       <EditorWrapper messageData={post} messageType="post" edit={false} />
@@ -119,6 +120,9 @@ const PostView = ({ userRole, highlightedSection }) => {
       break;
     case "Polls":
       endpoint += "?filterby=poll";
+      break;
+    case "General Posts":
+      endpoint += "?filterby=general";
       break;
     default:
     // Don't add a filter to endpoint

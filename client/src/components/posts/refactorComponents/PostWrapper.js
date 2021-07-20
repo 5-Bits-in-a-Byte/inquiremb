@@ -22,6 +22,8 @@ const accentColor = (type) => {
       return "#FA6A4A";
     case "Poll":
       return "#4CAF50";
+    case "General":
+      return "#ededed";
     default:
       return "#4a86fa";
   }
@@ -96,21 +98,76 @@ const PostWrapper = ({
     setIsEditing(true);
   };
 
+  const generateEditDeleteOption = (optionType) => {
+    var resultingOption;
+    var role = optionType == "delete" ? userRole.delete : userRole.edit;
+    if (
+      postType == "Question" &&
+      role.question &&
+      (postObject.postedBy._id == user._id ||
+        postObject.postedBy._id == user.anonymousId)
+    ) {
+      resultingOption = {
+        onClick: () => {
+          optionType == "delete"
+            ? handleDelete(postObject._id, postObject.courseId)
+            : handleEdit();
+        },
+        label: optionType == "delete" ? "Delete question" : "Edit question",
+      };
+    } else if (
+      postType == "Announcement" &&
+      role.announcement &&
+      (postObject.postedBy._id == user._id ||
+        postObject.postedBy._id == user.anonymousId)
+    ) {
+      resultingOption = {
+        onClick: () => {
+          optionType == "delete"
+            ? handleDelete(postObject._id, postObject.courseId)
+            : handleEdit();
+        },
+        label:
+          optionType == "delete" ? "Delete announcement" : "Edit announcement",
+      };
+    } else if (
+      postType == "Poll" &&
+      role.poll &&
+      (postObject.postedBy._id == user._id ||
+        postObject.postedBy._id == user.anonymousId)
+    ) {
+      resultingOption = {
+        onClick: () => {
+          optionType == "delete"
+            ? handleDelete(postObject._id, postObject.courseId)
+            : handleEdit();
+        },
+        label: optionType == "delete" ? "Delete poll" : "Edit poll",
+      };
+    } else if (
+      postType == "General" &&
+      role.general &&
+      (postObject.postedBy._id == user._id ||
+        postObject.postedBy._id == user.anonymousId)
+    ) {
+      resultingOption = {
+        onClick: () => {
+          optionType == "delete"
+            ? handleDelete(postObject._id, postObject.courseId)
+            : handleEdit();
+        },
+        label: optionType == "delete" ? "Delete post" : "Edit post",
+      };
+    } else {
+      resultingOption = null;
+    }
+    return resultingOption;
+  };
+
   const generateDropdownOptions = () => {
     if (userRole) {
-      let deleteOption =
-        userRole.delete.postComment && postObject.postedBy._id == user._id
-          ? {
-              onClick: () => {
-                handleDelete(postObject._id, postObject.courseId);
-              },
-              label: "Delete post",
-            }
-          : null;
-      let editOption =
-        userRole.edit.postComment && postObject.postedBy._id == user._id
-          ? { onClick: handleEdit, label: "Edit post" }
-          : null;
+      let deleteOption = generateEditDeleteOption("delete");
+      let editOption = generateEditDeleteOption("edit");
       let pinOption = userRole.participation.pin
         ? {
             onClick: () => {
@@ -159,9 +216,13 @@ const PostWrapper = ({
           isRead={postObject.read}
           accentColor={accentColor(postType)}
         />
-        <PostFlag accentColor={accentColor(postType)}>
-          {postType ? postType : "Question"}
-        </PostFlag>
+        {postType != "General" ? (
+          <PostFlag accentColor={accentColor(postType)}>
+            {postType ? postType : "Question"}
+          </PostFlag>
+        ) : (
+          <></>
+        )}
         <PostTitle style={{ cursor: "pointer" }}>
           {postObject.title ? postObject.title : "Error getting post title"}
         </PostTitle>
@@ -194,7 +255,9 @@ const PostWrapper = ({
           }}
           postType={postType}
         >
-          {postType == "Question" || postType == "Announcement"
+          {postType == "Question" ||
+          postType == "Announcement" ||
+          postType == "General"
             ? React.cloneElement(content, { edit: { isEditing, setIsEditing } })
             : content}
         </ContentWrapper>
@@ -212,12 +275,15 @@ const PostWrapper = ({
           Posted by {postObject.postedBy.first} {postObject.postedBy.last}
         </UserDescription>
         <ReactionSection>
-          <Reaction
-            reactions={postObject.reactions}
-            type="post"
-            id={postObject._id}
-            postid={postObject._id}
-          />
+          {userRole && userRole.participation.reactions && (
+            <Reaction
+              reactions={postObject.reactions}
+              type="post"
+              id={postObject._id}
+              postid={postObject._id}
+            />
+          )}
+
           <Icon
             alt={"Number of comments"}
             src={CommentImg}
@@ -280,7 +346,7 @@ const CircleIcon = styled.div`
 `;
 
 const PostTitle = styled.h1`
-  /* margin-left: 1em; */
+  margin-left: 0.75em;
   padding: 5px;
   font-size: 18px;
 `;
