@@ -1,6 +1,7 @@
 {
-  "name": "message-board",
-  "version": "0.1.0",
+  "name": "Inquire",
+  "homepage": "https://inquiremb.com/app",
+  "version": "2.0.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.3",
