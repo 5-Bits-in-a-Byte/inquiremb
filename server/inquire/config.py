@@ -14,6 +14,7 @@ GITHUB_CLIENT_SECRET = os.getenv('GITHUB_CLIENT_SECRET')
 HS_256_KEY = os.getenv('HS_256_KEY')
 MONGO_URI = os.getenv('MONGO_URI')
 ROUTING_PREFIX = os.getenv('ROUTING_PREFIX')
+AUTH_REDIRECT_URI = os.getenv('AUTH_REDIRECT_URI')
 swagger_config = {
     "headers": [
     ],

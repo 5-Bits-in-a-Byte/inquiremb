@@ -16,7 +16,7 @@ Steps:
 5. lookup user using jwt details on api requests
 """
 from inquire.mongo import *
-from inquire.config import HS_256_KEY, CLIENT_URL
+from inquire.config import HS_256_KEY, CLIENT_URL, AUTH_REDIRECT_URI
 
 from werkzeug.local import LocalProxy
 from functools import wraps
@@ -145,7 +145,8 @@ def permission_layer(required_permissions=None, require_login=True, require_join
 
 @ auth_routes.route('/login')
 def login():
-    redirect_uri = "http://localhost:5000/api/auth/auth"
+    # redirect_uri = "http://localhost:5000/api/auth/auth"
+    redirect_uri = AUTH_REDIRECT_URI + "auth"
     # redirect_uri = better_url_for(request.base_url, 'api_bp.auth_blueprint.auth', missing_prefix="/api")
     print(redirect_uri)
     return oauth.google.authorize_redirect(redirect_uri)
@@ -153,8 +154,10 @@ def login():
 
 @ auth_routes.route('/github-login')
 def github_login():
-    redirect_uri = "http://localhost:5000/api/auth/github-auth"
+    # redirect_uri = "http://localhost:5000/api/auth/github-auth"
+    redirect_uri = AUTH_REDIRECT_URI + "github-auth"
     # redirect_uri = better_url_for(request.base_url, 'api_bp.auth_blueprint.github_auth', missing_prefix="/api")
+    print(redirect_uri)
     return oauth.github.authorize_redirect(redirect_uri)
 
 
