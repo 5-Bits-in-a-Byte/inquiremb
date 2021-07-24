@@ -10,6 +10,7 @@ Last Modified Date: 03/12/2021
 from flask import Flask, Blueprint
 from flask_restful import Api
 from flasgger import Swagger
+# from inquire.config import ROUTING_PREFIX
 
 
 def create_app(override_config=None, testing=False, include_socketio=True):
@@ -20,8 +21,8 @@ def create_app(override_config=None, testing=False, include_socketio=True):
 
     # CORS
     app.config['CORS_HEADERS'] = 'Content-Type'
-    api_bp = Blueprint("api_bp", __name__, url_prefix=config.ROUTING_PREFIX)
-    #api_bp = Blueprint("api_bp", __name__, url_prefix='/api')
+    api_bp = Blueprint("api_bp", __name__, url_prefix='/' + config.ROUTING_PREFIX)
+    # api_bp = Blueprint("api_bp", __name__, url_prefix='/')
 
     @app.after_request
     def after_request(response):
