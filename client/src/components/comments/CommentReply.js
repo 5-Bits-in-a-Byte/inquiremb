@@ -62,14 +62,7 @@ const CommentReply = ({
           }}
           onEditorStateChange={handleContentChange}
           toolbar={{
-            options: [
-              "inline",
-              "list",
-              "link",
-              "emoji",
-              "history",
-              "blockType",
-            ],
+            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"]
           }}
         />
       ),
@@ -157,14 +150,7 @@ const CommentReply = ({
           }}
           onEditorStateChange={handleContentChange}
           toolbar={{
-            options: [
-              "inline",
-              "list",
-              "link",
-              "emoji",
-              "history",
-              "blockType",
-            ],
+            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"]
           }}
         />
       );

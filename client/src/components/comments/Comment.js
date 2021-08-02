@@ -59,14 +59,7 @@ const Comment = ({ comment, isDraft, callback }) => {
           }}
           onEditorStateChange={handleContentChange}
           toolbar={{
-            options: [
-              "inline",
-              "list",
-              "link",
-              "emoji",
-              "history",
-              "blockType",
-            ],
+            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"]
           }}
         />
       );

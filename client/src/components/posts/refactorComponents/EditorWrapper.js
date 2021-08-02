@@ -142,14 +142,7 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
           editorState={editorStateTest}
           editorStyle={editorStyle}
           toolbar={{
-            options: [
-              "inline",
-              "list",
-              "link",
-              "emoji",
-              "history",
-              "blockType",
-            ],
+            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"]
           }}
           onEditorStateChange={handleContentChange}
         />
@@ -161,14 +154,7 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
           editorState={editorStateTest}
           editorStyle={editorStyle}
           toolbar={{
-            options: [
-              "inline",
-              "list",
-              "link",
-              "emoji",
-              "history",
-              "blockType",
-            ],
+            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"]
           }}
         />
       )}

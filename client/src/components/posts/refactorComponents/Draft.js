@@ -177,7 +177,7 @@ const Draft = ({ userRole }) => {
         // placeholder="Details"
         onEditorStateChange={handleContentChange}
         toolbar={{
-          options: ["inline", "list", "link", "emoji", "history", "blockType"],
+          options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
         }}
       />
       <HRSeperator />
