@@ -219,40 +219,6 @@ class Courses(Resource):
         current_user.save()
         return {"success": "Course updated successfully"}, 200
 
-    # def put(self):
-    #     # Parse args
-    #     courseId = request.args.get('courseId')
-    #     color = request.args.get('color')
-    #     nickname = request.args.get('nickname')
-
-    #     # Query for courses matching the courseid
-    #     query = Course.objects.raw({"_id": courseId})
-    #     # Error checking even though these shouldn't happen
-    #     count = query.count()
-    #     if count > 1:
-    #         return {"errors": [f"More than one course with id {courseId}"]}, 400
-    #     elif count == 0:
-    #         return {"errors": [f"No course with id {courseId}"]}, 400
-
-    #     # Get the correct user course object to update
-    #     for course in current_user.courses:
-    #         if course.courseId == courseId:
-    #             break
-
-    #     # Update nickname
-    #     if color is None or color == "":
-    #         course.nickname = nickname
-    #     # Update color
-    #     elif nickname is None or nickname == "":
-    #         course.color = color
-    #     # Nothing valid sent to backend
-    #     else:
-    #         return {"errors": [f"No color or nickname provided"]}, 400
-
-    #     # Save changes and return
-    #     current_user.save()
-    #     return {"success": "Course updated successfully"}, 200
-
     def validate_post(self, args):
         errors = []
         # if args.university is None:
