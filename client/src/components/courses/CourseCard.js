@@ -28,8 +28,9 @@ class CourseCard extends React.Component {
       nicknameActive: false,
       nickname: this.props.nickname,
     };
-    this.endpoint = "/courses?courseId=" + this.props.id;
+    this.endpoint = "/courses";
   }
+  // Course ID = this.props.id
 
   handleColorChange = (colors) => {
     this.setState({ courseColor: colors.hex });
@@ -60,14 +61,13 @@ class CourseCard extends React.Component {
   };
 
   sendColorRequest = (colors) => {
-    // Get rid of # so we can send to backend properly
-    let spl = colors.hex.split("#");
-    // Add code for # part and then the actual color
-    let new_color = "%23" + spl[1];
-    // Send to backend
     LazyFetch({
       type: "put",
-      endpoint: this.endpoint + "&color=" + new_color,
+      endpoint: this.endpoint,
+      data: {
+        courseId: this.props.id,
+        color: colors.hex
+      },
       onSuccess: (data) => {
         console.log(data.success);
         this.setState({ courseColor: colors.hex });
@@ -78,13 +78,32 @@ class CourseCard extends React.Component {
   sendNicknameRequest = (nickname) => {
     LazyFetch({
       type: "put",
-      endpoint: this.endpoint + "&nickname=" + nickname,
+      endpoint: this.endpoint,
+      data: {
+        courseId: this.props.id,
+        nickname: nickname
+      },
       onSuccess: (data) => {
         console.log(data.success);
         this.setState({ nicknameActive: false });
       },
     });
   };
+
+  removeNickname = () => {
+    LazyFetch({
+      type: "put",
+      endpoint: this.endpoint,
+      data: {
+        courseId: this.props.id,
+        removeNickname: true
+      },
+      onSuccess: (data) => {
+        console.log(data.success);
+        this.setState({ nickname: null });
+      }
+    });
+  }
 
   handleNicknameChange = (e) => {
     this.setState({ nickname: e.target.value });
@@ -102,10 +121,6 @@ class CourseCard extends React.Component {
     //const newMsgs = {};
     this.setState({ numMsgs: 0 });
   }
-
-  removeNickname = () => {
-    console.log("nickname removed");
-  }
   
   render() {
     console.log("this.state.nickname:", this.state.nickname)
@@ -120,6 +135,7 @@ class CourseCard extends React.Component {
                 src={MessagesImg}
                 alt={"Messages"}
                 width={"25em"}
+                title={"Unread posts"}
                 onClick={() =>
                   alert(
                     'You clicked the Unread Messages icon for "' +
@@ -180,6 +196,7 @@ class CourseCard extends React.Component {
               alt={"Nickname"}
               width={"20em"}
               style={{ padding: "5px 5px 8px 0px" }}
+              title={"Add/Edit nickname"}
               onClick={this.toggleNickname}
             />)} 
             {!this.state.nicknameActive && this.state.nickname && (<Icon
@@ -188,7 +205,8 @@ class CourseCard extends React.Component {
               src={RemoveNickname} 
               alt={"Remove Nickname"} 
               width={"20em"} 
-              style={{padding: "5px 5px 8px 5px"}} 
+              style={{padding: "5px 5px 8px 5px"}}
+              title={"Remove nickname"}
               onClick={this.removeNickname} 
             />)}
             {!this.state.nicknameActive && (
@@ -199,6 +217,7 @@ class CourseCard extends React.Component {
               alt={"Color"}
               width={"16em"}
               style={{ padding: "5px 5px 8px 5px" }}
+              title={"Change color"}
               onClick={this.toggleColorDisplay}
             />)}
             {/* {this.state.nicknameActive && this.props.nickname && <Icon fader clickable src={CloseButtonIcon} alt={"Remove Nickname"} width={"16em"} title={"Remove Nickname"} onClick={this.removeNickname} />} */}

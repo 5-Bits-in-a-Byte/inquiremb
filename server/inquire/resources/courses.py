@@ -181,7 +181,7 @@ class Courses(Resource):
         parser.add_argument('courseId')
         parser.add_argument('color')
         parser.add_argument('nickname')
-        parser.add_argument('remove_nickname', type=bool, default=False)
+        parser.add_argument('removeNickname', type=bool, default=False)
         args = parser.parse_args()
 
         # Make sure the course exists
@@ -210,9 +210,9 @@ class Courses(Resource):
             return {"errors": ["Invalid color"]}, 400
 
         # Remove the course nickname
-        if args['remove_nickname'] and course.nickname:
+        if args['removeNickname'] and course.nickname:
             course.nickname = None
-        elif args['remove_nickname'] and not course.nickname:
+        elif args['removeNickname'] and not course.nickname:
             return {"errors": ["No nickname to remove"]}, 400
 
         # Save and return success
