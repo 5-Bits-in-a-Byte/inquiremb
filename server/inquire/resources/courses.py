@@ -14,6 +14,7 @@ from inquire.utils.argparser_types import str2bool
 import random
 
 from inquire.mongo import *
+import pymodm
 from inquire.auth import permission_layer, current_user
 from inquire.config import DEFAULT_COLORS
 from inquire.roles import student, admin
@@ -175,38 +176,82 @@ class Courses(Resource):
         return {"success": "successful delete"}, 200
 
     def put(self):
-        # Parse args
-        courseId = request.args.get('courseId')
-        color = request.args.get('color')
-        nickname = request.args.get('nickname')
+        # Parse arguments
+        parser = reqparse.RequestParser()
+        parser.add_argument('courseId')
+        parser.add_argument('color')
+        parser.add_argument('nickname')
+        parser.add_argument('remove_nickname', type=bool, default=False)
+        args = parser.parse_args()
 
-        # Query for courses matching the courseid
-        query = Course.objects.raw({"_id": courseId})
-        # Error checking even though these shouldn't happen
-        count = query.count()
-        if count > 1:
-            return {"errors": [f"More than one course with id {courseId}"]}, 400
-        elif count == 0:
-            return {"errors": [f"No course with id {courseId}"]}, 400
+        # Make sure the course exists
+        try:
+            Course.objects.get({"_id": args['courseId']})
+        except Course.DoesNotExist:
+            return {"errors": "Error: Course with id " + args['courseId'] + " does not exist."}, 400
+        except Course.MultipleObjectsReturned:
+            return {"errors": "Error: Multiple courses with id " + args['courseId'] + " were found."}, 400
 
         # Get the correct user course object to update
         for course in current_user.courses:
-            if course.courseId == courseId:
+            if course.courseId == args['courseId']:
                 break
 
-        # Update nickname
-        if color is None or color == "":
-            course.nickname = nickname
-        # Update color
-        elif nickname is None or nickname == "":
-            course.color = color
-        # Nothing valid sent to backend
-        else:
-            return {"errors": [f"No color or nickname provided"]}, 400
+        # Update the course nickname
+        if args['nickname'] is not None and args['nickname'] != "":
+            course.nickname = args['nickname']
+        elif args['nickname'] == "":
+            return {"errors": ["Invalid nickname"]}, 400
 
-        # Save changes and return
+        # Update the course color
+        if args['color'] is not None and args['color'] != "":
+            course.color = args['color']
+        elif args['color'] == "":
+            return {"errors": ["Invalid color"]}, 400
+
+        # Remove the course nickname
+        if args['remove_nickname'] and course.nickname:
+            course.nickname = None
+        elif args['remove_nickname'] and not course.nickname:
+            return {"errors": ["No nickname to remove"]}, 400
+
+        # Save and return success
         current_user.save()
         return {"success": "Course updated successfully"}, 200
+
+    # def put(self):
+    #     # Parse args
+    #     courseId = request.args.get('courseId')
+    #     color = request.args.get('color')
+    #     nickname = request.args.get('nickname')
+
+    #     # Query for courses matching the courseid
+    #     query = Course.objects.raw({"_id": courseId})
+    #     # Error checking even though these shouldn't happen
+    #     count = query.count()
+    #     if count > 1:
+    #         return {"errors": [f"More than one course with id {courseId}"]}, 400
+    #     elif count == 0:
+    #         return {"errors": [f"No course with id {courseId}"]}, 400
+
+    #     # Get the correct user course object to update
+    #     for course in current_user.courses:
+    #         if course.courseId == courseId:
+    #             break
+
+    #     # Update nickname
+    #     if color is None or color == "":
+    #         course.nickname = nickname
+    #     # Update color
+    #     elif nickname is None or nickname == "":
+    #         course.color = color
+    #     # Nothing valid sent to backend
+    #     else:
+    #         return {"errors": [f"No color or nickname provided"]}, 400
+
+    #     # Save changes and return
+    #     current_user.save()
+    #     return {"success": "Course updated successfully"}, 200
 
     def validate_post(self, args):
         errors = []
