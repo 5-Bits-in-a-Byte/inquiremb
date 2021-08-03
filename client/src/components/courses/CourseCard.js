@@ -73,10 +73,10 @@ class CourseCard extends React.Component {
     });
   };
 
-  sendNicknameRequest = () => {
+  sendNicknameRequest = (nickname) => {
     LazyFetch({
       type: "put",
-      endpoint: this.endpoint + "&nickname=" + this.state.nickname,
+      endpoint: this.endpoint + "&nickname=" + nickname,
       onSuccess: (data) => {
         console.log(data.success);
         this.setState({ nicknameActive: false });
@@ -85,9 +85,14 @@ class CourseCard extends React.Component {
   };
 
   handleNicknameChange = (e) => {
-    // console.log(e.target.value);
     this.setState({ nickname: e.target.value });
   };
+
+  handleEnterCheck = (e) => {
+    if (e.key == "Enter") {
+      this.sendNicknameRequest(e.target.value);
+    }
+  }
 
   // Track when new messages come in
   componentDidMount() {
@@ -95,8 +100,10 @@ class CourseCard extends React.Component {
     //const newMsgs = {};
     this.setState({ numMsgs: 0 });
   }
+  
 
   render() {
+    console.log("this.state.nickname:", this.state.nickname)
     return (
       <>
         <AlignedDiv>
@@ -132,6 +139,7 @@ class CourseCard extends React.Component {
                 <div>
                   <Input
                     placeholder="Enter a nickname"
+                    onKeyDown={this.handleEnterCheck}
                     onChange={this.handleNicknameChange}
                   />
                 </div>
@@ -191,7 +199,7 @@ class CourseCard extends React.Component {
                 <Button
                   primary
                   style={{ padding: "6px", margin: "0 0 0 0.5em" }}
-                  onClick={this.sendNicknameRequest}
+                  onClick={() => {this.sendNicknameRequest(this.state.nickname)}}
                 >
                   Submit
                 </Button>
