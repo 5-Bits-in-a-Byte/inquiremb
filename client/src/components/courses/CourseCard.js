@@ -9,6 +9,8 @@ import { ChromePicker } from "react-color";
 import LazyFetch from "../common/requests/LazyFetch";
 import Button from "../common/Button";
 import Input from "../common/Input";
+import CloseButtonIcon from "../../imgs/close.svg";
+import RemoveNickname from "../../imgs/remove-nickname.svg";
 
 /** Course Card
  * @brief Component for displaying courses the user is a part of. Component is one of many courses
@@ -100,8 +102,11 @@ class CourseCard extends React.Component {
     //const newMsgs = {};
     this.setState({ numMsgs: 0 });
   }
-  
 
+  removeNickname = () => {
+    console.log("nickname removed");
+  }
+  
   render() {
     console.log("this.state.nickname:", this.state.nickname)
     return (
@@ -168,7 +173,7 @@ class CourseCard extends React.Component {
             </div>
           </CourseInfo>
           <CourseFooter>
-            <Icon
+            {!this.state.nicknameActive && (<Icon
               fader
               clickable
               src={EditImg}
@@ -176,7 +181,17 @@ class CourseCard extends React.Component {
               width={"20em"}
               style={{ padding: "5px 5px 8px 0px" }}
               onClick={this.toggleNickname}
-            ></Icon>
+            />)} 
+            {!this.state.nicknameActive && this.state.nickname && (<Icon
+              fader 
+              clickable 
+              src={RemoveNickname} 
+              alt={"Remove Nickname"} 
+              width={"20em"} 
+              style={{padding: "5px 5px 8px 5px"}} 
+              onClick={this.removeNickname} 
+            />)}
+            {!this.state.nicknameActive && (
             <Icon
               fader
               clickable
@@ -185,7 +200,8 @@ class CourseCard extends React.Component {
               width={"16em"}
               style={{ padding: "5px 5px 8px 5px" }}
               onClick={this.toggleColorDisplay}
-            ></Icon>
+            />)}
+            {/* {this.state.nicknameActive && this.props.nickname && <Icon fader clickable src={CloseButtonIcon} alt={"Remove Nickname"} width={"16em"} title={"Remove Nickname"} onClick={this.removeNickname} />} */}
             <Placeholder></Placeholder>
             {this.state.nicknameActive && (
               <ButtonWrapper>
