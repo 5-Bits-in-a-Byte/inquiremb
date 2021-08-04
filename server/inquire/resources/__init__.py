@@ -13,3 +13,4 @@ from .course_users import CourseUsers
 from .poll import Poll
 from .pin import Pin
 from .ban_remove import BanRemove
+from .images import Images

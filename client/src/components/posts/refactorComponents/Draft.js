@@ -93,38 +93,20 @@ const Draft = ({ userRole }) => {
     });
   };
 
-  const imageCallback = (file) => {
-    console.log("file:", file);
-
-    const formData = new FormData();
-    formData.append("imageFile", file)
-
-    console.log("formData:", formData);
-    // axios.post("/images", formData).then(res => console.log("res")).catch(err => console.warn(err));
-    LazyFetch({
-      type: "post",
-      endpoint: "/images",
-      data: {
-        imageFile: formData
-      },
-      onSuccess: (data) => {
-        console.log(data);
-      }
-    });
-
-    // Put LazyFetch first here
-    let newImages = draft.uploadedImages;
-    const imageObject = {
-      file: file,
-      // LazyFetch sends URL I can store here
-      link: URL.createObjectURL(file),
-    }
-    newImages.append(imageObject);
-    setDraft({...draft, uploadedImages: newImages});
-
+  const imageCallback = async (file) => {
     return new Promise(
       (resolve, reject) => {
-        resolve({ data: { link: imageObject.link } });
+        const formData = new FormData();
+        formData.append("imageFile", file)
+
+        LazyFetch({
+          type: "post",
+          endpoint: "/images",
+          data: formData,
+          onSuccess: (data) => {
+            resolve({ data: { link: data.data.link } });
+          }
+        });
       }
     );
   }
@@ -216,7 +198,7 @@ const Draft = ({ userRole }) => {
         onEditorStateChange={handleContentChange}
         toolbar={{
           options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-          image: { uploadCallback: imageCallback, uploadEnabled: true }
+          image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
         }}
       />
       <HRSeperator />
