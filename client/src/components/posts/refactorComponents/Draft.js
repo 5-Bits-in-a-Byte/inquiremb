@@ -31,6 +31,7 @@ const Draft = ({ userRole }) => {
     title: "",
     isAnonymous: false,
     isPrivate: false,
+    uploadedImages: []
   });
 
   var defaultType;
@@ -90,6 +91,25 @@ const Draft = ({ userRole }) => {
       },
     });
   };
+
+  const imageCallback = (file) => {
+    // Put LazyFetch first here
+    let newImages = draft.uploadedImages;
+    console.log("file:", file);
+    const imageObject = {
+      file: file,
+      // LazyFetch sends URL I can store here
+      link: URL.createObjectURL(file),
+    }
+    newImages.append(imageObject);
+    setDraft({...draft, uploadedImages: newImages});
+
+    return new Promise(
+      (resolve, reject) => {
+        resolve({ data: { link: imageObject.link } });
+      }
+    );
+  }
 
   // Styling Variables
   var titlePlaceholder =
@@ -178,6 +198,7 @@ const Draft = ({ userRole }) => {
         onEditorStateChange={handleContentChange}
         toolbar={{
           options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
+          image: { uploadCallback: imageCallback, uploadEnabled: true }
         }}
       />
       <HRSeperator />
