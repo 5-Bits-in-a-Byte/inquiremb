@@ -58,4 +58,4 @@ class Images(Resource):
             if status:
                 print(f'User:{current_user._id} ({current_user.first} {current_user.last}) successfully uploaded an image')
                 return {"data": {"link": generate_s3_url(object_name, S3_BUCKET_NAME)}}
-        return {"data": {"link": generate_s3_url(object_name, S3_BUCKET_NAME)}}
+        return {"error": "Unsuccessful"}, 400
