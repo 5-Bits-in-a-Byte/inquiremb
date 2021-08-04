@@ -9,6 +9,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { convertToRaw, EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useHistory } from "react-router";
+import axios from "axios";
 
 const accentColor = (type) => {
   switch (type) {
@@ -93,9 +94,26 @@ const Draft = ({ userRole }) => {
   };
 
   const imageCallback = (file) => {
+    console.log("file:", file);
+
+    const formData = new FormData();
+    formData.append("imageFile", file)
+
+    console.log("formData:", formData);
+    // axios.post("/images", formData).then(res => console.log("res")).catch(err => console.warn(err));
+    LazyFetch({
+      type: "post",
+      endpoint: "/images",
+      data: {
+        imageFile: formData
+      },
+      onSuccess: (data) => {
+        console.log(data);
+      }
+    });
+
     // Put LazyFetch first here
     let newImages = draft.uploadedImages;
-    console.log("file:", file);
     const imageObject = {
       file: file,
       // LazyFetch sends URL I can store here
