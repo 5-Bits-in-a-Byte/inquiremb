@@ -31,8 +31,7 @@ const Draft = ({ userRole }) => {
   const [draft, setDraft] = useState({
     title: "",
     isAnonymous: false,
-    isPrivate: false,
-    uploadedImages: []
+    isPrivate: false
   });
 
   var defaultType;

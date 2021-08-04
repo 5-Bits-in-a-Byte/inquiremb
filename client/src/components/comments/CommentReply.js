@@ -47,6 +47,24 @@ const CommentReply = ({
     setContent({ raw: e, plainText: plainText });
   };
 
+  const imageCallback = async (file) => {
+    return new Promise(
+      (resolve, reject) => {
+        const formData = new FormData();
+        formData.append("imageFile", file)
+
+        LazyFetch({
+          type: "post",
+          endpoint: "/images",
+          data: formData,
+          onSuccess: (data) => {
+            resolve({ data: { link: data.data.link } });
+          }
+        });
+      }
+    );
+  }
+
   if (isDraft) {
     reply = {
       _id: null,
@@ -62,7 +80,8 @@ const CommentReply = ({
           }}
           onEditorStateChange={handleContentChange}
           toolbar={{
-            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"]
+            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
+            image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
           }}
         />
       ),
@@ -150,7 +169,8 @@ const CommentReply = ({
           }}
           onEditorStateChange={handleContentChange}
           toolbar={{
-            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"]
+            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
+            image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
           }}
         />
       );
