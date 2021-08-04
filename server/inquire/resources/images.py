@@ -13,6 +13,8 @@ from flask_restful import Resource, reqparse
 from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
 from inquire.config import S3_ACCESS_KEY, S3_SECRET_KEY, S3_BUCKET_NAME
+import boto3
+import shortuuid
 
 def create_client():
     client = boto3.client(
@@ -37,16 +39,23 @@ def upload_file(file, bucket, object_name, content_type="image/png"):
                       Bucket=bucket,
                       Key=object_name,
                       ContentType=content_type)
-        print(response)
     except error as e:
         print(e)
         return False
     return True
 
+def generate_s3_url(object_name, bucket_name, region='us-west-2'):
+    return f"https://s3-{region}.amazonaws.com/{bucket_name}/{object_name}"
 
 class Images(Resource):
     @permission_layer(require_login=True)
     def post(self):
         image = request.files.get('imageFile')
-        upload_file()
-        return self.__serialize(current_user).to_dict()
+        if image:
+            mimetype = image.content_type
+            object_name = shortuuid.uuid()
+            status = upload_file(image, S3_BUCKET_NAME, object_name, content_type=mimetype)
+            if status:
+                print(f'User:{current_user._id} ({current_user.first} {current_user.last}) successfully uploaded an image')
+                return {"data": {"link": generate_s3_url(object_name, S3_BUCKET_NAME)}}
+        return {"data": {"link": generate_s3_url(object_name, S3_BUCKET_NAME)}}
