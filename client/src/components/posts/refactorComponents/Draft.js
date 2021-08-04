@@ -9,6 +9,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { convertToRaw, EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useHistory } from "react-router";
+import axios from "axios";
 
 const accentColor = (type) => {
   switch (type) {
@@ -92,21 +93,20 @@ const Draft = ({ userRole }) => {
     });
   };
 
-  const imageCallback = (file) => {
-    // Put LazyFetch first here
-    let newImages = draft.uploadedImages;
-    console.log("file:", file);
-    const imageObject = {
-      file: file,
-      // LazyFetch sends URL I can store here
-      link: URL.createObjectURL(file),
-    }
-    newImages.append(imageObject);
-    setDraft({...draft, uploadedImages: newImages});
-
+  const imageCallback = async (file) => {
     return new Promise(
       (resolve, reject) => {
-        resolve({ data: { link: imageObject.link } });
+        const formData = new FormData();
+        formData.append("imageFile", file)
+
+        LazyFetch({
+          type: "post",
+          endpoint: "/images",
+          data: formData,
+          onSuccess: (data) => {
+            resolve({ data: { link: data.data.link } });
+          }
+        });
       }
     );
   }
@@ -198,7 +198,7 @@ const Draft = ({ userRole }) => {
         onEditorStateChange={handleContentChange}
         toolbar={{
           options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-          image: { uploadCallback: imageCallback, uploadEnabled: true }
+          image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
         }}
       />
       <HRSeperator />
