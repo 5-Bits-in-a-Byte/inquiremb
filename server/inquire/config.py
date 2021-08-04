@@ -7,6 +7,11 @@ Group Name: 5 Bits in a Byte
 """
 import os
 
+# AWS S3 config vars
+S3_ACCESS_KEY = os.getenv('S3_ACCESS_KEY')
+S3_SECRET_KEY = os.getenv('S3_SECRET_KEY')
+S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
+
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 GITHUB_CLIENT_ID = os.getenv('GITHUB_CLIENT_ID')
