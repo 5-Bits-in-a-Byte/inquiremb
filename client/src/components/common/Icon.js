@@ -5,7 +5,7 @@ import styled, { css } from "styled-components";
 const Icon = ({ src, onClick, msg, width, title, ...props }) => {
   const clickHandler = props.clickable ? onClick : undefined;
   return (
-    <IconDiv {...props} onClick={clickHandler}>
+    <IconDiv {...props} onClick={clickHandler} title={title}>
       <img src={src} alt={msg} width={width} />
     </IconDiv>
   );
