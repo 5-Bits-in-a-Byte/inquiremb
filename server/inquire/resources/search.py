@@ -1,3 +1,11 @@
+'''
+This resource deals with search functionality so that users can search for specific posts.
+
+Author: Brian Gunnarson
+Group Name: 5 Bits in a Byte
+
+Last Modified Date: 08/10/2021
+'''
 from flask import request
 from flask_restful import Resource
 from inquire.auth import current_user, permission_layer

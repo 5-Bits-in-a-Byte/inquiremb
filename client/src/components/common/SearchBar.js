@@ -10,17 +10,21 @@ import Icon from "../common/Icon";
  * @param {string} placeholder placeholder text in the search textfield
  * @returns
  */
-const SearchBar = ({ onChange, placeholder }) => {
+const SearchBar = ({ onChange, placeholder, displayIcon }) => {
   return (
     <SearchDiv className="secondary-btn flex-row">
-      <Icon
-        src={SearchImg}
-        style={{
-          height: "16px",
-          padding: "0 7px 0 11px",
-          borderRight: "1px solid #818181",
-        }}
-      />
+      {displayIcon ? (
+        <Icon
+          src={SearchImg}
+          style={{
+            height: "16px",
+            padding: "0 7px 0 11px",
+            borderRight: "1px solid #818181",
+          }}
+        />
+      ) : (
+        <></>
+      )}
       <TextInput type="text" onChange={onChange} placeholder={placeholder} />
     </SearchDiv>
   );

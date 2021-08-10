@@ -15,6 +15,9 @@ import { Editor } from "react-draft-wysiwyg";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import PollWrapper from "./refactorComponents/PollWrapper";
 import EditorWrapper from "./refactorComponents/EditorWrapper";
+import SearchPanel from "./SearchPanel";
+import LazyFetch from "../common/requests/LazyFetch";
+import LoadingDots from "../common/animation/LoadingDots";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();
@@ -147,46 +150,83 @@ const PostView = ({ userRole, highlightedSection }) => {
   }
 
   let posts = generateSections(data, userRole, isCondensed);
+  // const [posts, setPosts] = useState([]);
+  // useEffect(() => {
+  //   if (initialPosts) {
+  //     setPosts(initialPosts);
+  //     console.log("inside useEffect:", posts);
+  //   }
+  // }, []);
+
+  const handleSearch = (e) => {
+    // console.log(e.target.value);
+    LazyFetch({
+      type: "get",
+      endpoint: "/courses/" + courseId + "/search?search=" + e.target.value,
+      onSuccess: (data) => {
+        console.log(data);
+        if (data.length > 0) {
+          // setPosts(generateSections(data, userRole, isCondensed));
+          console.log("posts:", posts);
+        } else {
+          // setPosts(initialPosts);
+        }
+      },
+      onFailure: (err) => {
+        console.log(err.response.data.errors);
+      },
+    });
+  };
+
+  console.log("outside return:", posts);
 
   return (
     <>
       <PostFeed>
         <ScrollingDiv>
-          <CenterWrapper>
-            <SortingOptions>
-              <Button
-                secondary={true}
-                onClick={() => {
-                  setCondensedState(!isCondensed);
-                }}
-              >
-                <img src={LineWidthImg} />
-              </Button>
-              <Button
-                secondary={true}
-                style={MarginLeftRight}
-                onClick={() => toggleSort(!sortByMostRecent)}
-              >
-                {sortByMostRecent ? "Most Recent" : "Oldest"}
-              </Button>
-            </SortingOptions>
-            {posts.pinned.length > 0 && (
-              <PostGroupingHeader>
-                <img
-                  src={HollowPinImg}
-                  style={{ width: 18, height: 18, marginRight: 5 }}
-                />
-                Pinned Posts
-              </PostGroupingHeader>
-            )}
-            {posts.pinned}
-            {posts.other.length > 0 && (
-              <PostGroupingHeader>All Posts</PostGroupingHeader>
-            )}
-            {posts.other}
-            <Options userRole={userRole} courseId={courseId} />
-            <OverflowCounter offsetAmount={"0.25rem"} />
-          </CenterWrapper>
+          {posts.length <= 0 ? (
+            <></>
+          ) : (
+            <CenterWrapper>
+              <SortingOptions>
+                <Button
+                  secondary={true}
+                  onClick={() => {
+                    setCondensedState(!isCondensed);
+                  }}
+                >
+                  <img src={LineWidthImg} />
+                </Button>
+                <Button
+                  secondary={true}
+                  style={MarginLeftRight}
+                  onClick={() => toggleSort(!sortByMostRecent)}
+                >
+                  {sortByMostRecent ? "Most Recent" : "Oldest"}
+                </Button>
+              </SortingOptions>
+              {posts.pinned.length > 0 && (
+                <PostGroupingHeader>
+                  <img
+                    src={HollowPinImg}
+                    style={{ width: 18, height: 18, marginRight: 5 }}
+                  />
+                  Pinned Posts
+                </PostGroupingHeader>
+              )}
+              {posts.pinned}
+              {posts.other.length > 0 && (
+                <PostGroupingHeader>All Posts</PostGroupingHeader>
+              )}
+              {posts.other}
+              <SearchPanel
+                courseId={courseId}
+                onChangeCallback={handleSearch}
+              />
+              <Options userRole={userRole} courseId={courseId} />
+              <OverflowCounter offsetAmount={"0.25rem"} />
+            </CenterWrapper>
+          )}
         </ScrollingDiv>
       </PostFeed>
     </>
