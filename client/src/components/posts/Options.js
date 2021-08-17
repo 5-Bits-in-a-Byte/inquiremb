@@ -103,13 +103,13 @@ const OptionsWrapper = styled.div`
   flex-grow: 1;
   position: absolute;
   right: -40px;
-  top: 0;
+  top: 120px;
 
   /* border: 1px solid red; */
 `;
 
 const OptionsHeader = styled.h1`
-  margin: 3em 0 2em 0;
+  margin: 3em 0 1em 0;
 
   font-size: 14px;
 `;

@@ -66,7 +66,7 @@ class CourseCard extends React.Component {
       endpoint: this.endpoint,
       data: {
         courseId: this.props.id,
-        color: colors.hex
+        color: colors.hex,
       },
       onSuccess: (data) => {
         console.log(data.success);
@@ -81,7 +81,7 @@ class CourseCard extends React.Component {
       endpoint: this.endpoint,
       data: {
         courseId: this.props.id,
-        nickname: nickname
+        nickname: nickname,
       },
       onSuccess: (data) => {
         console.log(data.success);
@@ -96,14 +96,14 @@ class CourseCard extends React.Component {
       endpoint: this.endpoint,
       data: {
         courseId: this.props.id,
-        removeNickname: true
+        removeNickname: true,
       },
       onSuccess: (data) => {
         console.log(data.success);
         this.setState({ nickname: null });
-      }
+      },
     });
-  }
+  };
 
   handleNicknameChange = (e) => {
     this.setState({ nickname: e.target.value });
@@ -113,7 +113,7 @@ class CourseCard extends React.Component {
     if (e.key == "Enter") {
       this.sendNicknameRequest(e.target.value);
     }
-  }
+  };
 
   // Track when new messages come in
   componentDidMount() {
@@ -121,9 +121,8 @@ class CourseCard extends React.Component {
     //const newMsgs = {};
     this.setState({ numMsgs: 0 });
   }
-  
+
   render() {
-    console.log("this.state.nickname:", this.state.nickname)
     return (
       <>
         <AlignedDiv>
@@ -189,37 +188,42 @@ class CourseCard extends React.Component {
             </div>
           </CourseInfo>
           <CourseFooter>
-            {!this.state.nicknameActive && (<Icon
-              fader
-              clickable
-              src={EditImg}
-              alt={"Nickname"}
-              width={"20em"}
-              style={{ padding: "5px 5px 8px 0px" }}
-              title={"Add/Edit nickname"}
-              onClick={this.toggleNickname}
-            />)} 
-            {!this.state.nicknameActive && this.state.nickname && (<Icon
-              fader 
-              clickable 
-              src={RemoveNickname} 
-              alt={"Remove Nickname"} 
-              width={"20em"} 
-              style={{padding: "5px 5px 8px 5px"}}
-              title={"Remove nickname"}
-              onClick={this.removeNickname} 
-            />)}
             {!this.state.nicknameActive && (
-            <Icon
-              fader
-              clickable
-              src={ColorImg}
-              alt={"Color"}
-              width={"16em"}
-              style={{ padding: "5px 5px 8px 5px" }}
-              title={"Change color"}
-              onClick={this.toggleColorDisplay}
-            />)}
+              <Icon
+                fader
+                clickable
+                src={EditImg}
+                alt={"Nickname"}
+                width={"20em"}
+                style={{ padding: "5px 5px 8px 0px" }}
+                title={"Add/Edit nickname"}
+                onClick={this.toggleNickname}
+              />
+            )}
+            {!this.state.nicknameActive && this.state.nickname && (
+              <Icon
+                fader
+                clickable
+                src={RemoveNickname}
+                alt={"Remove Nickname"}
+                width={"20em"}
+                style={{ padding: "5px 5px 8px 5px" }}
+                title={"Remove nickname"}
+                onClick={this.removeNickname}
+              />
+            )}
+            {!this.state.nicknameActive && (
+              <Icon
+                fader
+                clickable
+                src={ColorImg}
+                alt={"Color"}
+                width={"16em"}
+                style={{ padding: "5px 5px 8px 5px" }}
+                title={"Change color"}
+                onClick={this.toggleColorDisplay}
+              />
+            )}
             {/* {this.state.nicknameActive && this.props.nickname && <Icon fader clickable src={CloseButtonIcon} alt={"Remove Nickname"} width={"16em"} title={"Remove Nickname"} onClick={this.removeNickname} />} */}
             <Placeholder></Placeholder>
             {this.state.nicknameActive && (
@@ -234,7 +238,9 @@ class CourseCard extends React.Component {
                 <Button
                   primary
                   style={{ padding: "6px", margin: "0 0 0 0.5em" }}
-                  onClick={() => {this.sendNicknameRequest(this.state.nickname)}}
+                  onClick={() => {
+                    this.sendNicknameRequest(this.state.nickname);
+                  }}
                 >
                   Submit
                 </Button>
