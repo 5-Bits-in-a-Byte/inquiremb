@@ -14,7 +14,6 @@ import LazyFetch from "../common/requests/LazyFetch";
  * @param {string} courseId given to the "+ New Post" button to route to the Post form page
  */
 const SearchPanel = ({ courseId, onChangeCallback }) => {
-  const user = useContext(UserContext);
   // console.log("User Object: ", user);
   // console.log("OPTIONS User Role: ", userRole);
 

@@ -60,6 +60,8 @@ class Search(Resource):
 
         queryParams = {"courseId": courseId}
 
+        # TODO: parallel query for title text; prioritize raw text over title
+
         # If the current user can see private posts
         if user_perms["privacy"]["private"]:
             queryParams['$text'] = {'$search': search}

@@ -76,6 +76,17 @@ const generateSections = (data, userRole, isCondensed) => {
   return posts;
 };
 
+const fetchData = (endpoint, socketPosts, setData) => {
+  LazyFetch({
+    type: "get",
+    endpoint: endpoint,
+    onSuccess: (response) => {
+      // console.log("get request data:", response);
+      setData([...socketPosts, ...response]);
+    },
+  });
+};
+
 const PostView = ({ userRole, highlightedSection }) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
@@ -103,130 +114,141 @@ const PostView = ({ userRole, highlightedSection }) => {
   const [sortByMostRecent, toggleSort] = useState(true);
   // Retrieves the courseId from the url parameters
   const { courseId } = useParams();
-  let endpoint = "/courses/" + courseId + "/posts";
+  const baseEndpoint = "/courses/" + courseId + "/posts";
+  const [endpoint, setEndpoint] = useState(baseEndpoint);
 
-  switch (highlightedSection) {
-    case "Instructor":
-      endpoint += "?filterby=instructor";
-      break;
-    case "My Posts":
-      endpoint += "?filterby=me";
-      break;
-    case "My Upvoted":
-      endpoint += "?filterby=myupvoted";
-      break;
-    case "Announcements":
-      endpoint += "?filterby=announcement";
-      break;
-    case "Questions":
-      endpoint += "?filterby=question";
-      break;
-    case "Polls":
-      endpoint += "?filterby=poll";
-      break;
-    case "General Posts":
-      endpoint += "?filterby=general";
-      break;
-    default:
-    // Don't add a filter to endpoint
-  }
-
-  if (!sortByMostRecent) {
-    if (highlightedSection !== "All Posts") {
-      endpoint += "&sortby=oldest";
-    } else {
-      endpoint += "?sortby=oldest";
+  useEffect(() => {
+    // Sorting by post type
+    switch (highlightedSection) {
+      case "Instructor":
+        setEndpoint(baseEndpoint + "?filterby=instructor");
+        break;
+      case "My Posts":
+        setEndpoint(baseEndpoint + "?filterby=me");
+        break;
+      case "My Upvoted":
+        setEndpoint(baseEndpoint + "?filterby=myupvoted");
+        break;
+      case "Announcements":
+        setEndpoint(baseEndpoint + "?filterby=announcement");
+        break;
+      case "Questions":
+        setEndpoint(baseEndpoint + "?filterby=question");
+        break;
+      case "Polls":
+        setEndpoint(baseEndpoint + "?filterby=poll");
+        break;
+      case "General Posts":
+        setEndpoint(baseEndpoint + "?filterby=general");
+        break;
+      default:
+        // Don't add a filter to endpoint
+        setEndpoint(baseEndpoint);
+        break;
     }
-  }
 
-  // Load posts from course
-  let { data, errors, loading } = Fetch({
-    type: "get",
-    endpoint: endpoint,
-  });
-  if (data) {
-    // console.log("DATA: ", data);
-    data = [...socketPosts, ...data];
-  }
+    // Sorting by date
+    if (!sortByMostRecent) {
+      if (highlightedSection !== "All Posts") {
+        setEndpoint(endpoint + "&sortby=oldest");
+      } else {
+        setEndpoint(baseEndpoint + "?sortby=oldest");
+      }
+    }
+  }, [highlightedSection, sortByMostRecent]);
 
-  let posts = generateSections(data, userRole, isCondensed);
-  // const [posts, setPosts] = useState([]);
-  // useEffect(() => {
-  //   if (initialPosts) {
-  //     setPosts(initialPosts);
-  //     console.log("inside useEffect:", posts);
-  //   }
-  // }, []);
+  const [data, setData] = useState(null);
+
+  // Initial Fetch of Data
+  useEffect(() => {
+    if (!data) {
+      fetchData(endpoint, socketPosts, setData);
+    }
+  }, []);
+
+  // Fetch for endpoint change
+  useEffect(() => {
+    if (data) {
+      fetchData(endpoint, socketPosts, setData);
+    }
+  }, [endpoint]);
+
+  const [posts, setPosts] = useState(null);
+  const [initialPosts, setInitialPosts] = useState(posts);
+
+  // Populate posts and store state of initial posts
+  useEffect(() => {
+    // console.log("data:", data);
+    if (data) {
+      let initialGeneratedPosts = generateSections(data, userRole, isCondensed);
+      setPosts(initialGeneratedPosts);
+      setInitialPosts(initialGeneratedPosts);
+    }
+  }, [data]);
 
   const handleSearch = (e) => {
     // console.log(e.target.value);
-    LazyFetch({
-      type: "get",
-      endpoint: "/courses/" + courseId + "/search?search=" + e.target.value,
-      onSuccess: (data) => {
-        console.log(data);
-        if (data.length > 0) {
-          // setPosts(generateSections(data, userRole, isCondensed));
-          console.log("posts:", posts);
-        } else {
-          // setPosts(initialPosts);
-        }
-      },
-      onFailure: (err) => {
-        console.log(err.response.data.errors);
-      },
-    });
+    if (e.target.value != "") {
+      LazyFetch({
+        type: "get",
+        endpoint: "/courses/" + courseId + "/search?search=" + e.target.value,
+        onSuccess: (searchData) => {
+          // console.log("onSuccess data:", searchData);
+          setPosts(generateSections(searchData, userRole, isCondensed));
+        },
+        onFailure: (err) => {
+          console.log(err.response.data.errors);
+        },
+      });
+    } else {
+      // console.log("initialPosts:", initialPosts);
+      setPosts(initialPosts);
+    }
   };
-
-  console.log("outside return:", posts);
 
   return (
     <>
       <PostFeed>
         <ScrollingDiv>
-          {posts.length <= 0 ? (
-            <></>
-          ) : (
-            <CenterWrapper>
-              <SortingOptions>
-                <Button
-                  secondary={true}
-                  onClick={() => {
-                    setCondensedState(!isCondensed);
-                  }}
-                >
-                  <img src={LineWidthImg} />
-                </Button>
-                <Button
-                  secondary={true}
-                  style={MarginLeftRight}
-                  onClick={() => toggleSort(!sortByMostRecent)}
-                >
-                  {sortByMostRecent ? "Most Recent" : "Oldest"}
-                </Button>
-              </SortingOptions>
-              {posts.pinned.length > 0 && (
-                <PostGroupingHeader>
-                  <img
-                    src={HollowPinImg}
-                    style={{ width: 18, height: 18, marginRight: 5 }}
-                  />
-                  Pinned Posts
-                </PostGroupingHeader>
-              )}
-              {posts.pinned}
-              {posts.other.length > 0 && (
-                <PostGroupingHeader>All Posts</PostGroupingHeader>
-              )}
-              {posts.other}
-              <SearchPanel
-                courseId={courseId}
-                onChangeCallback={handleSearch}
-              />
-              <Options userRole={userRole} courseId={courseId} />
-              <OverflowCounter offsetAmount={"0.25rem"} />
-            </CenterWrapper>
-          )}
+          <CenterWrapper>
+            <SortingOptions>
+              <Button
+                secondary={true}
+                onClick={() => {
+                  setCondensedState(!isCondensed);
+                  fetchData(endpoint, socketPosts, setData);
+                }}
+              >
+                <img src={LineWidthImg} />
+              </Button>
+              <Button
+                secondary={true}
+                style={MarginLeftRight}
+                onClick={() => {
+                  toggleSort(!sortByMostRecent);
+                }}
+              >
+                {sortByMostRecent ? "Most Recent" : "Oldest"}
+              </Button>
+            </SortingOptions>
+            {posts && posts.pinned.length > 0 && (
+              <PostGroupingHeader>
+                <img
+                  src={HollowPinImg}
+                  style={{ width: 18, height: 18, marginRight: 5 }}
+                />
+                Pinned Posts
+              </PostGroupingHeader>
+            )}
+            {posts ? posts.pinned : <></>}
+            {posts && posts.other.length > 0 && (
+              <PostGroupingHeader>All Posts</PostGroupingHeader>
+            )}
+            {posts ? posts.other : <></>}
+            <SearchPanel courseId={courseId} onChangeCallback={handleSearch} />
+            <Options userRole={userRole} courseId={courseId} />
+            <OverflowCounter offsetAmount={"0.25rem"} />
+          </CenterWrapper>
         </ScrollingDiv>
       </PostFeed>
     </>
