@@ -1,10 +1,61 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import Button from "../common/Button";
 import { UserContext } from "../context/UserProvider";
 import DraftTextArea from "../common/DraftTextArea";
+import LazyFetch from "../common/requests/LazyFetch";
 
 const AboutUser = ({ userObject, ...props }) => {
+  const user = useContext(UserContext);
+  const [editingProfile, toggleEdit] = useState(false);
+  const [aboutMe, setAboutMe] = useState(null);
+  const [initialAboutMe, setInitialAboutMe] = useState(null);
+  const [initialBannerColor, setInitialBannerColor] = useState(null);
+  const [bannerColor, setBannerColor] = useState(null);
+  let endpoint = "/userProfiles";
+
+  useEffect(() => {
+    LazyFetch({
+      type: "get",
+      endpoint: endpoint,
+      onSuccess: (response) => {
+        console.log("response:", response);
+        setAboutMe(response.profileData.about);
+        setInitialAboutMe(response.profileData.about);
+        setBannerColor(response.profileData.bannerColor);
+        setInitialBannerColor(response.profileData.bannerColor);
+      },
+    });
+  }, []);
+
+  const handleAboutSubmit = () => {
+    LazyFetch({
+      type: "put",
+      endpoint: endpoint,
+      data: {
+        userId: user._id,
+        about: aboutMe,
+      },
+      onSuccess: (response) => {
+        console.log("response:", response);
+      },
+    });
+  };
+
+  const handleColorChange = (colors) => {
+    LazyFetch({
+      type: "put",
+      endpoint: endpoint,
+      data: {
+        userId: "",
+        color: colors.hex,
+      },
+      onSuccess: (data) => {
+        console.log(data.success);
+        this.setState({ courseColor: colors.hex });
+      },
+    });
+  };
   return (
     <>
       <Wrapper>
@@ -18,31 +69,67 @@ const AboutUser = ({ userObject, ...props }) => {
               />
             </ImageWrapper>
 
-            <Button
-              secondary
-              buttonWidth={"10em"}
-              buttonHeight={"2em"}
-              onClick={() => {
-                alert("This feature is in progress.");
-              }}
-            >
-              Edit Profile
-            </Button>
+            {editingProfile ? (
+              <Button
+                secondary
+                buttonWidth={"10em"}
+                buttonHeight={"2em"}
+                onClick={() => {
+                  toggleEdit(false);
+                  setAboutMe(initialAboutMe);
+                  setBannerColor(initialBannerColor);
+                }}
+              >
+                Cancel
+              </Button>
+            ) : (
+              <Button
+                secondary
+                buttonWidth={"10em"}
+                buttonHeight={"2em"}
+                onClick={() => {
+                  // alert("This feature is in progress.");
+                  toggleEdit(!editingProfile);
+                }}
+              >
+                Edit Profile
+              </Button>
+            )}
           </VerticalFlex>
           <UserInfoWrapper>
             <UserName>{userObject.first + " " + userObject.last}</UserName>
             <h2 style={{ margin: `1.5em 0 0 0` }}>About</h2>
             <AboutContent>
-              <DraftTextArea
-                minRows={5}
-                placeholder="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia fuga quaerat atque! Aperiam autem fugit, ad sapiente illo dicta reiciendis quis nam, sint quidem iste!"
-                // onChange={handleChange}
-                // name="title"
-              ></DraftTextArea>
+              {editingProfile ? (
+                <div>
+                  <DraftTextArea
+                    minRows={5}
+                    placeholder="Here's something super interesting about me..."
+                    onChange={(e) => {
+                      setAboutMe(e.target.value);
+                    }}
+                  ></DraftTextArea>
+                  <ButtonWrapper>
+                    <Button
+                      primary
+                      buttonWidth={"10em"}
+                      buttonHeight={"1.5em"}
+                      onClick={() => {
+                        handleAboutSubmit();
+                        toggleEdit(false);
+                      }}
+                    >
+                      Submit
+                    </Button>
+                  </ButtonWrapper>
+                </div>
+              ) : (
+                <AboutText>{aboutMe}</AboutText>
+              )}
             </AboutContent>
           </UserInfoWrapper>
         </ContentWrapper>
-        <CustomColorSection></CustomColorSection>
+        <CustomColorSection bannerColor={bannerColor}></CustomColorSection>
       </Wrapper>
     </>
   );
@@ -55,7 +142,6 @@ const Wrapper = styled.div`
   overflow: hidden;
   display: flex;
   align-items: center;
-  /* width: 100%; */
   height: 300px;
   margin: 1em;
   padding: 1em;
@@ -64,6 +150,16 @@ const Wrapper = styled.div`
   border-radius: 10px;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
+`;
+
+const AboutText = styled.div`
+  width: 150%;
+  white-space: initial;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const ContentWrapper = styled.div`
@@ -80,7 +176,8 @@ const CustomColorSection = styled.div`
   width: 100%;
   height: 112px;
 
-  background-color: #4a86fa;
+  background-color: ${(props) =>
+    props.bannerColor ? props.bannerColor : css`#4A86FA`};
 `;
 
 const UserInfoWrapper = styled.div`

@@ -16,7 +16,7 @@ const UserCourses = ({ userObject, ...props }) => {
   return (
     <>
       <SectionWrapper>
-        <h1>Courses:</h1>
+        <h1>Courses</h1>
         <CardsContainer>
           {generateUserCourseCards(userObject.courses)}
         </CardsContainer>
