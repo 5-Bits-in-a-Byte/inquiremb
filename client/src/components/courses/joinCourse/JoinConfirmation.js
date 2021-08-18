@@ -43,14 +43,16 @@ const AddNewCourseToList = (newCourse, courseList) => {
   return ret;
 };
 
-const GenerateCoursesList = (courses) => {
+const GenerateCoursesList = (courses, selectedCourse, setSelectedCourse) => {
+  // const [selectedCourse, setSelectedCourse] = useState(null);
   return courses.map((course, index) => (
     <CoursePanel
       key={index}
       courseId={course.courseId}
       courseName={course.course}
       instructorName={course.first + " " + course.last}
-      selectedCourse={null}
+      selectedCourse={selectedCourse}
+      setSelectedCourse={setSelectedCourse}
     />
   ));
 };
@@ -79,8 +81,9 @@ const JoinConfirmation = ({
       LazyFetch({
         type: "put",
         endpoint: "/join",
-        data: { courseId: courses.courseId },
+        data: { courseId: selectedCourse },
         onSuccess: (data) => {
+          console.log("RESPONSE LENGTH:", data.length);
           let newCourseList = AddNewCourseToList(data.course, courseList);
           if (newCourseList != null) setCourseList(newCourseList);
           joinCourse(data.course);
@@ -111,7 +114,12 @@ const JoinConfirmation = ({
     }, 1000);
   };
 
-  let potentialCourses = GenerateCoursesList(courses);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
+  // Only call GenerateCoursesList if the return value is an array
+  let potentialCourses = courses.length
+    ? GenerateCoursesList(courses, selectedCourse, setSelectedCourse)
+    : null;
 
   return (
     <Wrapper className="flex-col align justify">

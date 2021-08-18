@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 
 const CoursePanel = ({
@@ -6,14 +6,24 @@ const CoursePanel = ({
   courseName,
   instructorName,
   selectedCourse,
+  setSelectedCourse,
   ...props
 }) => {
   let displayBorder = false;
   if (selectedCourse == courseId) {
     displayBorder = true;
   }
+
+  const handleCourseSelect = () => {
+    console.log("you pressed " + courseName + " with courseId: " + courseId);
+    setSelectedCourse(courseId);
+  };
+
   return (
-    <CoursePanelWrapper displayBorder={displayBorder}>
+    <CoursePanelWrapper
+      displayBorder={displayBorder}
+      onClick={handleCourseSelect}
+    >
       <Descriptor>Course:&nbsp;</Descriptor>
       <TextContent>{courseName}</TextContent>
       <div style={{ flex: 1 }}></div>
@@ -25,13 +35,18 @@ const CoursePanel = ({
 
 export default CoursePanel;
 
-const CoursePanelWrapper = styled.div`
+const CoursePanelWrapper = styled.button`
   display: flex;
   justify-content: space-evenly;
   margin: 0.5rem 0;
   background-color: white;
-  border: 2px solid
-    ${(props) => (props.displayBorder ? css`#4CAF50` : css`none`)};
+  border: none;
+  cursor: pointer;
+  ${(props) =>
+    props.displayBorder &&
+    css`
+      border: 2px solid #4caf50;
+    `}
   border-radius: 0.2rem;
 `;
 
