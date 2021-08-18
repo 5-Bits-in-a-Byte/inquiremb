@@ -13,12 +13,19 @@ const UserCourses = ({ userObject, ...props }) => {
     return userCourseCards;
   };
 
+  var courses = generateUserCourseCards(userObject.courses);
+
   return (
     <>
       <SectionWrapper>
         <h1>Courses</h1>
         <CardsContainer>
-          {generateUserCourseCards(userObject.courses)}
+          {courses.length > 0
+            ? courses
+            : userObject.first +
+              " " +
+              userObject.last +
+              " is not currently enrolled in any courses."}
         </CardsContainer>
       </SectionWrapper>
     </>

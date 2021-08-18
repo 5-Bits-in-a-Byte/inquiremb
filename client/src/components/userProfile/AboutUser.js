@@ -4,14 +4,18 @@ import Button from "../common/Button";
 import { UserContext } from "../context/UserProvider";
 import DraftTextArea from "../common/DraftTextArea";
 import LazyFetch from "../common/requests/LazyFetch";
+import { ChromePicker } from "react-color";
+import Icon from "../common/Icon";
+import LightColorImg from "../../imgs/color-palette-white.svg";
+import DarkColorImg from "../../imgs/color-palette.svg";
 
 const AboutUser = ({ userObject, ...props }) => {
   const user = useContext(UserContext);
   const [editingProfile, toggleEdit] = useState(false);
   const [aboutMe, setAboutMe] = useState(null);
   const [initialAboutMe, setInitialAboutMe] = useState(null);
-  const [initialBannerColor, setInitialBannerColor] = useState(null);
   const [bannerColor, setBannerColor] = useState(null);
+  const [displayColorSelector, toggleColorDisplay] = useState(false);
   let endpoint = "/userProfiles";
 
   useEffect(() => {
@@ -23,7 +27,6 @@ const AboutUser = ({ userObject, ...props }) => {
         setAboutMe(response.profileData.about);
         setInitialAboutMe(response.profileData.about);
         setBannerColor(response.profileData.bannerColor);
-        setInitialBannerColor(response.profileData.bannerColor);
       },
     });
   }, []);
@@ -43,23 +46,53 @@ const AboutUser = ({ userObject, ...props }) => {
   };
 
   const handleColorChange = (colors) => {
+    setBannerColor(colors.hex);
+  };
+
+  const submitColorChange = (colors) => {
     LazyFetch({
       type: "put",
       endpoint: endpoint,
       data: {
-        userId: "",
-        color: colors.hex,
+        userId: user._id,
+        bannerColor: colors.hex,
       },
       onSuccess: (data) => {
         console.log(data.success);
-        this.setState({ courseColor: colors.hex });
+        setBannerColor(colors.hex);
       },
     });
   };
+
+  // This code was obtained from https://awik.io/determine-color-bright-dark-using-javascript/
+  const lightOrDark = () => {
+    var r, g, b, colorVal;
+    var color = bannerColor;
+
+    // Convert hex value to integer
+    color = +("0x" + color.slice(1).replace(color.length < 5 && /./g, "$&$&"));
+
+    // Bit manipulation to obtain rgb values
+    r = color >> 16;
+    g = (color >> 8) & 255;
+    b = color & 255;
+
+    // Get a value between 0 and 255 using rgb values
+    colorVal = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
+
+    // Determine if the color is light or dark
+    if (colorVal > 127.5) {
+      return "light";
+    } else {
+      return "dark";
+    }
+  };
+
+  var background = bannerColor ? lightOrDark() : null;
+
   return (
     <>
       <Wrapper>
-        {/* <h3>{JSON.stringify(userObject, null, 2)}</h3> */}
         <ContentWrapper>
           <VerticalFlex>
             <ImageWrapper>
@@ -77,7 +110,7 @@ const AboutUser = ({ userObject, ...props }) => {
                 onClick={() => {
                   toggleEdit(false);
                   setAboutMe(initialAboutMe);
-                  setBannerColor(initialBannerColor);
+                  toggleColorDisplay(false);
                 }}
               >
                 Cancel
@@ -88,7 +121,6 @@ const AboutUser = ({ userObject, ...props }) => {
                 buttonWidth={"10em"}
                 buttonHeight={"2em"}
                 onClick={() => {
-                  // alert("This feature is in progress.");
                   toggleEdit(!editingProfile);
                 }}
               >
@@ -98,12 +130,13 @@ const AboutUser = ({ userObject, ...props }) => {
           </VerticalFlex>
           <UserInfoWrapper>
             <UserName>{userObject.first + " " + userObject.last}</UserName>
-            <h2 style={{ margin: `1.5em 0 0 0` }}>About</h2>
+            <h2 style={{ margin: `1.75em 0 0 0` }}>About</h2>
             <AboutContent>
               {editingProfile ? (
                 <div>
                   <DraftTextArea
-                    minRows={5}
+                    minRows={4}
+                    maxRows={4}
                     placeholder="Here's something super interesting about me..."
                     onChange={(e) => {
                       setAboutMe(e.target.value);
@@ -129,7 +162,43 @@ const AboutUser = ({ userObject, ...props }) => {
             </AboutContent>
           </UserInfoWrapper>
         </ContentWrapper>
-        <CustomColorSection bannerColor={bannerColor}></CustomColorSection>
+        <CustomColorSection bannerColor={bannerColor}>
+          {displayColorSelector && (
+            <ChromePicker
+              onChange={handleColorChange}
+              onChangeComplete={submitColorChange}
+              color={bannerColor}
+              disableAlpha
+            />
+          )}
+          {background == "dark" ? (
+            <Icon
+              fader
+              clickable
+              src={LightColorImg}
+              alt={"Color"}
+              width={"16em"}
+              style={{ padding: "8px" }}
+              title={"Change color"}
+              onClick={() => {
+                toggleColorDisplay(!displayColorSelector);
+              }}
+            />
+          ) : (
+            <Icon
+              fader
+              clickable
+              src={DarkColorImg}
+              alt={"Color"}
+              width={"16em"}
+              style={{ padding: "8px" }}
+              title={"Change color"}
+              onClick={() => {
+                toggleColorDisplay(!displayColorSelector);
+              }}
+            />
+          )}
+        </CustomColorSection>
       </Wrapper>
     </>
   );
@@ -160,6 +229,7 @@ const AboutText = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  padding: 0.5em 0 0 0;
 `;
 
 const ContentWrapper = styled.div`
@@ -175,6 +245,9 @@ const CustomColorSection = styled.div`
   left: 0;
   width: 100%;
   height: 112px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
 
   background-color: ${(props) =>
     props.bannerColor ? props.bannerColor : css`#4A86FA`};
