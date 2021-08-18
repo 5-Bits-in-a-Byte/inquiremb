@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import styled, { css } from "styled-components";
 import { UserContext } from "../context/UserProvider";
 import AboutUser from "./AboutUser";
+import UserCourses from "./UserCourses";
 
 const UserProfile = ({ props }) => {
   const user = useContext(UserContext);
@@ -10,6 +11,7 @@ const UserProfile = ({ props }) => {
       <Wrapper>
         <ScrollingDiv>
           <AboutUser userObject={user} />
+          <UserCourses userObject={user} />
           {/* <h3>{JSON.stringify(user, null, 2)}</h3> */}
           {/* KEEP THE OVERFLOW COUNTER IT HELPS WITH OVERFLOW
             at the bottom of the scrolling div. */}
