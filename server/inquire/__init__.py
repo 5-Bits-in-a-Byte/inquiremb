@@ -77,7 +77,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
         api_base_url='https://api.github.com/',
         client_kwargs={'scope': 'read:user user:email'},
     )
-    from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home, Roles, MeRole, CourseUsers, Poll, Pin, BanRemove, Images, Search
+    from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home, Roles, MeRole, CourseUsers, Poll, Pin, BanRemove, Images, Search, UserProfiles
 
     api = Api(api_bp)
 
@@ -104,6 +104,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     api.add_resource(BanRemove, '/courses/<string:courseId>/ban-remove')
     api.add_resource(Images, '/images')
     api.add_resource(Search, 'courses/<string:courseId>/search')
+    api.add_resource(UserProfiles, '/userProfiles')
     app.register_blueprint(api_bp)
     if include_socketio:
         # Wrapping flask app in socketio wrapper
