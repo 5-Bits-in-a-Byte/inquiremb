@@ -7,6 +7,7 @@ import Errors from "../../common/Errors";
 import CourseCard from "../CourseCard";
 import { UserContext, UserDispatchContext } from "../../context/UserProvider";
 import LazyFetch from "../../common/requests/LazyFetch";
+import CoursePanel from "./CoursePanel";
 
 const AddNewCourseToList = (newCourse, courseList) => {
   if (newCourse === null) return;
@@ -42,14 +43,27 @@ const AddNewCourseToList = (newCourse, courseList) => {
   return ret;
 };
 
+const GenerateCoursesList = (courses) => {
+  return courses.map((course, index) => (
+    <CoursePanel
+      key={index}
+      courseId={course.courseId}
+      courseName={course.course}
+      instructorName={course.first + " " + course.last}
+      selectedCourse={null}
+    />
+  ));
+};
+
 const JoinConfirmation = ({
-  course,
+  courses,
   joinCourse,
   display,
   toggleDisplay,
   courseList,
   setCourseList,
 }) => {
+  console.log("courseList:", courseList);
   const [loading, toggleLoading] = useState(false);
   const [errors, toggleErrors] = useState(null);
   const [success, toggleSuccess] = useState(null);
@@ -65,7 +79,7 @@ const JoinConfirmation = ({
       LazyFetch({
         type: "put",
         endpoint: "/join",
-        data: { courseId: course.courseId },
+        data: { courseId: courses.courseId },
         onSuccess: (data) => {
           let newCourseList = AddNewCourseToList(data.course, courseList);
           if (newCourseList != null) setCourseList(newCourseList);
@@ -97,6 +111,8 @@ const JoinConfirmation = ({
     }, 1000);
   };
 
+  let potentialCourses = GenerateCoursesList(courses);
+
   return (
     <Wrapper className="flex-col align justify">
       <img src={display == "none" ? CheckMarkGreen : CheckMarkBlue}></img>
@@ -110,16 +126,17 @@ const JoinConfirmation = ({
       </Success>
       <HighlightedSection className="flex-row" style={{ display: display }}>
         <CourseInfo>
-          <Course>
-            <div style={{ opacity: "70%" }}>Course:&nbsp;</div>{" "}
-            <TextContent>{course.course}</TextContent>
+          {potentialCourses}
+          {/* <Course>
+            <div style={{ opacity: "70%" }}>Course:&nbsp;</div>
+            <TextContent>{courses.course}</TextContent>
           </Course>
           <Instructor>
             <div style={{ opacity: "70%" }}>Instructor:&nbsp;</div>
             <TextContent>
-              {course.first} {course.last}
+              {courses.first} {courses.last}
             </TextContent>
-          </Instructor>
+          </Instructor> */}
         </CourseInfo>
       </HighlightedSection>
       <BottomButtons style={{ display: display }}>
@@ -192,6 +209,7 @@ const HighlightedSection = styled.div`
   padding: 15px;
   border-radius: 4px;
   width: 100%;
+  overflow: auto;
   display: flex;
   justify-content: center;
 `;
