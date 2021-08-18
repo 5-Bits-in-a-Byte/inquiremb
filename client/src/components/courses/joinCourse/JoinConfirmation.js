@@ -133,19 +133,7 @@ const JoinConfirmation = ({
         {success}
       </Success>
       <HighlightedSection className="flex-row" style={{ display: display }}>
-        <CourseInfo>
-          {potentialCourses}
-          {/* <Course>
-            <div style={{ opacity: "70%" }}>Course:&nbsp;</div>
-            <TextContent>{courses.course}</TextContent>
-          </Course>
-          <Instructor>
-            <div style={{ opacity: "70%" }}>Instructor:&nbsp;</div>
-            <TextContent>
-              {courses.first} {courses.last}
-            </TextContent>
-          </Instructor> */}
-        </CourseInfo>
+        {potentialCourses}
       </HighlightedSection>
       <BottomButtons style={{ display: display }}>
         <Button
@@ -188,43 +176,18 @@ const BottomButtons = styled.div`
   width: 100%;
 `;
 
-const CourseInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-  justify-content: center;
-
-  height: 4em;
-`;
-
-const Course = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  margin: 0.5em 0;
-`;
-
-const Instructor = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  margin: 0.5em 0;
-`;
-
 const HighlightedSection = styled.div`
   background-color: #f8f8f8;
   margin-top: 20px;
   padding: 15px;
   border-radius: 4px;
   width: 100%;
-  overflow: auto;
+  overflow-y: scroll;
   display: flex;
   justify-content: center;
-`;
-
-const TextContent = styled.div`
-  font-weight: 400;
-  font-style: normal;
+  align-items: center;
+  flex-direction: column;
+  max-height: 200px;
 `;
 
 const Success = styled.div`

@@ -133,6 +133,9 @@ class Join(Resource):
         parser.add_argument('courseId')
         args = parser.parse_args()
 
+        if args['courseId'] is None:
+            return {"errors": ["Please select a course to join"]}, 400
+
         try:
             course_to_add = Course.objects.get({"_id": args['courseId']})
         except Course.DoesNotExist:

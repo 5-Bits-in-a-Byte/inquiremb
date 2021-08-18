@@ -15,7 +15,6 @@ const CoursePanel = ({
   }
 
   const handleCourseSelect = () => {
-    console.log("you pressed " + courseName + " with courseId: " + courseId);
     setSelectedCourse(courseId);
   };
 
@@ -23,11 +22,11 @@ const CoursePanel = ({
     <CoursePanelWrapper
       displayBorder={displayBorder}
       onClick={handleCourseSelect}
+      id={"wrapper"}
     >
       <Descriptor>Course:&nbsp;</Descriptor>
       <TextContent>{courseName}</TextContent>
-      <div style={{ flex: 1 }}></div>
-      <Descriptor>Instructor:&nbsp;</Descriptor>
+      <Descriptor style={{ marginLeft: "auto" }}>Instructor:&nbsp;</Descriptor>
       <TextContent>{instructorName}</TextContent>
     </CoursePanelWrapper>
   );
@@ -37,11 +36,13 @@ export default CoursePanel;
 
 const CoursePanelWrapper = styled.button`
   display: flex;
-  justify-content: space-evenly;
   margin: 0.5rem 0;
   background-color: white;
   border: none;
+  width: 600px;
+  height: 50px;
   cursor: pointer;
+  padding: 0em 6em;
   ${(props) =>
     props.displayBorder &&
     css`
@@ -51,10 +52,18 @@ const CoursePanelWrapper = styled.button`
 `;
 
 const TextContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 400;
   font-style: normal;
+  height: 50px;
 `;
 
 const Descriptor = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 70%;
+  height: 50px;
 `;
