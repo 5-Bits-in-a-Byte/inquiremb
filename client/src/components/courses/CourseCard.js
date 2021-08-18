@@ -128,21 +128,16 @@ class CourseCard extends React.Component {
         <AlignedDiv>
           <ColorDiv color={this.state.courseColor}>
             <MessageDiv>
-              <Icon
-                fader
-                clickable
-                src={MessagesImg}
-                alt={"Messages"}
-                width={"25em"}
-                title={"Unread posts"}
-                onClick={() =>
-                  alert(
-                    'You clicked the Unread Messages icon for "' +
-                      this.props.courseName +
-                      '".\nThis feature is a work in progress.'
-                  )
-                }
-              ></Icon>
+              <Link to={"/course/" + this.props.id + "/post/newQorA"}>
+                <Icon
+                  fader
+                  clickable
+                  src={MessagesImg}
+                  alt={"Messages"}
+                  width={"25em"}
+                  title={"Unread posts"}
+                ></Icon>
+              </Link>
               {this.state.numMsgs > 0 && this.state.numMsgs ? (
                 <h3 style={{ color: `#f8f8f8`, lineHeight: `1.2em` }}>
                   {this.state.numMsgs}
