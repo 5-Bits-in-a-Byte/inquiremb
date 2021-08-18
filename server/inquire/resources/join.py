@@ -41,8 +41,8 @@ class Join(Resource):
           200:
             description: Returns additional course information
             schema:
-              type: object
-              properties:
+              type: list of objects
+              object properties:
                 courseName:
                   type: string
                   description: Name of the course
@@ -80,11 +80,8 @@ class Join(Resource):
             if count == 0:
                 return {'errors': [f"Course with the name {args['courseName']} does not exist"]}, 400
             else:
-                course = query.first()
-                instructor = User.objects.raw(
-                    {"_id": course.instructorID}).first()
-
-                return {"courseId": course._id, "course": course.course, "first": instructor.first, "last": instructor.last}, 200
+                result = self.format(query)
+                return result
 
         # Access code sent to backend
         else:
@@ -96,7 +93,7 @@ class Join(Resource):
 
             instructor = User.objects.raw({"_id": course.instructorID}).first()
 
-            return {"courseId": course._id, "course": course.course, "first": instructor.first, "last": instructor.last}, 200
+            return [{"courseId": course._id, "course": course.course, "first": instructor.first, "last": instructor.last}], 200
 
     def put(self):
         """
@@ -136,6 +133,9 @@ class Join(Resource):
         parser.add_argument('courseId')
         args = parser.parse_args()
 
+        if args['courseId'] is None:
+            return {"errors": ["Please select a course to join"]}, 400
+
         try:
             course_to_add = Course.objects.get({"_id": args['courseId']})
         except Course.DoesNotExist:
@@ -167,3 +167,21 @@ class Join(Resource):
         result = user_course.to_son()
 
         return {"success": ["Course joined successfully"], "course": result}, 200
+
+    def format(self, query):
+        '''
+        courseID
+        course (the name)
+        first
+        last
+        '''
+        result = []
+        for course in query:
+            data = {"courseId": course._id, "course": course.course,
+                    "first": None, "last": None}
+            instructor = User.objects.raw(
+                {"_id": course.instructorID}).first()
+            data["first"] = instructor.first
+            data["last"] = instructor.last
+            result.append(data)
+        return result

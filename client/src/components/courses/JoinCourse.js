@@ -13,7 +13,7 @@ import JoinInfo from "./joinCourse/JoinInfo";
  */
 const JoinCourse = ({ courseList, setCourseList }) => {
   const [modalIsShown, toggleModal] = useState(false);
-  const [course, joinCourse] = useState(null);
+  const [courses, joinCourse] = useState(null);
   const [display, toggleDisplay] = useState("flex");
 
   return (
@@ -31,11 +31,11 @@ const JoinCourse = ({ courseList, setCourseList }) => {
           width={"724px"}
           data-testid={"join-course-modal"}
         >
-          {!course ? (
+          {!courses ? (
             <JoinInfo joinCourse={joinCourse} />
           ) : (
             <JoinConfirmation
-              course={course}
+              courses={courses}
               joinCourse={joinCourse}
               display={display}
               toggleDisplay={toggleDisplay}

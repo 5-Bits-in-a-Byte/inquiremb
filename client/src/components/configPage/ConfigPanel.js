@@ -98,6 +98,7 @@ const createRoleObject = (itemId) => {
  * Generates a list of Role Components for State Management
  */
 const GenerateRoleList = (roles, setRoles, userList, setUserList) => {
+  console.log("roles:", roles);
   return roles.map((role, index) => (
     <RolePanel
       key={index}
