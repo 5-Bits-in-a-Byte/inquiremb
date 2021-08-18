@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo, useRef } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
-import {
-  UserRoleContext,
-  UserRoleDispatchContext,
-} from "../context/UserRoleProvider";
+import { UserRoleContext } from "../context/UserRoleProvider";
 import styled from "styled-components";
 import PostWrapper from "../posts/refactorComponents/PostWrapper";
 import Sidebar from "../posts/Sidebar";
@@ -239,7 +236,9 @@ const CommentView = ({ classroomName }) => {
                   </Button>
                 )}
               </OptionsContainer>
-              {postid === "newQorA" && <Draft userRole={userRole} />}
+              {postid === "newQorA" && userRole && (
+                <Draft userRole={userRole} />
+              )}
               {/* {postid === "newPoll" && <DraftPoll />} */}
               {postid === "newPoll" && <PollConfig />}
               {postExists &&
