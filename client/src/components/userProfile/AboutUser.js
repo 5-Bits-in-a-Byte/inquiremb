@@ -86,11 +86,6 @@ const renderColorIcon = (
 };
 
 const AboutUser = ({ userObject, isMyProfile, profileId, ...props }) => {
-  // const { profileId } = useParams();
-  // Compare useParams ID value with userObject ID value to see if we should display edit profile buttons
-  // const isMyProfile = profileId == userObject._id ? true : false;
-  console.log("profileId:", profileId);
-  console.log("userObject._id:", userObject._id);
   const [editingProfile, toggleEdit] = useState(false);
   const [aboutMe, setAboutMe] = useState(null);
   const [initialAboutMe, setInitialAboutMe] = useState(null);
@@ -105,7 +100,7 @@ const AboutUser = ({ userObject, isMyProfile, profileId, ...props }) => {
       endpoint: endpoint + "?profileId=" + profileId,
       // data: { profileId: profileId },
       onSuccess: (response) => {
-        console.log("response:", response);
+        // console.log("response:", response);
         setAboutMe(response.profileData.about);
         setInitialAboutMe(response.profileData.about);
         setBannerColor(response.profileData.bannerColor);

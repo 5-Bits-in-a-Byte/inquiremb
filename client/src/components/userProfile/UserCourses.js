@@ -6,8 +6,6 @@ import UserCourseCard from "./UserCourseCard";
 const UserCourses = ({ userObject, isMyProfile, profileId, ...props }) => {
   const [courses, setCourses] = useState([]);
   const generateUserCourseCards = (courseList) => {
-    console.log(courseList);
-
     let userCourseCards = courseList.map((course, index) => (
       <UserCourseCard
         key={index}
