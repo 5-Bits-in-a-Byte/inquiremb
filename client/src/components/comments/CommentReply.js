@@ -9,7 +9,7 @@ import Dropdown from "../common/dropdown/Dropdown";
 import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 import { Editor } from "react-draft-wysiwyg";
-import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
+import EditorWrapper from "../posts/EditorWrapper";
 import { EditorState } from "draft-js";
 import Checkbox from "../common/Checkbox";
 import { UserRoleContext } from "../context/UserRoleProvider";
@@ -48,22 +48,20 @@ const CommentReply = ({
   };
 
   const imageCallback = async (file) => {
-    return new Promise(
-      (resolve, reject) => {
-        const formData = new FormData();
-        formData.append("imageFile", file)
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append("imageFile", file);
 
-        LazyFetch({
-          type: "post",
-          endpoint: "/images",
-          data: formData,
-          onSuccess: (data) => {
-            resolve({ data: { link: data.data.link } });
-          }
-        });
-      }
-    );
-  }
+      LazyFetch({
+        type: "post",
+        endpoint: "/images",
+        data: formData,
+        onSuccess: (data) => {
+          resolve({ data: { link: data.data.link } });
+        },
+      });
+    });
+  };
 
   if (isDraft) {
     reply = {
@@ -80,8 +78,20 @@ const CommentReply = ({
           }}
           onEditorStateChange={handleContentChange}
           toolbar={{
-            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-            image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
+            options: [
+              "inline",
+              "list",
+              "link",
+              "emoji",
+              "history",
+              "blockType",
+              "image",
+            ],
+            image: {
+              uploadCallback: imageCallback,
+              uploadEnabled: true,
+              previewImage: true,
+            },
           }}
         />
       ),
@@ -169,8 +179,20 @@ const CommentReply = ({
           }}
           onEditorStateChange={handleContentChange}
           toolbar={{
-            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-            image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
+            options: [
+              "inline",
+              "list",
+              "link",
+              "emoji",
+              "history",
+              "blockType",
+              "image",
+            ],
+            image: {
+              uploadCallback: imageCallback,
+              uploadEnabled: true,
+              previewImage: true,
+            },
           }}
         />
       );

@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
-import Button from "../../common/Button";
+import Button from "../common/Button";
 import { Link } from "react-router-dom";
 import CogIcon from "../../../imgs/settings 1.svg";
 

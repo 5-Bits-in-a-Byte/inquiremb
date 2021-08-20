@@ -2,17 +2,17 @@ import React, { useContext, useEffect, useState, useMemo, useRef } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { UserRoleContext } from "../context/UserRoleProvider";
 import styled from "styled-components";
-import PostWrapper from "../posts/refactorComponents/PostWrapper";
+import PostWrapper from "../posts/PostWrapper";
 import Sidebar from "../posts/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
-import Draft from "../posts/refactorComponents/Draft";
-import PollConfig from "../posts/refactorComponents/PollConfig";
-import PollWrapper from "../posts/refactorComponents/PollWrapper";
-import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
+import Draft from "../posts/Draft";
+import PollConfig from "../posts/PollConfig";
+import PollWrapper from "../posts/PollWrapper";
+import EditorWrapper from "../posts/EditorWrapper";
 import { convertToRaw } from "draft-js";
 
 const renderComments = (data, userRole) => {

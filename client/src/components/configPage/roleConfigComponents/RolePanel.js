@@ -5,10 +5,7 @@ import styled, { css } from "styled-components";
 import Button from "../../common/Button";
 import PencilIcon from "../../../imgs/pencil.svg";
 import CloseButtonIcon from "../../../imgs/close.svg";
-import Input from "../../common/Input";
 import DraftTextArea from "../../common/DraftTextArea";
-import Dropdown from "../../common/dropdown/Dropdown";
-import Arrow from "../../../imgs/carrot-down-secondary.svg";
 import MaterialDropDownGroup from "./MaterialDropDownGroup";
 import UserPanel from "../userConfigComponents/UserPanel";
 

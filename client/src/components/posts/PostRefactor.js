@@ -5,7 +5,7 @@ import OptionsPanel from "./OptionsPanel";
 import PostWrapper from "./PostWrapper";
 import Poll from "react-polls";
 import PollConfig from "./PollConfig";
-import Button from "../../common/Button";
+import Button from "../common/Button";
 import LineWidthImg from "../../../imgs/line-width.svg";
 import { Editor } from "react-draft-wysiwyg";
 import { convertToRaw, EditorState } from "draft-js";

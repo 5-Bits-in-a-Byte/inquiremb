@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import Poll from "react-polls";
 import { useParams } from "react-router";
-import LazyFetch from "../../common/requests/LazyFetch";
-import { UserRoleContext } from "../../context/UserRoleProvider";
+import LazyFetch from "../common/requests/LazyFetch";
+import { UserRoleContext } from "../context/UserRoleProvider";
 
 const PollWrapper = ({ post }) => {
   const { courseId } = useParams();

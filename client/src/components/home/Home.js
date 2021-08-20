@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import RecentGroup from "./RecentGroup";
 import Fetch from "../common/requests/Fetch";
-import Post from "../posts/Post";
+// import Post from "../posts/Post";
 import { Editor } from "react-draft-wysiwyg";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
-import PostWrapper from "../posts/refactorComponents/PostWrapper";
-import PollWrapper from "../posts/refactorComponents/PollWrapper";
-import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
+import PostWrapper from "../posts/PostWrapper";
+import PollWrapper from "../posts/PollWrapper";
+import EditorWrapper from "../posts/EditorWrapper";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();

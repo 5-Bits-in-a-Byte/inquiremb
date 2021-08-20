@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
 import styled, { css } from "styled-components";
-import InfoIcon from "../../../imgs/Info_tip.svg";
-import PencilIcon from "../../../imgs/pencil.svg";
-import CloseButtonIcon from "../../../imgs/close.svg";
-import DraftTextArea from "../../common/DraftTextArea";
-import Button from "../../common/Button";
-import Checkbox from "../../common/Checkbox";
-import LazyFetch from "../../common/requests/LazyFetch";
+import InfoIcon from "../../imgs/Info_tip.svg";
+import PencilIcon from "../../imgs/pencil.svg";
+import CloseButtonIcon from "../../imgs/close.svg";
+import DraftTextArea from "../common/DraftTextArea";
+import Button from "../common/Button";
+import Checkbox from "../common/Checkbox";
+import LazyFetch from "../common/requests/LazyFetch";
 import { useHistory, useParams } from "react-router";
-import { UserRoleContext } from "../../context/UserRoleProvider";
+import { UserRoleContext } from "../context/UserRoleProvider";
 
 const max_options = 6;
 const default_title = "Inquire is a great website!";

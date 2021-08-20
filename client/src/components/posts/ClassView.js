@@ -9,9 +9,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import Sidebar from "./Sidebar";
-import LazyFetch from "../common/requests/LazyFetch";
 import LoadingDots from "../common/animation/LoadingDots";
-import PostRefactor from "./refactorComponents/PostRefactor";
 
 const PostView = React.lazy(() => import("./PostView"));
 
