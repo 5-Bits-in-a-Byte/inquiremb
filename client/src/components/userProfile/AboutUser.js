@@ -16,6 +16,7 @@ const AboutUser = ({ userObject, ...props }) => {
   const [initialAboutMe, setInitialAboutMe] = useState(null);
   const [bannerColor, setBannerColor] = useState(null);
   const [displayColorSelector, toggleColorDisplay] = useState(false);
+  const [changesMade, toggleChangesMade] = useState(false);
   let endpoint = "/userProfiles";
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const AboutUser = ({ userObject, ...props }) => {
       type: "get",
       endpoint: endpoint,
       onSuccess: (response) => {
-        console.log("response:", response);
+        // console.log("response:", response);
         setAboutMe(response.profileData.about);
         setInitialAboutMe(response.profileData.about);
         setBannerColor(response.profileData.bannerColor);
@@ -41,12 +42,14 @@ const AboutUser = ({ userObject, ...props }) => {
       },
       onSuccess: (response) => {
         console.log("response:", response);
+        toggleChangesMade(true);
       },
     });
   };
 
   const handleColorChange = (colors) => {
     setBannerColor(colors.hex);
+    toggleChangesMade(true);
   };
 
   const submitColorChange = (colors) => {
@@ -60,6 +63,7 @@ const AboutUser = ({ userObject, ...props }) => {
       onSuccess: (data) => {
         console.log(data.success);
         setBannerColor(colors.hex);
+        toggleChangesMade(true);
       },
     });
   };
@@ -113,7 +117,7 @@ const AboutUser = ({ userObject, ...props }) => {
                   toggleColorDisplay(false);
                 }}
               >
-                Cancel
+                {changesMade ? "Done" : "Cancel"}
               </Button>
             ) : (
               <Button
@@ -122,6 +126,7 @@ const AboutUser = ({ userObject, ...props }) => {
                 buttonHeight={"2em"}
                 onClick={() => {
                   toggleEdit(!editingProfile);
+                  toggleChangesMade(false);
                 }}
               >
                 Edit Profile
@@ -171,7 +176,7 @@ const AboutUser = ({ userObject, ...props }) => {
               disableAlpha
             />
           )}
-          {background == "dark" ? (
+          {background == "dark" && editingProfile && (
             <Icon
               fader
               clickable
@@ -184,7 +189,8 @@ const AboutUser = ({ userObject, ...props }) => {
                 toggleColorDisplay(!displayColorSelector);
               }}
             />
-          ) : (
+          )}{" "}
+          {background == "light" && editingProfile && (
             <Icon
               fader
               clickable
