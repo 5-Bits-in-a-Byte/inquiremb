@@ -12,7 +12,7 @@ import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 import { UserContext } from "../context/UserProvider";
 import { UserRoleContext } from "../context/UserRoleProvider";
-import EditorWrapper from "../posts/EditorWrapper";
+import EditorWrapper from "../posts/wrappers/EditorWrapper";
 import { Editor } from "react-draft-wysiwyg";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import Checkbox from "../common/Checkbox";

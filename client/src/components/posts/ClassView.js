@@ -7,8 +7,8 @@ import {
 } from "../context/UserRoleProvider";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import SectionTab from "./SectionTab";
-import Sidebar from "./Sidebar";
+import SectionTab from "./leftSideBar/SectionTab";
+import Sidebar from "./leftSideBar/Sidebar";
 import LoadingDots from "../common/animation/LoadingDots";
 import PostFeed from "./PostFeed";
 

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
-import Button from "../common/Button";
-import LazyFetch from "../common/requests/LazyFetch";
+import Button from "../../common/Button";
+import LazyFetch from "../../common/requests/LazyFetch";
 import { useParams } from "react-router";
 
 const generateStyle = (edit, postid, messageType) => {

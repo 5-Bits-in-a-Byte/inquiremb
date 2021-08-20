@@ -9,7 +9,7 @@ import Dropdown from "../common/dropdown/Dropdown";
 import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 import { Editor } from "react-draft-wysiwyg";
-import EditorWrapper from "../posts/EditorWrapper";
+import EditorWrapper from "../posts/wrappers/EditorWrapper";
 import { EditorState } from "draft-js";
 import Checkbox from "../common/Checkbox";
 import { UserRoleContext } from "../context/UserRoleProvider";

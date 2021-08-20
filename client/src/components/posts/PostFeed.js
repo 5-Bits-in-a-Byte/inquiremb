@@ -9,7 +9,7 @@ import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
 import PostWrapper from "./wrappers/PostWrapper";
 import PollWrapper from "./wrappers/PollWrapper";
-import EditorWrapper from "./EditorWrapper";
+import EditorWrapper from "./wrappers/EditorWrapper";
 import SearchPanel from "./SearchPanel";
 import LazyFetch from "../common/requests/LazyFetch";
 // import LoadingDots from "../common/animation/LoadingDots";
