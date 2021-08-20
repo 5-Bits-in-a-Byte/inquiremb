@@ -10,8 +10,9 @@ import styled from "styled-components";
 import SectionTab from "./SectionTab";
 import Sidebar from "./Sidebar";
 import LoadingDots from "../common/animation/LoadingDots";
+import PostFeed from "./PostFeed";
 
-const PostView = React.lazy(() => import("./PostView"));
+// const PostView = React.lazy(() => import("./PostView"));
 
 /**
  * ClassView Component ~ Blueprint for displaying a specific course post feed, as well as
@@ -66,7 +67,7 @@ const ClassView = ({ props }) => {
           </div>
         }
       >
-        <PostView userRole={userRole} highlightedSection={highlightedSection} />
+        <PostFeed userRole={userRole} highlightedSection={highlightedSection} />
       </Suspense>
     </ClassViewWrapper>
   );

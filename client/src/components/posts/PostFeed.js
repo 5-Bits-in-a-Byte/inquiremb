@@ -12,7 +12,7 @@ import PollWrapper from "./wrappers/PollWrapper";
 import EditorWrapper from "./EditorWrapper";
 import SearchPanel from "./SearchPanel";
 import LazyFetch from "../common/requests/LazyFetch";
-import LoadingDots from "../common/animation/LoadingDots";
+// import LoadingDots from "../common/animation/LoadingDots";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();
@@ -82,7 +82,7 @@ const fetchData = (endpoint, socketPosts, setData) => {
   });
 };
 
-const PostView = ({ userRole, highlightedSection }) => {
+const PostFeed = ({ userRole, highlightedSection }) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
 
@@ -203,7 +203,7 @@ const PostView = ({ userRole, highlightedSection }) => {
 
   return (
     <>
-      <PostFeed>
+      <PostFeedWrapper>
         <ScrollingDiv>
           <CenterWrapper>
             <SortingOptions>
@@ -245,21 +245,19 @@ const PostView = ({ userRole, highlightedSection }) => {
             <OverflowCounter offsetAmount={"0.25rem"} />
           </CenterWrapper>
         </ScrollingDiv>
-      </PostFeed>
+      </PostFeedWrapper>
     </>
   );
 };
 
-PostView.propTypes = {};
-
-export default PostView;
+export default PostFeed;
 
 const MarginLeftRight = {
   marginLeft: "1em",
   marginRight: "1em",
 };
 
-const PostFeed = styled.div`
+const PostFeedWrapper = styled.div`
   width: 100%;
   position: relative;
   display: flex;
