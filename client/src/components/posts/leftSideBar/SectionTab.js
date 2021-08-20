@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
-import Icon from "../common/Icon";
-import LazyFetch from "../common/requests/LazyFetch";
+import Icon from "../../common/Icon";
 
 const SectionTab = ({
   setHighlightedSection,

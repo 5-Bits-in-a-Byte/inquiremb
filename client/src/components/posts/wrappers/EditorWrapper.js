@@ -132,22 +132,20 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
   };
 
   const imageCallback = async (file) => {
-    return new Promise(
-      (resolve, reject) => {
-        const formData = new FormData();
-        formData.append("imageFile", file)
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append("imageFile", file);
 
-        LazyFetch({
-          type: "post",
-          endpoint: "/images",
-          data: formData,
-          onSuccess: (data) => {
-            resolve({ data: { link: data.data.link } });
-          }
-        });
-      }
-    );
-  }
+      LazyFetch({
+        type: "post",
+        endpoint: "/images",
+        data: formData,
+        onSuccess: (data) => {
+          resolve({ data: { link: data.data.link } });
+        },
+      });
+    });
+  };
 
   /** This variable is used to determine whether or not to force a maximum height for this containing element. */
   var editorStyle = generateStyle(edit, postid, messageType);
@@ -160,8 +158,20 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
           editorState={editorStateTest}
           editorStyle={editorStyle}
           toolbar={{
-            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-            image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
+            options: [
+              "inline",
+              "list",
+              "link",
+              "emoji",
+              "history",
+              "blockType",
+              "image",
+            ],
+            image: {
+              uploadCallback: imageCallback,
+              uploadEnabled: true,
+              previewImage: true,
+            },
           }}
           onEditorStateChange={handleContentChange}
         />
@@ -173,8 +183,20 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
           editorState={editorStateTest}
           editorStyle={editorStyle}
           toolbar={{
-            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-            image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
+            options: [
+              "inline",
+              "list",
+              "link",
+              "emoji",
+              "history",
+              "blockType",
+              "image",
+            ],
+            image: {
+              uploadCallback: imageCallback,
+              uploadEnabled: true,
+              previewImage: true,
+            },
           }}
         />
       )}

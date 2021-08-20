@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import DraftTextArea from "../../common/DraftTextArea";
-import Checkbox from "../../common/Checkbox";
-import Button from "../../common/Button";
-import LazyFetch from "../../common/requests/LazyFetch";
+import DraftTextArea from "../common/DraftTextArea";
+import Checkbox from "../common/Checkbox";
+import Button from "../common/Button";
+import LazyFetch from "../common/requests/LazyFetch";
 import { Editor } from "react-draft-wysiwyg";
 import { convertToRaw, EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -24,14 +24,14 @@ const accentColor = (type) => {
   }
 };
 
-const Draft = ({ userRole }) => {
+const PostDraft = ({ userRole }) => {
   const { courseId } = useParams();
   const history = useHistory();
   // State and handler for drafting posts
   const [draft, setDraft] = useState({
     title: "",
     isAnonymous: false,
-    isPrivate: false
+    isPrivate: false,
   });
 
   var defaultType;
@@ -93,22 +93,20 @@ const Draft = ({ userRole }) => {
   };
 
   const imageCallback = async (file) => {
-    return new Promise(
-      (resolve, reject) => {
-        const formData = new FormData();
-        formData.append("imageFile", file)
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append("imageFile", file);
 
-        LazyFetch({
-          type: "post",
-          endpoint: "/images",
-          data: formData,
-          onSuccess: (data) => {
-            resolve({ data: { link: data.data.link } });
-          }
-        });
-      }
-    );
-  }
+      LazyFetch({
+        type: "post",
+        endpoint: "/images",
+        data: formData,
+        onSuccess: (data) => {
+          resolve({ data: { link: data.data.link } });
+        },
+      });
+    });
+  };
 
   // Styling Variables
   var titlePlaceholder =
@@ -196,8 +194,20 @@ const Draft = ({ userRole }) => {
         // placeholder="Details"
         onEditorStateChange={handleContentChange}
         toolbar={{
-          options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-          image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
+          options: [
+            "inline",
+            "list",
+            "link",
+            "emoji",
+            "history",
+            "blockType",
+            "image",
+          ],
+          image: {
+            uploadCallback: imageCallback,
+            uploadEnabled: true,
+            previewImage: true,
+          },
         }}
       />
       <HRSeperator />
@@ -228,7 +238,7 @@ const Draft = ({ userRole }) => {
   );
 };
 
-export default Draft;
+export default PostDraft;
 
 const Wrapper = styled.div`
   margin: 2em;

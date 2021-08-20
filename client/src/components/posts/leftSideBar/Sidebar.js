@@ -2,15 +2,15 @@ import React, { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SectionTab from "./SectionTab";
-import UserImg from "../../imgs/user.svg";
-import { UserContext } from "../context/UserProvider";
-import GlassesImg from "../../imgs/glasses.svg";
-import NoteImg from "../../imgs/note.svg";
-import HeartImg from "../../imgs/heart.svg";
-import AnnouncementsImg from "../../imgs/announcements.svg";
-import QuestionsImg from "../../imgs/questions.svg";
-import PollsImg from "../../imgs/polls.svg";
-import GeneralImg from "../../imgs/general.svg";
+import UserImg from "../../../imgs/user.svg";
+import { UserContext } from "../../context/UserProvider";
+import GlassesImg from "../../../imgs/glasses.svg";
+import NoteImg from "../../../imgs/note.svg";
+import HeartImg from "../../../imgs/heart.svg";
+import AnnouncementsImg from "../../../imgs/announcements.svg";
+import QuestionsImg from "../../../imgs/questions.svg";
+import PollsImg from "../../../imgs/polls.svg";
+import GeneralImg from "../../../imgs/general.svg";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
 const Sidebar = ({ userRole, setHighlightedSection, highlightedSection }) => {

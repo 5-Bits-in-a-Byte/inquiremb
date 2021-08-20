@@ -1,23 +1,18 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled, { css } from "styled-components";
-import Options from "./Options";
-import Post from "./Post";
+import OptionsPanel from "./OptionsPanel";
 import Button from "../common/Button";
 import LineWidthImg from "../../imgs/line-width.svg";
 import HollowPinImg from "../../imgs/pin-hollow.svg";
 import { useParams } from "react-router-dom";
-import Fetch from "../common/requests/Fetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
-import PostWrapper from "./refactorComponents/PostWrapper";
-import Poll from "react-polls";
-import { Editor } from "react-draft-wysiwyg";
-import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
-import PollWrapper from "./refactorComponents/PollWrapper";
-import EditorWrapper from "./refactorComponents/EditorWrapper";
+import PostWrapper from "./wrappers/PostWrapper";
+import PollWrapper from "./wrappers/PollWrapper";
+import EditorWrapper from "./wrappers/EditorWrapper";
 import SearchPanel from "./SearchPanel";
 import LazyFetch from "../common/requests/LazyFetch";
-import LoadingDots from "../common/animation/LoadingDots";
+// import LoadingDots from "../common/animation/LoadingDots";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();
@@ -87,7 +82,7 @@ const fetchData = (endpoint, socketPosts, setData) => {
   });
 };
 
-const PostView = ({ userRole, highlightedSection }) => {
+const PostFeed = ({ userRole, highlightedSection }) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
 
@@ -208,7 +203,7 @@ const PostView = ({ userRole, highlightedSection }) => {
 
   return (
     <>
-      <PostFeed>
+      <PostFeedWrapper>
         <ScrollingDiv>
           <CenterWrapper>
             <SortingOptions>
@@ -246,25 +241,23 @@ const PostView = ({ userRole, highlightedSection }) => {
             )}
             {posts ? posts.other : <></>}
             <SearchPanel courseId={courseId} onChangeCallback={handleSearch} />
-            <Options userRole={userRole} courseId={courseId} />
+            <OptionsPanel userRole={userRole} courseId={courseId} />
             <OverflowCounter offsetAmount={"0.25rem"} />
           </CenterWrapper>
         </ScrollingDiv>
-      </PostFeed>
+      </PostFeedWrapper>
     </>
   );
 };
 
-PostView.propTypes = {};
-
-export default PostView;
+export default PostFeed;
 
 const MarginLeftRight = {
   marginLeft: "1em",
   marginRight: "1em",
 };
 
-const PostFeed = styled.div`
+const PostFeedWrapper = styled.div`
   width: 100%;
   position: relative;
   display: flex;

@@ -11,11 +11,7 @@ import CogIcon from "../../imgs/settings 1.svg";
  *
  * @param {string} courseId given to the "+ New Post" button to route to the Post form page
  */
-const Options = ({ userRole, courseId }) => {
-  const user = useContext(UserContext);
-  // console.log("User Object: ", user);
-  // console.log("OPTIONS User Role: ", userRole);
-
+const OptionsPanel = ({ userRole, courseId }) => {
   // Will be used to conditionally render the config page button and draft post button
   var userIsAdmin = false;
   var userCanBan = false;
@@ -36,7 +32,7 @@ const Options = ({ userRole, courseId }) => {
   return (
     <OptionsWrapper>
       <OptionsHeader>OPTIONS</OptionsHeader>
-      <OptionsPanel>
+      <OptionsPanelWrapper>
         {displayDraftPost && (
           <Link
             style={{
@@ -87,16 +83,16 @@ const Options = ({ userRole, courseId }) => {
             </Button>
           </Link>
         )}
-      </OptionsPanel>
+      </OptionsPanelWrapper>
     </OptionsWrapper>
   );
 };
 
-Options.propTypes = {
+OptionsPanel.propTypes = {
   courseId: PropTypes.string,
 };
 
-export default Options;
+export default OptionsPanel;
 
 const OptionsWrapper = styled.div`
   width: 280px; // Need to make same width as nav + menu bar
@@ -114,7 +110,7 @@ const OptionsHeader = styled.h1`
   font-size: 14px;
 `;
 
-const OptionsPanel = styled.div`
+const OptionsPanelWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

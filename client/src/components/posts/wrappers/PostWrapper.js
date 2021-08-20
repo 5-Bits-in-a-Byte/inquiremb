@@ -1,10 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled, { css } from "styled-components";
 import { UserContext } from "../../context/UserProvider";
-import {
-  UserRoleContext,
-  UserRoleDispatchContext,
-} from "../../context/UserRoleProvider";
+import { UserRoleContext } from "../../context/UserRoleProvider";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Icon from "../../common/Icon";
 import OptionDots from "../../../imgs/option-dots.svg";
