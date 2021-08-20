@@ -67,7 +67,6 @@ const ClassView = ({ props }) => {
         }
       >
         <PostView userRole={userRole} highlightedSection={highlightedSection} />
-        {/* <PostRefactor /> */}
       </Suspense>
     </ClassViewWrapper>
   );

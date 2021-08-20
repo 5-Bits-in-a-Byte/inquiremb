@@ -1,52 +1,70 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import styled, { css } from "styled-components";
+import React, { useContext } from "react";
+import { UserContext } from "../context/UserProvider";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
-import CogIcon from "../../../imgs/settings 1.svg";
+import CogIcon from "../../imgs/settings 1.svg";
 
-const OptionsPanel = ({ userRole, ...props }) => {
-  var { courseId } = useParams();
-  var userIsAdmin = userRole ? userRole.admin.config : false;
+/**
+ * Options Component ~ Button side panel for displaying buttons for the user
+ *
+ * @param {string} courseId given to the "+ New Post" button to route to the Post form page
+ */
+const OptionsPanel = ({ userRole, courseId }) => {
+  // Will be used to conditionally render the config page button and draft post button
+  var userIsAdmin = false;
+  var userCanBan = false;
+  var userCanRemove = false;
+  var displayDraftPost = false;
+  var displayDraftPoll = false;
+  if (userRole) {
+    userIsAdmin = userRole.admin.configure;
+    userCanBan = userRole.admin.banUsers;
+    userCanRemove = userRole.admin.removeUsers;
+    displayDraftPost =
+      userRole.publish.question ||
+      userRole.publish.announcement ||
+      userRole.publish.general;
+    displayDraftPoll = userRole.publish.poll;
+  }
 
   return (
-    <Wrapper>
-      <OptionsHeader>Options</OptionsHeader>
-      <Panel>
-        <Link
-          style={{
-            width: "100%",
-            textDecoration: "none",
-            display: "flex",
-          }}
-          to={"/course/" + courseId + "/post/new"}
-        >
-          <Button primary autoWidth enableMargin={"0.5em"}>
-            Draft Post
-          </Button>
-        </Link>
-        <Link
-          style={{
-            width: "100%",
-            textDecoration: "none",
-            display: "flex",
-          }}
-          to={"#"}
-        >
-          <Button
-            primary
-            autoWidth
-            enableMargin={"0.5em"}
-            onClick={() => alert("The feature has not yet been implemented...")}
+    <OptionsWrapper>
+      <OptionsHeader>OPTIONS</OptionsHeader>
+      <OptionsPanelWrapper>
+        {displayDraftPost && (
+          <Link
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+            }}
+            to={"/course/" + courseId + "/post/newQorA"}
           >
-            Draft Poll
-          </Button>
-        </Link>
+            <Button primary autoWidth enableMargin={"0.5em"}>
+              Draft Post
+            </Button>
+          </Link>
+        )}
+        {displayDraftPoll && (
+          <Link
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+            }}
+            to={"/course/" + courseId + "/post/newPoll"}
+          >
+            <Button primary autoWidth enableMargin={"0.5em"}>
+              Draft Poll
+            </Button>
+          </Link>
+        )}
 
         {/* The Config page conditionally renders based on whether or not
             the user has ADMIN priviledges for this course */}
-        {userIsAdmin && (
+        {(userIsAdmin || userCanBan || userCanRemove) && (
           <Link
             style={{
               width: "100%",
@@ -65,25 +83,34 @@ const OptionsPanel = ({ userRole, ...props }) => {
             </Button>
           </Link>
         )}
-      </Panel>
-    </Wrapper>
+      </OptionsPanelWrapper>
+    </OptionsWrapper>
   );
+};
+
+OptionsPanel.propTypes = {
+  courseId: PropTypes.string,
 };
 
 export default OptionsPanel;
 
-const Wrapper = styled.div`
-  width: 100%;
+const OptionsWrapper = styled.div`
+  width: 280px; // Need to make same width as nav + menu bar
+  flex-grow: 1;
+  position: absolute;
+  right: -40px;
+  top: 120px;
+
   /* border: 1px solid red; */
 `;
 
 const OptionsHeader = styled.h1`
-  margin: 3em 0 2em 0;
+  margin: 3em 0 1em 0;
 
   font-size: 14px;
 `;
 
-const Panel = styled.div`
+const OptionsPanelWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

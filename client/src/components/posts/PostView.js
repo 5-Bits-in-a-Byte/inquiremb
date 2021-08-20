@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled, { css } from "styled-components";
-import Options from "./Options";
+import OptionsPanel from "./OptionsPanel";
 import Button from "../common/Button";
 import LineWidthImg from "../../imgs/line-width.svg";
 import HollowPinImg from "../../imgs/pin-hollow.svg";
@@ -241,7 +241,7 @@ const PostView = ({ userRole, highlightedSection }) => {
             )}
             {posts ? posts.other : <></>}
             <SearchPanel courseId={courseId} onChangeCallback={handleSearch} />
-            <Options userRole={userRole} courseId={courseId} />
+            <OptionsPanel userRole={userRole} courseId={courseId} />
             <OverflowCounter offsetAmount={"0.25rem"} />
           </CenterWrapper>
         </ScrollingDiv>
