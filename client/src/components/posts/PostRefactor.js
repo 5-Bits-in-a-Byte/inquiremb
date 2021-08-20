@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useParams } from "react";
 import styled, { css } from "styled-components";
 import Options from "../Options";
 import OptionsPanel from "./OptionsPanel";
-import PostWrapper from "./PostWrapper";
+import PostWrapper from "./wrappers/PostWrapper";
 import Poll from "react-polls";
 import PollConfig from "./PollConfig";
 import Button from "../common/Button";

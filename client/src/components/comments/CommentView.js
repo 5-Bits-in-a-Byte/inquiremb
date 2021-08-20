@@ -2,16 +2,16 @@ import React, { useContext, useEffect, useState, useMemo, useRef } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { UserRoleContext } from "../context/UserRoleProvider";
 import styled from "styled-components";
-import PostWrapper from "../posts/PostWrapper";
+import PostWrapper from "../posts/wrappers/PostWrapper";
 import Sidebar from "../posts/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
-import Draft from "../posts/Draft";
+import PostDraft from "../posts/PostDraft";
 import PollConfig from "../posts/PollConfig";
-import PollWrapper from "../posts/PollWrapper";
+import PollWrapper from "../posts/wrappers/PollWrapper";
 import EditorWrapper from "../posts/EditorWrapper";
 import { convertToRaw } from "draft-js";
 
@@ -237,7 +237,7 @@ const CommentView = ({ classroomName }) => {
                 )}
               </OptionsContainer>
               {postid === "newQorA" && userRole && (
-                <Draft userRole={userRole} />
+                <PostDraft userRole={userRole} />
               )}
               {/* {postid === "newPoll" && <DraftPoll />} */}
               {postid === "newPoll" && <PollConfig />}

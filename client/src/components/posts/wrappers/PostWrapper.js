@@ -1,18 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled, { css } from "styled-components";
-import { UserContext } from "../context/UserProvider";
-import {
-  UserRoleContext,
-  UserRoleDispatchContext,
-} from "../context/UserRoleProvider";
-import Dropdown from "../common/dropdown/Dropdown";
-import Icon from "../common/Icon";
-import OptionDots from "../../imgs/option-dots.svg";
-import Reaction from "../common/Reaction";
-import CommentImg from "../../imgs/comment.svg";
+import { UserContext } from "../../context/UserProvider";
+import { UserRoleContext } from "../../context/UserRoleProvider";
+import Dropdown from "../../common/dropdown/Dropdown";
+import Icon from "../../common/Icon";
+import OptionDots from "../../../imgs/option-dots.svg";
+import Reaction from "../../common/Reaction";
+import CommentImg from "../../../imgs/comment.svg";
 import { useHistory, useParams } from "react-router";
-import LazyFetch from "../common/requests/LazyFetch";
-import PinIcon from "../../imgs/pin.svg";
+import LazyFetch from "../../common/requests/LazyFetch";
+import PinIcon from "../../../imgs/pin.svg";
 
 const accentColor = (type) => {
   switch (type) {

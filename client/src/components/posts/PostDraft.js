@@ -24,7 +24,7 @@ const accentColor = (type) => {
   }
 };
 
-const Draft = ({ userRole }) => {
+const PostDraft = ({ userRole }) => {
   const { courseId } = useParams();
   const history = useHistory();
   // State and handler for drafting posts
@@ -238,7 +238,7 @@ const Draft = ({ userRole }) => {
   );
 };
 
-export default Draft;
+export default PostDraft;
 
 const Wrapper = styled.div`
   margin: 2em;
