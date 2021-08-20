@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import Button from "../common/Button";
 
-const UserCourseCard = ({ userCourseObject, ...props }) => {
+const UserCourseCard = ({ userCourseObject, isMyProfile, ...props }) => {
   let title = userCourseObject?.courseName;
   let subtitle = "";
   if (userCourseObject.nickname) {
@@ -17,16 +17,20 @@ const UserCourseCard = ({ userCourseObject, ...props }) => {
           <CourseTitle>{title}</CourseTitle>
           <CourseSubtitle>{subtitle}</CourseSubtitle>
         </UpperSection>
-        <LowerSection>
-          <Button
-            outlineSecondary
-            autoWidth
-            buttonColor={`#DC2B2B`}
-            style={{ color: `#DC2B2B` }}
-          >
-            Leave Course
-          </Button>
-        </LowerSection>
+        {isMyProfile ? (
+          <LowerSection>
+            <Button
+              outlineSecondary
+              autoWidth
+              buttonColor={`#DC2B2B`}
+              style={{ color: `#DC2B2B` }}
+            >
+              Leave Course
+            </Button>
+          </LowerSection>
+        ) : (
+          <></>
+        )}
 
         {/* <h1></h1> */}
       </CardWrapper>
@@ -38,7 +42,7 @@ export default UserCourseCard;
 
 const CardWrapper = styled.div`
   min-width: 8rem;
-  min-height: 6rem;
+  /* min-height: 6rem; */
 
   margin: 1em;
   /* padding: 1em; */

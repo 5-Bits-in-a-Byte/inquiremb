@@ -1,19 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
+import LazyFetch from "../common/requests/LazyFetch";
 import UserCourseCard from "./UserCourseCard";
 
-const UserCourses = ({ userObject, ...props }) => {
+const UserCourses = ({ userObject, isMyProfile, profileId, ...props }) => {
+  const [courses, setCourses] = useState([]);
   const generateUserCourseCards = (courseList) => {
     console.log(courseList);
 
     let userCourseCards = courseList.map((course, index) => (
-      <UserCourseCard id={`course-card-${index}`} userCourseObject={course} />
+      <UserCourseCard
+        key={index}
+        id={`course-card-${index}`}
+        userCourseObject={course}
+        isMyProfile={isMyProfile}
+      />
     ));
 
     return userCourseCards;
   };
 
-  var courses = generateUserCourseCards(userObject.courses);
+  useEffect(() => {
+    LazyFetch({
+      type: "get",
+      endpoint: "/userProfiles?profileId=" + profileId,
+      onSuccess: (response) => {
+        // setCourseList(response.courses);
+        setCourses(generateUserCourseCards(response.courses));
+      },
+    });
+  }, []);
 
   return (
     <>

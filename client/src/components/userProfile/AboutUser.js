@@ -8,26 +8,108 @@ import { ChromePicker } from "react-color";
 import Icon from "../common/Icon";
 import LightColorImg from "../../imgs/color-palette-white.svg";
 import DarkColorImg from "../../imgs/color-palette.svg";
+import { ContrastDetector } from "../common/externalMethods/ContrastDetector";
+import { useParams } from "react-router-dom";
 
-const AboutUser = ({ userObject, ...props }) => {
-  const user = useContext(UserContext);
+const renderEditButton = (
+  toggleEdit,
+  setAboutMe,
+  editingProfile,
+  initialAboutMe
+) => {
+  if (editingProfile) {
+    return (
+      <Button
+        secondary
+        buttonWidth={"10em"}
+        buttonHeight={"2em"}
+        onClick={() => {
+          toggleEdit(false);
+          setAboutMe(initialAboutMe);
+        }}
+      >
+        Cancel{" "}
+      </Button>
+    );
+  } else {
+    return (
+      <Button
+        secondary
+        buttonWidth={"10em"}
+        buttonHeight={"2em"}
+        onClick={() => {
+          toggleEdit(!editingProfile);
+        }}
+      >
+        Edit Profile
+      </Button>
+    );
+  }
+};
+
+const renderColorIcon = (
+  background,
+  toggleColorDisplay,
+  displayColorSelector
+) => {
+  if (background == "dark") {
+    return (
+      <Icon
+        fader
+        clickable
+        src={LightColorImg}
+        alt={"Color"}
+        width={"16em"}
+        style={{ padding: "8px" }}
+        title={"Change color"}
+        onClick={() => {
+          toggleColorDisplay(!displayColorSelector);
+        }}
+      />
+    );
+  } else {
+    return (
+      <Icon
+        fader
+        clickable
+        src={DarkColorImg}
+        alt={"Color"}
+        width={"16em"}
+        style={{ padding: "8px" }}
+        title={"Change color"}
+        onClick={() => {
+          toggleColorDisplay(!displayColorSelector);
+        }}
+      />
+    );
+  }
+};
+
+const AboutUser = ({ userObject, isMyProfile, profileId, ...props }) => {
+  // const { profileId } = useParams();
+  // Compare useParams ID value with userObject ID value to see if we should display edit profile buttons
+  // const isMyProfile = profileId == userObject._id ? true : false;
+  console.log("profileId:", profileId);
+  console.log("userObject._id:", userObject._id);
   const [editingProfile, toggleEdit] = useState(false);
   const [aboutMe, setAboutMe] = useState(null);
   const [initialAboutMe, setInitialAboutMe] = useState(null);
   const [bannerColor, setBannerColor] = useState(null);
   const [displayColorSelector, toggleColorDisplay] = useState(false);
-  const [changesMade, toggleChangesMade] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(null);
   let endpoint = "/userProfiles";
 
   useEffect(() => {
     LazyFetch({
       type: "get",
-      endpoint: endpoint,
+      endpoint: endpoint + "?profileId=" + profileId,
+      // data: { profileId: profileId },
       onSuccess: (response) => {
-        // console.log("response:", response);
+        console.log("response:", response);
         setAboutMe(response.profileData.about);
         setInitialAboutMe(response.profileData.about);
         setBannerColor(response.profileData.bannerColor);
+        setProfilePicture(response.picture);
       },
     });
   }, []);
@@ -37,19 +119,17 @@ const AboutUser = ({ userObject, ...props }) => {
       type: "put",
       endpoint: endpoint,
       data: {
-        userId: user._id,
+        userId: userObject._id,
         about: aboutMe,
       },
       onSuccess: (response) => {
         console.log("response:", response);
-        toggleChangesMade(true);
       },
     });
   };
 
   const handleColorChange = (colors) => {
     setBannerColor(colors.hex);
-    toggleChangesMade(true);
   };
 
   const submitColorChange = (colors) => {
@@ -57,42 +137,17 @@ const AboutUser = ({ userObject, ...props }) => {
       type: "put",
       endpoint: endpoint,
       data: {
-        userId: user._id,
+        userId: userObject._id,
         bannerColor: colors.hex,
       },
       onSuccess: (data) => {
         console.log(data.success);
         setBannerColor(colors.hex);
-        toggleChangesMade(true);
       },
     });
   };
 
-  // This code was obtained from https://awik.io/determine-color-bright-dark-using-javascript/
-  const lightOrDark = () => {
-    var r, g, b, colorVal;
-    var color = bannerColor;
-
-    // Convert hex value to integer
-    color = +("0x" + color.slice(1).replace(color.length < 5 && /./g, "$&$&"));
-
-    // Bit manipulation to obtain rgb values
-    r = color >> 16;
-    g = (color >> 8) & 255;
-    b = color & 255;
-
-    // Get a value between 0 and 255 using rgb values
-    colorVal = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
-
-    // Determine if the color is light or dark
-    if (colorVal > 127.5) {
-      return "light";
-    } else {
-      return "dark";
-    }
-  };
-
-  var background = bannerColor ? lightOrDark() : null;
+  var background = bannerColor ? ContrastDetector(bannerColor) : null;
 
   return (
     <>
@@ -101,40 +156,26 @@ const AboutUser = ({ userObject, ...props }) => {
           <VerticalFlex>
             <ImageWrapper>
               <UserProfileImage
-                src={userObject.picture}
+                src={profilePicture}
                 alt="User Profile Image."
               />
             </ImageWrapper>
-
-            {editingProfile ? (
-              <Button
-                secondary
-                buttonWidth={"10em"}
-                buttonHeight={"2em"}
-                onClick={() => {
-                  toggleEdit(false);
-                  setAboutMe(initialAboutMe);
-                  toggleColorDisplay(false);
-                }}
-              >
-                {changesMade ? "Done" : "Cancel"}
-              </Button>
+            {isMyProfile ? (
+              renderEditButton(
+                toggleEdit,
+                setAboutMe,
+                editingProfile,
+                initialAboutMe
+              )
             ) : (
-              <Button
-                secondary
-                buttonWidth={"10em"}
-                buttonHeight={"2em"}
-                onClick={() => {
-                  toggleEdit(!editingProfile);
-                  toggleChangesMade(false);
-                }}
-              >
-                Edit Profile
-              </Button>
+              <></>
             )}
           </VerticalFlex>
+
           <UserInfoWrapper>
-            <UserName>{userObject.first + " " + userObject.last}</UserName>
+            <UserName backgroundColor={background}>
+              {userObject.first + " " + userObject.last}
+            </UserName>
             <h2 style={{ margin: `1.75em 0 0 0` }}>About</h2>
             <AboutContent>
               {editingProfile ? (
@@ -176,33 +217,14 @@ const AboutUser = ({ userObject, ...props }) => {
               disableAlpha
             />
           )}
-          {background == "dark" && editingProfile && (
-            <Icon
-              fader
-              clickable
-              src={LightColorImg}
-              alt={"Color"}
-              width={"16em"}
-              style={{ padding: "8px" }}
-              title={"Change color"}
-              onClick={() => {
-                toggleColorDisplay(!displayColorSelector);
-              }}
-            />
-          )}{" "}
-          {background == "light" && editingProfile && (
-            <Icon
-              fader
-              clickable
-              src={DarkColorImg}
-              alt={"Color"}
-              width={"16em"}
-              style={{ padding: "8px" }}
-              title={"Change color"}
-              onClick={() => {
-                toggleColorDisplay(!displayColorSelector);
-              }}
-            />
+          {isMyProfile ? (
+            renderColorIcon(
+              background,
+              toggleColorDisplay,
+              displayColorSelector
+            )
+          ) : (
+            <></>
           )}
         </CustomColorSection>
       </Wrapper>
@@ -271,7 +293,8 @@ const UserName = styled.h1`
   margin-top: 1em;
 
   font-size: 36px;
-  color: #fff;
+  color: ${(props) =>
+    props.backgroundColor == "dark" ? css`#fff` : css`#162B55`};
 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 `;
