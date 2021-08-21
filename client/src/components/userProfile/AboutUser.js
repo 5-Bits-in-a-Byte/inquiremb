@@ -15,18 +15,24 @@ const renderEditButton = (
   toggleEdit,
   setAboutMe,
   editingProfile,
-  initialAboutMe
+  initialAboutMe,
+  modalIsShown
 ) => {
+  var opacity = "100%";
+  if (modalIsShown) {
+    opacity = "60%";
+  }
   if (editingProfile) {
     return (
       <Button
-        secondary
+        secondary={true}
         buttonWidth={"10em"}
         buttonHeight={"2em"}
         onClick={() => {
           toggleEdit(false);
           setAboutMe(initialAboutMe);
         }}
+        style={{ opacity: opacity }}
       >
         Cancel{" "}
       </Button>
@@ -40,6 +46,7 @@ const renderEditButton = (
         onClick={() => {
           toggleEdit(!editingProfile);
         }}
+        style={{ opacity: opacity }}
       >
         Edit Profile
       </Button>
@@ -85,7 +92,13 @@ const renderColorIcon = (
   }
 };
 
-const AboutUser = ({ userObject, isMyProfile, profileId, ...props }) => {
+const AboutUser = ({
+  userObject,
+  isMyProfile,
+  profileId,
+  modalIsShown,
+  ...props
+}) => {
   const [editingProfile, toggleEdit] = useState(false);
   const [aboutMe, setAboutMe] = useState(null);
   const [initialAboutMe, setInitialAboutMe] = useState(null);
@@ -146,9 +159,28 @@ const AboutUser = ({ userObject, isMyProfile, profileId, ...props }) => {
   return (
     <>
       <Wrapper>
+        <CustomColorSection bannerColor={bannerColor}>
+          {displayColorSelector && (
+            <ChromePicker
+              onChange={handleColorChange}
+              onChangeComplete={submitColorChange}
+              color={bannerColor}
+              disableAlpha
+            />
+          )}
+          {isMyProfile ? (
+            renderColorIcon(
+              background,
+              toggleColorDisplay,
+              displayColorSelector
+            )
+          ) : (
+            <></>
+          )}
+        </CustomColorSection>
         <ContentWrapper>
           <VerticalFlex>
-            <ImageWrapper>
+            <ImageWrapper modalActive={modalIsShown}>
               <UserProfileImage
                 src={profilePicture}
                 alt="User Profile Image."
@@ -159,7 +191,8 @@ const AboutUser = ({ userObject, isMyProfile, profileId, ...props }) => {
                 toggleEdit,
                 setAboutMe,
                 editingProfile,
-                initialAboutMe
+                initialAboutMe,
+                modalIsShown
               )
             ) : (
               <></>
@@ -167,7 +200,7 @@ const AboutUser = ({ userObject, isMyProfile, profileId, ...props }) => {
           </VerticalFlex>
 
           <UserInfoWrapper>
-            <UserName backgroundColor={background}>
+            <UserName backgroundColor={background} modalActive={modalIsShown}>
               {userObject.first + " " + userObject.last}
             </UserName>
             <h2 style={{ margin: `1.75em 0 0 0` }}>About</h2>
@@ -202,25 +235,6 @@ const AboutUser = ({ userObject, isMyProfile, profileId, ...props }) => {
             </AboutContent>
           </UserInfoWrapper>
         </ContentWrapper>
-        <CustomColorSection bannerColor={bannerColor}>
-          {displayColorSelector && (
-            <ChromePicker
-              onChange={handleColorChange}
-              onChangeComplete={submitColorChange}
-              color={bannerColor}
-              disableAlpha
-            />
-          )}
-          {isMyProfile ? (
-            renderColorIcon(
-              background,
-              toggleColorDisplay,
-              displayColorSelector
-            )
-          ) : (
-            <></>
-          )}
-        </CustomColorSection>
       </Wrapper>
     </>
   );
@@ -290,6 +304,8 @@ const UserName = styled.h1`
   color: ${(props) =>
     props.backgroundColor == "dark" ? css`#fff` : css`#162B55`};
 
+  opacity: ${(props) => (props.modalActive ? css`60%` : css`100%`)};
+
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 `;
 
@@ -315,7 +331,8 @@ const ImageWrapper = styled.div`
   width: 200px;
   height: 200px;
 
-  background-color: #f8f8f8;
+  background-color: ${(props) =>
+    props.modalActive ? css`#CBCFD7` : css`#F8F8F8`};
   border-radius: 50%;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.15);

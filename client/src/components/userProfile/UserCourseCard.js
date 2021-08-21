@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import Button from "../common/Button";
+import Modal from "../common/Modal";
+import LazyFetch from "../common/requests/LazyFetch";
 
-const UserCourseCard = ({ userCourseObject, isMyProfile, ...props }) => {
+const UserCourseCard = ({
+  userCourseObject,
+  isMyProfile,
+  toggleModal,
+  setCourseToLeave,
+  setName,
+  ...props
+}) => {
   let title = userCourseObject?.courseName;
   let subtitle = "";
   if (userCourseObject.nickname) {
@@ -24,6 +33,11 @@ const UserCourseCard = ({ userCourseObject, isMyProfile, ...props }) => {
               autoWidth
               buttonColor={`#DC2B2B`}
               style={{ color: `#DC2B2B` }}
+              onClick={() => {
+                toggleModal(true);
+                setCourseToLeave(userCourseObject.courseId);
+                setName(userCourseObject.courseName);
+              }}
             >
               Leave Course
             </Button>
@@ -31,7 +45,6 @@ const UserCourseCard = ({ userCourseObject, isMyProfile, ...props }) => {
         ) : (
           <></>
         )}
-
         {/* <h1></h1> */}
       </CardWrapper>
     </>

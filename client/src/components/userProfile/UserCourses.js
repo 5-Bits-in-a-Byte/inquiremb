@@ -3,8 +3,18 @@ import styled, { css } from "styled-components";
 import LazyFetch from "../common/requests/LazyFetch";
 import UserCourseCard from "./UserCourseCard";
 
-const UserCourses = ({ userObject, isMyProfile, profileId, ...props }) => {
-  const [courses, setCourses] = useState([]);
+const UserCourses = ({
+  userObject,
+  isMyProfile,
+  profileId,
+  toggleModal,
+  setCourseToLeave,
+  setName,
+  setCourses,
+  courses,
+  changeMade,
+  ...props
+}) => {
   const generateUserCourseCards = (courseList) => {
     let userCourseCards = courseList.map((course, index) => (
       <UserCourseCard
@@ -12,6 +22,9 @@ const UserCourses = ({ userObject, isMyProfile, profileId, ...props }) => {
         id={`course-card-${index}`}
         userCourseObject={course}
         isMyProfile={isMyProfile}
+        toggleModal={toggleModal}
+        setCourseToLeave={setCourseToLeave}
+        setName={setName}
       />
     ));
 
@@ -27,7 +40,7 @@ const UserCourses = ({ userObject, isMyProfile, profileId, ...props }) => {
         setCourses(generateUserCourseCards(response.courses));
       },
     });
-  }, []);
+  }, [changeMade]);
 
   return (
     <>
