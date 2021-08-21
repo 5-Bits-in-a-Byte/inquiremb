@@ -98,7 +98,6 @@ const AboutUser = ({ userObject, isMyProfile, profileId, ...props }) => {
     LazyFetch({
       type: "get",
       endpoint: endpoint + "?profileId=" + profileId,
-      // data: { profileId: profileId },
       onSuccess: (response) => {
         // console.log("response:", response);
         setAboutMe(response.profileData.about);
