@@ -26,7 +26,9 @@ const MenuItem = ({ img, label, to, active }) => {
 export default MenuItem;
 
 const Item = styled.li`
-  margin: 12px 6px;
+  width: 64px;
+  height: 64px;
+  margin: 0.5em 0;
   text-align: center;
   background-color: ${(props) => props.active && "#0B1B3A"};
   padding: 3px;

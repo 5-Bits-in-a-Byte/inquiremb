@@ -6,6 +6,7 @@ import MenuItem from "./MenuItem";
 import HomeImg from "../../imgs/home-white.svg";
 import CourseImg from "../../imgs/courses-white.svg";
 import MessagesImg from "../../imgs/messages-white.svg";
+import InquireTooltip from "../common/InquireTooltip";
 
 /** LeftNavBar Component
  * @brief Wrapper containing MenuItems routing the user to the main website pages
@@ -17,24 +18,38 @@ const LeftNavBar = () => {
   return (
     <Nav>
       <Wrapper>
-        <MenuItem
-          to="/home"
-          label="Home"
-          img={HomeImg}
-          active={active === "/home"}
-        />
-        <MenuItem
-          to="/"
-          label="Courses"
-          img={CourseImg}
-          active={active === "/"}
-        />
-        {/* <MenuItem
-          to="/home"
-          label="Messages"
-          img={MessagesImg}
-          active={active === "/home"}
-        /> */}
+        <InquireTooltip
+          tooltipText={"See recent post history."}
+          customPosition={{
+            top: `25%`,
+            right: `auto`,
+            bottom: `auto`,
+            left: `100%`,
+          }}
+        >
+          <MenuItem
+            to="/home"
+            label="Home"
+            img={HomeImg}
+            active={active === "/home"}
+          />
+        </InquireTooltip>
+        <InquireTooltip
+          tooltipText={"See your active classes."}
+          customPosition={{
+            top: `25%`,
+            right: `auto`,
+            bottom: `auto`,
+            left: `100%`,
+          }}
+        >
+          <MenuItem
+            to="/"
+            label="Courses"
+            img={CourseImg}
+            active={active === "/"}
+          />
+        </InquireTooltip>
       </Wrapper>
     </Nav>
   );
@@ -54,6 +69,13 @@ const Nav = styled.nav`
 `;
 
 const Wrapper = styled.ul`
-  margin-top: 55px;
-  padding: 10px 0;
+  margin-top: 66px; // 66px is the height of topNavBar
+  /* padding: 0.5em; */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* border: 1px solid red; */
 `;

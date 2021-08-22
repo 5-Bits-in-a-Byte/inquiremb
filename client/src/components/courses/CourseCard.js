@@ -11,6 +11,7 @@ import Button from "../common/Button";
 import Input from "../common/Input";
 import CloseButtonIcon from "../../imgs/close.svg";
 import RemoveNickname from "../../imgs/remove-nickname.svg";
+import InquireTooltip from "../common/InquireTooltip";
 
 /** Course Card
  * @brief Component for displaying courses the user is a part of. Component is one of many courses
@@ -125,6 +126,15 @@ class CourseCard extends React.Component {
   render() {
     return (
       <>
+        {/* <InquireTooltip
+          tooltipText={`Navigate to ${this.props.courseName}`}
+          customPosition={{
+            top: `37%`,
+            right: `auto`,
+            bottom: `auto`,
+            left: `100%`,
+          }}
+        > */}
         <AlignedDiv>
           <ColorDiv color={this.state.courseColor}>
             <MessageDiv>
@@ -243,6 +253,7 @@ class CourseCard extends React.Component {
             )}
           </CourseFooter>
         </AlignedDiv>
+        {/* </InquireTooltip> */}
         {this.state.displayColorSelector && (
           <ColorWrapper
             ref={this.colorFocus}

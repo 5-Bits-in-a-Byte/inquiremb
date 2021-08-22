@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import JoinCourse from "./JoinCourse";
 import CreateCourse from "./CreateCourse";
+import InquireTooltip from "../common/InquireTooltip";
 
 /** TopContent
  * @brief Wrapper for the Create Course and Join Course buttons.
@@ -14,8 +15,15 @@ const TopContent = ({ courseList, setCourseList }) => {
   return (
     <TopWrapper className="flex-row align">
       <Title>COURSES</Title>
-      <JoinCourse courseList={courseList} setCourseList={setCourseList} />
-      <CreateCourse courseList={courseList} setCourseList={setCourseList} />
+      <InquireTooltip tooltipText={"Open join course modal."} hoverDelay={250}>
+        <JoinCourse courseList={courseList} setCourseList={setCourseList} />
+      </InquireTooltip>
+      <InquireTooltip
+        tooltipText={"Open create course modal."}
+        hoverDelay={250}
+      >
+        <CreateCourse courseList={courseList} setCourseList={setCourseList} />
+      </InquireTooltip>
     </TopWrapper>
   );
 };
