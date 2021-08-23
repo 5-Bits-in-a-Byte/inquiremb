@@ -9,12 +9,20 @@ import LoadingDots from "./animation/LoadingDots";
  * @version 1.0.0
  * @author [Alec Springel](https://github.com/alecspringel) , [Seth Tal](https://github.com/Sephta)
  */
-const Button = ({ children, loading, onClick, ...props }) => {
+const Button = ({ children, loading, onClick, customStyledCSS, ...props }) => {
   const clickHandler = loading ? undefined : onClick;
   return (
-    <Btn {...props} onClick={clickHandler}>
-      {loading ? <LoadingDots /> : children}
-    </Btn>
+    <>
+      {customStyledCSS ? (
+        <customStyledCSS onClick={clickHandler}>
+          {loading ? <LoadingDots /> : children}
+        </customStyledCSS>
+      ) : (
+        <Btn {...props} onClick={clickHandler}>
+          {loading ? <LoadingDots /> : children}
+        </Btn>
+      )}
+    </>
   );
 };
 

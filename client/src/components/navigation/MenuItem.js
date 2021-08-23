@@ -26,16 +26,21 @@ const MenuItem = ({ img, label, to, active }) => {
 export default MenuItem;
 
 const Item = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 64px;
   height: 64px;
   margin: 0.5em 0;
   text-align: center;
   background-color: ${(props) => props.active && "#0B1B3A"};
-  padding: 3px;
+  padding-top: 0.5em;
   border-radius: 3px;
 `;
 
 const Label = styled.p`
+  margin: 0.5em 0;
   color: #fff;
   font-size: 13px;
 `;

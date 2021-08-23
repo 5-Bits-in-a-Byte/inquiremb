@@ -145,7 +145,7 @@ class CourseCard extends React.Component {
                   src={MessagesImg}
                   alt={"Messages"}
                   width={"25em"}
-                  title={"Unread posts"}
+                  title={"Create post for this course"}
                 ></Icon>
               </Link>
               {this.state.numMsgs > 0 && this.state.numMsgs ? (

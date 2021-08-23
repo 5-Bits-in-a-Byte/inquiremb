@@ -6,8 +6,7 @@ import styled, { css } from "styled-components";
 /**
  * @param {*} tooltipText the text contained in the tooltip popup modal.
  * @param {*} customPosition json object to set custom absolute tooltip position around the element its wrapping.
- * @param {*} hoverDelayStart the time in milliseconds before the tooltip is shown
- * @param {*} hoverDelayEnd the time in milliseconds before the tooltip is not shown
+ * @param {*} hoverDelay the time in milliseconds before the tooltip toggled
  * @param {*} debug tells this component to print debug info to the console
  * @brief The customPosition object should look like the following:
  *  { top: "value", right: "value", bottom: "value", left: "value" }
@@ -121,19 +120,19 @@ const TooltipContainer = styled.div`
     visibility: ${(props) => (props.showTooltip ? css`visible` : css`hidden`)};
 
     transition: 150ms ease-in-out;
-
-    ::after {
-      display: inline-block;
-      width: 100%;
-      /* height: 25px; */
-      position: absolute;
-      top: calc(50% - 8px);
-      left: -101%;
-      content: "";
-      /* background-color: #f8f8f8; */
-      border-top: 8px solid transparent;
-      border-right: 16px solid #e7e7e7;
-      border-bottom: 8px solid transparent;
-    }
   }
 `;
+
+// ::after {
+//       display: inline-block;
+//       width: 50%;
+//       /* height: 25px; */
+//       position: absolute;
+//       top: calc(50% - 8px);
+//       left: -160%;
+//       content: "";
+//       /* background-color: #f8f8f8; */
+//       border-top: 8px solid transparent;
+//       border-right: 16px solid #e7e7e7;
+//       border-bottom: 8px solid transparent;
+//     }

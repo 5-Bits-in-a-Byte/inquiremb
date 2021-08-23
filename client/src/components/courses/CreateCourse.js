@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import CourseConfirmation from "./createCourse/CourseConfirmation";
@@ -61,15 +61,9 @@ const CreateCourse = ({ courseList, setCourseList }) => {
 
   return (
     <>
-      <Button
-        secondary={true}
-        style={{ marginLeft: 10 }}
-        onClick={() => {
-          toggleModal(true);
-        }}
-      >
+      <CustomButton onClick={() => toggleModal(true)}>
         Create a Course
-      </Button>
+      </CustomButton>
       {modalIsShown && (
         <Modal
           close={() => {
@@ -98,3 +92,40 @@ const CreateCourse = ({ courseList, setCourseList }) => {
 };
 
 export default CreateCourse;
+
+const CustomButton = styled.div`
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 9em;
+  margin-left: 1em;
+
+  border-radius: 4px;
+  padding: 0.5em 0.125em;
+  background-color: #e7e7e7;
+  color: #162b55;
+  &:hover {
+    background-color: #dedede;
+  }
+
+  transition: 150ms ease-out;
+
+  @media only screen and (min-width: 1201px) {
+    width: 10em;
+  }
+  @media only screen and (max-width: 650px) {
+    width: 8em;
+    font-size: 14px;
+    /* margin-left: 0.5em; */
+    /* margin: 0; */
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 12px;
+    width: 8em;
+  }
+`;
