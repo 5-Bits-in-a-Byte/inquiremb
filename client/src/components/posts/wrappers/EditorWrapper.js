@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
@@ -42,6 +42,12 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
   );
 
   const [plainText, setPlainText] = useState(messageData.content.plainText);
+
+  useEffect(() => {
+    setEditorStateTest(
+      EditorState.createWithContent(convertFromRaw(messageData.content.raw))
+    );
+  }, [messageData]);
 
   const handleContentChange = (e) => {
     setEditorStateTest(e);
