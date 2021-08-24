@@ -105,6 +105,7 @@ const AboutUser = ({
   const [bannerColor, setBannerColor] = useState(null);
   const [displayColorSelector, toggleColorDisplay] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
+  const [profileName, setProfileName] = useState(null);
   let endpoint = "/userProfiles";
 
   useEffect(() => {
@@ -117,6 +118,7 @@ const AboutUser = ({
         setInitialAboutMe(response.profileData.about);
         setBannerColor(response.profileData.bannerColor);
         setProfilePicture(response.picture);
+        setProfileName(response.name);
       },
     });
   }, []);
@@ -201,7 +203,7 @@ const AboutUser = ({
 
           <UserInfoWrapper>
             <UserName backgroundColor={background} modalActive={modalIsShown}>
-              {userObject.first + " " + userObject.last}
+              {profileName}
             </UserName>
             <h2 style={{ margin: `1.75em 0 0 0` }}>About</h2>
             <AboutContent>
@@ -269,7 +271,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  z-index: 9998;
+  z-index: 1;
 
   display: flex;
   align-items: center;

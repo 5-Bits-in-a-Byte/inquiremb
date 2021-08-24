@@ -22,7 +22,7 @@ class UserProfiles(Resource):
         print("serialized_user:", serialized_user)
 
         if user.userProfileData is not None:
-            return {"profileData": serialized_user['userProfileData'], "picture": serialized_user['picture'], "courses": serialized_user['courses']}, 200
+            return {"profileData": serialized_user['userProfileData'], "picture": serialized_user['picture'], "courses": serialized_user['courses'], "name": f"{serialized_user['first']} {serialized_user['last']}"}, 200
         else:
             return {"errors": ["No user profile data was found"]}, 400
 
