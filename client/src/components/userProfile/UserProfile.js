@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import Button from "../common/Button";
 import { UserContext } from "../context/UserProvider";
 import AboutUser from "./AboutUser";
 import UserCourses from "./UserCourses";
@@ -15,6 +16,20 @@ const UserProfile = ({ props }) => {
     <>
       <Wrapper>
         <ScrollingDiv>
+          {isMyProfile ? (
+            <></>
+          ) : (
+            <Button
+              secondary
+              onClick={() => {
+                window.history.back();
+              }}
+              style={{ margin: "1em", padding: ".25em 2em" }}
+            >
+              Back
+            </Button>
+          )}
+
           <AboutUser
             userObject={user}
             isMyProfile={isMyProfile}

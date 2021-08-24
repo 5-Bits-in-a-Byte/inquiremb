@@ -10,6 +10,7 @@ import CommentImg from "../../../imgs/comment.svg";
 import { useHistory, useParams } from "react-router";
 import LazyFetch from "../../common/requests/LazyFetch";
 import PinIcon from "../../../imgs/pin.svg";
+import { Link } from "react-router-dom";
 
 const accentColor = (type) => {
   switch (type) {
@@ -270,13 +271,31 @@ const PostWrapper = ({
       <HRSeperator />
       <FooterContentWrapper>
         {postObject.postedBy.anonymous ? (
-          <></>
+          <UserDescription isInstructor={postObject.isInstructor}>
+            Posted by {postObject.postedBy.first} {postObject.postedBy.last}
+          </UserDescription>
         ) : (
-          <UserIcon src={postObject.postedBy.picture} />
+          <Link
+            style={{
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
+            to={`/userProfile/${postObject.postedBy._id}`}
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            <UserIcon src={postObject.postedBy.picture} />
+            <UserDescription isInstructor={postObject.isInstructor}>
+              Posted by {postObject.postedBy.first} {postObject.postedBy.last}
+            </UserDescription>
+          </Link>
         )}
-        <UserDescription isInstructor={postObject.isInstructor}>
+        {/* <UserDescription isInstructor={postObject.isInstructor}>
           Posted by {postObject.postedBy.first} {postObject.postedBy.last}
-        </UserDescription>
+        </UserDescription> */}
         <ReactionSection>
           {userRole && userRole.participation.reactions && (
             <Reaction
