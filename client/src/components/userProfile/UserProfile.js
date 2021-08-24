@@ -1,10 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import styled, { css } from "styled-components";
-import Button from "../common/Button";
-import Errors from "../common/Errors";
-import Modal from "../common/Modal";
-import LazyFetch from "../common/requests/LazyFetch";
+import styled from "styled-components";
 import { UserContext } from "../context/UserProvider";
 import AboutUser from "./AboutUser";
 import UserCourses from "./UserCourses";
@@ -13,36 +9,7 @@ const UserProfile = ({ props }) => {
   const user = useContext(UserContext);
   const { profileId } = useParams();
   const isMyProfile = user._id == profileId ? true : false;
-  const [courses, setCourses] = useState([]);
-
-  // Leaving Course/Modal state variables
-  const [courseToLeave, setCourseToLeave] = useState(null);
-  const [modalIsShown, toggleModal] = useState(false);
-  const [success, setSuccessMessage] = useState(null);
-  const [errors, setErrorMessage] = useState(null);
-  const [display, toggleDisplay] = useState("flex");
-  const [courseToLeaveName, setName] = useState(null);
-  const [changeMade, toggleChangeMade] = useState(false);
-  console.log("courses:", courses);
-
-  const handleLeaveCourse = () => {
-    LazyFetch({
-      type: "put",
-      endpoint: "/leaveCourse",
-      data: { courseId: courseToLeave },
-      onSuccess: (response) => {
-        console.log(response.success);
-        toggleDisplay("none");
-        setSuccessMessage(response.success);
-        toggleChangeMade(!changeMade);
-      },
-      onFailure: (err) => {
-        if (err.response && err.response.data) {
-          setErrorMessage(err.response.data.errors);
-        }
-      },
-    });
-  };
+  const [profileName, setProfileName] = useState(null);
 
   return (
     <>
@@ -52,56 +19,17 @@ const UserProfile = ({ props }) => {
             userObject={user}
             isMyProfile={isMyProfile}
             profileId={profileId}
-            modalIsShown={modalIsShown}
+            profileName={profileName}
+            setProfileName={setProfileName}
           />
           <UserCourses
             userObject={user}
             isMyProfile={isMyProfile}
             profileId={profileId}
-            toggleModal={toggleModal}
-            setCourseToLeave={setCourseToLeave}
-            setName={setName}
-            setCourses={setCourses}
-            courses={courses}
-            changeMade={changeMade}
+            profileName={profileName}
           />
         </ScrollingDiv>
       </Wrapper>
-      {modalIsShown && (
-        <Modal
-          close={() => {
-            toggleModal(false);
-            setCourseToLeave(null);
-            toggleDisplay("flex");
-            setName(null);
-          }}
-          width={"724px"}
-          data-testid={"leave-course-modal"}
-        >
-          <InnerModalWrapper className="flex-col align justify">
-            <Title style={{ display: display }}>CONFIRM LEAVING COURSE</Title>
-            <Success
-              style={
-                display == "none" ? { display: "block" } : { display: "none" }
-              }
-            >
-              {success}
-            </Success>
-            <ContentSection style={{ display: display }}>
-              Are you sure you want to leave {courseToLeaveName}?
-            </ContentSection>
-            <Button
-              primary
-              autoWidth
-              style={{ marginTop: "10px", display: display }}
-              onClick={handleLeaveCourse}
-            >
-              Confirm
-            </Button>
-            <Errors errors={errors} />
-          </InnerModalWrapper>
-        </Modal>
-      )}
     </>
   );
 };

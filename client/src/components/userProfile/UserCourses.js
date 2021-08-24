@@ -10,11 +10,12 @@ const UserCourses = ({
   toggleModal,
   setCourseToLeave,
   setName,
-  setCourses,
-  courses,
-  changeMade,
+  profileName,
   ...props
 }) => {
+  const [changeMade, toggleChangeMade] = useState(false);
+  const [courses, setCourses] = useState([]);
+
   const generateUserCourseCards = (courseList) => {
     let userCourseCards = courseList.map((course, index) => (
       <UserCourseCard
@@ -25,6 +26,8 @@ const UserCourses = ({
         toggleModal={toggleModal}
         setCourseToLeave={setCourseToLeave}
         setName={setName}
+        toggleChangeMade={toggleChangeMade}
+        changeMade={changeMade}
       />
     ));
 
@@ -36,7 +39,6 @@ const UserCourses = ({
       type: "get",
       endpoint: "/userProfiles?profileId=" + profileId,
       onSuccess: (response) => {
-        // setCourseList(response.courses);
         setCourses(generateUserCourseCards(response.courses));
       },
     });
@@ -49,10 +51,7 @@ const UserCourses = ({
         <CardsContainer>
           {courses.length > 0
             ? courses
-            : userObject.first +
-              " " +
-              userObject.last +
-              " is not currently enrolled in any courses."}
+            : profileName + " is not currently enrolled in any courses."}
         </CardsContainer>
       </SectionWrapper>
     </>

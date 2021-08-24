@@ -1,7 +1,6 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import Button from "../common/Button";
-import { UserContext } from "../context/UserProvider";
 import DraftTextArea from "../common/DraftTextArea";
 import LazyFetch from "../common/requests/LazyFetch";
 import { ChromePicker } from "react-color";
@@ -9,19 +8,13 @@ import Icon from "../common/Icon";
 import LightColorImg from "../../imgs/color-palette-white.svg";
 import DarkColorImg from "../../imgs/color-palette.svg";
 import { ContrastDetector } from "../common/externalMethods/ContrastDetector";
-import { useParams } from "react-router-dom";
 
 const renderEditButton = (
   toggleEdit,
   setAboutMe,
   editingProfile,
-  initialAboutMe,
-  modalIsShown
+  initialAboutMe
 ) => {
-  var opacity = "100%";
-  if (modalIsShown) {
-    opacity = "60%";
-  }
   if (editingProfile) {
     return (
       <Button
@@ -32,7 +25,6 @@ const renderEditButton = (
           toggleEdit(false);
           setAboutMe(initialAboutMe);
         }}
-        style={{ opacity: opacity }}
       >
         Cancel{" "}
       </Button>
@@ -46,7 +38,6 @@ const renderEditButton = (
         onClick={() => {
           toggleEdit(!editingProfile);
         }}
-        style={{ opacity: opacity }}
       >
         Edit Profile
       </Button>
@@ -96,7 +87,8 @@ const AboutUser = ({
   userObject,
   isMyProfile,
   profileId,
-  modalIsShown,
+  profileName,
+  setProfileName,
   ...props
 }) => {
   const [editingProfile, toggleEdit] = useState(false);
@@ -105,7 +97,6 @@ const AboutUser = ({
   const [bannerColor, setBannerColor] = useState(null);
   const [displayColorSelector, toggleColorDisplay] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
-  const [profileName, setProfileName] = useState(null);
   let endpoint = "/userProfiles";
 
   useEffect(() => {
@@ -182,7 +173,7 @@ const AboutUser = ({
         </CustomColorSection>
         <ContentWrapper>
           <VerticalFlex>
-            <ImageWrapper modalActive={modalIsShown}>
+            <ImageWrapper>
               <UserProfileImage
                 src={profilePicture}
                 alt="User Profile Image."
@@ -193,8 +184,7 @@ const AboutUser = ({
                 toggleEdit,
                 setAboutMe,
                 editingProfile,
-                initialAboutMe,
-                modalIsShown
+                initialAboutMe
               )
             ) : (
               <></>
@@ -202,9 +192,7 @@ const AboutUser = ({
           </VerticalFlex>
 
           <UserInfoWrapper>
-            <UserName backgroundColor={background} modalActive={modalIsShown}>
-              {profileName}
-            </UserName>
+            <UserName backgroundColor={background}>{profileName}</UserName>
             <h2 style={{ margin: `1.75em 0 0 0` }}>About</h2>
             <AboutContent>
               {editingProfile ? (
@@ -306,7 +294,7 @@ const UserName = styled.h1`
   color: ${(props) =>
     props.backgroundColor == "dark" ? css`#fff` : css`#162B55`};
 
-  opacity: ${(props) => (props.modalActive ? css`60%` : css`100%`)};
+  /* opacity: ${(props) => (props.modalActive ? css`60%` : css`100%`)}; */
 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 `;
@@ -333,8 +321,8 @@ const ImageWrapper = styled.div`
   width: 200px;
   height: 200px;
 
-  background-color: ${(props) =>
-    props.modalActive ? css`#CBCFD7` : css`#F8F8F8`};
+  background-color: #f8f8f8;
+
   border-radius: 50%;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.15);
