@@ -116,8 +116,8 @@ const LogoText = styled.h2`
   font-size: 32px;
   transition: 150ms ease-out;
 
-  @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
-  font-family: "Poppins", sans-serif;
+  /* @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+  font-family: "Poppins", sans-serif; */
 
   @media only screen and (min-width: 1201px) {
     font-size: 32px;
