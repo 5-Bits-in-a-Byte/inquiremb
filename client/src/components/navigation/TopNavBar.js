@@ -9,6 +9,7 @@ import Dropdown from "../common/dropdown/Dropdown";
 import { UserContext } from "../context/UserProvider";
 import Arrow from "../../imgs/carrot-down-secondary.svg";
 import Icon from "../common/Icon";
+import InquireLogoSVG from "../../imgs/inquire_logo_navbar.svg";
 import "../common/css/noTextSelection.css";
 
 /** TopNavBar Component
@@ -42,19 +43,23 @@ const TopNavBar = () => {
 
   return (
     <Nav>
-      <Wrapper>
-        <Link to={"/"}>
-          <LogoImg src={Logo} />
+      <FlexWrapper>
+        <Link to={"/"} style={{ textDecoration: `none` }}>
+          <InquireLogo>
+            <LogoIMG src={InquireLogoSVG} />
+            <LogoText>Inquire</LogoText>
+          </InquireLogo>
+          {/* <LogoImg src={Logo} /> */}
         </Link>
-      </Wrapper>
-      <Wrapper style={{ display: "flex", justifyContent: "center" }}>
+      </FlexWrapper>
+      <FlexWrapper style={{ display: "flex", justifyContent: "center" }}>
         {false ? (
           <SearchBar placeholder="Search for a post or class" />
         ) : (
           <Dropdown options={options}>
             <DropdownSelector tabIndex="0">
               <SelectionName className={"noselect"}>
-                Select a Class
+                Quick Navigate
               </SelectionName>
               <Icon
                 className={"noselect"}
@@ -64,18 +69,71 @@ const TopNavBar = () => {
             </DropdownSelector>
           </Dropdown>
         )}
-      </Wrapper>
-      <Wrapper>
+      </FlexWrapper>
+      <FlexWrapper>
         <ProfileDropdown />
-      </Wrapper>
+      </FlexWrapper>
     </Nav>
   );
 };
 
 export default TopNavBar;
 
-const Wrapper = styled.div`
+const FlexWrapper = styled.div`
   flex: 1;
+`;
+
+const InquireLogo = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const LogoIMG = styled.img`
+  width: 38px;
+  height: auto;
+  transition: 150ms ease-out;
+
+  @media only screen and (min-width: 1201px) {
+    width: 38px;
+  }
+  /* @media only screen and (max-width: 1200px) {
+    width: 450px;
+  }
+  @media only screen and (max-width: 1024px) {
+    width: 300px;
+  } */
+  @media only screen and (max-width: 768px) {
+    width: 24px;
+  }
+  @media only screen and (max-width: 480px) {
+    width: 20px;
+  }
+`;
+
+const LogoText = styled.h2`
+  margin-left: 0.5em;
+  font-size: 32px;
+  transition: 150ms ease-out;
+
+  @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+  font-family: "Poppins", sans-serif;
+
+  @media only screen and (min-width: 1201px) {
+    font-size: 32px;
+  }
+  /* @media only screen and (max-width: 1200px) {
+    font-size: 450px;
+  }
+  @media only screen and (max-width: 1024px) {
+    font-size: 300px;
+  } */
+  @media only screen and (max-width: 768px) {
+    font-size: 24px;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 20px;
+  }
 `;
 
 const Nav = styled.nav`
@@ -89,7 +147,11 @@ const Nav = styled.nav`
   display: flex;
   align-items: center;
   padding: 0 20px;
-  z-index: 9999;
+  z-index: 9998;
+
+  @media only screen and (max-width: 480px) {
+    padding: 0 0.5em;
+  }
 `;
 
 const LogoImg = styled.img`
@@ -98,7 +160,6 @@ const LogoImg = styled.img`
 
 const DropdownSelector = styled.div`
   background-color: #e7e7e7;
-  width: 100vw;
   height: 2rem;
   display: flex;
   align-items: center;
@@ -107,6 +168,25 @@ const DropdownSelector = styled.div`
   cursor: pointer;
   &:focus {
     outline-color: #162b55;
+  }
+
+  transition: 150ms ease-out;
+
+  @media only screen and (min-width: 1201px) {
+    width: 100vw;
+  }
+  @media only screen and (max-width: 1200px) {
+    width: 450px;
+  }
+  @media only screen and (max-width: 1024px) {
+    width: 300px;
+  }
+  @media only screen and (max-width: 768px) {
+    width: 200px;
+  }
+  @media only screen and (max-width: 480px) {
+    width: 125px;
+    font-size: 14px;
   }
 `;
 

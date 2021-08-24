@@ -51,6 +51,7 @@ const ClassView = ({ props }) => {
   return (
     <ClassViewWrapper>
       <Sidebar
+        id={"Sidebar"}
         userRole={userRole}
         setHighlightedSection={setHighlightedSection}
         highlightedSection={highlightedSection}

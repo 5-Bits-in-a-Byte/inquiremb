@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled, { css } from "styled-components";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import JoinConfirmation from "./joinCourse/JoinConfirmation";
@@ -18,9 +19,9 @@ const JoinCourse = ({ courseList, setCourseList }) => {
 
   return (
     <>
-      <Button secondary={true} onClick={() => toggleModal(true)}>
+      <CustomButton onClick={() => toggleModal(true)}>
         Join a Course
-      </Button>
+      </CustomButton>
       {modalIsShown && (
         <Modal
           close={() => {
@@ -50,3 +51,41 @@ const JoinCourse = ({ courseList, setCourseList }) => {
 };
 
 export default JoinCourse;
+
+const CustomButton = styled.div`
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 9em;
+
+  border-radius: 4px;
+  padding: 0.5em 0.125em;
+  background-color: #e7e7e7;
+  color: #162b55;
+  &:hover {
+    background-color: #dedede;
+  }
+
+  transition: 150ms ease-out;
+
+  @media only screen and (min-width: 1201px) {
+    width: 10em;
+  }
+  @media only screen and (max-width: 650px) {
+    font-size: 14px;
+    width: 8em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 12px;
+    width: 7em;
+  }
+  @media only screen and (max-width: 400px) {
+    font-size: 8px;
+    width: 8em;
+  }
+`;
