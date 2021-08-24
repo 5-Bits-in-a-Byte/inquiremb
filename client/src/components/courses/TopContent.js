@@ -16,7 +16,7 @@ const TopContent = ({ courseList, setCourseList }) => {
     <TopWrapper className="flex-row align">
       <Title>COURSES</Title>
       <FlexWrapper>
-        <InquireTooltip
+        {/* <InquireTooltip
           tooltipText={"Open join course modal."}
           hoverDelay={250}
           customPosition={{
@@ -25,10 +25,10 @@ const TopContent = ({ courseList, setCourseList }) => {
             bottom: `auto`,
             left: `-50%`,
           }}
-        >
-          <JoinCourse courseList={courseList} setCourseList={setCourseList} />
-        </InquireTooltip>
-        <InquireTooltip
+        > */}
+        <JoinCourse courseList={courseList} setCourseList={setCourseList} />
+        {/* </InquireTooltip> */}
+        {/* <InquireTooltip
           tooltipText={"Open create course modal."}
           hoverDelay={250}
           customPosition={{
@@ -37,9 +37,9 @@ const TopContent = ({ courseList, setCourseList }) => {
             bottom: `auto`,
             left: `-30%`,
           }}
-        >
-          <CreateCourse courseList={courseList} setCourseList={setCourseList} />
-        </InquireTooltip>
+        > */}
+        <CreateCourse courseList={courseList} setCourseList={setCourseList} />
+        {/* </InquireTooltip> */}
       </FlexWrapper>
     </TopWrapper>
   );
