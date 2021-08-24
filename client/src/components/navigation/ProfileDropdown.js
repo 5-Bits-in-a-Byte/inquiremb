@@ -21,7 +21,7 @@ const ProfileDropdown = () => {
     {
       onClick: () => {
         window.location.href =
-          process.env.REACT_APP_CLIENT_URL + "/userProfile";
+          process.env.REACT_APP_CLIENT_URL + "/userProfile/" + user._id;
       },
       label: "User Profile",
     },
