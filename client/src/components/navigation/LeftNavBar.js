@@ -21,7 +21,7 @@ const LeftNavBar = () => {
       <Wrapper>
         <InquireTooltip
           tooltipText={`See recent post history.`}
-          // hoverDelay={150}
+          // hoverDelay={1000}
           customPosition={{
             top: `25%`,
             right: `auto`,
@@ -38,7 +38,7 @@ const LeftNavBar = () => {
         </InquireTooltip>
         <InquireTooltip
           tooltipText={"See your active classes."}
-          // hoverDelay={150}
+          // hoverDelay={1000}
           customPosition={{
             top: `25%`,
             right: `auto`,
