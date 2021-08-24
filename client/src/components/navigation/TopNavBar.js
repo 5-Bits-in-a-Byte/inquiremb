@@ -116,6 +116,9 @@ const LogoText = styled.h2`
   font-size: 32px;
   transition: 150ms ease-out;
 
+  @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+  font-family: "Poppins", sans-serif;
+
   @media only screen and (min-width: 1201px) {
     font-size: 32px;
   }
@@ -145,6 +148,10 @@ const Nav = styled.nav`
   align-items: center;
   padding: 0 20px;
   z-index: 9998;
+
+  @media only screen and (max-width: 480px) {
+    padding: 0 0.5em;
+  }
 `;
 
 const LogoImg = styled.img`
@@ -178,7 +185,8 @@ const DropdownSelector = styled.div`
     width: 200px;
   }
   @media only screen and (max-width: 480px) {
-    width: 150px;
+    width: 125px;
+    font-size: 14px;
   }
 `;
 

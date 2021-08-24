@@ -49,6 +49,13 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   cursor: pointer;
+
+  @media only screen and (max-width: 480px) {
+    align-items: center;
+    justify-content: center;
+    /* height: 0; */
+    /* visibility: hidden; */
+  }
 `;
 
 const DropdownWrapper = styled.div`
@@ -80,6 +87,7 @@ const Name = styled.h4`
 
   @media only screen and (max-width: 768px) {
     width: 0;
+    height: 0;
     visibility: hidden;
   }
 `;

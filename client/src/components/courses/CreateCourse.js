@@ -128,4 +128,7 @@ const CustomButton = styled.div`
     font-size: 12px;
     width: 8em;
   }
+  @media only screen and (max-width: 400px) {
+    font-size: 8px;
+  }
 `;

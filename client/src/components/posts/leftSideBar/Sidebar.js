@@ -33,76 +33,75 @@ const Sidebar = ({ userRole, setHighlightedSection, highlightedSection }) => {
   //var nameRatio = 1;
 
   return (
-    <FlexWrapper>
-      <Container>
-        <Link to={"/course/" + courseId} style={{ textDecoration: "none" }}>
-          <ClassTitle nameFit={nameRatio}>{classroomName}</ClassTitle>
-        </Link>
+    <>
+      <FlexWrapper>
+        <Container>
+          <Link to={"/course/" + courseId} style={{ textDecoration: "none" }}>
+            <ClassTitle nameFit={nameRatio}>{classroomName}</ClassTitle>
+          </Link>
 
-        <HR />
-        <Section>
-          <SectionTab
-            tabText={"All Posts"}
-            imageLocation={NoteImg}
-            setHighlightedSection={setHighlightedSection}
-            highlightedSection={highlightedSection}
-          />
-          <SectionTab
-            tabText={"Instructor"}
-            imageLocation={GlassesImg}
-            setHighlightedSection={setHighlightedSection}
-            highlightedSection={highlightedSection}
-          />
-          <SectionTab
-            tabText={"Announcements"}
-            imageLocation={AnnouncementsImg}
-            setHighlightedSection={setHighlightedSection}
-            highlightedSection={highlightedSection}
-          />
-          <SectionTab
-            tabText={"Questions"}
-            imageLocation={QuestionsImg}
-            setHighlightedSection={setHighlightedSection}
-            highlightedSection={highlightedSection}
-          />
-          <SectionTab
-            tabText={"General Posts"}
-            imageLocation={GeneralImg}
-            setHighlightedSection={setHighlightedSection}
-            highlightedSection={highlightedSection}
-          />
-          <SectionTab
-            tabText={"Polls"}
-            imageLocation={PollsImg}
-            setHighlightedSection={setHighlightedSection}
-            highlightedSection={highlightedSection}
-          />
-        </Section>
+          <HR />
 
-        <ClassSubtitle>My Posts</ClassSubtitle>
+          <ClassSubtitle>Course Filters</ClassSubtitle>
 
-        <Section>
-          <SectionTab
-            tabText={"My Posts"}
-            imageLocation={UserImg}
-            setHighlightedSection={setHighlightedSection}
-            highlightedSection={highlightedSection}
-          />
-          <SectionTab
-            tabText={"My Upvoted"}
-            imageLocation={HeartImg}
-            setHighlightedSection={setHighlightedSection}
-            highlightedSection={highlightedSection}
-          />
-          {/* <SectionTab
-            tabText={"Bookmarked"}
-            imageLocation={BookmarkImg}
-            setHighlightedSection={setHighlightedSection}
-            highlightedSection={highlightedSection}
-          /> */}
-        </Section>
-      </Container>
-    </FlexWrapper>
+          <Section>
+            <SectionTab
+              tabText={"All Posts"}
+              imageLocation={NoteImg}
+              setHighlightedSection={setHighlightedSection}
+              highlightedSection={highlightedSection}
+            />
+            <SectionTab
+              tabText={"Instructor"}
+              imageLocation={GlassesImg}
+              setHighlightedSection={setHighlightedSection}
+              highlightedSection={highlightedSection}
+            />
+            <SectionTab
+              tabText={"Announcements"}
+              imageLocation={AnnouncementsImg}
+              setHighlightedSection={setHighlightedSection}
+              highlightedSection={highlightedSection}
+            />
+            <SectionTab
+              tabText={"Questions"}
+              imageLocation={QuestionsImg}
+              setHighlightedSection={setHighlightedSection}
+              highlightedSection={highlightedSection}
+            />
+            <SectionTab
+              tabText={"General Posts"}
+              imageLocation={GeneralImg}
+              setHighlightedSection={setHighlightedSection}
+              highlightedSection={highlightedSection}
+            />
+            <SectionTab
+              tabText={"Polls"}
+              imageLocation={PollsImg}
+              setHighlightedSection={setHighlightedSection}
+              highlightedSection={highlightedSection}
+            />
+          </Section>
+
+          <ClassSubtitle>My Filters</ClassSubtitle>
+
+          <Section>
+            <SectionTab
+              tabText={"My Posts"}
+              imageLocation={UserImg}
+              setHighlightedSection={setHighlightedSection}
+              highlightedSection={highlightedSection}
+            />
+            <SectionTab
+              tabText={"My Upvoted"}
+              imageLocation={HeartImg}
+              setHighlightedSection={setHighlightedSection}
+              highlightedSection={highlightedSection}
+            />
+          </Section>
+        </Container>
+      </FlexWrapper>
+    </>
   );
 };
 
@@ -116,6 +115,12 @@ const HR = styled.hr`
 
 const FlexWrapper = styled.div`
   flex: 0 0 200px;
+  transition: 150ms ease-out;
+  @media only screen and (max-width: 768px) {
+    width: 0;
+    overflow: hidden;
+    flex: 0 0 0;
+  }
 `;
 
 const Container = styled.div`
@@ -123,6 +128,11 @@ const Container = styled.div`
   box-shadow: 5px 2px 6px -2px rgba(0, 0, 0, 0.15);
   background-color: #fff;
   max-width: 200px;
+  transition: 150ms ease-out;
+  @media only screen and (max-width: 768px) {
+    width: 0;
+    overflow: hidden;
+  }
 `;
 
 const ClassTitle = styled.h1`
@@ -139,7 +149,7 @@ const ClassSubtitle = styled.h2`
   line-height: 2.5em;
   font-size: 1.25rem;
   text-align: left;
-  color: #b8b8b8;
+  color: #7e7e7e; // will find better grey later but for now this is for contrast
   user-select: none;
 `;
 
