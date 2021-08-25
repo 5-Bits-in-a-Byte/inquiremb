@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
 import CogIcon from "../../imgs/settings 1.svg";
+import { useWindowDimensions } from "../common/CustomHooks";
 
 /**
  * Options Component ~ Button side panel for displaying buttons for the user
@@ -13,6 +14,8 @@ import CogIcon from "../../imgs/settings 1.svg";
  */
 const OptionsPanel = ({ userRole, courseId, ...props }) => {
   const [panelPermissions, setPanelPermissions] = useState(null);
+
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     if (userRole)
@@ -26,19 +29,21 @@ const OptionsPanel = ({ userRole, courseId, ...props }) => {
           userRole.publish.general,
         displayDraftPoll: userRole.publish.poll,
       });
-  });
+  }, [userRole]);
 
   if (
     !userRole ||
     !panelPermissions ||
     (!panelPermissions.displayDraftPoll &&
       !panelPermissions.displayDraftPost &&
-      !panelPermissions.userIsAdmin)
+      !panelPermissions.userIsAdmin) ||
+    width <= 1200
   )
     return <></>;
   else
     return (
       <OptionsWrapper>
+        {/* {width >= 768 ? <OptionsHeader>OPTIONS</OptionsHeader> : <></>} */}
         <OptionsHeader>OPTIONS</OptionsHeader>
         <OptionsPanelWrapper>
           {panelPermissions.displayDraftPost && (
@@ -111,7 +116,13 @@ const OptionsWrapper = styled.div`
   right: -40px;
   top: 120px;
 
-  /* border: 1px solid red; */
+  /* @media only screen and (max-width: 768px) {
+    position: auto;
+    top: auto;
+    right: auto;
+
+    width: 15em;
+  } */
 `;
 
 const OptionsHeader = styled.h1`
@@ -131,4 +142,9 @@ const OptionsPanelWrapper = styled.div`
   border-radius: 5px;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
+
+  /* @media only screen and (max-width: 768px) {
+    min-width: 15em;
+    flex-direction: row;
+  } */
 `;

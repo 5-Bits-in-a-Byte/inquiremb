@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import CogIcon from "../../imgs/settings 1.svg";
 import SearchBar from "../common/SearchBar";
 import LazyFetch from "../common/requests/LazyFetch";
+import { useWindowDimensions } from "../common/CustomHooks";
 
 /**
  * Options Component ~ Button side panel for displaying buttons for the user
@@ -31,18 +32,23 @@ const SearchPanel = ({ courseId, onChangeCallback }) => {
   //     });
   //   };
 
-  return (
-    <OptionsWrapper>
-      <OptionsHeader>SEARCH</OptionsHeader>
-      <OptionsPanel>
-        <SearchBar
-          placeholder="Search for Post"
-          displayIcon={false}
-          onChange={onChangeCallback}
-        />
-      </OptionsPanel>
-    </OptionsWrapper>
-  );
+  const { width, height } = useWindowDimensions();
+
+  if (width <= 1200) return <></>;
+  else
+    return (
+      <OptionsWrapper>
+        {/* {width >= 768 ? <OptionsHeader>SEARCH</OptionsHeader> : <></>} */}
+        <OptionsHeader>SEARCH</OptionsHeader>
+        <OptionsPanel>
+          <SearchBar
+            placeholder="Search for Post"
+            displayIcon={false}
+            onChange={onChangeCallback}
+          />
+        </OptionsPanel>
+      </OptionsWrapper>
+    );
 };
 
 SearchPanel.propTypes = {
@@ -58,7 +64,11 @@ const OptionsWrapper = styled.div`
   right: -40px;
   top: 0px;
 
-  /* border: 1px solid red; */
+  /* @media only screen and (max-width: 768px) {
+    position: auto;
+    top: auto;
+    right: auto;
+  } */
 `;
 
 const OptionsHeader = styled.h1`

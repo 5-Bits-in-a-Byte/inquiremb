@@ -116,7 +116,7 @@ const HR = styled.hr`
 const FlexWrapper = styled.div`
   flex: 0 0 200px;
   transition: 150ms ease-out;
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1200px) {
     width: 0;
     overflow: hidden;
     flex: 0 0 0;
@@ -129,7 +129,7 @@ const Container = styled.div`
   background-color: #fff;
   max-width: 200px;
   transition: 150ms ease-out;
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1200px) {
     width: 0;
     overflow: hidden;
   }

@@ -12,6 +12,8 @@ import PollWrapper from "./wrappers/PollWrapper";
 import EditorWrapper from "./wrappers/EditorWrapper";
 import SearchPanel from "./SearchPanel";
 import LazyFetch from "../common/requests/LazyFetch";
+import { useWindowDimensions } from "../common/CustomHooks";
+import SearchBar from "../common/SearchBar";
 // import LoadingDots from "../common/animation/LoadingDots";
 
 const convertToUpper = (postType) => {
@@ -85,6 +87,10 @@ const fetchData = (endpoint, socketPosts, setData) => {
 const PostFeed = ({ userRole, highlightedSection }) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
+
+  const { width, height } = useWindowDimensions();
+  const [displaySecondarySearchbar, setDisplaySecondarySearchbar] =
+    useState(false);
 
   useEffect(() => {
     io.emit("join", { room: courseId, room_type: "course" });
@@ -206,9 +212,68 @@ const PostFeed = ({ userRole, highlightedSection }) => {
       <PostFeedWrapper>
         <ScrollingDiv>
           <CenterWrapper>
+            {displaySecondarySearchbar ? (
+              <div
+                style={{
+                  width: `100%`,
+                  padding: `2.2em 1em 0 1em`,
+                  display: `flex`,
+                  justifyContent: `center`,
+                  alignItems: `center`,
+                }}
+              >
+                <SearchBar
+                  placeholder="Search for Post"
+                  displayIcon={false}
+                  onChange={handleSearch}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
             <SortingOptions>
+              {width <= 1200 ? (
+                <>
+                  <Button primary style={MarginLeftRight}>
+                    Filters
+                  </Button>
+
+                  {displaySecondarySearchbar ? (
+                    <Button
+                      outlineSecondary
+                      style={{ padding: `9px 12px`, ...MarginLeftRight }}
+                      onClick={(event) => {
+                        setDisplaySecondarySearchbar(
+                          !displaySecondarySearchbar
+                        );
+                      }}
+                    >
+                      Search
+                    </Button>
+                  ) : (
+                    <Button
+                      primary
+                      style={MarginLeftRight}
+                      onClick={(event) => {
+                        setDisplaySecondarySearchbar(
+                          !displaySecondarySearchbar
+                        );
+                      }}
+                    >
+                      Search
+                    </Button>
+                  )}
+
+                  <Button primary style={MarginLeftRight}>
+                    Options
+                  </Button>
+                </>
+              ) : (
+                <></>
+              )}
               <Button
-                secondary={true}
+                secondary
+                style={MarginLeftRight}
                 onClick={() => {
                   setCondensedState(!isCondensed);
                   fetchData(endpoint, socketPosts, setData);
@@ -217,7 +282,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                 <img src={LineWidthImg} />
               </Button>
               <Button
-                secondary={true}
+                secondary
                 style={MarginLeftRight}
                 onClick={() => {
                   toggleSort(!sortByMostRecent);
@@ -253,8 +318,8 @@ const PostFeed = ({ userRole, highlightedSection }) => {
 export default PostFeed;
 
 const MarginLeftRight = {
-  marginLeft: "1em",
-  marginRight: "1em",
+  marginLeft: "0.5em",
+  marginRight: "0.5em",
 };
 
 const PostFeedWrapper = styled.div`
@@ -278,6 +343,10 @@ const CenterWrapper = styled.div`
   width: 100%;
   padding-right: 280px;
   position: relative;
+
+  @media only screen and (max-width: 1200px) {
+    padding-right: 0;
+  }
 `;
 
 const SortingOptions = styled.div`
@@ -289,12 +358,22 @@ const SortingOptions = styled.div`
   margin: 2.2em 0 1em 0;
   position: absolute;
   padding-right: 280px;
+
+  @media only screen and (max-width: 1200px) {
+    padding-right: 0;
+    justify-content: center;
+    position: relative;
+  }
 `;
 
 const PostGroupingHeader = styled.div`
   margin: 2.2em 0 0em 0;
   font-size: 1.25em;
   font-weight: 500;
+
+  @media only screen and (max-width: 1200px) {
+    margin: 0;
+  }
 `;
 
 /** THIS ACCOUNTS FOR WEIRD SCROLLING DIV STUFF */
