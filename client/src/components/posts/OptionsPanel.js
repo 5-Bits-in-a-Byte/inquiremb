@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { Children, useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserProvider";
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -11,81 +11,91 @@ import CogIcon from "../../imgs/settings 1.svg";
  *
  * @param {string} courseId given to the "+ New Post" button to route to the Post form page
  */
-const OptionsPanel = ({ userRole, courseId }) => {
-  // Will be used to conditionally render the config page button and draft post button
-  var userIsAdmin = false;
-  var userCanBan = false;
-  var userCanRemove = false;
-  var displayDraftPost = false;
-  var displayDraftPoll = false;
-  if (userRole) {
-    userIsAdmin = userRole.admin.configure;
-    userCanBan = userRole.admin.banUsers;
-    userCanRemove = userRole.admin.removeUsers;
-    displayDraftPost =
-      userRole.publish.question ||
-      userRole.publish.announcement ||
-      userRole.publish.general;
-    displayDraftPoll = userRole.publish.poll;
-  }
+const OptionsPanel = ({ userRole, courseId, ...props }) => {
+  const [panelPermissions, setPanelPermissions] = useState(null);
 
-  return (
-    <OptionsWrapper>
-      <OptionsHeader>OPTIONS</OptionsHeader>
-      <OptionsPanelWrapper>
-        {displayDraftPost && (
-          <Link
-            style={{
-              width: "100%",
-              textDecoration: "none",
-              display: "flex",
-            }}
-            to={"/course/" + courseId + "/post/newQorA"}
-          >
-            <Button primary autoWidth enableMargin={"0.5em"}>
-              Draft Post
-            </Button>
-          </Link>
-        )}
-        {displayDraftPoll && (
-          <Link
-            style={{
-              width: "100%",
-              textDecoration: "none",
-              display: "flex",
-            }}
-            to={"/course/" + courseId + "/post/newPoll"}
-          >
-            <Button primary autoWidth enableMargin={"0.5em"}>
-              Draft Poll
-            </Button>
-          </Link>
-        )}
+  useEffect(() => {
+    if (userRole)
+      setPanelPermissions({
+        userIsAdmin: userRole.admin.configure,
+        userCanBan: userRole.admin.banUsers,
+        userCanRemove: userRole.admin.removeUsers,
+        displayDraftPost:
+          userRole.publish.question ||
+          userRole.publish.announcement ||
+          userRole.publish.general,
+        displayDraftPoll: userRole.publish.poll,
+      });
+  });
 
-        {/* The Config page conditionally renders based on whether or not
-            the user has ADMIN priviledges for this course */}
-        {(userIsAdmin || userCanBan || userCanRemove) && (
-          <Link
-            style={{
-              width: "100%",
-              textDecoration: "none",
-              display: "flex",
-            }}
-            to={"/course/" + courseId + "/config"}
-          >
-            <Button
-              outlineSecondary
-              autoWidth
-              enableMargin={"0.5em"}
-              // onClick={() => alert("This webpage has not yet been set up...")}
+  if (
+    !userRole ||
+    !panelPermissions ||
+    (!panelPermissions.displayDraftPoll &&
+      !panelPermissions.displayDraftPost &&
+      !panelPermissions.userIsAdmin)
+  )
+    return <></>;
+  else
+    return (
+      <OptionsWrapper>
+        <OptionsHeader>OPTIONS</OptionsHeader>
+        <OptionsPanelWrapper>
+          {panelPermissions.displayDraftPost && (
+            <Link
+              style={{
+                width: "100%",
+                textDecoration: "none",
+                display: "flex",
+              }}
+              to={"/course/" + courseId + "/post/newQorA"}
             >
-              <img src={CogIcon} alt="Config Page Button Icon" />
-            </Button>
-          </Link>
-        )}
-      </OptionsPanelWrapper>
-    </OptionsWrapper>
-  );
+              <Button primary autoWidth enableMargin={"0.5em"}>
+                Draft Post
+              </Button>
+            </Link>
+          )}
+          {panelPermissions.displayDraftPoll && (
+            <Link
+              style={{
+                width: "100%",
+                textDecoration: "none",
+                display: "flex",
+              }}
+              to={"/course/" + courseId + "/post/newPoll"}
+            >
+              <Button primary autoWidth enableMargin={"0.5em"}>
+                Draft Poll
+              </Button>
+            </Link>
+          )}
+
+          {/* The Config page conditionally renders based on whether or not
+            the user has ADMIN priviledges for this course */}
+          {(panelPermissions.userIsAdmin ||
+            panelPermissions.userCanBan ||
+            panelPermissions.userCanRemove) && (
+            <Link
+              style={{
+                width: "100%",
+                textDecoration: "none",
+                display: "flex",
+              }}
+              to={"/course/" + courseId + "/config"}
+            >
+              <Button
+                outlineSecondary
+                autoWidth
+                enableMargin={"0.5em"}
+                // onClick={() => alert("This webpage has not yet been set up...")}
+              >
+                <img src={CogIcon} alt="Config Page Button Icon" />
+              </Button>
+            </Link>
+          )}
+        </OptionsPanelWrapper>
+      </OptionsWrapper>
+    );
 };
 
 OptionsPanel.propTypes = {
