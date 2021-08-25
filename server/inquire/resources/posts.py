@@ -186,20 +186,20 @@ class Posts(Resource):
         if filterby == 'instructor':
             queryParams["isInstructor"] = True
             query = Post.objects.raw(
-                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
+                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         # Filter by 'me'
         elif filterby == 'me':
             queryParams["postedBy._id"] = {
                 '$in': [current_user._id, current_user.anonymousId]}
             query = Post.objects.raw(
-                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
+                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         # Filter by 'myupvoted'
         elif filterby == 'myupvoted':
             queryParams["reactions.likes"] = current_user._id
             query = Post.objects.raw(
-                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
+                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         # Filter by 'question'
         elif filterby == 'question':
@@ -209,7 +209,7 @@ class Posts(Resource):
                     '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams["content.type"] = "question"
             query = Post.objects.raw(queryParams).order_by(
-                [("isPinned", -1), ("createdDate", sort_date)])
+                [("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         # Filter by 'announcement'
         elif filterby == 'announcement':
@@ -219,7 +219,7 @@ class Posts(Resource):
                     '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams["content.type"] = "announcement"
             query = Post.objects.raw(queryParams).order_by(
-                [("isPinned", -1), ("createdDate", sort_date)])
+                [("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         # Filter by 'poll'
         elif filterby == 'poll':
@@ -229,7 +229,7 @@ class Posts(Resource):
                     '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams["content.type"] = "poll"
             query = Post.objects.raw(queryParams).order_by(
-                [("isPinned", -1), ("createdDate", sort_date)])
+                [("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         # Filter by 'general'
         elif filterby == 'general':
@@ -239,18 +239,18 @@ class Posts(Resource):
                     '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams["content.type"] = "general"
             query = Post.objects.raw(queryParams).order_by(
-                [("isPinned", -1), ("createdDate", sort_date)])
+                [("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         # If the current user can see private posts and there's no search
         elif user_perms["privacy"]["private"] and (req is None):
             query = Post.objects.raw(
-                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)])
+                queryParams).order_by([("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         # If the current user can see private posts and there is a search
         elif user_perms["privacy"]["private"] and (req is not None):
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
-                [("isPinned", -1), ("createdDate", sort_date)])
+                [("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         # If the current user cannot see private posts and there is a search
         elif (not user_perms["privacy"]["private"]) and (req is not None):
@@ -258,14 +258,14 @@ class Posts(Resource):
                 '$in': [current_user._id, current_user.anonymousId]}}]
             queryParams['$text'] = {'$search': req}
             query = Post.objects.raw(queryParams).order_by(
-                [('isPinned', -1), ('createdDate', sort_date)])
+                [('isPinned', -1), ('createdDate', sort_date)]).skip(page*20).limit(20)
 
         # If the current user cannot see private posts and there is not a search
         else:
             queryParams["$or"] = [{'isPrivate': False}, {'postedBy._id': {
                 '$in': [current_user._id, current_user.anonymousId]}}]
             query = Post.objects.raw(queryParams).order_by(
-                [("isPinned", -1), ("createdDate", sort_date)])
+                [("isPinned", -1), ("createdDate", sort_date)]).skip(page*20).limit(20)
 
         course = current_user.get_course(courseId)
         viewed = course.viewed

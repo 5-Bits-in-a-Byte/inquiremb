@@ -111,8 +111,10 @@ const PostFeed = ({ userRole, highlightedSection }) => {
   const { courseId } = useParams();
   const baseEndpoint = "/courses/" + courseId + "/posts";
   const [endpoint, setEndpoint] = useState(baseEndpoint);
+  const [page, changePage] = useState(0);
 
   useEffect(() => {
+    console.log("page:", page);
     // Sorting by post type
     switch (highlightedSection) {
       case "Instructor":
@@ -150,7 +152,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
         setEndpoint(baseEndpoint + "?sortby=oldest");
       }
     }
-  }, [highlightedSection, sortByMostRecent]);
+  }, [highlightedSection, sortByMostRecent, page]);
 
   const [data, setData] = useState(null);
 
@@ -201,10 +203,27 @@ const PostFeed = ({ userRole, highlightedSection }) => {
     }
   };
 
+  const handleScroll = (e) => {
+    // console.log("e.target.scrollHeight:", e.target.scrollHeight);
+    // console.log("e.target.scrollTop:", e.target.scrollTop);
+    // console.log("e.target.clientHeight:", e.target.clientHeight);
+
+    // if (e.target.scrollTop == 0 && page != 1) {
+    //   console.log("AT THE TOP");
+    //   changePage(page - 1);
+    // }
+
+    // Checking to see if you're at the bottom of the scrolling div; if yes, load more posts
+    if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) {
+      console.log("AT THE BOTTOM");
+      changePage(page + 1);
+    }
+  };
+
   return (
     <>
       <PostFeedWrapper>
-        <ScrollingDiv>
+        <ScrollingDiv onScroll={handleScroll}>
           <CenterWrapper>
             <SortingOptions>
               <Button
