@@ -234,7 +234,14 @@ const PostFeed = ({ userRole, highlightedSection }) => {
             <SortingOptions>
               {width <= 1200 ? (
                 <>
-                  <Button primary style={MarginLeftRight}>
+                  <Button
+                    primary
+                    style={{
+                      marginTop: `0.5em`,
+                      marginBottom: `0.5em`,
+                      ...MarginLeftRight,
+                    }}
+                  >
                     Filters
                   </Button>
 
@@ -253,7 +260,11 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                   ) : (
                     <Button
                       primary
-                      style={MarginLeftRight}
+                      style={{
+                        marginTop: `0.5em`,
+                        marginBottom: `0.5em`,
+                        ...MarginLeftRight,
+                      }}
                       onClick={(event) => {
                         setDisplaySecondarySearchbar(
                           !displaySecondarySearchbar
@@ -264,7 +275,14 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                     </Button>
                   )}
 
-                  <Button primary style={MarginLeftRight}>
+                  <Button
+                    primary
+                    style={{
+                      marginTop: `0.5em`,
+                      marginBottom: `0.5em`,
+                      ...MarginLeftRight,
+                    }}
+                  >
                     Options
                   </Button>
                 </>
@@ -273,7 +291,11 @@ const PostFeed = ({ userRole, highlightedSection }) => {
               )}
               <Button
                 secondary
-                style={MarginLeftRight}
+                style={{
+                  marginTop: `0.5em`,
+                  marginBottom: `0.5em`,
+                  ...MarginLeftRight,
+                }}
                 onClick={() => {
                   setCondensedState(!isCondensed);
                   fetchData(endpoint, socketPosts, setData);
@@ -283,7 +305,11 @@ const PostFeed = ({ userRole, highlightedSection }) => {
               </Button>
               <Button
                 secondary
-                style={MarginLeftRight}
+                style={{
+                  marginTop: `0.5em`,
+                  marginBottom: `0.5em`,
+                  ...MarginLeftRight,
+                }}
                 onClick={() => {
                   toggleSort(!sortByMostRecent);
                 }}
@@ -359,10 +385,13 @@ const SortingOptions = styled.div`
   position: absolute;
   padding-right: 280px;
 
+  transition: 150ms ease-out;
+
   @media only screen and (max-width: 1200px) {
     padding-right: 0;
     justify-content: center;
     position: relative;
+    flex-wrap: wrap;
   }
 `;
 

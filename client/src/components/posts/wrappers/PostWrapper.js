@@ -351,9 +351,16 @@ const HeaderContentWrapper = styled.div`
   align-items: center;
 
   padding: 5px;
-  height: 40px;
+  height: 2.5em;
 
   /* border: 1px solid #4a86fa; */
+
+  transition: 150ms ease-out;
+
+  @media only screen and (max-width: 768px) {
+    flex-wrap: wrap;
+    height: 3.5em;
+  }
 `;
 
 const CircleIcon = styled.div`
@@ -443,4 +450,10 @@ const ReactionSection = styled.div`
   margin-left: auto;
   height: 100%;
   align-items: center;
+
+  @media only screen and (max-width: 768px) {
+    width: 0;
+    display: hidden;
+    overflow: hidden;
+  }
 `;
