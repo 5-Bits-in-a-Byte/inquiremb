@@ -115,6 +115,10 @@ const PostFeed = ({ userRole, highlightedSection }) => {
   const [sortByMostRecent, toggleSort] = useState(true);
   // Retrieves the courseId from the url parameters
   const { courseId } = useParams();
+
+  // Used to check for when the courseId in the url changes. We re-fetch data accordingly.
+  const [currentCourseId, setCurrentCourseId] = useState(courseId);
+
   const baseEndpoint = "/courses/" + courseId + "/posts";
   const [endpoint, setEndpoint] = useState(baseEndpoint);
 
@@ -179,13 +183,20 @@ const PostFeed = ({ userRole, highlightedSection }) => {
 
   // Populate posts and store state of initial posts
   useEffect(() => {
-    // console.log("data:", data);
     if (data) {
+      console.log("data:", data);
       let initialGeneratedPosts = generateSections(data, userRole, isCondensed);
       setPosts(initialGeneratedPosts);
       setInitialPosts(initialGeneratedPosts);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (currentCourseId && currentCourseId != courseId) {
+      setCurrentCourseId(courseId);
+      setEndpoint(baseEndpoint);
+    }
+  }, [courseId]);
 
   const handleSearch = (e) => {
     // console.log(e.target.value);
