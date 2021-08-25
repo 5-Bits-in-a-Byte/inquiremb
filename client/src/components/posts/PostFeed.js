@@ -109,50 +109,57 @@ const PostFeed = ({ userRole, highlightedSection }) => {
   const [sortByMostRecent, toggleSort] = useState(true);
   // Retrieves the courseId from the url parameters
   const { courseId } = useParams();
-  const baseEndpoint = "/courses/" + courseId + "/posts";
+  // const baseEndpoint = "/courses/" + courseId + "/posts";
+  const [baseEndpoint, setBaseEndpoint] = useState(
+    `/courses/${courseId}/posts?page=0`
+  );
   const [endpoint, setEndpoint] = useState(baseEndpoint);
   const [page, changePage] = useState(0);
 
   useEffect(() => {
-    console.log("page:", page);
+    setBaseEndpoint(`/courses/${courseId}/posts?page=${page}`);
+  }, [page]);
+
+  useEffect(() => {
     // Sorting by post type
     switch (highlightedSection) {
       case "Instructor":
-        setEndpoint(baseEndpoint + "?filterby=instructor");
+        setEndpoint(baseEndpoint + "&filterby=instructor");
         break;
       case "My Posts":
-        setEndpoint(baseEndpoint + "?filterby=me");
+        setEndpoint(baseEndpoint + "&filterby=me");
         break;
       case "My Upvoted":
-        setEndpoint(baseEndpoint + "?filterby=myupvoted");
+        setEndpoint(baseEndpoint + "&filterby=myupvoted");
         break;
       case "Announcements":
-        setEndpoint(baseEndpoint + "?filterby=announcement");
+        setEndpoint(baseEndpoint + "&filterby=announcement");
         break;
       case "Questions":
-        setEndpoint(baseEndpoint + "?filterby=question");
+        setEndpoint(baseEndpoint + "&filterby=question");
         break;
       case "Polls":
-        setEndpoint(baseEndpoint + "?filterby=poll");
+        setEndpoint(baseEndpoint + "&filterby=poll");
         break;
       case "General Posts":
-        setEndpoint(baseEndpoint + "?filterby=general");
+        setEndpoint(baseEndpoint + "&filterby=general");
         break;
       default:
         // Don't add a filter to endpoint
-        setEndpoint(baseEndpoint);
+        setEndpoint(`/courses/${courseId}/posts?page=0`);
         break;
     }
 
     // Sorting by date
     if (!sortByMostRecent) {
-      if (highlightedSection !== "All Posts") {
-        setEndpoint(endpoint + "&sortby=oldest");
-      } else {
-        setEndpoint(baseEndpoint + "?sortby=oldest");
-      }
+      setEndpoint(endpoint + "&sortby=oldest");
+      // if (highlightedSection !== "All Posts") {
+      //   setEndpoint(endpoint + "&sortby=oldest");
+      // } else {
+      //   setEndpoint(baseEndpoint + "&sortby=oldest");
+      // }
     }
-  }, [highlightedSection, sortByMostRecent, page]);
+  }, [highlightedSection, sortByMostRecent]);
 
   const [data, setData] = useState(null);
 
@@ -216,7 +223,8 @@ const PostFeed = ({ userRole, highlightedSection }) => {
     // Checking to see if you're at the bottom of the scrolling div; if yes, load more posts
     if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) {
       console.log("AT THE BOTTOM");
-      changePage(page + 1);
+      console.log("mod math:", (posts.pinned.length + posts.other.length) % 20);
+      changePage((posts.pinned.length + posts.other.length) % 20);
     }
   };
 
