@@ -184,7 +184,6 @@ const PostFeed = ({ userRole, highlightedSection }) => {
   // Populate posts and store state of initial posts
   useEffect(() => {
     if (data) {
-      console.log("data:", data);
       let initialGeneratedPosts = generateSections(data, userRole, isCondensed);
       setPosts(initialGeneratedPosts);
       setInitialPosts(initialGeneratedPosts);
@@ -199,7 +198,6 @@ const PostFeed = ({ userRole, highlightedSection }) => {
   }, [courseId]);
 
   const handleSearch = (e) => {
-    // console.log(e.target.value);
     if (e.target.value != "") {
       LazyFetch({
         type: "get",
