@@ -224,7 +224,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
       <PostFeedWrapper>
         <ScrollingDiv>
           <CenterWrapper>
-            {displaySecondarySearchbar ? (
+            {displaySecondarySearchbar && width < 1200 ? (
               <div
                 style={{
                   width: `100%`,
@@ -251,6 +251,8 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                     style={{
                       marginTop: `0.5em`,
                       marginBottom: `0.5em`,
+                      width: `100%`,
+                      margin: `8px 0`,
                       ...MarginLeftRight,
                     }}
                   >
@@ -260,7 +262,12 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                   {displaySecondarySearchbar ? (
                     <Button
                       outlineSecondary
-                      style={{ padding: `9px 12px`, ...MarginLeftRight }}
+                      style={{
+                        padding: `9px 12px`,
+                        width: `100%`,
+                        margin: `8px 0`,
+                        ...MarginLeftRight,
+                      }}
                       onClick={(event) => {
                         setDisplaySecondarySearchbar(
                           !displaySecondarySearchbar
@@ -275,6 +282,8 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                       style={{
                         marginTop: `0.5em`,
                         marginBottom: `0.5em`,
+                        width: `100%`,
+                        margin: `8px 0`,
                         ...MarginLeftRight,
                       }}
                       onClick={(event) => {
@@ -292,6 +301,8 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                     style={{
                       marginTop: `0.5em`,
                       marginBottom: `0.5em`,
+                      width: `100%`,
+                      margin: `8px 0`,
                       ...MarginLeftRight,
                     }}
                   >
@@ -306,9 +317,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                   <Button
                     secondary
                     style={{
-                      marginTop: `0.5em`,
-                      marginBottom: `0.5em`,
-                      ...MarginLeftRight,
+                      margin: `0.5em calc(100% - 186px) 0.5em 8px`,
                     }}
                     onClick={() => {
                       setCondensedState(!isCondensed);
@@ -372,6 +381,10 @@ const PostFeedWrapper = styled.div`
   display: flex;
 `;
 
+const TestClassName = styled.button`
+  width: 100%;
+`;
+
 const ScrollingDiv = styled.div`
   position: absolute;
   display: flex;
@@ -411,6 +424,11 @@ const SortingOptions = styled.div`
     position: relative;
     flex-wrap: wrap;
   }
+  /* @media only screen and (max-width: 768px) {
+    margin: 1em 0;
+    flex-direction: column;
+    flex: 1 1 100%;
+  } */
 `;
 
 const PostGroupingHeader = styled.div`
