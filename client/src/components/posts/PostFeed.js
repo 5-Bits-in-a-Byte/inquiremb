@@ -89,6 +89,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
   const [socketPosts, setSocketPosts] = useState([]);
 
   const { width, height } = useWindowDimensions();
+
   const [displaySecondarySearchbar, setDisplaySecondarySearchbar] =
     useState(false);
 
@@ -111,8 +112,10 @@ const PostFeed = ({ userRole, highlightedSection }) => {
     };
   }, []);
 
-  const [isCondensed, setCondensedState] = useState(false);
+  const [isCondensed, setCondensedState] = useState(false || width <= 540);
+
   const [sortByMostRecent, toggleSort] = useState(true);
+
   // Retrieves the courseId from the url parameters
   const { courseId } = useParams();
 
@@ -298,20 +301,26 @@ const PostFeed = ({ userRole, highlightedSection }) => {
               ) : (
                 <></>
               )}
-              <Button
-                secondary
-                style={{
-                  marginTop: `0.5em`,
-                  marginBottom: `0.5em`,
-                  ...MarginLeftRight,
-                }}
-                onClick={() => {
-                  setCondensedState(!isCondensed);
-                  fetchData(endpoint, socketPosts, setData);
-                }}
-              >
-                <img src={LineWidthImg} />
-              </Button>
+              {width > 540 ? (
+                <>
+                  <Button
+                    secondary
+                    style={{
+                      marginTop: `0.5em`,
+                      marginBottom: `0.5em`,
+                      ...MarginLeftRight,
+                    }}
+                    onClick={() => {
+                      setCondensedState(!isCondensed);
+                      fetchData(endpoint, socketPosts, setData);
+                    }}
+                  >
+                    <img src={LineWidthImg} />
+                  </Button>
+                </>
+              ) : (
+                <></>
+              )}
               <Button
                 secondary
                 style={{

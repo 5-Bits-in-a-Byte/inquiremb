@@ -11,6 +11,7 @@ import { useHistory, useParams } from "react-router";
 import LazyFetch from "../../common/requests/LazyFetch";
 import PinIcon from "../../../imgs/pin.svg";
 import { Link } from "react-router-dom";
+import { useWindowDimensions } from "../../common/CustomHooks";
 
 const accentColor = (type) => {
   switch (type) {
@@ -38,6 +39,7 @@ const PostWrapper = ({
 
   const user = useContext(UserContext);
   const userRole = useContext(UserRoleContext);
+  const { width, height } = useWindowDimensions();
 
   const [isEditing, setIsEditing] = useState(false);
   const [pinnedStatus, setPinnedStatus] = useState(postObject.isPinned);
@@ -243,7 +245,7 @@ const PostWrapper = ({
           ) : (
             <></>
           )}
-          {userRole && dropdownOptions ? (
+          {userRole && dropdownOptions && width >= 768 ? (
             <Dropdown options={dropdownOptions}>
               <Icon src={OptionDots} style={{ cursor: "pointer" }} />
             </Dropdown>
@@ -359,7 +361,7 @@ const HeaderContentWrapper = styled.div`
 
   @media only screen and (max-width: 768px) {
     flex-wrap: wrap;
-    height: 3.5em;
+    height: auto;
   }
 `;
 

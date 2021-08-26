@@ -308,6 +308,10 @@ const ScrollingDiv = styled.div`
   padding: 0 280px 0 40px;
   overflow: auto;
   padding-right: 280px;
+
+  @media only screen and (max-width: 1200px) {
+    padding: 0 2.5em;
+  }
 `;
 
 const MaxWidth = styled.div`
