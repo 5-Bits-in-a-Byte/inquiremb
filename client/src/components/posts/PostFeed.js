@@ -317,7 +317,9 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                   <Button
                     secondary
                     style={{
-                      margin: `0.5em calc(100% - 186px) 0.5em 8px`,
+                      marginTop: `0.5em`,
+                      marginBottom: `0.5em`,
+                      ...MarginLeftRight,
                     }}
                     onClick={() => {
                       setCondensedState(!isCondensed);
