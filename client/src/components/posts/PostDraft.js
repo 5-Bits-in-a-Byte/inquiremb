@@ -10,6 +10,7 @@ import { convertToRaw, EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useHistory } from "react-router";
 import axios from "axios";
+import MaterialCheckbox from "../common/MaterialCheckbox";
 
 const accentColor = (type) => {
   switch (type) {
@@ -27,12 +28,10 @@ const accentColor = (type) => {
 const PostDraft = ({ userRole }) => {
   const { courseId } = useParams();
   const history = useHistory();
-  // State and handler for drafting posts
-  const [draft, setDraft] = useState({
-    title: "",
-    isAnonymous: false,
-    isPrivate: false,
-  });
+  // State and handlers for drafting posts
+  const [isPrivate, toggleIsPrivate] = useState(false);
+  const [isAnonymous, toggleIsAnonymous] = useState(false);
+  const [title, setTitle] = useState("");
 
   var defaultType;
   if (userRole.publish.general) {
@@ -51,18 +50,9 @@ const PostDraft = ({ userRole }) => {
     plainText: EditorState.createEmpty(),
   });
 
-  const handleChange = (e) => {
-    setDraft({
-      ...draft,
-      [e.target.name]:
-        e.target.type === "checkbox" ? e.target.checked : e.target.value,
-    });
-  };
-
   const handleContentChange = (e) => {
     const plainText = e.getCurrentContent().getPlainText();
     setContent({ ...content, raw: e, plainText: plainText });
-    console.log(content);
   };
 
   const handleSubmit = () => {
@@ -75,9 +65,9 @@ const PostDraft = ({ userRole }) => {
       type: "post",
       endpoint: "/courses/" + courseId + "/posts",
       data: {
-        title: draft.title,
-        isAnonymous: draft.isAnonymous,
-        isPrivate: draft.isPrivate,
+        title: title,
+        isAnonymous: isAnonymous,
+        isPrivate: isPrivate,
         content: newContent,
       },
       onSuccess: (data) => {
@@ -120,8 +110,6 @@ const PostDraft = ({ userRole }) => {
     displayGeneral = userRole.publish.general;
   }
   var accent = accentColor(content.type);
-
-  // console.log("User Role: ", userRole);
 
   return (
     <Wrapper sideBarColor={accent}>
@@ -179,7 +167,9 @@ const PostDraft = ({ userRole }) => {
       <DraftTextArea
         minRows={1}
         placeholder={titlePlaceholder}
-        onChange={handleChange}
+        onChange={(e) => {
+          setTitle(e.target.value);
+        }}
         name="title"
       />
       <Editor
@@ -214,20 +204,22 @@ const PostDraft = ({ userRole }) => {
       <FooterContentWrapper>
         <ButtonSection>
           {userRole && userRole.privacy.anonymous ? (
-            <Checkbox
-              checkboxName="isAnonymous"
-              labelText={"Make Anonymous"}
-              onChange={handleChange}
-              checkStatus={draft.isAnonymous}
+            <MaterialCheckbox
+              label={"Make Anonymous"}
+              checkedState={{
+                checked: isAnonymous,
+                toggleChecked: toggleIsAnonymous,
+              }}
             />
           ) : (
             <></>
           )}
-          <Checkbox
-            checkboxName="isPrivate"
-            labelText={"Make Private"}
-            onChange={handleChange}
-            checkStatus={draft.isPrivate}
+          <MaterialCheckbox
+            label={"Make Private"}
+            checkedState={{
+              checked: isPrivate,
+              toggleChecked: toggleIsPrivate,
+            }}
           />
           <Button primary onClick={handleSubmit} style={{ margin: "0 1em" }}>
             Submit

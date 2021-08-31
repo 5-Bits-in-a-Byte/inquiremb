@@ -50,18 +50,23 @@ const createPost = (post, userRole, isCondensed, key) => {
 };
 
 // Sorts the posts by pinned/date
-const generateSections = (data, userRole, isCondensed) => {
+const generateSections = (data, userRole, isCondensed, user) => {
+  console.log("user:", user);
+  if (!userRole) return;
+
   let posts = { pinned: [], other: [] };
   let key = 0;
   if (data) {
     data.forEach((post) => {
+      let isMyPost =
+        post.postedBy._id == user._id || post.postedBy._id == user.anonymousId;
       if (post.isPinned) {
-        if (post.isPrivate && userRole.privacy.private)
+        if (post.isPrivate && (userRole.privacy.private || isMyPost))
           posts.pinned.push(createPost(post, userRole, isCondensed, key));
         else if (!post.isPrivate)
           posts.pinned.push(createPost(post, userRole, isCondensed, key));
       } else if (
-        (post.isPrivate && userRole.privacy.private) ||
+        (post.isPrivate && (userRole.privacy.private || isMyPost)) ||
         !post.isPrivate
       ) {
         posts.other.push(createPost(post, userRole, isCondensed, key));
@@ -78,7 +83,7 @@ const fetchData = (endpoint, socketPosts, setData) => {
     type: "get",
     endpoint: endpoint,
     onSuccess: (response) => {
-      // console.log("get request data:", response);
+      console.log("get request data:", response);
       setData([...socketPosts, ...response]);
     },
   });
@@ -97,7 +102,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
     io.emit("join", { room: courseId, room_type: "course" });
     io.on("Post/create", (post) => {
       // Ensure the user isn't the one who posted it
-      console.log(post);
+      // console.log(post);
       if (
         post &&
         post.postedBy._id !== user._id &&
@@ -182,16 +187,22 @@ const PostFeed = ({ userRole, highlightedSection }) => {
   }, [endpoint]);
 
   const [posts, setPosts] = useState(null);
+  // console.log("posts:", posts);
   const [initialPosts, setInitialPosts] = useState(posts);
 
   // Populate posts and store state of initial posts
   useEffect(() => {
     if (data) {
-      let initialGeneratedPosts = generateSections(data, userRole, isCondensed);
+      let initialGeneratedPosts = generateSections(
+        data,
+        userRole,
+        isCondensed,
+        user
+      );
       setPosts(initialGeneratedPosts);
       setInitialPosts(initialGeneratedPosts);
     }
-  }, [data]);
+  }, [data, userRole]);
 
   useEffect(() => {
     if (currentCourseId && currentCourseId != courseId) {
@@ -207,7 +218,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
         endpoint: "/courses/" + courseId + "/search?search=" + e.target.value,
         onSuccess: (searchData) => {
           // console.log("onSuccess data:", searchData);
-          setPosts(generateSections(searchData, userRole, isCondensed));
+          setPosts(generateSections(searchData, userRole, isCondensed, user));
         },
         onFailure: (err) => {
           console.log(err.response.data.errors);

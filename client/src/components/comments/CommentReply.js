@@ -13,6 +13,7 @@ import EditorWrapper from "../posts/wrappers/EditorWrapper";
 import { EditorState } from "draft-js";
 import Checkbox from "../common/Checkbox";
 import { UserRoleContext } from "../context/UserRoleProvider";
+import MaterialCheckbox from "../common/MaterialCheckbox";
 
 const CommentReply = ({
   reply,
@@ -25,8 +26,8 @@ const CommentReply = ({
   const user = useContext(UserContext);
   const { courseId } = useParams();
 
+  const [isAnonymous, toggleIsAnonymous] = useState(false);
   const [content, setContent] = useState({
-    isAnonymous: false,
     raw: EditorState.createEmpty(),
     plainText: EditorState.createEmpty(),
   });
@@ -229,7 +230,7 @@ const CommentReply = ({
       <ReplyMetaContentWrapper className="meta">
         <UserDescription isInstructor={reply.isInstructor}>
           by{" "}
-          {!content.isAnonymous
+          {!isAnonymous
             ? reply.postedBy.first + " " + reply.postedBy.last
             : "Anonymous"}
         </UserDescription>
@@ -237,6 +238,17 @@ const CommentReply = ({
         <MetaIconWrapper>
           {isDraft ? (
             <>
+              {userRole && userRole.privacy.anonymous ? (
+                <MaterialCheckbox
+                  label="Make Anonymous"
+                  checkedState={{
+                    checked: isAnonymous,
+                    toggleChecked: toggleIsAnonymous,
+                  }}
+                />
+              ) : (
+                <></>
+              )}
               <Button
                 largeSecondary
                 onClick={() => submitReply(null)}
@@ -244,22 +256,7 @@ const CommentReply = ({
               >
                 Cancel
               </Button>
-              {userRole && userRole.privacy.anonymous ? (
-                <Checkbox
-                  checkboxName="isAnonymous"
-                  labelText={"Make Anonymous"}
-                  onChange={() => {
-                    setContent({
-                      ...content,
-                      isAnonymous: !content.isAnonymous,
-                    });
-                  }}
-                  checkStatus={content.isAnonymous}
-                />
-              ) : (
-                <></>
-              )}
-              <Button primary onClick={() => submitReply(content)}>
+              <Button primary onClick={() => submitReply(isAnonymous, content)}>
                 Submit
               </Button>
             </>

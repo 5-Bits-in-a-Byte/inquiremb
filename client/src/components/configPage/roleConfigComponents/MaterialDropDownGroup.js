@@ -49,10 +49,10 @@ const MaterialDropDownGroup = ({
                   <Checkbox
                     checked={initialState[formLabels.stateLabel]}
                     onChange={(e) => {
-                      console.log(
-                        formLabels?.itemLabel + " value changed: ",
-                        e.target.checked
-                      );
+                      // console.log(
+                      //   formLabels?.itemLabel + " value changed: ",
+                      //   e.target.checked
+                      // );
                       formLabels.changeRoleVal(e.target.checked);
                     }}
                   />

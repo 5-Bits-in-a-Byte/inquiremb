@@ -55,7 +55,7 @@ const CommentView = ({ classroomName }) => {
 
   // const setUserRole = useContext(UserRoleDispatchContext);
   const userRole = useContext(UserRoleContext);
-  console.log("Comment View Role Object: ", userRole);
+  // console.log("Comment View Role Object: ", userRole);
 
   const handleVote = (voteAnswer) => {
     var pa = pollAns;
@@ -164,7 +164,7 @@ const CommentView = ({ classroomName }) => {
     });
   };
   // Takes a boolean value: true creates, false cancels
-  const finishComment = (content) => {
+  const finishComment = (content, isAnonymous) => {
     // If false, clear the draft
     if (!content) {
       setNewComments({ draft: false });
@@ -176,10 +176,9 @@ const CommentView = ({ classroomName }) => {
       LazyFetch({
         type: "post",
         endpoint: "/courses/" + courseId + "/posts/" + post._id + "/comments",
-        data: { isAnonymous: newContent.isAnonymous, content: newContent },
+        data: { isAnonymous: isAnonymous, content: newContent },
         onSuccess: (data) => {
           console.log("data:", data);
-          console.log(data);
           setNewComments({ draft: false });
           setCommentData([
             ...commentData,
