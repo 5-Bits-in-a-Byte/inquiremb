@@ -164,7 +164,7 @@ const CommentView = ({ classroomName }) => {
     });
   };
   // Takes a boolean value: true creates, false cancels
-  const finishComment = (content) => {
+  const finishComment = (content, isAnonymous) => {
     // If false, clear the draft
     if (!content) {
       setNewComments({ draft: false });
@@ -176,7 +176,7 @@ const CommentView = ({ classroomName }) => {
       LazyFetch({
         type: "post",
         endpoint: "/courses/" + courseId + "/posts/" + post._id + "/comments",
-        data: { isAnonymous: newContent.isAnonymous, content: newContent },
+        data: { isAnonymous: isAnonymous, content: newContent },
         onSuccess: (data) => {
           console.log("data:", data);
           console.log(data);
