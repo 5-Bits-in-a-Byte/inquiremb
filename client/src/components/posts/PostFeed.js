@@ -51,6 +51,8 @@ const createPost = (post, userRole, isCondensed, key) => {
 
 // Sorts the posts by pinned/date
 const generateSections = (data, userRole, isCondensed) => {
+  if (!userRole) return;
+
   let posts = { pinned: [], other: [] };
   let key = 0;
   if (data) {
@@ -191,7 +193,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
       setPosts(initialGeneratedPosts);
       setInitialPosts(initialGeneratedPosts);
     }
-  }, [data]);
+  }, [data, userRole]);
 
   useEffect(() => {
     if (currentCourseId && currentCourseId != courseId) {
@@ -218,6 +220,8 @@ const PostFeed = ({ userRole, highlightedSection }) => {
       setPosts(initialPosts);
     }
   };
+
+  console.log("userRole:", userRole);
 
   return (
     <>
