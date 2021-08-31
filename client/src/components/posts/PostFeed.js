@@ -99,7 +99,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
     io.emit("join", { room: courseId, room_type: "course" });
     io.on("Post/create", (post) => {
       // Ensure the user isn't the one who posted it
-      console.log(post);
+      // console.log(post);
       if (
         post &&
         post.postedBy._id !== user._id &&
@@ -220,8 +220,6 @@ const PostFeed = ({ userRole, highlightedSection }) => {
       setPosts(initialPosts);
     }
   };
-
-  console.log("userRole:", userRole);
 
   return (
     <>

@@ -53,7 +53,6 @@ const PostDraft = ({ userRole }) => {
   const handleContentChange = (e) => {
     const plainText = e.getCurrentContent().getPlainText();
     setContent({ ...content, raw: e, plainText: plainText });
-    console.log(content);
   };
 
   const handleSubmit = () => {

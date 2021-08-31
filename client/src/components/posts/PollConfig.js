@@ -203,13 +203,13 @@ const StringConflictCheck = (newOptions) => {
       //console.log(upperNewOptions[i] + " vs " + upperNewOptions[j]);
 
       if (upperNewOptions[i] == upperNewOptions[j]) {
-        console.log("From checker, Conflict");
+        // console.log("From checker, Conflict");
         return true;
       }
     }
   }
 
-  console.log("From checker, No conflict");
+  // console.log("From checker, No conflict");
 
   return false;
 };
@@ -225,16 +225,16 @@ const PollConfig = ({ children, ...props }) => {
   const history = useHistory();
 
   const TestNewOption = (index, newOption) => {
-    console.log("newOption:", newOption);
+    // console.log("newOption:", newOption);
     var newOptions = [...options];
     newOptions[index] = newOption;
 
     if (StringConflictCheck(newOptions)) {
       alert("Options must all be different.");
-      console.log("No change to options");
+      // console.log("No change to options");
       return false;
     }
-    console.log("Setting options");
+    // console.log("Setting options");
     setOptions(newOptions);
 
     return true;
@@ -258,7 +258,7 @@ const PollConfig = ({ children, ...props }) => {
         var match = false;
 
         for (var i = 0; i < len; i++) {
-          console.log(newOption + " vs " + options[i]);
+          // console.log(newOption + " vs " + options[i]);
 
           if (newOption == options[i]) {
             match = true;
@@ -285,7 +285,7 @@ const PollConfig = ({ children, ...props }) => {
     let newOptions = [...options];
     newOptions.splice(index, 1);
 
-    console.log(newOptions);
+    // console.log(newOptions);
     if (newOptions.length > 0) {
       setOptions(newOptions);
     } else {
@@ -294,8 +294,8 @@ const PollConfig = ({ children, ...props }) => {
   };
 
   const handleSubmit = () => {
-    console.log("type:", type);
-    console.log("options:", options);
+    // console.log("type:", type);
+    // console.log("options:", options);
     LazyFetch({
       type: "post",
       endpoint: "/courses/" + courseId + "/posts",

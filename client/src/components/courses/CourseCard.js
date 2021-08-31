@@ -38,12 +38,12 @@ class CourseCard extends React.Component {
   };
 
   toggleColorDisplay = (e) => {
-    console.log("Event: ", e);
+    // console.log("Event: ", e);
     this.setState({ displayColorSelector: !this.state.displayColorSelector });
   };
 
   toggleColorDisplay_onBlur = (e) => {
-    console.log("Event: ", e);
+    // console.log("Event: ", e);
     this.setState({ displayColorSelector: false });
   };
 

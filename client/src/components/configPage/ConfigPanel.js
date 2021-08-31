@@ -98,7 +98,6 @@ const createRoleObject = (itemId) => {
  * Generates a list of Role Components for State Management
  */
 const GenerateRoleList = (roles, setRoles, userList, setUserList) => {
-  console.log("roles:", roles);
   return roles.map((role, index) => (
     <RolePanel
       key={index}
@@ -153,7 +152,6 @@ const GenerateBannedUserList = (blacklist, displayBan) => {
     return <></>;
   }
   return blacklist.map((bannedUser, index) => {
-    console.log("bannedUser:", bannedUser);
     return (
       <UserPanel
         key={index}
@@ -176,7 +174,6 @@ const ConfigPanel = ({
   setRoleIdCounter,
   ...props
 }) => {
-  console.log("Course Roles: ", courseRoles);
   const userRole = useContext(UserRoleContext);
   const [loadingIcons, setLoadingIcons] = useState(true);
 
@@ -215,7 +212,6 @@ const ConfigPanel = ({
     userRole.admin.banUsers,
     userRole.admin.removeUsers
   );
-  console.log("realUserList:", realUserList);
   const [userList, setUserList] = useState(realUserList);
 
   // State for roles ------------------------------------------------------
@@ -288,11 +284,10 @@ const ConfigPanel = ({
             buttonWidth={"200px"}
             buttonHeight={"2.2rem"}
             onClick={() => {
-              console.log("CourseRoles (Confirm): ", courseRoles);
               let testList = [];
 
               for (let i = 0; i < realRoleList.length; i++) {
-                console.log(realRoleList[i].props.roleObject);
+                // console.log(realRoleList[i].props.roleObject);
                 testList.push(realRoleList[i].props.roleObject);
               }
 

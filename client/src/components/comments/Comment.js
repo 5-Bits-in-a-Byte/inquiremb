@@ -39,9 +39,9 @@ const Comment = ({ comment, isDraft, callback }) => {
 
   const endpoint = "/courses/" + courseId + "/posts/" + postid + "/comments";
 
-  useEffect(() => {
-    console.log("Comment Object: ", comment);
-  });
+  // useEffect(() => {
+  //   console.log("Comment Object: ", comment);
+  // });
 
   const handleContentChange = (e) => {
     const plainText = e.getCurrentContent().getPlainText();
@@ -143,7 +143,6 @@ const Comment = ({ comment, isDraft, callback }) => {
   // Collect replies from comment data and append any newly created replies (if applicable)
   let replies = [];
   if (comment.replies && comment.replies.length > 0) {
-    console.log("inside reply loader");
     comment.replies.forEach((reply) => {
       replies.push(
         <CommentReply
@@ -161,7 +160,6 @@ const Comment = ({ comment, isDraft, callback }) => {
 
   // If the user clicks reply, insert a drafted reply
   if (isReplying) {
-    console.log("in isReplying section");
     replies.unshift(
       <CommentReply
         isDraft

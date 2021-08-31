@@ -65,15 +65,11 @@ const JoinConfirmation = ({
   courseList,
   setCourseList,
 }) => {
-  console.log("courseList:", courseList);
   const [loading, toggleLoading] = useState(false);
   const [errors, toggleErrors] = useState(null);
   const [success, toggleSuccess] = useState(null);
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
-
-  console.log(display);
-  console.log("SUCCESS Message: " + success);
 
   const confirmJoinRequest = () => {
     toggleLoading(true);
@@ -83,7 +79,6 @@ const JoinConfirmation = ({
         endpoint: "/join",
         data: { courseId: selectedCourse },
         onSuccess: (data) => {
-          console.log("RESPONSE LENGTH:", data.length);
           let newCourseList = AddNewCourseToList(data.course, courseList);
           if (newCourseList != null) setCourseList(newCourseList);
           joinCourse(data.course);
