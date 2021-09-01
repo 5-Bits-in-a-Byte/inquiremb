@@ -8,6 +8,8 @@ import UserPanel from "./userConfigComponents/UserPanel";
 import LazyFetch from "../common/requests/LazyFetch";
 import LoadingDots from "../common/animation/LoadingDots";
 import { UserRoleContext } from "../context/UserRoleProvider";
+import Errors from "../common/Errors";
+import { FormHelperText } from "@material-ui/core";
 
 const colorTest = [
   "#dd0000",
@@ -147,7 +149,7 @@ const GenerateUserList = (
   });
 };
 
-const GenerateBannedUserList = (blacklist, displayBan) => {
+const GenerateBannedUserList = (blacklist, displayBan, setBannedErrors) => {
   if (!blacklist) {
     return <></>;
   }
@@ -160,6 +162,7 @@ const GenerateBannedUserList = (blacklist, displayBan) => {
         userImg={bannedUser.userImg}
         unbanList={true}
         displayBan={displayBan}
+        setBannedErrors={setBannedErrors}
       />
     );
   });
@@ -180,6 +183,9 @@ const ConfigPanel = ({
   const [bannedUserList, setBannedUserList] = useState(null);
   const [numBannedUsers, changeNumBanned] = useState(0);
   const [displayBanned, setDisplayBanned] = useState(false);
+  const [configErrors, setConfigErrors] = useState(null);
+  const [assignErrors, setAssignErrors] = useState(null);
+  const [bannedErrors, setBannedErrors] = useState(null);
   // Grab the instructor ID for display purposes later
   useEffect(() => {
     if (!bannedUserList) {
@@ -192,7 +198,11 @@ const ConfigPanel = ({
             changeNumBanned(data.success.length);
           }
           setBannedUserList(
-            GenerateBannedUserList(data.success, userRole.admin.banUsers)
+            GenerateBannedUserList(
+              data.success,
+              userRole.admin.banUsers,
+              setBannedErrors
+            )
           );
         },
         onFailure: () => {
@@ -242,6 +252,7 @@ const ConfigPanel = ({
           ) : (
             realRoleList
           )}
+
           <Button
             secondary
             buttonWidth={"207px"}
@@ -282,6 +293,7 @@ const ConfigPanel = ({
           >
             + Add a New Role
           </Button>
+          <Errors errors={configErrors} />
         </ConfigPanelGroup>
       )}
       {userRole.admin.configure && (
@@ -326,10 +338,12 @@ const ConfigPanel = ({
         panelHeader={"Assign roles to participants of this course here."}
       >
         <UserContainer>{userList}</UserContainer>
+        <Errors errors={assignErrors} />
       </ConfigPanelGroup>
       {displayBanned ? (
         <ConfigPanelGroup panelHeader={"Banned users."}>
           <UserContainer>{bannedUserList}</UserContainer>
+          <Errors errors={bannedErrors} />
         </ConfigPanelGroup>
       ) : (
         <></>
