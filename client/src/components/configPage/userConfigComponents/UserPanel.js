@@ -70,20 +70,22 @@ const UserPanel = ({
   const [instructorId, setInstructorId] = useState(null);
   const [roleName, setRoleName] = useState(name);
 
-  // Varaible to store all of the dropdown options
-  let realRoleOptions =
-    allRoles != null
-      ? GenerateRoleOptions(allRoles, courseId, userId, setRoleName)
-      : [
-          {
-            onClick: () => {
-              alert("NULL Role selected");
-            },
-            label: "NULL",
-          },
-        ];
+  // Dropdown options initially set to a temporary null value
+  const [roleOptions, setRoleOptions] = useState([
+    {
+      onClick: () => {
+        alert("NULL Role selected");
+      },
+      label: "NULL",
+    },
+  ]);
 
-  const [roleOptions, setRoleOptions] = useState(realRoleOptions);
+  // Change dropdown options each time a new role is added
+  useEffect(() => {
+    setRoleOptions(
+      GenerateRoleOptions(allRoles, courseId, userId, setRoleName)
+    );
+  }, [allRoles]);
 
   // Grab the instructor ID for display purposes later
   useEffect(() => {

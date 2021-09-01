@@ -264,7 +264,15 @@ const ConfigPanel = ({
                     courseRoles != null ? [...courseRoles, role] : [role];
                   setCourseRoles(newCourseRoles);
 
-                  setUserList(GenerateUserList(courseUsers, newCourseRoles));
+                  setUserList(
+                    GenerateUserList(
+                      courseUsers,
+                      newCourseRoles,
+                      userRole.admin.configure,
+                      userRole.admin.banUsers,
+                      userRole.admin.removeUsers
+                    )
+                  );
                 },
                 onFailure: (err) => {
                   console.log("Failed to Post Roles.", err?.response);

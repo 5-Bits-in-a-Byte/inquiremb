@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
@@ -12,6 +12,7 @@ import UserPanel from "../userConfigComponents/UserPanel";
 // MATERIAL UI -----------------------------------------------------------
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import LazyFetch from "../../common/requests/LazyFetch";
+import { UserRoleContext } from "../../context/UserRoleProvider";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -23,8 +24,9 @@ const useStyles = makeStyles((theme) => ({
 /**
  * Generates a list of User Components for State Management
  */
-const GenerateUserList = (users, roles) => {
+const GenerateUserList = (users, roles, displayDropdown) => {
   var test_simple_role = { roleName: "Regular User", roleColor: "#55cc88" };
+  console.log("displayDropdown in RolePanel:", displayDropdown);
 
   return users.map((user, index) => (
     <UserPanel
@@ -33,6 +35,7 @@ const GenerateUserList = (users, roles) => {
       userImg={user.userImg}
       userRole={test_simple_role}
       allRoles={roles}
+      displayDropdown={displayDropdown}
     />
   ));
 };
@@ -49,6 +52,7 @@ const RolePanel = ({
 }) => {
   // MATERIAL UI --------------------------------
   const styleClasses = useStyles();
+  const userRole = useContext(UserRoleContext);
 
   const [publishAnchorEl, setPublishAnchorEl] = useState(null);
 
@@ -575,7 +579,13 @@ const RolePanel = ({
               // console.log("After Filter: ", newRolesList);
               setCourseRoles(newRolesList);
 
-              setUserList(GenerateUserList(userList, newRolesList));
+              setUserList(
+                GenerateUserList(
+                  userList,
+                  newRolesList,
+                  userRole.admin.configure
+                )
+              );
             },
             onFailure: (err) => {
               console.log(
