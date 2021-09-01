@@ -157,13 +157,11 @@ const UserPanel = ({
               borderColor={userRole.roleColor ? userRole.roleColor : "#e7e7e7"}
             >
               <Dropdown options={roleOptions}>
-                <DropdownWrapper className="flex-row align">
-                  <RoleDisplay
-                    className="font-regular"
-                    style={{ cursor: `pointer` }}
-                  >
-                    {roleName}
-                  </RoleDisplay>
+                <DropdownWrapper
+                  className="flex-row align"
+                  style={{ cursor: `pointer` }}
+                >
+                  <RoleDisplay className="font-regular">{roleName}</RoleDisplay>
                   <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
                 </DropdownWrapper>
               </Dropdown>
