@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import UnlikedImg from "../../imgs/like_grey.svg";
@@ -35,6 +35,16 @@ const Reaction = ({ reactions, type, id, postid }) => {
   // console.log("reactClicked: ", reactClicked);
 
   let endpoint = "/courses/" + urlParams.courseId + "/reactions";
+
+  // This use effect is used to update state when sorting by oldest/newest posts
+  useEffect(() => {
+    setClicked({
+      liked: reactions.likes.includes(user._id),
+      gooded: reactions.goods.includes(user._id),
+      helpfuled: reactions.helpfuls.includes(user._id),
+    });
+    setReactions(reactions);
+  }, [reactions]);
 
   switch (type) {
     case "post":
