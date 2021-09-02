@@ -41,12 +41,16 @@ class Roles(Resource):
             course = Course.objects.get({"_id": courseId})
             course.roles[new_role._id] = []
             course.save()
-            return {"status": "success", "role": self._serialize(new_role)}
+            return {"status": "success", "role": self._serialize(new_role)}, 200
         except Exception as exc:
             if type(exc) == list:
-                return {"errors": [str(e) for e in exc]}
+                # Print statement for debugging, error message for the front end
+                print([str(e) for e in exc])
+                return {"errors": [f"Multiple errors occured. Please try again."]}, 401
             else:
-                return {"errors": str(exc)}
+                # Print statement for debugging, error message for the front end
+                print(str(exc))
+                return {"errors": [f"Oops, something went wrong! Please try again."]}, 401
 
     @permission_layer(required_permissions=["admin-configure"])
     def put(self, courseId):
@@ -57,9 +61,11 @@ class Roles(Resource):
             try:
                 course = Course.objects.get({"_id": courseId})
             except Course.DoesNotExist:
-                return {"error": [f"No courses with id: {courseId}"]}, 400
+                print(f"No courses with id: {courseId}")
+                return {"errors": [f"The course you are trying to set the default role for was not found. Please try again."]}, 400
             except Course.MultipleObjectsReturned:
-                return {"error": [f"Multiple courses with id: {courseId}"]}, 400
+                print(f"Multiple courses with id: {courseId}")
+                return {"errors": [f"The course you are trying to set the default role for was found multiple times. Please try again."]}, 400
             default = data['default']
             if default in course.roles:
                 course.defaultRole = default
@@ -72,9 +78,11 @@ class Roles(Resource):
             try:
                 saved = Role.objects.get({"_id": _id})
             except Role.DoesNotExist:
-                return {"error": [f"No role with id: {_id}"]}, 400
+                print(f"No role with id: {_id}")
+                return {"errors": [f"The role you are trying to update was not found. Please try again."]}, 400
             except Role.MultipleObjectsReturned:
-                return {"error": [f"Multiple roles with id: {_id}"]}, 400
+                print(f"Multiple roles with id: {_id}")
+                return {"errors": [f"The role you are trying to update was found multiple times. Please try again."]}, 400
             # Convert the role to a dict for comparison
             db_role = dict(self._serialize(saved))
             db_role = dict(db_role)
@@ -89,7 +97,9 @@ class Roles(Resource):
         # Make sure update is valid
         for updated_role in updated_list:
             if(not updated_role.is_valid()):
-                return {"error": [f"Update to the role with id {updated_role._id} is invalid"]}, 400
+                print(
+                    f"Update to the role with id {updated_role._id} is invalid")
+                return {"errors": [f"The update to the role you're trying to modify is invalid. Please try again."]}, 400
         else:
             for updated_role in updated_list:
                 updated_role.save()
@@ -101,28 +111,44 @@ class Roles(Resource):
         try:
             course = Course.objects.get({"_id": courseId})
         except Course.DoesNotExit:
-            return {"deleted": False, "error": f"Course does not exist"}
+            # Print statement for debugging, error message for the front end
+            print(f"ERROR: Course with id {courseId} was not found.")
+            return {"deleted": False, "errors": [f"The course you are trying to delete a role in was not found. Please try again."]}, 400
+        except Course.MultipleObjectsReturned:
+            # Print statement for debugging, error message for the front end
+            print(f"ERROR: Multiple courses with id {courseId} were found.")
+            return {"deleted": False, "errors": ["The course you are trying to delete a role in was found multiple times. Please try again."]}, 400
 
         roleId = data["roleId"]
         role_users = course.roles[roleId]
         count = len(role_users)
         if roleId not in course.roles:
-            return {"deleted": False, "error": f"Role with id {str(roleId)} does not exit"}
+            print(
+                f"ERROR: Role with id {str(roleId)} does not exist in this course.")
+            return {"deleted": False, "errors": ["The role you are trying to delete was not found for this course. Please try again."]}, 400
         elif course.defaultRole == roleId:
-            return {"deleted": False, "error": f"Cannot delete default role"}
+            print(f"ERROR: Cannot delete default role")
+            return {"deleted": False, "errors": [f"Cannot delete the default role for a course."]}, 400
         elif count > 0:
-            return {"deleted": False, "error": f"Cannot delete role while it's in use"}
+            print(f"ERROR: Cannot delete role while it's in use")
+            return {"deleted": False, "errors": [f"Cannot delete role while it's in use. Make sure nobody in the course is still assigned this role."]}, 400
         else:
             try:
                 role = Role.objects.get({"_id": roleId})
                 role.delete()
                 course.roles.pop(roleId, None)
                 course.save()
-                return {"deleted": True}
+                return {"deleted": True}, 200
             except Role.DoesNotExist:
-                return {"deleted": False, "error": f"Role with id {str(roleId)} does not exit"}
+                print(
+                    f"ERROR: Role with id {str(roleId)} does not exist in the database.")
+                return {"deleted": False, "errors": ["The role you are trying to delete was not found. Please try again."]}, 400
+            except Role.MultipleObjectsReturned:
+                print(f"ERROR: Multiple roles with id {roleId} were found.")
+                return {"deleted": False, "errors": ["The role you are trying to delete was found multiple times. Please try again."]}, 400
             except Exception:
-                return {"deleted": False, "error": "Unspecified error occured"}
+                print("ERROR: Unspecified error.")
+                return {"deleted": False, "errors": ["Unspecified error occured. Please try again."]}, 400
 
     def _serialize(self, role):
         j = role.to_son()

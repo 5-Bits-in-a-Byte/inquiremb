@@ -67,6 +67,7 @@ const RolePanel = ({
   setCourseRoles,
   userList,
   setUserList,
+  setConfigErrors,
   ...props
 }) => {
   // MATERIAL UI --------------------------------
@@ -181,15 +182,10 @@ const RolePanel = ({
             userRole.admin.removeUsers
           )
         );
+        setConfigErrors(null);
       },
       onFailure: (err) => {
-        console.log(err.response.data);
-        console.log(
-          "Failed to delete role: ",
-          roleObject.name,
-          ". ",
-          err?.response
-        );
+        setConfigErrors(err.response.data.errors);
       },
     });
   };

@@ -12,7 +12,13 @@ import Errors from "../../common/Errors";
 
 const UserPerms = { canBan: true, canRemove: true };
 /* Handle Role selection in the dropdown */
-const GenerateRoleOptions = (roles, courseId, userId, setRoleName) => {
+const GenerateRoleOptions = (
+  roles,
+  courseId,
+  userId,
+  setRoleName,
+  setAssignErrors
+) => {
   return roles.map((role) => ({
     onClick: () => {
       LazyFetch({
@@ -26,10 +32,10 @@ const GenerateRoleOptions = (roles, courseId, userId, setRoleName) => {
           console.log("Successful PUT (UserPanel). Status: ", data.status);
           alert(role.name + " Role selected and updated.");
           setRoleName(role.name);
+          setAssignErrors(null);
         },
         onFailure: (err) => {
-          console.log("ERROR: failed PUT (UserPanel): ", err.response);
-          alert("There was an error updating the role for this user.");
+          setAssignErrors(err.response.data.errors);
         },
       });
     },
@@ -47,6 +53,7 @@ const UserPanel = ({
   displayDropdown,
   displayBan,
   displayRemove,
+  setAssignErrors,
   ...props
 }) => {
   const { courseId } = useParams();
@@ -82,9 +89,16 @@ const UserPanel = ({
 
   // Change dropdown options each time a new role is added
   useEffect(() => {
-    setRoleOptions(
-      GenerateRoleOptions(allRoles, courseId, userId, setRoleName)
-    );
+    if (allRoles)
+      setRoleOptions(
+        GenerateRoleOptions(
+          allRoles,
+          courseId,
+          userId,
+          setRoleName,
+          setAssignErrors
+        )
+      );
   }, [allRoles]);
 
   // Grab the instructor ID for display purposes later
@@ -95,12 +109,16 @@ const UserPanel = ({
         endpoint: "/courses?courseId=" + courseId,
         onSuccess: (data) => {
           setInstructorId(data.success.instructorID);
+          setAssignErrors(null);
         },
         onFailure: () => {
-          console.log(
-            "There was a problem fetching the course with id",
-            courseId
-          );
+          // console.log(
+          //   "There was a problem fetching the course with id",
+          //   courseId
+          // );
+          setAssignErrors([
+            "There was a problem finding the course instructor. Refresh the page and try again.",
+          ]);
         },
       });
     }
