@@ -8,6 +8,8 @@ import UserPanel from "./userConfigComponents/UserPanel";
 import LazyFetch from "../common/requests/LazyFetch";
 import LoadingDots from "../common/animation/LoadingDots";
 import { UserRoleContext } from "../context/UserRoleProvider";
+import Errors from "../common/Errors";
+import { FormHelperText } from "@material-ui/core";
 
 const colorTest = [
   "#dd0000",
@@ -97,7 +99,13 @@ const createRoleObject = (itemId) => {
 /**
  * Generates a list of Role Components for State Management
  */
-const GenerateRoleList = (roles, setRoles, userList, setUserList) => {
+const GenerateRoleList = (
+  roles,
+  setRoles,
+  userList,
+  setUserList,
+  setConfigErrors
+) => {
   return roles.map((role, index) => (
     <RolePanel
       key={index}
@@ -109,6 +117,7 @@ const GenerateRoleList = (roles, setRoles, userList, setUserList) => {
       setCourseRoles={setRoles}
       userList={userList}
       setUserList={setUserList}
+      setConfigErrors={setConfigErrors}
     />
   ));
 };
@@ -121,7 +130,8 @@ const GenerateUserList = (
   roles,
   displayDropdown,
   displayBan,
-  displayRemove
+  displayRemove,
+  setAssignErrors
 ) => {
   var userRole = { name: "null", roleColor: "#e7e7e7" };
 
@@ -142,12 +152,13 @@ const GenerateUserList = (
         displayDropdown={displayDropdown}
         displayBan={displayBan}
         displayRemove={displayRemove}
+        setAssignErrors={setAssignErrors}
       />
     );
   });
 };
 
-const GenerateBannedUserList = (blacklist, displayBan) => {
+const GenerateBannedUserList = (blacklist, displayBan, setAssignErrors) => {
   if (!blacklist) {
     return <></>;
   }
@@ -160,6 +171,7 @@ const GenerateBannedUserList = (blacklist, displayBan) => {
         userImg={bannedUser.userImg}
         unbanList={true}
         displayBan={displayBan}
+        setAssignErrors={setAssignErrors}
       />
     );
   });
@@ -178,9 +190,13 @@ const ConfigPanel = ({
   const [loadingIcons, setLoadingIcons] = useState(true);
 
   const [bannedUserList, setBannedUserList] = useState(null);
-  const [numBannedUsers, changeNumBanned] = useState(0);
+  // const [numBannedUsers, changeNumBanned] = useState(0);
   const [displayBanned, setDisplayBanned] = useState(false);
-  // Grab the instructor ID for display purposes later
+  const [configErrors, setConfigErrors] = useState(null);
+  const [assignErrors, setAssignErrors] = useState(null);
+  const [bannedErrors, setBannedErrors] = useState(null);
+
+  // Grab the banned users
   useEffect(() => {
     if (!bannedUserList) {
       LazyFetch({
@@ -189,14 +205,18 @@ const ConfigPanel = ({
         onSuccess: (data) => {
           if (data.success.length > 0) {
             setDisplayBanned(true);
-            changeNumBanned(data.success.length);
+            // changeNumBanned(data.success.length);
           }
           setBannedUserList(
-            GenerateBannedUserList(data.success, userRole.admin.banUsers)
+            GenerateBannedUserList(
+              data.success,
+              userRole.admin.banUsers,
+              setAssignErrors
+            )
           );
         },
         onFailure: () => {
-          console.log(
+          setBannedErrors(
             "There was a problem getting the blacklist info for the course with id " +
               courseId
           );
@@ -210,14 +230,21 @@ const ConfigPanel = ({
     courseRoles,
     userRole.admin.configure,
     userRole.admin.banUsers,
-    userRole.admin.removeUsers
+    userRole.admin.removeUsers,
+    setAssignErrors
   );
   const [userList, setUserList] = useState(realUserList);
 
   // State for roles ------------------------------------------------------
   let realRoleList =
     courseRoles != null ? (
-      GenerateRoleList(courseRoles, setCourseRoles, userList, setUserList)
+      GenerateRoleList(
+        courseRoles,
+        setCourseRoles,
+        userList,
+        setUserList,
+        setConfigErrors
+      )
     ) : (
       <></>
     );
@@ -242,6 +269,7 @@ const ConfigPanel = ({
           ) : (
             realRoleList
           )}
+
           <Button
             secondary
             buttonWidth={"207px"}
@@ -254,8 +282,10 @@ const ConfigPanel = ({
                 type: "post",
                 endpoint: "/courses/" + courseId + "/roles",
                 data: {
-                  name: newPerms.name,
-                  permissions: newPerms.permissions,
+                  // name: newPerms.name,
+                  // permissions: newPerms.permissions,
+                  name: null,
+                  permissions: null,
                 },
                 onSuccess: (data) => {
                   let { status, role } = data;
@@ -264,16 +294,27 @@ const ConfigPanel = ({
                     courseRoles != null ? [...courseRoles, role] : [role];
                   setCourseRoles(newCourseRoles);
 
-                  setUserList(GenerateUserList(courseUsers, newCourseRoles));
+                  setUserList(
+                    GenerateUserList(
+                      courseUsers,
+                      newCourseRoles,
+                      userRole.admin.configure,
+                      userRole.admin.banUsers,
+                      userRole.admin.removeUsers,
+                      setAssignErrors
+                    )
+                  );
+                  setConfigErrors(null);
                 },
                 onFailure: (err) => {
-                  console.log("Failed to Post Roles.", err?.response);
+                  setConfigErrors(err.response.data.errors);
                 },
               });
             }}
           >
             + Add a New Role
           </Button>
+          <Errors errors={configErrors} />
         </ConfigPanelGroup>
       )}
       {userRole.admin.configure && (
@@ -301,10 +342,18 @@ const ConfigPanel = ({
                 onSuccess: (data) => {
                   console.log("Success PUT Roles: ", data);
                   alert("Changes saved successfully.");
+                  setConfigErrors(null);
                 },
                 onFailure: (err) => {
                   console.log("Failed PUT Roles. ", err?.response);
-                  alert("Error: Changes not saved. Please try again.");
+                  if (err.response.data.errors)
+                    setConfigErrors(err.response.data.errors);
+                  else if (err.response.data.message)
+                    setConfigErrors([err.response.data.message]);
+                  else
+                    setConfigErrors([
+                      "Unspecified error occurred. Please try again.",
+                    ]);
                 },
               });
             }}
@@ -318,10 +367,12 @@ const ConfigPanel = ({
         panelHeader={"Assign roles to participants of this course here."}
       >
         <UserContainer>{userList}</UserContainer>
+        <Errors errors={assignErrors} />
       </ConfigPanelGroup>
       {displayBanned ? (
         <ConfigPanelGroup panelHeader={"Banned users."}>
           <UserContainer>{bannedUserList}</UserContainer>
+          <Errors errors={bannedErrors} />
         </ConfigPanelGroup>
       ) : (
         <></>
