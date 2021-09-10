@@ -51,7 +51,6 @@ const createPost = (post, userRole, isCondensed, key) => {
 
 // Sorts the posts by pinned/date
 const generateSections = (data, userRole, isCondensed, user) => {
-  console.log("user:", user);
   if (!userRole) return;
 
   let posts = { pinned: [], other: [] };
