@@ -124,6 +124,7 @@ const AboutUser = ({
       },
       onSuccess: (response) => {
         console.log("response:", response);
+        setInitialAboutMe(aboutMe);
       },
     });
   };

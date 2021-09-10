@@ -282,10 +282,8 @@ const ConfigPanel = ({
                 type: "post",
                 endpoint: "/courses/" + courseId + "/roles",
                 data: {
-                  // name: newPerms.name,
-                  // permissions: newPerms.permissions,
-                  name: null,
-                  permissions: null,
+                  name: newPerms.name,
+                  permissions: newPerms.permissions,
                 },
                 onSuccess: (data) => {
                   let { status, role } = data;
