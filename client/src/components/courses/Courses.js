@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { UserContext } from "../context/UserProvider";
+import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import styled from "styled-components";
 import TopContent from "./TopContent";
 import CourseCard from "./CourseCard";
@@ -10,7 +10,7 @@ import CourseCard from "./CourseCard";
  * @param {list} userCourses the list of user courses from the UserContext
  * @returns a list of CourseCard components
  */
-const generateCourseList = (userCourses) => {
+const generateCourseList = (userCourses, setUser) => {
   let ret = [];
   userCourses.forEach((course, index) => {
     ret.push(
@@ -21,6 +21,7 @@ const generateCourseList = (userCourses) => {
         nickname={course.nickname}
         courseTerm="Winter 2021"
         color={course.color || "#121212"}
+        setUser={setUser}
       />
     );
   });
@@ -34,7 +35,8 @@ const generateCourseList = (userCourses) => {
  */
 const Courses = () => {
   const user = useContext(UserContext);
-  let currentCourseState = generateCourseList(user.courses);
+  const setUser = useContext(UserDispatchContext);
+  let currentCourseState = generateCourseList(user.courses, setUser);
   const [courseList, setCourseList] = useState(currentCourseState);
 
   return (

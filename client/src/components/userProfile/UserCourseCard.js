@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled, { css } from "styled-components";
 import Button from "../common/Button";
 import Errors from "../common/Errors";
+import { fetchUser } from "../common/externalMethods/FetchUser";
 import Modal from "../common/Modal";
 import LazyFetch from "../common/requests/LazyFetch";
+import { UserDispatchContext } from "../context/UserProvider";
 
 const UserCourseCard = ({
   userCourseObject,
@@ -16,6 +18,7 @@ const UserCourseCard = ({
   const [success, setSuccessMessage] = useState(null);
   const [errors, setErrorMessage] = useState(null);
   const [display, toggleDisplay] = useState("flex");
+  const setUser = useContext(UserDispatchContext);
 
   let title = userCourseObject?.courseName;
   let subtitle = "";
@@ -34,6 +37,7 @@ const UserCourseCard = ({
         toggleDisplay("none");
         setSuccessMessage(response.success);
         toggleChangeMade(!changeMade);
+        fetchUser(setUser);
       },
       onFailure: (err) => {
         if (err.response && err.response.data) {
