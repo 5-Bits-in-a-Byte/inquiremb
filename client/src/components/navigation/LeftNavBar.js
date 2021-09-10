@@ -19,7 +19,7 @@ const LeftNavBar = () => {
   return (
     <Nav>
       <Wrapper>
-        <InquireTooltip
+        {/* <InquireTooltip
           tooltipText={`See recent post history.`}
           // hoverDelay={1000}
           customPosition={{
@@ -28,15 +28,15 @@ const LeftNavBar = () => {
             bottom: `auto`,
             left: `100%`,
           }}
-        >
-          <MenuItem
-            to="/home"
-            label="Recents"
-            img={ClockImg}
-            active={active === "/home"}
-          />
-        </InquireTooltip>
-        <InquireTooltip
+        > */}
+        <MenuItem
+          to="/home"
+          label="Recents"
+          img={ClockImg}
+          active={active === "/home"}
+        />
+        {/* </InquireTooltip> */}
+        {/* <InquireTooltip
           tooltipText={"See your active classes."}
           // hoverDelay={1000}
           customPosition={{
@@ -45,14 +45,14 @@ const LeftNavBar = () => {
             bottom: `auto`,
             left: `100%`,
           }}
-        >
-          <MenuItem
-            to="/"
-            label="Courses"
-            img={CourseImg}
-            active={active === "/"}
-          />
-        </InquireTooltip>
+        > */}
+        <MenuItem
+          to="/"
+          label="Courses"
+          img={CourseImg}
+          active={active === "/"}
+        />
+        {/* </InquireTooltip> */}
       </Wrapper>
     </Nav>
   );
