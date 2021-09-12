@@ -7,6 +7,8 @@ import styled from "styled-components";
 import Errors from "../../common/Errors";
 import { UserContext, UserDispatchContext } from "../../context/UserProvider";
 import LazyFetch from "../../common/requests/LazyFetch";
+import { fetchUser } from "../../common/externalMethods/FetchUser";
+import { generateCourseList } from "../../common/externalMethods/CoursesHelperMethods";
 
 const INVITE_OPTIONS = [
   {
@@ -17,7 +19,7 @@ const INVITE_OPTIONS = [
   },
 ];
 
-const CourseInfo = ({ setCourse }) => {
+const CourseInfo = ({ setCourse, setCourseList }) => {
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
   const [form, setForm] = useState({
@@ -42,12 +44,8 @@ const CourseInfo = ({ setCourse }) => {
         endpoint: "/courses",
         data: { course: form.course, canJoinById: form.canJoinById },
         onSuccess: (data) => {
-          let userCopy = user;
-          // console.log(userCopy, "user before update");
-          // console.log(data, "request data");
-          userCopy.courses.push(data);
-          // console.log(userCopy, "user after update");
-          setUser(userCopy);
+          fetchUser(setUser, true);
+          setCourseList(generateCourseList(user.courses, setUser));
           setCourse(data);
         },
         onFailure: (err) => {

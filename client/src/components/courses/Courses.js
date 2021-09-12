@@ -2,31 +2,7 @@ import React, { useContext, useState } from "react";
 import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import styled from "styled-components";
 import TopContent from "./TopContent";
-import CourseCard from "./CourseCard";
-
-/** generateCourseList (list)
- * @brief Creates a list of CourseCards generated from the UserContext course list
- *
- * @param {list} userCourses the list of user courses from the UserContext
- * @returns a list of CourseCard components
- */
-const generateCourseList = (userCourses, setUser) => {
-  let ret = [];
-  userCourses.forEach((course, index) => {
-    ret.push(
-      <CourseCard
-        key={course.courseId}
-        id={course.courseId}
-        courseName={course.courseName}
-        nickname={course.nickname}
-        courseTerm="Winter 2021"
-        color={course.color || "#121212"}
-        setUser={setUser}
-      />
-    );
-  });
-  return ret;
-};
+import { generateCourseList } from "../common/externalMethods/CoursesHelperMethods";
 
 /** Courses Component
  * @brief Contains the programmatically generated list of user course cards from the UserCourses list in the UserContext

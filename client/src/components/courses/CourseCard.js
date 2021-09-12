@@ -64,6 +64,7 @@ class CourseCard extends React.Component {
   };
 
   sendColorRequest = (colors) => {
+    // console.log(this.setUser);
     LazyFetch({
       type: "put",
       endpoint: this.endpoint,
