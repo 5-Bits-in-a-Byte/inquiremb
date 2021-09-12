@@ -27,23 +27,6 @@ const renderComments = (data, userRole) => {
 
 const CommentView = ({ classroomName }) => {
   const { courseId, postid } = useParams();
-  // var roleAfterGetRequest = null;
-
-  // LazyFetch({
-  //   type: "get",
-  //   endpoint: "/userRole/" + courseId,
-  //   onSuccess: (role) => {
-  //     if (role) {
-  //       roleAfterGetRequest = role;
-  //     }
-  //   },
-  //   onFailure: (err) => {
-  //     console.log(
-  //       "Error getting user role object from {" + courseId + "}:",
-  //       err
-  //     );
-  //   },
-  // });
 
   const user = useContext(UserContext);
   const history = useHistory();
