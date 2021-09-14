@@ -14,6 +14,7 @@ import SearchPanel from "./SearchPanel";
 import LazyFetch from "../common/requests/LazyFetch";
 import { useWindowDimensions } from "../common/CustomHooks";
 import SearchBar from "../common/SearchBar";
+import Dropdown from "../common/dropdown/Dropdown";
 // import LoadingDots from "../common/animation/LoadingDots";
 
 const convertToUpper = (postType) => {
@@ -234,29 +235,10 @@ const PostFeed = ({ userRole, highlightedSection }) => {
       <PostFeedWrapper>
         <ScrollingDiv>
           <CenterWrapper>
-            {displaySecondarySearchbar && width < 1200 ? (
-              <div
-                style={{
-                  width: `100%`,
-                  padding: `2.2em 1em 0 1em`,
-                  display: `flex`,
-                  justifyContent: `center`,
-                  alignItems: `center`,
-                }}
-              >
-                <SearchBar
-                  placeholder="Search for Post"
-                  displayIcon={false}
-                  onChange={handleSearch}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
             <SortingOptions>
               {width <= 1200 ? (
                 <>
-                  <Button
+                  {/* <Button
                     primary
                     style={{
                       marginTop: `0.5em`,
@@ -267,7 +249,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                     }}
                   >
                     Filters
-                  </Button>
+                  </Button> */}
 
                   {displaySecondarySearchbar ? (
                     <Button
@@ -275,7 +257,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                       style={{
                         padding: `9px 12px`,
                         width: `100%`,
-                        margin: `8px 0`,
+                        margin: `0.5em 0`,
                         ...MarginLeftRight,
                       }}
                       onClick={(event) => {
@@ -305,8 +287,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                       Search
                     </Button>
                   )}
-
-                  <Button
+                  {/* <Button
                     primary
                     style={{
                       marginTop: `0.5em`,
@@ -317,11 +298,67 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                     }}
                   >
                     Options
-                  </Button>
+                  </Button> */}
                 </>
               ) : (
                 <></>
               )}
+              <Dropdown
+                options={[
+                  {
+                    onClick: () => {},
+                    label: "All Posts",
+                  },
+                  {
+                    onClick: () => {},
+                    label: "Instructor",
+                  },
+                  {
+                    onClick: () => {},
+                    label: "Announcements",
+                  },
+                  {
+                    onClick: () => {},
+                    label: "Questions",
+                  },
+                  {
+                    onClick: () => {},
+                    label: "General Posts",
+                  },
+                  {
+                    onClick: () => {},
+                    label: "Polls",
+                  },
+                  {
+                    onClick: () => {},
+                    label: "My Posts",
+                  },
+                  {
+                    onClick: () => {},
+                    label: "My Upvoted",
+                  },
+                ]}
+              >
+                Filters
+              </Dropdown>
+              <Dropdown
+                options={[
+                  {
+                    onClick: () => {},
+                    label: "Draft Post",
+                  },
+                  {
+                    onClick: () => {},
+                    label: "Draft Poll",
+                  },
+                  {
+                    onClick: () => {},
+                    label: "Configure Course",
+                  },
+                ]}
+              >
+                <DropdownButton buttonLabel={`Options`} />
+              </Dropdown>
               {width > 540 ? (
                 <>
                   <Button
@@ -355,6 +392,25 @@ const PostFeed = ({ userRole, highlightedSection }) => {
               >
                 {sortByMostRecent ? "Most Recent" : "Oldest"}
               </Button>
+              {displaySecondarySearchbar && width < 1200 ? (
+                <div
+                  style={{
+                    width: `100%`,
+                    padding: `0.5em 1em 0 1em`,
+                    display: `flex`,
+                    justifyContent: `center`,
+                    alignItems: `center`,
+                  }}
+                >
+                  <SearchBar
+                    placeholder="Search for Post"
+                    displayIcon={false}
+                    onChange={handleSearch}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
             </SortingOptions>
             {posts && posts.pinned.length > 0 && (
               <PostGroupingHeader>
@@ -386,6 +442,12 @@ const MarginLeftRight = {
   marginLeft: "0.5em",
   marginRight: "0.5em",
 };
+
+const DropdownButton = styled.div`
+  ::after {
+    content: ${(props) => (props.buttonLabel ? props.buttonLabel : "Test")};
+  }
+`;
 
 const PostFeedWrapper = styled.div`
   width: 100%;
