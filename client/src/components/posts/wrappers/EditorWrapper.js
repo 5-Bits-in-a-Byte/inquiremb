@@ -182,6 +182,7 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
           onEditorStateChange={handleContentChange}
         />
       ) : (
+        // <MaskContainer id="mask">
         <Editor
           readOnly
           toolbarHidden
@@ -205,6 +206,7 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
             },
           }}
         />
+        // </MaskContainer>
       )}
       {edit.isEditing ? (
         <SubmitButtonContainer>
@@ -258,4 +260,11 @@ const SubmitButtonContainer = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const MaskContainer = styled.div`
+  width: auto;
+  height: auto;
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 `;
