@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import ColorImg from "../../imgs/color-palette.svg";
 import EditImg from "../../imgs/create-black.svg";
 import MessagesImg from "../../imgs/message-black.svg";
@@ -11,6 +11,8 @@ import Button from "../common/Button";
 import Input from "../common/Input";
 import CloseButtonIcon from "../../imgs/close.svg";
 import RemoveNickname from "../../imgs/remove-nickname.svg";
+import InquireTooltip from "../common/InquireTooltip";
+import { fetchUser } from "../common/externalMethods/FetchUser";
 
 /** Course Card
  * @brief Component for displaying courses the user is a part of. Component is one of many courses
@@ -29,6 +31,7 @@ class CourseCard extends React.Component {
       nickname: this.props.nickname,
     };
     this.endpoint = "/courses";
+    this.setUser = props.setUser;
   }
   // Course ID = this.props.id
 
@@ -37,12 +40,12 @@ class CourseCard extends React.Component {
   };
 
   toggleColorDisplay = (e) => {
-    console.log("Event: ", e);
+    // console.log("Event: ", e);
     this.setState({ displayColorSelector: !this.state.displayColorSelector });
   };
 
   toggleColorDisplay_onBlur = (e) => {
-    console.log("Event: ", e);
+    // console.log("Event: ", e);
     this.setState({ displayColorSelector: false });
   };
 
@@ -61,16 +64,18 @@ class CourseCard extends React.Component {
   };
 
   sendColorRequest = (colors) => {
+    // console.log(this.setUser);
     LazyFetch({
       type: "put",
       endpoint: this.endpoint,
       data: {
         courseId: this.props.id,
-        color: colors.hex
+        color: colors.hex,
       },
       onSuccess: (data) => {
         console.log(data.success);
         this.setState({ courseColor: colors.hex });
+        fetchUser(this.setUser);
       },
     });
   };
@@ -81,11 +86,12 @@ class CourseCard extends React.Component {
       endpoint: this.endpoint,
       data: {
         courseId: this.props.id,
-        nickname: nickname
+        nickname: nickname,
       },
       onSuccess: (data) => {
         console.log(data.success);
         this.setState({ nicknameActive: false });
+        fetchUser(this.setUser);
       },
     });
   };
@@ -96,14 +102,15 @@ class CourseCard extends React.Component {
       endpoint: this.endpoint,
       data: {
         courseId: this.props.id,
-        removeNickname: true
+        removeNickname: true,
       },
       onSuccess: (data) => {
         console.log(data.success);
         this.setState({ nickname: null });
-      }
+        fetchUser(this.setUser);
+      },
     });
-  }
+  };
 
   handleNicknameChange = (e) => {
     this.setState({ nickname: e.target.value });
@@ -113,7 +120,7 @@ class CourseCard extends React.Component {
     if (e.key == "Enter") {
       this.sendNicknameRequest(e.target.value);
     }
-  }
+  };
 
   // Track when new messages come in
   componentDidMount() {
@@ -121,29 +128,32 @@ class CourseCard extends React.Component {
     //const newMsgs = {};
     this.setState({ numMsgs: 0 });
   }
-  
+
   render() {
-    console.log("this.state.nickname:", this.state.nickname)
     return (
       <>
+        {/* <InquireTooltip
+          tooltipText={`Navigate to ${this.props.courseName}`}
+          customPosition={{
+            top: `37%`,
+            right: `auto`,
+            bottom: `auto`,
+            left: `100%`,
+          }}
+        > */}
         <AlignedDiv>
           <ColorDiv color={this.state.courseColor}>
             <MessageDiv>
-              <Icon
-                fader
-                clickable
-                src={MessagesImg}
-                alt={"Messages"}
-                width={"25em"}
-                title={"Unread posts"}
-                onClick={() =>
-                  alert(
-                    'You clicked the Unread Messages icon for "' +
-                      this.props.courseName +
-                      '".\nThis feature is a work in progress.'
-                  )
-                }
-              ></Icon>
+              <Link to={"/course/" + this.props.id + "/post/newQorA"}>
+                <Icon
+                  fader
+                  clickable
+                  src={MessagesImg}
+                  alt={"Messages"}
+                  width={"25em"}
+                  title={"Create post for this course"}
+                ></Icon>
+              </Link>
               {this.state.numMsgs > 0 && this.state.numMsgs ? (
                 <h3 style={{ color: `#f8f8f8`, lineHeight: `1.2em` }}>
                   {this.state.numMsgs}
@@ -189,37 +199,42 @@ class CourseCard extends React.Component {
             </div>
           </CourseInfo>
           <CourseFooter>
-            {!this.state.nicknameActive && (<Icon
-              fader
-              clickable
-              src={EditImg}
-              alt={"Nickname"}
-              width={"20em"}
-              style={{ padding: "5px 5px 8px 0px" }}
-              title={"Add/Edit nickname"}
-              onClick={this.toggleNickname}
-            />)} 
-            {!this.state.nicknameActive && this.state.nickname && (<Icon
-              fader 
-              clickable 
-              src={RemoveNickname} 
-              alt={"Remove Nickname"} 
-              width={"20em"} 
-              style={{padding: "5px 5px 8px 5px"}}
-              title={"Remove nickname"}
-              onClick={this.removeNickname} 
-            />)}
             {!this.state.nicknameActive && (
-            <Icon
-              fader
-              clickable
-              src={ColorImg}
-              alt={"Color"}
-              width={"16em"}
-              style={{ padding: "5px 5px 8px 5px" }}
-              title={"Change color"}
-              onClick={this.toggleColorDisplay}
-            />)}
+              <Icon
+                fader
+                clickable
+                src={EditImg}
+                alt={"Nickname"}
+                width={"20em"}
+                style={{ padding: "5px 5px 8px 0px" }}
+                title={"Add/Edit nickname"}
+                onClick={this.toggleNickname}
+              />
+            )}
+            {!this.state.nicknameActive && this.state.nickname && (
+              <Icon
+                fader
+                clickable
+                src={RemoveNickname}
+                alt={"Remove Nickname"}
+                width={"20em"}
+                style={{ padding: "5px 5px 8px 5px" }}
+                title={"Remove nickname"}
+                onClick={this.removeNickname}
+              />
+            )}
+            {!this.state.nicknameActive && (
+              <Icon
+                fader
+                clickable
+                src={ColorImg}
+                alt={"Color"}
+                width={"16em"}
+                style={{ padding: "5px 5px 8px 5px" }}
+                title={"Change color"}
+                onClick={this.toggleColorDisplay}
+              />
+            )}
             {/* {this.state.nicknameActive && this.props.nickname && <Icon fader clickable src={CloseButtonIcon} alt={"Remove Nickname"} width={"16em"} title={"Remove Nickname"} onClick={this.removeNickname} />} */}
             <Placeholder></Placeholder>
             {this.state.nicknameActive && (
@@ -234,7 +249,9 @@ class CourseCard extends React.Component {
                 <Button
                   primary
                   style={{ padding: "6px", margin: "0 0 0 0.5em" }}
-                  onClick={() => {this.sendNicknameRequest(this.state.nickname)}}
+                  onClick={() => {
+                    this.sendNicknameRequest(this.state.nickname);
+                  }}
                 >
                   Submit
                 </Button>
@@ -242,6 +259,7 @@ class CourseCard extends React.Component {
             )}
           </CourseFooter>
         </AlignedDiv>
+        {/* </InquireTooltip> */}
         {this.state.displayColorSelector && (
           <ColorWrapper
             ref={this.colorFocus}

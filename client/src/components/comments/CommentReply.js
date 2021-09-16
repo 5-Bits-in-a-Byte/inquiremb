@@ -9,10 +9,11 @@ import Dropdown from "../common/dropdown/Dropdown";
 import Icon from "../common/Icon";
 import OptionDots from "../../imgs/option-dots.svg";
 import { Editor } from "react-draft-wysiwyg";
-import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
+import EditorWrapper from "../posts/wrappers/EditorWrapper";
 import { EditorState } from "draft-js";
 import Checkbox from "../common/Checkbox";
 import { UserRoleContext } from "../context/UserRoleProvider";
+import MaterialCheckbox from "../common/MaterialCheckbox";
 
 const CommentReply = ({
   reply,
@@ -25,8 +26,8 @@ const CommentReply = ({
   const user = useContext(UserContext);
   const { courseId } = useParams();
 
+  const [isAnonymous, toggleIsAnonymous] = useState(false);
   const [content, setContent] = useState({
-    isAnonymous: false,
     raw: EditorState.createEmpty(),
     plainText: EditorState.createEmpty(),
   });
@@ -48,22 +49,20 @@ const CommentReply = ({
   };
 
   const imageCallback = async (file) => {
-    return new Promise(
-      (resolve, reject) => {
-        const formData = new FormData();
-        formData.append("imageFile", file)
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append("imageFile", file);
 
-        LazyFetch({
-          type: "post",
-          endpoint: "/images",
-          data: formData,
-          onSuccess: (data) => {
-            resolve({ data: { link: data.data.link } });
-          }
-        });
-      }
-    );
-  }
+      LazyFetch({
+        type: "post",
+        endpoint: "/images",
+        data: formData,
+        onSuccess: (data) => {
+          resolve({ data: { link: data.data.link } });
+        },
+      });
+    });
+  };
 
   if (isDraft) {
     reply = {
@@ -80,8 +79,20 @@ const CommentReply = ({
           }}
           onEditorStateChange={handleContentChange}
           toolbar={{
-            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-            image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
+            options: [
+              "inline",
+              "list",
+              "link",
+              "emoji",
+              "history",
+              "blockType",
+              "image",
+            ],
+            image: {
+              uploadCallback: imageCallback,
+              uploadEnabled: true,
+              previewImage: true,
+            },
           }}
         />
       ),
@@ -169,8 +180,20 @@ const CommentReply = ({
           }}
           onEditorStateChange={handleContentChange}
           toolbar={{
-            options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-            image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
+            options: [
+              "inline",
+              "list",
+              "link",
+              "emoji",
+              "history",
+              "blockType",
+              "image",
+            ],
+            image: {
+              uploadCallback: imageCallback,
+              uploadEnabled: true,
+              previewImage: true,
+            },
           }}
         />
       );
@@ -207,7 +230,7 @@ const CommentReply = ({
       <ReplyMetaContentWrapper className="meta">
         <UserDescription isInstructor={reply.isInstructor}>
           by{" "}
-          {!content.isAnonymous
+          {!isAnonymous
             ? reply.postedBy.first + " " + reply.postedBy.last
             : "Anonymous"}
         </UserDescription>
@@ -215,6 +238,17 @@ const CommentReply = ({
         <MetaIconWrapper>
           {isDraft ? (
             <>
+              {userRole && userRole.privacy.anonymous ? (
+                <MaterialCheckbox
+                  label="Make Anonymous"
+                  checkedState={{
+                    checked: isAnonymous,
+                    toggleChecked: toggleIsAnonymous,
+                  }}
+                />
+              ) : (
+                <></>
+              )}
               <Button
                 largeSecondary
                 onClick={() => submitReply(null)}
@@ -222,22 +256,7 @@ const CommentReply = ({
               >
                 Cancel
               </Button>
-              {userRole && userRole.privacy.anonymous ? (
-                <Checkbox
-                  checkboxName="isAnonymous"
-                  labelText={"Make Anonymous"}
-                  onChange={() => {
-                    setContent({
-                      ...content,
-                      isAnonymous: !content.isAnonymous,
-                    });
-                  }}
-                  checkStatus={content.isAnonymous}
-                />
-              ) : (
-                <></>
-              )}
-              <Button primary onClick={() => submitReply(content)}>
+              <Button primary onClick={() => submitReply(isAnonymous, content)}>
                 Submit
               </Button>
             </>

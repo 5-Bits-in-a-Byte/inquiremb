@@ -1,19 +1,48 @@
-import React, { useContext } from "react";
-import styled, { css } from "styled-components";
+import React, { useContext, useState } from "react";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import Button from "../common/Button";
 import { UserContext } from "../context/UserProvider";
 import AboutUser from "./AboutUser";
+import UserCourses from "./UserCourses";
 
 const UserProfile = ({ props }) => {
   const user = useContext(UserContext);
+  const { profileId } = useParams();
+  const isMyProfile = user._id == profileId ? true : false;
+  const [profileName, setProfileName] = useState(null);
+
   return (
     <>
       <Wrapper>
         <ScrollingDiv>
-          <AboutUser userObject={user} />
-          {/* <h3>{JSON.stringify(user, null, 2)}</h3> */}
-          {/* KEEP THE OVERFLOW COUNTER IT HELPS WITH OVERFLOW
-            at the bottom of the scrolling div. */}
-          {/* <OverflowCounter offsetAmount={"2em"}></OverflowCounter> */}
+          {isMyProfile ? (
+            <></>
+          ) : (
+            <Button
+              secondary
+              onClick={() => {
+                window.history.back();
+              }}
+              style={{ margin: "1em", padding: ".25em 2em" }}
+            >
+              Back
+            </Button>
+          )}
+
+          <AboutUser
+            userObject={user}
+            isMyProfile={isMyProfile}
+            profileId={profileId}
+            profileName={profileName}
+            setProfileName={setProfileName}
+          />
+          <UserCourses
+            userObject={user}
+            isMyProfile={isMyProfile}
+            profileId={profileId}
+            profileName={profileName}
+          />
         </ScrollingDiv>
       </Wrapper>
     </>
@@ -44,6 +73,26 @@ const ScrollingDiv = styled.div`
   /* padding: 2rem 4rem 0 4rem; */
 
   overflow: auto;
+`;
+
+const InnerModalWrapper = styled.div``;
+
+const Success = styled.div`
+  display: none;
+  text-align: center;
+  font-size: 25px;
+`;
+
+const Title = styled.h4`
+  font-size: 25px;
+  padding: 0px 0px 10px 0px;
+`;
+
+const ContentSection = styled.div`
+  background-color: #f8f8f8;
+  padding: 15px;
+  border-radius: 4px;
+  text-align: center;
 `;
 
 /** THIS ACCOUNTS FOR WEIRD SCROLLING DIV STUFF */

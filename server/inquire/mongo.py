@@ -66,6 +66,8 @@ class User(MongoModel):
     picture = fields.URLField()
     courses = fields.EmbeddedDocumentListField(
         'UserCourse', blank=True, required=True)
+    userProfileData = fields.DictField(required=True, blank=True, default={
+                                       "about": "", "bannerColor": "#4A86FA"})
 
     def get_course(self, courseId):
         for course in self.courses:

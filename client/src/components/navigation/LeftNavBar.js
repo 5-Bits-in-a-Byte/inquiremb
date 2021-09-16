@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import MenuItem from "./MenuItem";
 // Menu item images:
+import ClockImg from "../../imgs/clock.svg";
 import HomeImg from "../../imgs/home-white.svg";
 import CourseImg from "../../imgs/courses-white.svg";
 import MessagesImg from "../../imgs/messages-white.svg";
+import InquireTooltip from "../common/InquireTooltip";
 
 /** LeftNavBar Component
  * @brief Wrapper containing MenuItems routing the user to the main website pages
@@ -17,24 +19,40 @@ const LeftNavBar = () => {
   return (
     <Nav>
       <Wrapper>
+        {/* <InquireTooltip
+          tooltipText={`See recent post history.`}
+          // hoverDelay={1000}
+          customPosition={{
+            top: `25%`,
+            right: `auto`,
+            bottom: `auto`,
+            left: `100%`,
+          }}
+        > */}
         <MenuItem
           to="/home"
-          label="Home"
-          img={HomeImg}
+          label="Recents"
+          img={ClockImg}
           active={active === "/home"}
         />
+        {/* </InquireTooltip> */}
+        {/* <InquireTooltip
+          tooltipText={"See your active classes."}
+          // hoverDelay={1000}
+          customPosition={{
+            top: `25%`,
+            right: `auto`,
+            bottom: `auto`,
+            left: `100%`,
+          }}
+        > */}
         <MenuItem
           to="/"
           label="Courses"
           img={CourseImg}
           active={active === "/"}
         />
-        {/* <MenuItem
-          to="/home"
-          label="Messages"
-          img={MessagesImg}
-          active={active === "/home"}
-        /> */}
+        {/* </InquireTooltip> */}
       </Wrapper>
     </Nav>
   );
@@ -50,10 +68,17 @@ const Nav = styled.nav`
   left: 0;
   top: 0;
 
-  z-index: 9999;
+  z-index: 9998;
 `;
 
 const Wrapper = styled.ul`
-  margin-top: 55px;
-  padding: 10px 0;
+  margin-top: 66px; // 66px is the height of topNavBar
+  /* padding: 0.5em; */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* border: 1px solid red; */
 `;

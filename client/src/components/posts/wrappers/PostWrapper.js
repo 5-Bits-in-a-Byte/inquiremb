@@ -1,10 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled, { css } from "styled-components";
 import { UserContext } from "../../context/UserProvider";
-import {
-  UserRoleContext,
-  UserRoleDispatchContext,
-} from "../../context/UserRoleProvider";
+import { UserRoleContext } from "../../context/UserRoleProvider";
 import Dropdown from "../../common/dropdown/Dropdown";
 import Icon from "../../common/Icon";
 import OptionDots from "../../../imgs/option-dots.svg";
@@ -13,6 +10,8 @@ import CommentImg from "../../../imgs/comment.svg";
 import { useHistory, useParams } from "react-router";
 import LazyFetch from "../../common/requests/LazyFetch";
 import PinIcon from "../../../imgs/pin.svg";
+import { Link } from "react-router-dom";
+import { useWindowDimensions } from "../../common/CustomHooks";
 
 const accentColor = (type) => {
   switch (type) {
@@ -40,6 +39,7 @@ const PostWrapper = ({
 
   const user = useContext(UserContext);
   const userRole = useContext(UserRoleContext);
+  const { width, height } = useWindowDimensions();
 
   const [isEditing, setIsEditing] = useState(false);
   const [pinnedStatus, setPinnedStatus] = useState(postObject.isPinned);
@@ -245,7 +245,7 @@ const PostWrapper = ({
           ) : (
             <></>
           )}
-          {userRole && dropdownOptions ? (
+          {userRole && dropdownOptions && width >= 768 ? (
             <Dropdown options={dropdownOptions}>
               <Icon src={OptionDots} style={{ cursor: "pointer" }} />
             </Dropdown>
@@ -273,13 +273,31 @@ const PostWrapper = ({
       <HRSeperator />
       <FooterContentWrapper>
         {postObject.postedBy.anonymous ? (
-          <></>
+          <UserDescription isInstructor={postObject.isInstructor}>
+            Posted by {postObject.postedBy.first} {postObject.postedBy.last}
+          </UserDescription>
         ) : (
-          <UserIcon src={postObject.postedBy.picture} />
+          <Link
+            style={{
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
+            to={`/userProfile/${postObject.postedBy._id}`}
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            <UserIcon src={postObject.postedBy.picture} />
+            <UserDescription isInstructor={postObject.isInstructor}>
+              Posted by {postObject.postedBy.first} {postObject.postedBy.last}
+            </UserDescription>
+          </Link>
         )}
-        <UserDescription isInstructor={postObject.isInstructor}>
+        {/* <UserDescription isInstructor={postObject.isInstructor}>
           Posted by {postObject.postedBy.first} {postObject.postedBy.last}
-        </UserDescription>
+        </UserDescription> */}
         <ReactionSection>
           {userRole && userRole.participation.reactions && (
             <Reaction
@@ -335,9 +353,16 @@ const HeaderContentWrapper = styled.div`
   align-items: center;
 
   padding: 5px;
-  height: 40px;
+  height: 2.5em;
 
   /* border: 1px solid #4a86fa; */
+
+  transition: 150ms ease-out;
+
+  @media only screen and (max-width: 768px) {
+    flex-wrap: wrap;
+    height: auto;
+  }
 `;
 
 const CircleIcon = styled.div`
@@ -427,4 +452,10 @@ const ReactionSection = styled.div`
   margin-left: auto;
   height: 100%;
   align-items: center;
+
+  @media only screen and (max-width: 768px) {
+    width: 0;
+    display: hidden;
+    overflow: hidden;
+  }
 `;

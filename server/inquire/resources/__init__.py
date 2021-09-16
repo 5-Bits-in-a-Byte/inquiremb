@@ -14,3 +14,6 @@ from .poll import Poll
 from .pin import Pin
 from .ban_remove import BanRemove
 from .images import Images
+from .search import Search
+from .user_profiles import UserProfiles
+from .leave_course import LeaveCourse

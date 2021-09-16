@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import DraftTextArea from "../../common/DraftTextArea";
-import Checkbox from "../../common/Checkbox";
-import Button from "../../common/Button";
-import LazyFetch from "../../common/requests/LazyFetch";
+import DraftTextArea from "../common/DraftTextArea";
+import Checkbox from "../common/Checkbox";
+import Button from "../common/Button";
+import LazyFetch from "../common/requests/LazyFetch";
 import { Editor } from "react-draft-wysiwyg";
 import { convertToRaw, EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useHistory } from "react-router";
 import axios from "axios";
+import MaterialCheckbox from "../common/MaterialCheckbox";
 
 const accentColor = (type) => {
   switch (type) {
@@ -24,15 +25,13 @@ const accentColor = (type) => {
   }
 };
 
-const Draft = ({ userRole }) => {
+const PostDraft = ({ userRole }) => {
   const { courseId } = useParams();
   const history = useHistory();
-  // State and handler for drafting posts
-  const [draft, setDraft] = useState({
-    title: "",
-    isAnonymous: false,
-    isPrivate: false
-  });
+  // State and handlers for drafting posts
+  const [isPrivate, toggleIsPrivate] = useState(false);
+  const [isAnonymous, toggleIsAnonymous] = useState(false);
+  const [title, setTitle] = useState("");
 
   var defaultType;
   if (userRole.publish.general) {
@@ -51,18 +50,9 @@ const Draft = ({ userRole }) => {
     plainText: EditorState.createEmpty(),
   });
 
-  const handleChange = (e) => {
-    setDraft({
-      ...draft,
-      [e.target.name]:
-        e.target.type === "checkbox" ? e.target.checked : e.target.value,
-    });
-  };
-
   const handleContentChange = (e) => {
     const plainText = e.getCurrentContent().getPlainText();
     setContent({ ...content, raw: e, plainText: plainText });
-    console.log(content);
   };
 
   const handleSubmit = () => {
@@ -75,9 +65,9 @@ const Draft = ({ userRole }) => {
       type: "post",
       endpoint: "/courses/" + courseId + "/posts",
       data: {
-        title: draft.title,
-        isAnonymous: draft.isAnonymous,
-        isPrivate: draft.isPrivate,
+        title: title,
+        isAnonymous: isAnonymous,
+        isPrivate: isPrivate,
         content: newContent,
       },
       onSuccess: (data) => {
@@ -93,22 +83,20 @@ const Draft = ({ userRole }) => {
   };
 
   const imageCallback = async (file) => {
-    return new Promise(
-      (resolve, reject) => {
-        const formData = new FormData();
-        formData.append("imageFile", file)
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append("imageFile", file);
 
-        LazyFetch({
-          type: "post",
-          endpoint: "/images",
-          data: formData,
-          onSuccess: (data) => {
-            resolve({ data: { link: data.data.link } });
-          }
-        });
-      }
-    );
-  }
+      LazyFetch({
+        type: "post",
+        endpoint: "/images",
+        data: formData,
+        onSuccess: (data) => {
+          resolve({ data: { link: data.data.link } });
+        },
+      });
+    });
+  };
 
   // Styling Variables
   var titlePlaceholder =
@@ -122,8 +110,6 @@ const Draft = ({ userRole }) => {
     displayGeneral = userRole.publish.general;
   }
   var accent = accentColor(content.type);
-
-  // console.log("User Role: ", userRole);
 
   return (
     <Wrapper sideBarColor={accent}>
@@ -181,7 +167,9 @@ const Draft = ({ userRole }) => {
       <DraftTextArea
         minRows={1}
         placeholder={titlePlaceholder}
-        onChange={handleChange}
+        onChange={(e) => {
+          setTitle(e.target.value);
+        }}
         name="title"
       />
       <Editor
@@ -196,28 +184,42 @@ const Draft = ({ userRole }) => {
         // placeholder="Details"
         onEditorStateChange={handleContentChange}
         toolbar={{
-          options: ["inline", "list", "link", "emoji", "history", "blockType", "image"],
-          image: { uploadCallback: imageCallback, uploadEnabled: true, previewImage: true }
+          options: [
+            "inline",
+            "list",
+            "link",
+            "emoji",
+            "history",
+            "blockType",
+            "image",
+          ],
+          image: {
+            uploadCallback: imageCallback,
+            uploadEnabled: true,
+            previewImage: true,
+          },
         }}
       />
       <HRSeperator />
       <FooterContentWrapper>
         <ButtonSection>
           {userRole && userRole.privacy.anonymous ? (
-            <Checkbox
-              checkboxName="isAnonymous"
-              labelText={"Make Anonymous"}
-              onChange={handleChange}
-              checkStatus={draft.isAnonymous}
+            <MaterialCheckbox
+              label={"Make Anonymous"}
+              checkedState={{
+                checked: isAnonymous,
+                toggleChecked: toggleIsAnonymous,
+              }}
             />
           ) : (
             <></>
           )}
-          <Checkbox
-            checkboxName="isPrivate"
-            labelText={"Make Private"}
-            onChange={handleChange}
-            checkStatus={draft.isPrivate}
+          <MaterialCheckbox
+            label={"Make Private"}
+            checkedState={{
+              checked: isPrivate,
+              toggleChecked: toggleIsPrivate,
+            }}
           />
           <Button primary onClick={handleSubmit} style={{ margin: "0 1em" }}>
             Submit
@@ -228,7 +230,7 @@ const Draft = ({ userRole }) => {
   );
 };
 
-export default Draft;
+export default PostDraft;
 
 const Wrapper = styled.div`
   margin: 2em;

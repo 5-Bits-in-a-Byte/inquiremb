@@ -44,6 +44,12 @@ const Background = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition: 150ms ease-out;
+
+  @media only screen and (max-width: 1201px) {
+    padding-left: 80px;
+  }
 `;
 
 const Content = styled.div`
@@ -54,4 +60,11 @@ const Content = styled.div`
   border-radius: 4px;
   box-shadow: 3px 3px 9px #48484830;
   width: ${(props) => props.width || "520px"};
+
+  transition: 150ms ease-out;
+
+  @media only screen and (max-width: 1201px) {
+    width: auto;
+    min-width: 1px;
+  }
 `;

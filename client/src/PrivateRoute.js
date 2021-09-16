@@ -4,38 +4,15 @@ import {
   UserDispatchContext,
   UserContext,
 } from "./components/context/UserProvider";
-// import {
-//   UserRoleDispatchContext,
-//   UserRoleContext,
-// } from "./components/context/UserRoleProvider";
-import LazyFetch from "./components/common/requests/LazyFetch";
+import { fetchUser } from "./components/common/externalMethods/FetchUser";
 
 const PrivateRoute = (props) => {
   const setUser = useContext(UserDispatchContext);
   const user = useContext(UserContext);
 
-  // const setUserRole = useContext(UserRoleDispatchContext);
-  // const userRole = useContext(UserRoleContext);
-
-  const attemptSignIn = (token) => {
-    LazyFetch({
-      type: "get",
-      endpoint: "/me",
-      onSuccess: (data) => {
-        if (data && data._id) {
-          setUser(data);
-        }
-      },
-      onFailure: (err) => {
-        console.log("Error completing sign in:", err);
-        setUser(false);
-      },
-    });
-  };
-
   useEffect(() => {
     if (!user) {
-      attemptSignIn();
+      fetchUser(setUser);
     }
   });
 

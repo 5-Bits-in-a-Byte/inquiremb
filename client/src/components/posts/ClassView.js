@@ -7,13 +7,12 @@ import {
 } from "../context/UserRoleProvider";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import SectionTab from "./SectionTab";
-import Sidebar from "./Sidebar";
-import LazyFetch from "../common/requests/LazyFetch";
+import SectionTab from "./leftSideBar/SectionTab";
+import Sidebar from "./leftSideBar/Sidebar";
 import LoadingDots from "../common/animation/LoadingDots";
-import PostRefactor from "./refactorComponents/PostRefactor";
+import PostFeed from "./PostFeed";
 
-const PostView = React.lazy(() => import("./PostView"));
+// const PostView = React.lazy(() => import("./PostView"));
 
 /**
  * ClassView Component ~ Blueprint for displaying a specific course post feed, as well as
@@ -52,6 +51,7 @@ const ClassView = ({ props }) => {
   return (
     <ClassViewWrapper>
       <Sidebar
+        id={"Sidebar"}
         userRole={userRole}
         setHighlightedSection={setHighlightedSection}
         highlightedSection={highlightedSection}
@@ -68,8 +68,7 @@ const ClassView = ({ props }) => {
           </div>
         }
       >
-        <PostView userRole={userRole} highlightedSection={highlightedSection} />
-        {/* <PostRefactor /> */}
+        <PostFeed userRole={userRole} highlightedSection={highlightedSection} />
       </Suspense>
     </ClassViewWrapper>
   );

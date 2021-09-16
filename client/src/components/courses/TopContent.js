@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import JoinCourse from "./JoinCourse";
 import CreateCourse from "./CreateCourse";
+import InquireTooltip from "../common/InquireTooltip";
 
 /** TopContent
  * @brief Wrapper for the Create Course and Join Course buttons.
@@ -14,8 +15,32 @@ const TopContent = ({ courseList, setCourseList }) => {
   return (
     <TopWrapper className="flex-row align">
       <Title>COURSES</Title>
-      <JoinCourse courseList={courseList} setCourseList={setCourseList} />
-      <CreateCourse courseList={courseList} setCourseList={setCourseList} />
+      <FlexWrapper>
+        {/* <InquireTooltip
+          tooltipText={"Open join course modal."}
+          hoverDelay={250}
+          customPosition={{
+            top: `100%`,
+            right: `auto`,
+            bottom: `auto`,
+            left: `-50%`,
+          }}
+        > */}
+        <JoinCourse courseList={courseList} setCourseList={setCourseList} />
+        {/* </InquireTooltip> */}
+        {/* <InquireTooltip
+          tooltipText={"Open create course modal."}
+          hoverDelay={250}
+          customPosition={{
+            top: `100%`,
+            right: `auto`,
+            bottom: `auto`,
+            left: `-30%`,
+          }}
+        > */}
+        <CreateCourse courseList={courseList} setCourseList={setCourseList} />
+        {/* </InquireTooltip> */}
+      </FlexWrapper>
     </TopWrapper>
   );
 };
@@ -28,4 +53,18 @@ const Title = styled.h3`
 
 const TopWrapper = styled.div`
   margin: 1em 1em 1em 1em;
+`;
+
+const FlexWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  @media only screen and (max-width: 650px) {
+    width: 100%;
+    flex: 1;
+    /* align-items: left; */
+    justify-content: space-evenly;
+  }
 `;

@@ -1,21 +1,18 @@
 import React, { useContext, useEffect, useState, useMemo, useRef } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
-import {
-  UserRoleContext,
-  UserRoleDispatchContext,
-} from "../context/UserRoleProvider";
+import { UserRoleContext } from "../context/UserRoleProvider";
 import styled from "styled-components";
-import PostWrapper from "../posts/refactorComponents/PostWrapper";
-import Sidebar from "../posts/Sidebar";
+import PostWrapper from "../posts/wrappers/PostWrapper";
+import Sidebar from "../posts/leftSideBar/Sidebar";
 import Button from "../common/Button";
 import Comment from "./Comment";
 import LazyFetch from "../common/requests/LazyFetch";
 import { UserContext } from "../context/UserProvider";
 import io from "../../services/socketio";
-import Draft from "../posts/refactorComponents/Draft";
-import PollConfig from "../posts/refactorComponents/PollConfig";
-import PollWrapper from "../posts/refactorComponents/PollWrapper";
-import EditorWrapper from "../posts/refactorComponents/EditorWrapper";
+import PostDraft from "../posts/PostDraft";
+import PollConfig from "../posts/PollConfig";
+import PollWrapper from "../posts/wrappers/PollWrapper";
+import EditorWrapper from "../posts/wrappers/EditorWrapper";
 import { convertToRaw } from "draft-js";
 
 const renderComments = (data, userRole) => {
@@ -30,23 +27,6 @@ const renderComments = (data, userRole) => {
 
 const CommentView = ({ classroomName }) => {
   const { courseId, postid } = useParams();
-  // var roleAfterGetRequest = null;
-
-  // LazyFetch({
-  //   type: "get",
-  //   endpoint: "/userRole/" + courseId,
-  //   onSuccess: (role) => {
-  //     if (role) {
-  //       roleAfterGetRequest = role;
-  //     }
-  //   },
-  //   onFailure: (err) => {
-  //     console.log(
-  //       "Error getting user role object from {" + courseId + "}:",
-  //       err
-  //     );
-  //   },
-  // });
 
   const user = useContext(UserContext);
   const history = useHistory();
@@ -58,7 +38,7 @@ const CommentView = ({ classroomName }) => {
 
   // const setUserRole = useContext(UserRoleDispatchContext);
   const userRole = useContext(UserRoleContext);
-  console.log("Comment View Role Object: ", userRole);
+  // console.log("Comment View Role Object: ", userRole);
 
   const handleVote = (voteAnswer) => {
     var pa = pollAns;
@@ -167,7 +147,7 @@ const CommentView = ({ classroomName }) => {
     });
   };
   // Takes a boolean value: true creates, false cancels
-  const finishComment = (content) => {
+  const finishComment = (content, isAnonymous) => {
     // If false, clear the draft
     if (!content) {
       setNewComments({ draft: false });
@@ -179,10 +159,9 @@ const CommentView = ({ classroomName }) => {
       LazyFetch({
         type: "post",
         endpoint: "/courses/" + courseId + "/posts/" + post._id + "/comments",
-        data: { isAnonymous: newContent.isAnonymous, content: newContent },
+        data: { isAnonymous: isAnonymous, content: newContent },
         onSuccess: (data) => {
           console.log("data:", data);
-          console.log(data);
           setNewComments({ draft: false });
           setCommentData([
             ...commentData,
@@ -239,7 +218,9 @@ const CommentView = ({ classroomName }) => {
                   </Button>
                 )}
               </OptionsContainer>
-              {postid === "newQorA" && <Draft userRole={userRole} />}
+              {postid === "newQorA" && userRole && (
+                <PostDraft userRole={userRole} />
+              )}
               {/* {postid === "newPoll" && <DraftPoll />} */}
               {postid === "newPoll" && <PollConfig />}
               {postExists &&
@@ -309,6 +290,10 @@ const ScrollingDiv = styled.div`
   padding: 0 280px 0 40px;
   overflow: auto;
   padding-right: 280px;
+
+  @media only screen and (max-width: 1200px) {
+    padding: 0 2.5em;
+  }
 `;
 
 const MaxWidth = styled.div`

@@ -1,50 +1,16 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useContext, useState } from "react";
+import styled, { css } from "styled-components";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import CourseConfirmation from "./createCourse/CourseConfirmation";
 import CourseInfo from "./createCourse/CourseInfo";
 import CourseCard from "./CourseCard";
-
-/** addNewCourseToList (object, list)
- * @brief takes the new course info from the newCourse object and creates a course to append onto the courseList React State
- *
- * @param {object} newCourse object containing information needed to make a new course card
- * @param {list} courseList the react state list containing all of the React CourseCards
- * @returns new list of courseCards to be updated in React State
- */
-const addNewCourseToList = (newCourse, courseList) => {
-  // console.log("Course to add: ", newCourse);
-  // console.log("Example from list: ", courseList[0]);
-  // console.log("Before: ", "\nCourseList: ", courseList);
-
-  let ret = [];
-  for (let i = 0; i < courseList.length; i++) {
-    // console.log(courseList[i]);
-    ret.push(
-      <CourseCard
-        key={courseList[i].props.id}
-        id={courseList[i].props.id}
-        courseName={courseList[i].props.courseName}
-        courseTerm="Winter 2021"
-        color={courseList[i].props.color || "#121212"}
-      />
-    );
-  }
-
-  ret.push(
-    <CourseCard
-      key={newCourse.courseId}
-      id={newCourse.courseId}
-      courseName={newCourse.courseName}
-      courseTerm="Winter 2021"
-      color={newCourse.color || "#121212"}
-    />
-  );
-
-  // console.log("After: ", "\nCourseList: ", ret);
-  return ret;
-};
+import { fetchUser } from "../common/externalMethods/FetchUser";
+import {
+  generateCourseList,
+  addNewCourseToList,
+} from "../common/externalMethods/CoursesHelperMethods";
+import { UserContext, UserDispatchContext } from "../context/UserProvider";
 
 /** CreateCourse
  * @brief Overlay with modal background that allows the user to create a new course.
@@ -59,33 +25,33 @@ const CreateCourse = ({ courseList, setCourseList }) => {
   // The info is used to share the course link/access code provided by the API
   const [course, setCourse] = useState(null);
 
+  const user = useContext(UserContext);
+  const setUser = useContext(UserDispatchContext);
+
   return (
     <>
-      <Button
-        secondary={true}
-        style={{ marginLeft: 10 }}
-        onClick={() => {
-          toggleModal(true);
-        }}
-      >
+      <CustomButton onClick={() => toggleModal(true)}>
         Create a Course
-      </Button>
+      </CustomButton>
       {modalIsShown && (
         <Modal
           close={() => {
+            setCourseList(generateCourseList(user.courses, setUser));
             toggleModal(false);
           }}
           width="620px"
           data-testid="join-course-modal"
         >
           {!course ? (
-            <CourseInfo setCourse={setCourse} />
+            <CourseInfo setCourse={setCourse} setCourseList={setCourseList} />
           ) : (
             <CourseConfirmation
               course={course}
               close={() => {
-                let newCourseList = addNewCourseToList(course, courseList);
-                setCourseList(newCourseList);
+                // let newCourseList = addNewCourseToList(course, courseList);
+                // setCourseList(newCourseList);
+                fetchUser(setUser, true);
+                setCourseList(generateCourseList(user.courses, setUser));
                 toggleModal(false);
                 setCourse(null);
               }}
@@ -98,3 +64,43 @@ const CreateCourse = ({ courseList, setCourseList }) => {
 };
 
 export default CreateCourse;
+
+const CustomButton = styled.div`
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 9em;
+  margin-left: 1em;
+
+  border-radius: 4px;
+  padding: 0.5em 0.125em;
+  background-color: #e7e7e7;
+  color: #162b55;
+  &:hover {
+    background-color: #dedede;
+  }
+
+  transition: 150ms ease-out;
+
+  @media only screen and (min-width: 1201px) {
+    width: 10em;
+  }
+  @media only screen and (max-width: 650px) {
+    width: 8em;
+    font-size: 14px;
+    /* margin-left: 0.5em; */
+    /* margin: 0; */
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 12px;
+    width: 8em;
+  }
+  @media only screen and (max-width: 400px) {
+    font-size: 8px;
+  }
+`;

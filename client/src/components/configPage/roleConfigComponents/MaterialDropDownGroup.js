@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import Button from "../../common/Button";
 import Menu from "@material-ui/core/Menu";
@@ -50,10 +49,10 @@ const MaterialDropDownGroup = ({
                   <Checkbox
                     checked={initialState[formLabels.stateLabel]}
                     onChange={(e) => {
-                      console.log(
-                        formLabels?.itemLabel + " value changed: ",
-                        e.target.checked
-                      );
+                      // console.log(
+                      //   formLabels?.itemLabel + " value changed: ",
+                      //   e.target.checked
+                      // );
                       formLabels.changeRoleVal(e.target.checked);
                     }}
                   />

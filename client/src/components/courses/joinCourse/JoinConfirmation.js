@@ -7,6 +7,7 @@ import Errors from "../../common/Errors";
 import CourseCard from "../CourseCard";
 import { UserContext, UserDispatchContext } from "../../context/UserProvider";
 import LazyFetch from "../../common/requests/LazyFetch";
+import CoursePanel from "./CoursePanel";
 
 const AddNewCourseToList = (newCourse, courseList) => {
   if (newCourse === null) return;
@@ -42,8 +43,22 @@ const AddNewCourseToList = (newCourse, courseList) => {
   return ret;
 };
 
+const GenerateCoursesList = (courses, selectedCourse, setSelectedCourse) => {
+  // const [selectedCourse, setSelectedCourse] = useState(null);
+  return courses.map((course, index) => (
+    <CoursePanel
+      key={index}
+      courseId={course.courseId}
+      courseName={course.course}
+      instructorName={course.first + " " + course.last}
+      selectedCourse={selectedCourse}
+      setSelectedCourse={setSelectedCourse}
+    />
+  ));
+};
+
 const JoinConfirmation = ({
-  course,
+  courses,
   joinCourse,
   display,
   toggleDisplay,
@@ -56,16 +71,13 @@ const JoinConfirmation = ({
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
 
-  console.log(display);
-  console.log("SUCCESS Message: " + success);
-
   const confirmJoinRequest = () => {
     toggleLoading(true);
     setTimeout(() => {
       LazyFetch({
         type: "put",
         endpoint: "/join",
-        data: { courseId: course.courseId },
+        data: { courseId: selectedCourse },
         onSuccess: (data) => {
           let newCourseList = AddNewCourseToList(data.course, courseList);
           if (newCourseList != null) setCourseList(newCourseList);
@@ -97,6 +109,13 @@ const JoinConfirmation = ({
     }, 1000);
   };
 
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
+  // Only call GenerateCoursesList if the return value is an array
+  let potentialCourses = courses.length
+    ? GenerateCoursesList(courses, selectedCourse, setSelectedCourse)
+    : null;
+
   return (
     <Wrapper className="flex-col align justify">
       <img src={display == "none" ? CheckMarkGreen : CheckMarkBlue}></img>
@@ -109,18 +128,7 @@ const JoinConfirmation = ({
         {success}
       </Success>
       <HighlightedSection className="flex-row" style={{ display: display }}>
-        <CourseInfo>
-          <Course>
-            <div style={{ opacity: "70%" }}>Course:&nbsp;</div>{" "}
-            <TextContent>{course.course}</TextContent>
-          </Course>
-          <Instructor>
-            <div style={{ opacity: "70%" }}>Instructor:&nbsp;</div>
-            <TextContent>
-              {course.first} {course.last}
-            </TextContent>
-          </Instructor>
-        </CourseInfo>
+        {potentialCourses}
       </HighlightedSection>
       <BottomButtons style={{ display: display }}>
         <Button
@@ -163,42 +171,18 @@ const BottomButtons = styled.div`
   width: 100%;
 `;
 
-const CourseInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-  justify-content: center;
-
-  height: 4em;
-`;
-
-const Course = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  margin: 0.5em 0;
-`;
-
-const Instructor = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  margin: 0.5em 0;
-`;
-
 const HighlightedSection = styled.div`
   background-color: #f8f8f8;
   margin-top: 20px;
   padding: 15px;
   border-radius: 4px;
   width: 100%;
+  overflow-y: scroll;
   display: flex;
   justify-content: center;
-`;
-
-const TextContent = styled.div`
-  font-weight: 400;
-  font-style: normal;
+  align-items: center;
+  flex-direction: column;
+  max-height: 200px;
 `;
 
 const Success = styled.div`
