@@ -106,6 +106,9 @@ const SignInLogoImg = styled.img`
 const CenterBlock = styled.div`
   position: relative;
   background: #ffffff;
+
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
+
   width: 350px;
   height: 350px;
   border-radius: 10px;
@@ -127,6 +130,10 @@ const LogoImg = styled.img`
   width: auto;
   height: 4rem;
   margin: auto;
+  padding: 0.35em;
+
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.25); */
+  border-radius: 0.5em;
 `;
 
 /* Styling for the login buttons */
@@ -141,8 +148,11 @@ const Buttons = styled.a`
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #bababa;
+  /* border: 1px solid #bababa; */
   border-radius: 3px;
+
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 25%);
+
   width: 191px;
   height: 46px;
   background-color: white;
@@ -155,6 +165,7 @@ const Buttons = styled.a`
 
 /* Styling for the login text in the buttons */
 const BtnText = styled.div`
+  color: #444;
   text-align: center;
   padding: 8px 8px 8px 24px;
   font-size: 14px;
