@@ -49,7 +49,7 @@ const SignUp = () => {
           {/* Google Login Button */}
           <Buttons href={process.env.REACT_APP_SERVER_URL + "/auth/login"}>
             <Icon src={GoogleLogo} />
-            <BtnText>Login with Google</BtnText>
+            <BtnText>Sign in with Google</BtnText>
           </Buttons>
 
           {/* Github Login Button */}
@@ -57,7 +57,7 @@ const SignUp = () => {
             href={process.env.REACT_APP_SERVER_URL + "/auth/github-login"}
           >
             <Icon src={GithubLogo} />
-            <BtnText>Login with Github</BtnText>
+            <BtnText>Sign in with Github</BtnText>
           </Buttons>
         </ButtonContainer>
         {/* Account related message */}
@@ -106,9 +106,12 @@ const SignInLogoImg = styled.img`
 const CenterBlock = styled.div`
   position: relative;
   background: #ffffff;
-  width: 400px;
-  height: 357px;
-  border-radius: 5px;
+
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
+
+  width: 350px;
+  height: 350px;
+  border-radius: 10px;
   display: grid;
   margin: auto;
 `;
@@ -127,40 +130,58 @@ const LogoImg = styled.img`
   width: auto;
   height: 4rem;
   margin: auto;
+  padding: 0.35em;
+
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.25); */
+  border-radius: 0.5em;
 `;
 
 /* Styling for the login buttons */
 const Buttons = styled.a`
   margin: auto;
   position: relative;
-  padding: 15px 40px;
-  vertical-align: middle;
-  border: 1px solid #bababa;
+  /* padding: 15px 40px; */
+  /* vertical-align: middle; */
+
+  display: flex;
+  /* flex-direction: row; */
+  align-items: center;
+  justify-content: center;
+
+  /* border: 1px solid #bababa; */
   border-radius: 3px;
-  width: 100%;
-  max-width: 320px;
-  height: 43px;
+
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 25%);
+
+  width: 191px;
+  height: 46px;
   background-color: white;
   text-decoration: none;
   cursor: pointer;
   &:hover {
-    background-color: #dedede;
+    background-color: #f8f8f8;
   }
 `;
 
 /* Styling for the login text in the buttons */
 const BtnText = styled.div`
+  color: #444;
   text-align: center;
-  font-size: 17px;
-  transform: translateY(-23%);
+  padding: 8px 8px 8px 24px;
+  font-size: 14px;
+  font-family: "Roboto";
+  font-weight: 500;
+  /* transform: translateY(-23%); */
 `;
 
 /* Styling for the icons in the buttons */
 const Icon = styled.img`
-  position: absolute;
-  height: 25px;
-  left: 12px;
-  transform: translateY(-25%);
+  /* position: absolute; */
+  width: 18px;
+  height: 18px;
+  margin: 8px 0 8px 8px;
+  /* margin-right: 1em; */
+  /* transform: translateY(-25%); */
 `;
 
 /* Styling for the account specific message */
