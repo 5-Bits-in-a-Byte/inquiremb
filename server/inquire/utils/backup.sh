@@ -14,7 +14,7 @@ echo "Uploading backed up files to AWS S3"
 /usr/local/bin/aws s3 cp $TARFILENAME s3://$BUCKET/ --storage-class STANDARD_IA --profile inquire
 TIMESTAMP2=`date +%F-%H%M`
 
-Deleting files creating in backup process
+# Deleting files creating in backup process
 /bin/rm -f $TARFILENAME
 /bin/rm -rf $FILENAME
 
