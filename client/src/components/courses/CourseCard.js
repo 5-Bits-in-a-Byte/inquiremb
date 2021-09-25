@@ -300,6 +300,8 @@ const AlignedDiv = styled.div`
   display: flex;
   flex-direction: column;
 
+  transition: 150ms ease-out;
+
   &:hover {
     box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.14);
   }

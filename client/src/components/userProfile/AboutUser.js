@@ -234,11 +234,20 @@ const AboutUser = ({
               )}
             </AboutContent>
           </UserInfoWrapper>
-          <ModularSettingsWrapper>
-            <ProfileSettingsCard title={`Change Display Name`} width={`200px`}>
-              <ChangeDisplayName />
-            </ProfileSettingsCard>
-          </ModularSettingsWrapper>
+          {isMyProfile ? (
+            <>
+              <ModularSettingsWrapper>
+                <ProfileSettingsCard
+                  title={`Change Display Name`}
+                  width={`200px`}
+                >
+                  <ChangeDisplayName />
+                </ProfileSettingsCard>
+              </ModularSettingsWrapper>
+            </>
+          ) : (
+            <></>
+          )}
         </ContentWrapper>
       </Wrapper>
     </>
