@@ -11,6 +11,7 @@ import { ContrastDetector } from "../common/externalMethods/ContrastDetector";
 import ProfileSettingsCard from "./ProfileSettingsCard";
 import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import { fetchUser } from "../common/externalMethods/FetchUser";
+import ChangeDisplayName from "./settingsFeatures/ChangeDisplayName";
 
 const renderEditButton = (
   toggleEdit,
@@ -156,54 +157,6 @@ const AboutUser = ({
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
 
-  const [firstLastState, setFirstLastState] = useState({
-    first: user.first,
-    last: user.last,
-  });
-
-  const handleFirstNameChange = (event) => {
-    console.log("[UserDataCheck] Event Data: ", event);
-
-    event.stopPropagation();
-
-    setFirstLastState({
-      first: event.target.value,
-      last: firstLastState.last,
-    });
-  };
-
-  const handleLastNameChange = (event) => {
-    console.log("[UserDataCheck] Event Data: ", event);
-
-    event.stopPropagation();
-
-    setFirstLastState({
-      first: firstLastState.first,
-      last: event.target.value,
-    });
-  };
-
-  const handleFormSubmission = (event) => {
-    console.log("[UserDataCheck] Event Data: ", event);
-
-    LazyFetch({
-      type: "put",
-      endpoint: "/update-user-data",
-      data: {
-        userId: user._id,
-        ...firstLastState,
-      },
-      onSuccess: (response) => {
-        console.log("[UserDataCheck] PUT Response: ", response);
-        fetchUser(setUser);
-        setProfileName(`${user.first} ${user.last}`);
-      },
-      onFailure: (error) => {
-        console.log("[UserDataCheck] Error: ", error);
-      },
-    });
-  };
-
   return (
     <>
       <Wrapper>
@@ -283,41 +236,7 @@ const AboutUser = ({
           </UserInfoWrapper>
           <ModularSettingsWrapper>
             <ProfileSettingsCard title={`Change Display Name`} width={`200px`}>
-              <FormWrapper>
-                <form>
-                  <label htmlFor="fname">First Name:</label> <br />
-                  <input
-                    type="text"
-                    id="fname"
-                    onChange={handleFirstNameChange}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                    }}
-                  />
-                  <br />
-                  <label htmlFor="fname">Last Name:</label> <br />
-                  <input
-                    type="text"
-                    id="fname"
-                    onChange={handleLastNameChange}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                    }}
-                  />
-                  <br /> <br />
-                </form>
-              </FormWrapper>
-              <Button
-                primary
-                buttonWidth={"10em"}
-                buttonHeight={"2.5em"}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  handleFormSubmission(event);
-                }}
-              >
-                Submit
-              </Button>
+              <ChangeDisplayName />
             </ProfileSettingsCard>
           </ModularSettingsWrapper>
         </ContentWrapper>
@@ -347,24 +266,6 @@ const Wrapper = styled.div`
   @media only screen and (max-width: 1200px) {
     height: auto;
     min-height: 300px;
-  }
-`;
-
-const FormWrapper = styled.div`
-  label {
-    color: var(--inquire-blue);
-    font-family: "Roboto";
-    font-weight: 100;
-    font-size: 18px;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
   }
 `;
 
