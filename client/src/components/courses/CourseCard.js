@@ -303,7 +303,7 @@ const AlignedDiv = styled.div`
   transition: 150ms ease-out;
 
   &:hover {
-    box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.14);
+    box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.25);
   }
 `;
 
