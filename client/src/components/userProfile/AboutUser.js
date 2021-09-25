@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled, { css } from "styled-components";
 import Button from "../common/Button";
 import DraftTextArea from "../common/DraftTextArea";
@@ -8,6 +8,10 @@ import Icon from "../common/Icon";
 import LightColorImg from "../../imgs/color-palette-white.svg";
 import DarkColorImg from "../../imgs/color-palette.svg";
 import { ContrastDetector } from "../common/externalMethods/ContrastDetector";
+import ProfileSettingsCard from "./ProfileSettingsCard";
+import { UserContext, UserDispatchContext } from "../context/UserProvider";
+import { fetchUser } from "../common/externalMethods/FetchUser";
+import ChangeDisplayName from "./settingsFeatures/ChangeDisplayName";
 
 const renderEditButton = (
   toggleEdit,
@@ -150,6 +154,9 @@ const AboutUser = ({
 
   var background = bannerColor ? ContrastDetector(bannerColor) : null;
 
+  const user = useContext(UserContext);
+  const setUser = useContext(UserDispatchContext);
+
   return (
     <>
       <Wrapper>
@@ -193,7 +200,9 @@ const AboutUser = ({
           </VerticalFlex>
 
           <UserInfoWrapper>
-            <UserName backgroundColor={background}>{profileName}</UserName>
+            <UserName
+              backgroundColor={background}
+            >{`${user.first} ${user.last}`}</UserName>
             <h2 style={{ margin: `1.75em 0 0 0` }}>About</h2>
             <AboutContent>
               {editingProfile ? (
@@ -246,10 +255,17 @@ const Wrapper = styled.div`
   border-radius: 10px;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
+
+  transition: 150ms ease-out;
+
+  @media only screen and (max-width: 1200px) {
+    height: auto;
+    min-height: 300px;
+  }
 `;
 
 const AboutText = styled.div`
-  width: 150%;
+  /* width: 150%; */
   white-space: initial;
 `;
 
@@ -262,8 +278,14 @@ const ButtonWrapper = styled.div`
 const ContentWrapper = styled.div`
   z-index: 1;
 
+  width: 100%;
+
   display: flex;
   align-items: center;
+
+  @media only screen and (max-width: 1200px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const CustomColorSection = styled.div`
@@ -282,8 +304,9 @@ const CustomColorSection = styled.div`
 
 const UserInfoWrapper = styled.div`
   margin: 0 1em;
-  width: 350px;
+  width: 45%;
   height: 300px;
+  overflow: hidden;
 
   /* border: 1px solid black; */
 `;

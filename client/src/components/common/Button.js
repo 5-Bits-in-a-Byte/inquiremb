@@ -54,6 +54,10 @@ const Btn = styled.button`
 
   transition: ease-in-out 100ms;
 
+  :focus {
+    border: 2px solid var(--inquire-blue);
+  }
+
   // If secondary prop === true
   ${(props) =>
     props.secondary &&

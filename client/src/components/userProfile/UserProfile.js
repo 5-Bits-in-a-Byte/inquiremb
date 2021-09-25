@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Button from "../common/Button";
 import { UserContext } from "../context/UserProvider";
 import AboutUser from "./AboutUser";
+import ProfileSettingsSection from "./ProfileSettingsSection";
 import UserCourses from "./UserCourses";
 
 const UserProfile = ({ props }) => {
@@ -37,6 +38,7 @@ const UserProfile = ({ props }) => {
             profileName={profileName}
             setProfileName={setProfileName}
           />
+          <ProfileSettingsSection />
           <UserCourses
             userObject={user}
             isMyProfile={isMyProfile}
