@@ -100,7 +100,9 @@ const UserDataCheck = ({ userData, debug, ...props }) => {
                 <input type="text" id="fname" onChange={handleLastNameChange} />
                 <br /> <br />
               </form>
-              <Button onClick={handleFormSubmission}>Submit</Button>
+              <Button primary onClick={handleFormSubmission}>
+                Submit
+              </Button>
             </ModalWrapper>
           </Modal>
         )}
