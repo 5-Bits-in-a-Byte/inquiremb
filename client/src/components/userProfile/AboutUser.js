@@ -234,20 +234,6 @@ const AboutUser = ({
               )}
             </AboutContent>
           </UserInfoWrapper>
-          {/* {isMyProfile ? (
-            <>
-              <ModularSettingsWrapper>
-                <ProfileSettingsCard
-                  title={`Change Display Name`}
-                  width={`200px`}
-                >
-                  <ChangeDisplayName />
-                </ProfileSettingsCard>
-              </ModularSettingsWrapper>
-            </>
-          ) : (
-            <></>
-          )} */}
         </ContentWrapper>
       </Wrapper>
     </>
@@ -339,23 +325,6 @@ const UserName = styled.h1`
 
 const AboutContent = styled.div`
   margin: 0.5em 0;
-`;
-
-const ModularSettingsWrapper = styled.div`
-  width: 100%;
-  height: 300px;
-  /* padding: 1em; */
-
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  /* background: black; */
-  /* box-shadow: 2px 2px 5px black; */
-
-  @media only screen and (max-width: 1200px) {
-    width: 100%;
-  }
 `;
 
 const VerticalFlex = styled.div`
