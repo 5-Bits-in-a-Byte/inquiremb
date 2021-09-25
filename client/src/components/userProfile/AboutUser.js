@@ -234,7 +234,7 @@ const AboutUser = ({
               )}
             </AboutContent>
           </UserInfoWrapper>
-          {isMyProfile ? (
+          {/* {isMyProfile ? (
             <>
               <ModularSettingsWrapper>
                 <ProfileSettingsCard
@@ -247,7 +247,7 @@ const AboutUser = ({
             </>
           ) : (
             <></>
-          )}
+          )} */}
         </ContentWrapper>
       </Wrapper>
     </>
