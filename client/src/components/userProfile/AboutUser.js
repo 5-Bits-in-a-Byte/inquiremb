@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled, { css } from "styled-components";
 import Button from "../common/Button";
 import DraftTextArea from "../common/DraftTextArea";
@@ -8,6 +8,9 @@ import Icon from "../common/Icon";
 import LightColorImg from "../../imgs/color-palette-white.svg";
 import DarkColorImg from "../../imgs/color-palette.svg";
 import { ContrastDetector } from "../common/externalMethods/ContrastDetector";
+import ProfileSettingsCard from "./ProfileSettingsCard";
+import { UserContext, UserDispatchContext } from "../context/UserProvider";
+import { fetchUser } from "../common/externalMethods/FetchUser";
 
 const renderEditButton = (
   toggleEdit,
@@ -150,6 +153,57 @@ const AboutUser = ({
 
   var background = bannerColor ? ContrastDetector(bannerColor) : null;
 
+  const user = useContext(UserContext);
+  const setUser = useContext(UserDispatchContext);
+
+  const [firstLastState, setFirstLastState] = useState({
+    first: user.first,
+    last: user.last,
+  });
+
+  const handleFirstNameChange = (event) => {
+    console.log("[UserDataCheck] Event Data: ", event);
+
+    event.stopPropagation();
+
+    setFirstLastState({
+      first: event.target.value,
+      last: firstLastState.last,
+    });
+  };
+
+  const handleLastNameChange = (event) => {
+    console.log("[UserDataCheck] Event Data: ", event);
+
+    event.stopPropagation();
+
+    setFirstLastState({
+      first: firstLastState.first,
+      last: event.target.value,
+    });
+  };
+
+  const handleFormSubmission = (event) => {
+    console.log("[UserDataCheck] Event Data: ", event);
+
+    LazyFetch({
+      type: "put",
+      endpoint: "/update-user-data",
+      data: {
+        userId: user._id,
+        ...firstLastState,
+      },
+      onSuccess: (response) => {
+        console.log("[UserDataCheck] PUT Response: ", response);
+        fetchUser(setUser);
+        setProfileName(`${user.first} ${user.last}`);
+      },
+      onFailure: (error) => {
+        console.log("[UserDataCheck] Error: ", error);
+      },
+    });
+  };
+
   return (
     <>
       <Wrapper>
@@ -193,7 +247,9 @@ const AboutUser = ({
           </VerticalFlex>
 
           <UserInfoWrapper>
-            <UserName backgroundColor={background}>{profileName}</UserName>
+            <UserName
+              backgroundColor={background}
+            >{`${user.first} ${user.last}`}</UserName>
             <h2 style={{ margin: `1.75em 0 0 0` }}>About</h2>
             <AboutContent>
               {editingProfile ? (
@@ -225,6 +281,45 @@ const AboutUser = ({
               )}
             </AboutContent>
           </UserInfoWrapper>
+          <ModularSettingsWrapper>
+            <ProfileSettingsCard title={`Change Display Name`} width={`200px`}>
+              <FormWrapper>
+                <form>
+                  <label htmlFor="fname">First Name:</label> <br />
+                  <input
+                    type="text"
+                    id="fname"
+                    onChange={handleFirstNameChange}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                    }}
+                  />
+                  <br />
+                  <label htmlFor="fname">Last Name:</label> <br />
+                  <input
+                    type="text"
+                    id="fname"
+                    onChange={handleLastNameChange}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                    }}
+                  />
+                  <br /> <br />
+                </form>
+              </FormWrapper>
+              <Button
+                primary
+                buttonWidth={"10em"}
+                buttonHeight={"2.5em"}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleFormSubmission(event);
+                }}
+              >
+                Submit
+              </Button>
+            </ProfileSettingsCard>
+          </ModularSettingsWrapper>
         </ContentWrapper>
       </Wrapper>
     </>
@@ -246,10 +341,35 @@ const Wrapper = styled.div`
   border-radius: 10px;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
+
+  transition: 150ms ease-out;
+
+  @media only screen and (max-width: 1200px) {
+    height: auto;
+    min-height: 300px;
+  }
+`;
+
+const FormWrapper = styled.div`
+  label {
+    color: var(--inquire-blue);
+    font-family: "Roboto";
+    font-weight: 100;
+    font-size: 18px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
 `;
 
 const AboutText = styled.div`
-  width: 150%;
+  /* width: 150%; */
   white-space: initial;
 `;
 
@@ -262,8 +382,14 @@ const ButtonWrapper = styled.div`
 const ContentWrapper = styled.div`
   z-index: 1;
 
+  width: 100%;
+
   display: flex;
   align-items: center;
+
+  @media only screen and (max-width: 1200px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const CustomColorSection = styled.div`
@@ -282,8 +408,9 @@ const CustomColorSection = styled.div`
 
 const UserInfoWrapper = styled.div`
   margin: 0 1em;
-  width: 350px;
+  width: 45%;
   height: 300px;
+  overflow: hidden;
 
   /* border: 1px solid black; */
 `;
@@ -302,6 +429,23 @@ const UserName = styled.h1`
 
 const AboutContent = styled.div`
   margin: 0.5em 0;
+`;
+
+const ModularSettingsWrapper = styled.div`
+  width: 100%;
+  height: 300px;
+  /* padding: 1em; */
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  /* background: black; */
+  /* box-shadow: 2px 2px 5px black; */
+
+  @media only screen and (max-width: 1200px) {
+    width: 100%;
+  }
 `;
 
 const VerticalFlex = styled.div`
