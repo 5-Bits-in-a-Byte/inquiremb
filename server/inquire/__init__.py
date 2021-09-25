@@ -77,7 +77,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
         api_base_url='https://api.github.com/',
         client_kwargs={'scope': 'read:user user:email'},
     )
-    from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home, Roles, MeRole, CourseUsers, Poll, Pin, BanRemove, Images, Search, UserProfiles, LeaveCourse
+    from inquire.resources import Demo, Me, Courses, Posts, Comments, Replies, Join, Reactions, Home, Roles, MeRole, CourseUsers, Poll, Pin, BanRemove, Images, Search, UserProfiles, LeaveCourse, Users
 
     api = Api(api_bp)
 
@@ -85,6 +85,7 @@ def create_app(override_config=None, testing=False, include_socketio=True):
     # swagger = Swagger(app, config=config.swagger_config)
 
     # register endpoints from /resources folder here:
+    api.add_resource(Users, '/update-user-data')
     api.add_resource(Roles, '/courses/<string:courseId>/roles')
     api.add_resource(Demo, '/demo')
     api.add_resource(Me, '/me')

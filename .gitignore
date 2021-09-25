@@ -122,3 +122,7 @@ run-dev-client.sh
 run-dev-server.sh
 server/docker-env
 inquire-server.yaml
+
+**.tar.gz
+mongodb-backup**
+backup-README.md

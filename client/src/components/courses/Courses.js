@@ -3,6 +3,7 @@ import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import styled from "styled-components";
 import TopContent from "./TopContent";
 import { generateCourseList } from "../common/externalMethods/CoursesHelperMethods";
+import UserDataCheck from "../common/UserDataCheck";
 
 /** Courses Component
  * @brief Contains the programmatically generated list of user course cards from the UserCourses list in the UserContext
@@ -20,6 +21,7 @@ const Courses = () => {
       <ScrollDiv>
         <TopContent courseList={courseList} setCourseList={setCourseList} />
         <WrapDisplay className="content">{courseList}</WrapDisplay>
+        {user && <UserDataCheck userData={user} />}
       </ScrollDiv>
     </WrapAll>
   );

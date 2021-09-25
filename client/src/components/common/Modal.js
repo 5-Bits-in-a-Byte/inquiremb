@@ -60,6 +60,7 @@ const Content = styled.div`
   border-radius: 4px;
   box-shadow: 3px 3px 9px #48484830;
   width: ${(props) => props.width || "520px"};
+  height: ${(props) => props.height || "auto"};
 
   transition: 150ms ease-out;
 
