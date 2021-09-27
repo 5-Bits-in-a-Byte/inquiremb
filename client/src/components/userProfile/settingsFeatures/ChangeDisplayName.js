@@ -49,6 +49,9 @@ const ChangeDisplayName = ({ props }) => {
       onSuccess: (response) => {
         console.log("[UserDataCheck] PUT Response: ", response);
         fetchUser(setUser);
+        alert(
+          "Name change successful. Please refresh the page to see changes reflected."
+        );
       },
       onFailure: (error) => {
         console.log("[UserDataCheck] Error: ", error);

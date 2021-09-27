@@ -200,9 +200,7 @@ const AboutUser = ({
           </VerticalFlex>
 
           <UserInfoWrapper>
-            <UserName
-              backgroundColor={background}
-            >{`${user.first} ${user.last}`}</UserName>
+            <UserName backgroundColor={background}>{profileName}</UserName>
             <h2 style={{ margin: `1.75em 0 0 0` }}>About</h2>
             <AboutContent>
               {editingProfile ? (
