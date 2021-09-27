@@ -82,7 +82,7 @@ const fetchData = (endpoint, socketPosts, setData) => {
     type: "get",
     endpoint: endpoint,
     onSuccess: (response) => {
-      console.log("get request data:", response);
+      // console.log("get request data:", response);
       setData([...socketPosts, ...response]);
     },
   });
@@ -227,7 +227,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
           setPosts(generateSections(searchData, userRole, isCondensed, user));
         },
         onFailure: (err) => {
-          console.log(err.response.data.errors);
+          // console.log(err.response.data.errors);
         },
       });
     } else {

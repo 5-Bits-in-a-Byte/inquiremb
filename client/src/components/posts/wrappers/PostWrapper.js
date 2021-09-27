@@ -63,16 +63,16 @@ const PostWrapper = ({
         isPinned: !pin.pinnedStatus,
       },
       onSuccess: (data) => {
-        console.log(
-          "(PUT, 'pin') Response: ",
-          data.status ? data.status : data
-        );
+        // console.log(
+        //   "(PUT, 'pin') Response: ",
+        //   data.status ? data.status : data
+        // );
         pin.setPinnedStatus(!pin.pinnedStatus);
         if (!postid) window.location.reload();
       },
       onFailure: (err) => {
         alert("Error pinning / unpinning post.");
-        console.log("Err: ", err);
+        // console.log("Err: ", err);
       },
     });
   };
@@ -83,13 +83,13 @@ const PostWrapper = ({
       endpoint: "/courses/" + courseId + "/posts",
       data: { _id: postId },
       onSuccess: (data) => {
-        console.log("Success: ", data);
+        // console.log("Success: ", data);
         if (postid) history.push("/course/" + courseId);
         else window.location.reload();
       },
       onFailure: (err) => {
         alert("Error deleting post.");
-        console.log("Err: ", err);
+        // console.log("Err: ", err);
       },
     });
   };

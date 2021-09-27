@@ -127,7 +127,7 @@ const AboutUser = ({
         about: aboutMe,
       },
       onSuccess: (response) => {
-        console.log("response:", response);
+        // console.log("response:", response);
         setInitialAboutMe(aboutMe);
       },
     });
@@ -146,7 +146,7 @@ const AboutUser = ({
         bannerColor: colors.hex,
       },
       onSuccess: (data) => {
-        console.log(data.success);
+        // console.log(data.success);
         setBannerColor(colors.hex);
       },
     });

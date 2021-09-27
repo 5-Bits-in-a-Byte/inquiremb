@@ -95,7 +95,7 @@ const JoinConfirmation = ({
         onFailure: (err) => {
           if (err.response && err.response.data) {
             // Set the errors provided by our API request
-            console.log(err.response.data.errors);
+            // console.log(err.response.data.errors);
             toggleLoading(false);
             toggleErrors(err.response.data.errors);
           } else {

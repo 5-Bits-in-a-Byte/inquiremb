@@ -287,7 +287,7 @@ const ConfigPanel = ({
                 },
                 onSuccess: (data) => {
                   let { status, role } = data;
-                  console.log("Roles Post Success: ", status);
+                  // console.log("Roles Post Success: ", status);
                   let newCourseRoles =
                     courseRoles != null ? [...courseRoles, role] : [role];
                   setCourseRoles(newCourseRoles);
@@ -338,12 +338,12 @@ const ConfigPanel = ({
                   roles: testList,
                 },
                 onSuccess: (data) => {
-                  console.log("Success PUT Roles: ", data);
+                  // console.log("Success PUT Roles: ", data);
                   alert("Changes saved successfully.");
                   setConfigErrors(null);
                 },
                 onFailure: (err) => {
-                  console.log("Failed PUT Roles. ", err?.response);
+                  // console.log("Failed PUT Roles. ", err?.response);
                   if (err.response.data.errors)
                     setConfigErrors(err.response.data.errors);
                   else if (err.response.data.message)

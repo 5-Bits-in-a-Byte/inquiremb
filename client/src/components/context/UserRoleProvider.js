@@ -15,10 +15,10 @@ const attemptGetUserRole = (courseId, setUserRole) => {
       }
     },
     onFailure: (err) => {
-      console.log(
-        "Error getting user role object from {" + courseId + "}:",
-        err
-      );
+      // console.log(
+      //   "Error getting user role object from {" + courseId + "}:",
+      //   err
+      // );
       setUserRole(null);
     },
   });

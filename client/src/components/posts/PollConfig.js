@@ -309,7 +309,7 @@ const PollConfig = ({ children, ...props }) => {
         },
       },
       onSuccess: (data) => {
-        console.log(data);
+        // console.log(data);
         data.new = true;
         history.push({
           pathname: "/course/" + data.courseId + "/post/" + data._id,
@@ -343,7 +343,7 @@ const PollConfig = ({ children, ...props }) => {
           <HeaderInfoIcon
             src={InfoIcon}
             onClick={() => {
-              console.log("Config data: ", title, options);
+              // console.log("Config data: ", title, options);
             }}
           />
         </HeaderGroup>

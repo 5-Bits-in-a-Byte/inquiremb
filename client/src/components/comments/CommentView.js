@@ -161,7 +161,7 @@ const CommentView = ({ classroomName }) => {
         endpoint: "/courses/" + courseId + "/posts/" + post._id + "/comments",
         data: { isAnonymous: isAnonymous, content: newContent },
         onSuccess: (data) => {
-          console.log("data:", data);
+          // console.log("data:", data);
           setNewComments({ draft: false });
           setCommentData([
             ...commentData,

@@ -36,7 +36,7 @@ const GenerateUserList = (
   // console.log("roles:", roles);
 
   return users.map((user, index) => {
-    console.log("user:", user.props);
+    // console.log("user:", user.props);
     for (let i = 0; i < numRoles; i++) {
       if (roles[i]._id == user.props.userRole._id) {
         userRole = roles[i];
@@ -159,7 +159,7 @@ const RolePanel = ({
         roleId: roleObject._id,
       },
       onSuccess: (data) => {
-        console.log("Successful delete of role: ", roleObject.name, ". ", data);
+        // console.log("Successful delete of role: ", roleObject.name, ". ", data);
         // let newRolesList = ;
         let newRolesList = courseRoles.filter((role) => {
           // console.log(

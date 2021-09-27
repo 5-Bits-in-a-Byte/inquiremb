@@ -46,7 +46,7 @@ const JoinCourse = ({ joinCourse }) => {
         onFailure: (err) => {
           if (err.response && err.response.data) {
             // Set the errors provided by our API request
-            console.log(err.response.data.errors);
+            // console.log(err.response.data.errors);
             setForm({
               ...form,
               errors: err.response.data.errors,
