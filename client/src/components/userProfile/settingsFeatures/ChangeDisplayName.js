@@ -15,7 +15,7 @@ const ChangeDisplayName = ({ props }) => {
   });
 
   const handleFirstNameChange = (event) => {
-    console.log("[UserDataCheck] Event Data: ", event);
+    // console.log("[UserDataCheck] Event Data: ", event);
 
     event.stopPropagation();
 
@@ -26,7 +26,7 @@ const ChangeDisplayName = ({ props }) => {
   };
 
   const handleLastNameChange = (event) => {
-    console.log("[UserDataCheck] Event Data: ", event);
+    // console.log("[UserDataCheck] Event Data: ", event);
 
     event.stopPropagation();
 
@@ -37,7 +37,7 @@ const ChangeDisplayName = ({ props }) => {
   };
 
   const handleFormSubmission = (event) => {
-    console.log("[UserDataCheck] Event Data: ", event);
+    // console.log("[UserDataCheck] Event Data: ", event);
 
     LazyFetch({
       type: "put",
@@ -47,11 +47,14 @@ const ChangeDisplayName = ({ props }) => {
         ...firstLastState,
       },
       onSuccess: (response) => {
-        console.log("[UserDataCheck] PUT Response: ", response);
+        // console.log("[UserDataCheck] PUT Response: ", response);
         fetchUser(setUser);
+        alert(
+          "Name change successful. Please refresh the page to see changes reflected."
+        );
       },
       onFailure: (error) => {
-        console.log("[UserDataCheck] Error: ", error);
+        // console.log("[UserDataCheck] Error: ", error);
       },
     });
   };

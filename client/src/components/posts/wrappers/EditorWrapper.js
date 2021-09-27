@@ -69,11 +69,11 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
         _id: messageData._id,
       },
       onSuccess: (data) => {
-        console.log(data);
+        // console.log(data);
         edit.setIsEditing(false);
       },
       onFailure: (err) => {
-        console.log("Error: ", err.errors ? err.errors : err);
+        // console.log("Error: ", err.errors ? err.errors : err);
         alert("Error updating post.");
       },
     });
@@ -91,11 +91,11 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
         _id: messageData._id,
       },
       onSuccess: (data) => {
-        console.log(data);
+        // console.log(data);
         edit.setIsEditing(false);
       },
       onFailure: (err) => {
-        console.log("Error: ", err.errors ? err.errors : err);
+        // console.log("Error: ", err.errors ? err.errors : err);
         alert("Error updating comment.");
       },
     });
@@ -120,11 +120,11 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
         _id: messageData._id,
       },
       onSuccess: (data) => {
-        console.log(data);
+        // console.log(data);
         edit.setIsEditing(false);
       },
       onFailure: (err) => {
-        console.log("Error: ", err.errors ? err.errors : err);
+        // console.log("Error: ", err.errors ? err.errors : err);
         alert("Error updating comment.");
       },
     });

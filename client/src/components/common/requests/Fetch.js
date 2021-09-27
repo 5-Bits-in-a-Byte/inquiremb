@@ -19,7 +19,7 @@ const Fetch = ({ type, url = process.env.REACT_APP_SERVER_URL, endpoint }) => {
       .catch((err) => {
         if (err.response && err.response.data) {
           // Set the errors provided by our API request
-          console.log(err.response.data.errors);
+          // console.log(err.response.data.errors);
           setRes({ ...res, errors: err.response.data.errors, loading: false });
         } else {
           setRes({

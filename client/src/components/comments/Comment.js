@@ -118,7 +118,7 @@ const Comment = ({ comment, isDraft, callback }) => {
         endpoint: endpoint + "/" + comment._id + "/replies",
         data: { content: newContent, isAnonymous: isAnonymous },
         onSuccess: (data) => {
-          console.log("data:", data);
+          // console.log("data:", data);
           toggleReply(false);
           setNewReplies([
             ...newReplies,

@@ -37,9 +37,9 @@ const LazyFetch = ({
         onFailure(err);
       } else if (err.response && err.response.data) {
         // Set the errors provided by our API request
-        console.log(err.response.data.errors);
+        // console.log(err.response.data.errors);
       } else {
-        console.log("An error occurred");
+        // console.log("An error occurred");
       }
     });
 };

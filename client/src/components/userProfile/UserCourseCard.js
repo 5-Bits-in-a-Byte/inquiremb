@@ -33,7 +33,7 @@ const UserCourseCard = ({
       endpoint: "/leaveCourse",
       data: { courseId: userCourseObject.courseId },
       onSuccess: (response) => {
-        console.log(response.success);
+        // console.log(response.success);
         toggleDisplay("none");
         setSuccessMessage(response.success);
         toggleChangeMade(!changeMade);

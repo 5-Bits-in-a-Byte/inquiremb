@@ -29,7 +29,7 @@ const GenerateRoleOptions = (
           user: userId,
         },
         onSuccess: (data) => {
-          console.log("Successful PUT (UserPanel). Status: ", data.status);
+          // console.log("Successful PUT (UserPanel). Status: ", data.status);
           alert(role.name + " Role selected and updated.");
           setRoleName(role.name);
           setAssignErrors(null);

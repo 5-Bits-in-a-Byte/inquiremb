@@ -73,14 +73,14 @@ const ConfigView = ({ props }) => {
         if (role) {
           setUserRole(role);
         } else {
-          console.log("Err: role is null / none / etc.");
+          // console.log("Err: role is null / none / etc.");
         }
       },
       onFailure: (err) => {
-        console.log(
-          "Error getting user role object from {" + courseId + "}:",
-          err
-        );
+        // console.log(
+        //   "Error getting user role object from {" + courseId + "}:",
+        //   err
+        // );
         setUserRole(false);
       },
     });
@@ -105,7 +105,7 @@ const ConfigView = ({ props }) => {
         setCourseUsers(data.data);
       },
       onFailure: (err) => {
-        console.log("Error: Failed GET course users. ", err.response);
+        // console.log("Error: Failed GET course users. ", err.response);
       },
     });
   };
@@ -118,11 +118,11 @@ const ConfigView = ({ props }) => {
       type: "get",
       endpoint: "/courses/" + courseId + "/roles",
       onSuccess: (roles) => {
-        console.log("Successfully fetched Course Roles: ", roles);
+        // console.log("Successfully fetched Course Roles: ", roles);
         setCourseRoles(roles);
       },
       onFailure: (err) => {
-        console.log("Failed to fetch Course Roles. ", err);
+        // console.log("Failed to fetch Course Roles. ", err);
       },
     });
   };

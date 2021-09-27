@@ -38,7 +38,7 @@ const UserProfile = ({ props }) => {
             profileName={profileName}
             setProfileName={setProfileName}
           />
-          <ProfileSettingsSection />
+          {isMyProfile ? <ProfileSettingsSection /> : <></>}
           <UserCourses
             userObject={user}
             isMyProfile={isMyProfile}

@@ -82,7 +82,7 @@ const fetchData = (endpoint, socketPosts, setData) => {
     type: "get",
     endpoint: endpoint,
     onSuccess: (response) => {
-      console.log("get request data:", response);
+      // console.log("get request data:", response);
       setData([...socketPosts, ...response]);
     },
   });
@@ -99,17 +99,18 @@ const PostFeed = ({ userRole, highlightedSection }) => {
 
   useEffect(() => {
     io.emit("join", { room: courseId, room_type: "course" });
-    io.on("Post/create", (post) => {
-      // Ensure the user isn't the one who posted it
-      // console.log(post);
-      if (
-        post &&
-        post.postedBy._id !== user._id &&
-        post.postedBy._id !== user.anonymousId
-      ) {
-        setSocketPosts([post, ...socketPosts]);
-      }
-    });
+    // io.on("Post/create", (post) => {
+    //   // Ensure the user isn't the one who posted it
+    //   console.log("[SOCKETIO] Post/create: post - ", post);
+    //   if (
+    //     post &&
+    //     post.postedBy._id !== user._id &&
+    //     post.postedBy._id !== user.anonymousId
+    //   ) {
+    //     console.log("[PostFeed] socketPosts: ", [post, ...socketPosts]);
+    //     setSocketPosts([post, ...socketPosts]);
+    //   }
+    // });
 
     return () => {
       io.emit("leave", { room: courseId });
@@ -210,6 +211,12 @@ const PostFeed = ({ userRole, highlightedSection }) => {
     }
   }, [courseId]);
 
+  useEffect(() => {
+    if (data) {
+      setData([...socketPosts, ...data]);
+    }
+  }, [socketPosts]);
+
   const handleSearch = (e) => {
     if (e.target.value != "") {
       LazyFetch({
@@ -220,7 +227,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
           setPosts(generateSections(searchData, userRole, isCondensed, user));
         },
         onFailure: (err) => {
-          console.log(err.response.data.errors);
+          // console.log(err.response.data.errors);
         },
       });
     } else {

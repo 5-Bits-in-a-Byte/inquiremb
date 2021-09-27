@@ -73,7 +73,7 @@ class CourseCard extends React.Component {
         color: colors.hex,
       },
       onSuccess: (data) => {
-        console.log(data.success);
+        // console.log(data.success);
         this.setState({ courseColor: colors.hex });
         fetchUser(this.setUser);
       },
@@ -89,7 +89,7 @@ class CourseCard extends React.Component {
         nickname: nickname,
       },
       onSuccess: (data) => {
-        console.log(data.success);
+        // console.log(data.success);
         this.setState({ nicknameActive: false });
         fetchUser(this.setUser);
       },
@@ -105,7 +105,7 @@ class CourseCard extends React.Component {
         removeNickname: true,
       },
       onSuccess: (data) => {
-        console.log(data.success);
+        // console.log(data.success);
         this.setState({ nickname: null });
         fetchUser(this.setUser);
       },
