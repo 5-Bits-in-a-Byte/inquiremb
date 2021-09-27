@@ -7,12 +7,10 @@ import socketIOClient from "socket.io-client";
 
 let path = process.env.REACT_APP_SOCKETIO_PATH;
 
-
-const io = socketIOClient("localhost:5000", {
+const io = socketIOClient(process.env.REACT_APP_SERVER_URL, {
   path: path,
   withCredentials: true,
   reconnectionAttempts: 1,
 });
-
 
 export default io;
