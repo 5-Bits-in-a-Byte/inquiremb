@@ -7,7 +7,7 @@ import socketIOClient from "socket.io-client";
 
 let path = "/api/socket.io"; // process.env.REACT_APP_SOCKETIO_PATH;
 
-const io = socketIOClient(process.env.REACT_APP_SERVER_URL, {
+const io = socketIOClient("https://inquiremb.com", {
   path: path,
   withCredentials: true,
   reconnectionAttempts: 1,
