@@ -5,6 +5,7 @@ import Fetch from "../common/requests/Fetch";
 import PostWrapper from "../posts/wrappers/PostWrapper";
 import PollWrapper from "../posts/wrappers/PollWrapper";
 import EditorWrapper from "../posts/wrappers/EditorWrapper";
+import { useWindowDimensions } from "../common/CustomHooks";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();
@@ -107,7 +108,9 @@ const generateSections = (data) => {
  * @brief The entire home page showcasing recent posts in user courses.
  * @returns Home Component
  */
-const Home = () => {
+const Home = ({ props }) => {
+  const { width, height } = useWindowDimensions();
+
   let endpoint = "/home";
 
   // Load posts from course
@@ -129,7 +132,7 @@ const Home = () => {
     );
 
   return (
-    <Wrapper>
+    <Wrapper id={"recents-wrapper"} windowWidth={width}>
       <ViewWrapper>
         <ScrollingDiv>
           <MaxWidth>
@@ -166,8 +169,8 @@ const ViewWrapper = styled.div`
 const ScrollingDiv = styled.div`
   height: 100%;
   width: 100%;
-  padding: 0 280px 0 200px;
-  padding-right: 280px;
+  /* padding: 0 280px 0 200px; */
+  padding: 1em;
 `;
 
 const MaxWidth = styled.div`
