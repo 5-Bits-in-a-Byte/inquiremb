@@ -9,6 +9,7 @@ class Users(Resource):
     parser.add_argument('userId')
     parser.add_argument('first')
     parser.add_argument('last')
+    parser.add_argument('email')
     args = parser.parse_args()
 
     if current_user._id != args["userId"]:
@@ -27,5 +28,12 @@ class Users(Resource):
     if args['last'] is not None:
       user.last = args['last']
     
+    if args['email'] is not None:
+      user.email = args['email']
+    
     user.save()
-    return {"success": f"Updated user first and last name with: {args['first']} {args['last']}"}
+    return {"success": f"Successfully updated user data.", "data" : {
+      "first" : user.first, 
+      "last"  : user.last,
+      "email" : user.email,
+      }}
