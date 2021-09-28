@@ -356,8 +356,6 @@ const UserName = styled.h1`
   color: ${(props) =>
     props.backgroundColor == "dark" ? css`#fff` : css`#162B55`};
 
-  /* opacity: ${(props) => (props.modalActive ? css`60%` : css`100%`)}; */
-
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 
   transition: 150ms ease-out;
@@ -373,11 +371,11 @@ const UserName = styled.h1`
     text-align: center;
   }
   @media only screen and (max-width: 481px) {
-    font-size: 18px;
+    font-size: 22px;
   }
-  @media only screen and (max-width: 400px) {
+  /* @media only screen and (max-width: 400px) {
     font-size: 16px;
-  }
+  } */
 `;
 
 const AboutContent = styled.div`
