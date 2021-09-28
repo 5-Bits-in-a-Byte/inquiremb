@@ -14,7 +14,7 @@ const ChangeUserEmail = ({ props }) => {
   });
 
   const handleEmailChange = (event) => {
-    console.log("[UserDataCheck] Event Data: ", event);
+    // console.log("[UserDataCheck] Event Data: ", event);
 
     event.stopPropagation();
 
@@ -34,12 +34,12 @@ const ChangeUserEmail = ({ props }) => {
         ...emailState,
       },
       onSuccess: (response) => {
-        console.log("[UserDataCheck] PUT Response: ", response);
+        // console.log("[UserDataCheck] PUT - Response: ", response);
         fetchUser(setUser);
         alert("Account email change successful.");
       },
       onFailure: (error) => {
-        console.log("[UserDataCheck] Error: ", error);
+        console.log("[UserDataCheck] PUT - Error: ", error);
       },
     });
   };
@@ -51,6 +51,8 @@ const ChangeUserEmail = ({ props }) => {
           Note: this simply changes the email associated with your account, not
           the method of signing into Inquire.
         </h4>
+        <h5>Current Email: </h5>
+        <p>{user.email}</p>
         <FormWrapper>
           <form>
             <label htmlFor="fname">Email:</label> <br />
@@ -85,6 +87,10 @@ export default ChangeUserEmail;
 
 const Wrapper = styled.div`
   max-width: 300px;
+
+  p {
+    padding: 0 0 1em 0;
+  }
 
   h4 {
     white-space: pre-line;
