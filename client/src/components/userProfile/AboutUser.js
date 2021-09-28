@@ -298,7 +298,7 @@ const ContentWrapper = styled.div`
   display: flex;
   align-items: center;
 
-  @media only screen and (max-width: 1200px) {
+  @media only screen and (max-width: 768px) {
     flex-wrap: wrap;
   }
 `;
