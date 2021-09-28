@@ -130,6 +130,8 @@ const BurgerMenu = styled.div`
   justify-content: center;
   align-items: center;
 
+  box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.07);
+
   background-color: #f8f8f8;
   border-radius: 5px;
   /* border: 1px solid red; */
