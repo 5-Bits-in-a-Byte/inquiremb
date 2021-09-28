@@ -154,9 +154,6 @@ const AboutUser = ({
 
   var background = bannerColor ? ContrastDetector(bannerColor) : null;
 
-  const user = useContext(UserContext);
-  const setUser = useContext(UserDispatchContext);
-
   return (
     <>
       <Wrapper>
@@ -260,11 +257,32 @@ const Wrapper = styled.div`
     height: auto;
     min-height: 300px;
   }
+  @media only screen and (max-width: 1025px) {
+  }
+  @media only screen and (max-width: 769px) {
+    min-height: 200px;
+  }
+  @media only screen and (max-width: 481px) {
+  }
+  @media only screen and (max-width: 400px) {
+  }
 `;
 
-const AboutText = styled.div`
-  /* width: 150%; */
+const AboutText = styled.p`
   white-space: initial;
+
+  @media only screen and (max-width: 1200px) {
+    font-size: 16px;
+  }
+  @media only screen and (max-width: 769px) {
+    width: 100%;
+    white-space: pre-line;
+    word-wrap: break-word;
+    padding-bottom: 1em;
+  }
+  @media only screen and (max-width: 481px) {
+    font-size: 14px;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -275,7 +293,6 @@ const ButtonWrapper = styled.div`
 
 const ContentWrapper = styled.div`
   z-index: 1;
-
   width: 100%;
 
   display: flex;
@@ -302,15 +319,38 @@ const CustomColorSection = styled.div`
 
 const UserInfoWrapper = styled.div`
   margin: 0 1em;
-  width: 45%;
+  width: 100%;
   height: 300px;
   overflow: hidden;
 
-  /* border: 1px solid black; */
+  @media only screen and (max-width: 769px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    height: auto;
+  }
+
+  h2 {
+    @media only screen and (max-width: 1200px) {
+      font-size: 24px;
+    }
+    @media only screen and (max-width: 1025px) {
+      font-size: 22px;
+    }
+    @media only screen and (max-width: 769px) {
+      font-size: 18px;
+      height: auto;
+      padding-bottom: 1em;
+    }
+  }
 `;
 
 const UserName = styled.h1`
   margin-top: 1em;
+
+  word-wrap: break-word;
+  white-space: pre-line;
 
   font-size: 36px;
   color: ${(props) =>
@@ -319,10 +359,39 @@ const UserName = styled.h1`
   /* opacity: ${(props) => (props.modalActive ? css`60%` : css`100%`)}; */
 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+  transition: 150ms ease-out;
+
+  @media only screen and (max-width: 1200px) {
+    font-size: 32px;
+  }
+  @media only screen and (max-width: 1025px) {
+    font-size: 28px;
+  }
+  @media only screen and (max-width: 769px) {
+    font-size: 24px;
+    text-align: center;
+  }
+  @media only screen and (max-width: 481px) {
+    font-size: 18px;
+  }
+  @media only screen and (max-width: 400px) {
+    font-size: 16px;
+  }
 `;
 
 const AboutContent = styled.div`
   margin: 0.5em 0;
+  max-width: 400px;
+
+  @media only screen and (max-width: 769px) {
+    margin: 0;
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
 `;
 
 const VerticalFlex = styled.div`
@@ -333,6 +402,12 @@ const VerticalFlex = styled.div`
 
   margin: 0 0.5em 0 1em;
   height: 300px;
+
+  @media only screen and (max-width: 769px) {
+    width: 100%;
+    height: auto;
+    min-height: 100px;
+  }
 `;
 
 const ImageWrapper = styled.div`
@@ -348,6 +423,10 @@ const ImageWrapper = styled.div`
   border-radius: 50%;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.15);
+
+  @media only screen and (max-width: 769px) {
+    margin-bottom: 18px;
+  }
 `;
 
 const UserProfileImage = styled.img`

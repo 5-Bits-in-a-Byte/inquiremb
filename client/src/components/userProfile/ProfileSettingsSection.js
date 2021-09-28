@@ -13,9 +13,9 @@ const ProfileSettingsSection = ({ props }) => {
           <ProfileSettingsCard title={`Change Display Name`}>
             <ChangeDisplayName />
           </ProfileSettingsCard>
-          <ProfileSettingsCard title={`Change Account Email`}>
+          {/* <ProfileSettingsCard title={`Change Account Email`}>
             <ChangeUserEmail />
-          </ProfileSettingsCard>
+          </ProfileSettingsCard> */}
         </FlexContainer>
       </Wrapper>
     </>
