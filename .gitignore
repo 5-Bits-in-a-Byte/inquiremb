@@ -126,3 +126,5 @@ inquire-server.yaml
 **.tar.gz
 mongodb-backup**
 backup-README.md
+
+patchNotes
