@@ -105,7 +105,7 @@ const Wrapper = styled.ul`
 
   transition: 150ms ease-out;
 
-  @media only screen and (max-width: 1200px) {
+  /* @media only screen and (max-width: 1200px) {
   }
   @media only screen and (max-width: 1025px) {
   }
@@ -114,7 +114,7 @@ const Wrapper = styled.ul`
   @media only screen and (max-width: 481px) {
   }
   @media only screen and (max-width: 400px) {
-  }
+  } */
 `;
 
 const BurgerMenu = styled.div`
