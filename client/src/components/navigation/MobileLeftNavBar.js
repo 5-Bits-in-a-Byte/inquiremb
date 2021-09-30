@@ -3,27 +3,14 @@ import { useLocation } from "react-router";
 import styled, { css } from "styled-components";
 import ClockImg from "../../imgs/clock.svg";
 import CourseImg from "../../imgs/courses-white.svg";
+import { useOnClickAway } from "../common/CustomHooks";
 import MenuItem from "./MenuItem";
 
 const MobileLeftNavBar = ({ openState, debug, chidren, ...props }) => {
   const location = useLocation();
   const active = location.pathname;
 
-  const node = useRef();
-
-  const handleClick = (event) => {
-    if (node.current.contains(event.target)) return;
-
-    openState.setState(false);
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-    };
-  }, []);
+  const node = useOnClickAway(() => openState.setState(false));
 
   return (
     <>
@@ -35,6 +22,7 @@ const MobileLeftNavBar = ({ openState, debug, chidren, ...props }) => {
             img={ClockImg}
             active={active === "/home"}
             onClick={(event) => {
+              console.log("MenuItem Click: ", openState.state);
               openState.setState(false);
               console.log(event);
             }}
@@ -45,6 +33,7 @@ const MobileLeftNavBar = ({ openState, debug, chidren, ...props }) => {
             img={CourseImg}
             active={active === "/"}
             onClick={(event) => {
+              console.log("MenuItem Click: ", openState.state);
               openState.setState(false);
               console.log(event);
             }}

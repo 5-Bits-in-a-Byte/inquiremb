@@ -39,9 +39,9 @@ const LeftNavBar = ({ props }) => {
         <BurgerMenu
           id={"Burger-Menu"}
           onClick={(event) => {
-            console.log(showMobileNav);
-            event.stopPropagation();
+            console.log("Burger Menu Click: ", showMobileNav);
             setShowMobileNav(!showMobileNav);
+            event.stopPropagation();
           }}
         >
           <img
