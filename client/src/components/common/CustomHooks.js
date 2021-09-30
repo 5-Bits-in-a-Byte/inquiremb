@@ -26,6 +26,8 @@ export function useWindowDimensions() {
   return windowDimensions;
 }
 
+// useOnClickAway inspired by:
+// https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
 export function useOnClickAway(handler, debugMessage) {
   const node = useRef();
 
