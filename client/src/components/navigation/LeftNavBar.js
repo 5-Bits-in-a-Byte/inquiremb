@@ -10,6 +10,7 @@ import MessagesImg from "../../imgs/messages-white.svg";
 import InquireTooltip from "../common/InquireTooltip";
 import { useWindowDimensions } from "../common/CustomHooks";
 import MobileLeftNavBar from "./MobileLeftNavBar";
+import "./hamburger.css";
 
 /** LeftNavBar Component
  * @brief Wrapper containing MenuItems routing the user to the main website pages
@@ -39,44 +40,35 @@ const LeftNavBar = ({ props }) => {
         <BurgerMenu
           id={"Burger-Menu"}
           onClick={(event) => {
-            console.log("Burger Menu Click: ", showMobileNav);
+            // console.log("Burger Menu Click: ", showMobileNav);
             setShowMobileNav(!showMobileNav);
             event.stopPropagation();
           }}
         >
-          <img
-            src={"https://img.icons8.com/ios-glyphs/30/000000/menu--v1.png"}
-            alt=""
-          />
+          {/* THIS IS A CUSTOM HAMBURGER MENU ICON. It uses ./hamburger.css */}
+          <div id="bar-container">
+            <div
+              id="bar-one"
+              class={`navButtonBar ${showMobileNav ? `x1` : ``}`}
+            ></div>
+            <div
+              id="bar-two"
+              class={`navButtonBar ${showMobileNav ? `x2` : ``}`}
+            ></div>
+            <div
+              id="bar-three"
+              class={`navButtonBar ${showMobileNav ? `x3` : ``}`}
+            ></div>
+          </div>
         </BurgerMenu>
       ) : (
         <></>
       )}
-      {/* {hidddenState ? (
-        <>{showMobileNav ? <MobileLeftNavBar openState={showMobileNav} /> : <></>}</>
-      ) : (
-        <>
-          <Nav hide={hidddenState}>
-            <Wrapper>
-              <MenuItem
-                to="/home"
-                label="Recents"
-                img={ClockImg}
-                active={active === "/home"}
-              />
-              <MenuItem
-                to="/"
-                label="Courses"
-                img={CourseImg}
-                active={active === "/"}
-              />
-            </Wrapper>
-          </Nav>
-        </>
-      )} */}
+
       <MobileLeftNavBar
         openState={{ state: showMobileNav, setState: setShowMobileNav }}
       />
+
       <Nav hide={hidddenState}>
         <Wrapper>
           <MenuItem
@@ -165,7 +157,7 @@ const BurgerMenu = styled.div`
 
   z-index: 9998;
 
-  box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.07);
+  box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.25);
 
   background-color: #f8f8f8;
   border-radius: 5px;
@@ -174,11 +166,14 @@ const BurgerMenu = styled.div`
   transition: 150ms ease-out;
 
   :hover {
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.363);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.45);
+    /* background-color: #dfdfdf; */
   }
 
   :active {
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.363);
-    border: 2px solid #d9d9d9;
+    /* border: 2px solid #d9d9d9; */
+
+    transform: translateY(4px);
   }
 `;

@@ -50,7 +50,7 @@ const WrapDisplay = styled.div`
   margin: 1em 1em 1em 1em;
   padding: 0;
 
-  @media only screen and (max-width: 565px) {
+  @media only screen and (max-width: 768px) {
     justify-content: center;
   }
 `;

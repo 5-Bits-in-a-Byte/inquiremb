@@ -67,7 +67,7 @@ const Wrapper = styled.div`
   overflow: hidden;
 
   background-color: #162b55;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.25);
 
   z-index: 9997;
 
