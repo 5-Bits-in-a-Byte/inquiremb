@@ -14,6 +14,7 @@ import SearchPanel from "./SearchPanel";
 import LazyFetch from "../common/requests/LazyFetch";
 import { useWindowDimensions } from "../common/CustomHooks";
 import SearchBar from "../common/SearchBar";
+import MobileOptionsPanel from "./mobile/MobileOptionsPanel";
 // import LoadingDots from "../common/animation/LoadingDots";
 
 const convertToUpper = (postType) => {
@@ -95,6 +96,9 @@ const PostFeed = ({ userRole, highlightedSection }) => {
   const { width, height } = useWindowDimensions();
 
   const [displaySecondarySearchbar, setDisplaySecondarySearchbar] =
+    useState(false);
+
+  const [displayMobileOptionsPanel, setDisplayMobileOptionsPanel] =
     useState(false);
 
   useEffect(() => {
@@ -217,6 +221,13 @@ const PostFeed = ({ userRole, highlightedSection }) => {
     }
   }, [socketPosts]);
 
+  useEffect(() => {
+    if (width > 1200) {
+      setDisplaySecondarySearchbar(false);
+      setDisplayMobileOptionsPanel(false);
+    }
+  }, [width]);
+
   const handleSearch = (e) => {
     if (e.target.value != "") {
       LazyFetch({
@@ -322,6 +333,9 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                       margin: `8px auto 8px 0`,
                       ...MarginLeftRight,
                     }}
+                    onClick={(event) => {
+                      setDisplayMobileOptionsPanel(!displayMobileOptionsPanel);
+                    }}
                   >
                     Options
                   </Button>
@@ -363,6 +377,13 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                 {sortByMostRecent ? "Newest" : "Oldest"}
               </Button>
             </SortingOptions>
+
+            {width <= 1200 && displayMobileOptionsPanel ? (
+              <MobileOptionsPanel userRole={userRole} courseId={courseId} />
+            ) : (
+              <></>
+            )}
+
             {posts && posts.pinned.length > 0 && (
               <PostGroupingHeader>
                 <img
