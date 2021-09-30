@@ -157,7 +157,9 @@ const BurgerMenu = styled.div`
 
   z-index: 9998;
 
-  box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+
+  box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.2);
 
   background-color: #f8f8f8;
   border-radius: 5px;

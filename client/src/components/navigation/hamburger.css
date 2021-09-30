@@ -17,25 +17,26 @@
 
   background: var(--inquire-blue);
 
-  transition: 0.1s ease-in-out;
+  transition: 0.15s ease-in-out;
 }
 
 .x1 {
   width: 42px;
-  height: 5px;
+  height: 4px;
   border-radius: 5px;
 
   transform: translateY(10px) rotate(45deg);
 }
 
 .x2 {
-  display: none;
+  /* display: none; */
+  transform: translateX(40px);
 }
 
 .x3 {
   width: 42px;
-  height: 5px;
+  height: 4px;
   border-radius: 5px;
 
-  transform: translateY(-3px) rotate(-45deg);
+  transform: translateY(-14px) rotate(-45deg);
 }
