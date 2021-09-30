@@ -9,6 +9,7 @@ import CourseImg from "../../imgs/courses-white.svg";
 import MessagesImg from "../../imgs/messages-white.svg";
 import InquireTooltip from "../common/InquireTooltip";
 import { useWindowDimensions } from "../common/CustomHooks";
+import MobileLeftNavBar from "./MobileLeftNavBar";
 
 /** LeftNavBar Component
  * @brief Wrapper containing MenuItems routing the user to the main website pages
@@ -16,12 +17,16 @@ import { useWindowDimensions } from "../common/CustomHooks";
  */
 const LeftNavBar = ({ props }) => {
   const [hidddenState, setHiddenState] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false);
 
   const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     if (width <= 768) {
       setHiddenState(true);
+    } else {
+      setHiddenState(false);
+      setShowMobileNav(false);
     }
   }, [width]);
 
@@ -34,8 +39,9 @@ const LeftNavBar = ({ props }) => {
         <BurgerMenu
           id={"Burger-Menu"}
           onClick={(event) => {
+            console.log(showMobileNav);
             event.stopPropagation();
-            setHiddenState(!hidddenState);
+            setShowMobileNav(!showMobileNav);
           }}
         >
           <img
@@ -46,6 +52,31 @@ const LeftNavBar = ({ props }) => {
       ) : (
         <></>
       )}
+      {/* {hidddenState ? (
+        <>{showMobileNav ? <MobileLeftNavBar openState={showMobileNav} /> : <></>}</>
+      ) : (
+        <>
+          <Nav hide={hidddenState}>
+            <Wrapper>
+              <MenuItem
+                to="/home"
+                label="Recents"
+                img={ClockImg}
+                active={active === "/home"}
+              />
+              <MenuItem
+                to="/"
+                label="Courses"
+                img={CourseImg}
+                active={active === "/"}
+              />
+            </Wrapper>
+          </Nav>
+        </>
+      )} */}
+      <MobileLeftNavBar
+        openState={{ state: showMobileNav, setState: setShowMobileNav }}
+      />
       <Nav hide={hidddenState}>
         <Wrapper>
           <MenuItem
@@ -77,21 +108,22 @@ const Nav = styled.nav`
   top: 0;
 
   z-index: 9998;
+  overflow: hidden;
 
   transition: 150ms ease-out;
 
-  @media only screen and (max-width: 1200px) {
+  /* @media only screen and (max-width: 1200px) {
   }
   @media only screen and (max-width: 1025px) {
-  }
+  } */
   @media only screen and (max-width: 769px) {
-    width: ${(props) => (props.hide ? 0 : "80px")};
     visibility: ${(props) => (props.hide ? "hidden" : "visible")};
+    width: ${(props) => (props.hide ? 0 : "80px")};
   }
-  @media only screen and (max-width: 481px) {
+  /* @media only screen and (max-width: 481px) {
   }
   @media only screen and (max-width: 400px) {
-  }
+  } */
 `;
 
 const Wrapper = styled.ul`
@@ -124,11 +156,14 @@ const BurgerMenu = styled.div`
 
   width: 42px;
   height: 42px;
-  margin: 0.5em;
+  margin-top: 1em;
+  margin-left: 1.2em;
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  z-index: 9998;
 
   box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.07);
 

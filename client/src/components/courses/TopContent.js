@@ -55,7 +55,7 @@ const TopWrapper = styled.div`
   margin: 1em 1em 1em 1em;
 
   @media only screen and (max-width: 769px) {
-    margin-left: 66px;
+    margin-left: calc(66px + 1em);
   }
 `;
 
