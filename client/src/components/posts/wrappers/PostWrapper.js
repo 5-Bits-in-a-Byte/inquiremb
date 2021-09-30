@@ -245,7 +245,7 @@ const PostWrapper = ({
           ) : (
             <></>
           )}
-          {userRole && dropdownOptions && width >= 768 ? (
+          {userRole && dropdownOptions && width >= 481 ? (
             <Dropdown options={dropdownOptions}>
               <Icon src={OptionDots} style={{ cursor: "pointer" }} />
             </Dropdown>
@@ -453,7 +453,7 @@ const ReactionSection = styled.div`
   height: 100%;
   align-items: center;
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 481px) {
     width: 0;
     display: hidden;
     overflow: hidden;
