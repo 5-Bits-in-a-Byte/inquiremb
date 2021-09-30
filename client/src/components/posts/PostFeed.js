@@ -319,7 +319,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                       marginTop: `0.5em`,
                       marginBottom: `0.5em`,
                       width: `100%`,
-                      margin: `8px 0`,
+                      margin: `8px auto 8px 0`,
                       ...MarginLeftRight,
                     }}
                   >
@@ -329,7 +329,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
               ) : (
                 <></>
               )}
-              {width > 540 ? (
+              {width > 481 ? (
                 <>
                   <Button
                     secondary
@@ -360,7 +360,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                   toggleSort(!sortByMostRecent);
                 }}
               >
-                {sortByMostRecent ? "Most Recent" : "Oldest"}
+                {sortByMostRecent ? "Newest" : "Oldest"}
               </Button>
             </SortingOptions>
             {posts && posts.pinned.length > 0 && (
@@ -389,6 +389,10 @@ const PostFeed = ({ userRole, highlightedSection }) => {
 
 export default PostFeed;
 
+const Test = styled.button`
+  width: 1000px;
+`;
+
 const MarginLeftRight = {
   marginLeft: "0.5em",
   marginRight: "0.5em",
@@ -411,6 +415,10 @@ const ScrollingDiv = styled.div`
   width: 100%;
   padding: 0 40px;
   overflow: auto;
+
+  @media only screen and (max-width: 786px) {
+    padding: 0 1em;
+  }
 `;
 
 const CenterWrapper = styled.div`
@@ -441,13 +449,14 @@ const SortingOptions = styled.div`
     padding-right: 0;
     justify-content: center;
     position: relative;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
   }
-  /* @media only screen and (max-width: 768px) {
-    margin: 1em 0;
-    flex-direction: column;
-    flex: 1 1 100%;
-  } */
+  @media only screen and (max-width: 768px) {
+    /* margin: 0.8em 0 1em 2.2em; */
+    margin: 0.9em 0;
+    /* padding: 0 0 0 42px; */
+    padding-left: calc(42px + 1em);
+  }
 `;
 
 const PostGroupingHeader = styled.div`
