@@ -23,7 +23,6 @@ const ProfileSettingsCard = ({ title, width, height, children, ...props }) => {
         }}
       >
         {displayChildren ? <></> : <SettingTitle>{title}</SettingTitle>}
-        {/* <hr /> */}
         {displayChildren ? children : <></>}
       </Wrapper>
     </>
