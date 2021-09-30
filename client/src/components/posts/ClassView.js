@@ -68,7 +68,11 @@ const ClassView = ({ props }) => {
           </div>
         }
       >
-        <PostFeed userRole={userRole} highlightedSection={highlightedSection} />
+        <PostFeed
+          userRole={userRole}
+          highlightedSection={highlightedSection}
+          setHighlightedSection={setHighlightedSection}
+        />
       </Suspense>
     </ClassViewWrapper>
   );

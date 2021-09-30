@@ -89,7 +89,12 @@ const fetchData = (endpoint, socketPosts, setData) => {
   });
 };
 
-const PostFeed = ({ userRole, highlightedSection }) => {
+const PostFeed = ({
+  userRole,
+  highlightedSection,
+  setHighlightedSection,
+  ...props
+}) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
 

@@ -282,6 +282,13 @@ const OptionsContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   margin: 2.2em 0 1.1em 0;
+
+  @media only screen and (max-width: 769px) {
+    padding-left: calc(42px);
+    margin: 1.5em 0 1em 0;
+
+    justify-content: space-around;
+  }
 `;
 
 const ScrollingDiv = styled.div`
@@ -293,6 +300,9 @@ const ScrollingDiv = styled.div`
 
   @media only screen and (max-width: 1200px) {
     padding: 0 2.5em;
+  }
+  @media only screen and (max-width: 769px) {
+    padding: 0 1em;
   }
 `;
 
