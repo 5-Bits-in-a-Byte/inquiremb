@@ -130,3 +130,4 @@ backup-README.md
 patchNotes
 # environments
 env/
+*.sh
