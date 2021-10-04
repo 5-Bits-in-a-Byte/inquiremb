@@ -1,7 +1,7 @@
 import boto3
 import json
 from datetime import datetime
-from inquire.config import SQS_QUEUE_URL
+from inquire.config import SNS_TOPIC_ARN
 
 """ Event Model
 {
@@ -12,22 +12,20 @@ from inquire.config import SQS_QUEUE_URL
 }
 """
 
-SQS = boto3.client('sqs')
+SNS = boto3.client('sns')
 
+def publishMessage(message, topic_arn=SNS_TOPIC_ARN):
+  """Send Subscription to thingy and do stuff SNS"""
 
-def sendQueueMessage(message, queue_url=SQS_QUEUE_URL):
-  """Send message to SQS Queue"""
-
-  response = SQS.send_message(
-    QueueUrl=queue_url,
-    DelaySeconds=0,
+  response = SNS.publish(
+    TopicArn=topic_arn,
     MessageAttributes={
         'Datetime': {
             'DataType': 'String',
             'StringValue': str(datetime.now())
         }
     },
-    MessageBody=json.dumps(message),
+    Message=json.dumps(message),
   )
 
 
@@ -39,4 +37,4 @@ def sendEvent(actor, action, subject, topics):
       'topics': topics
   }
 
-  sendQueueMessage(message)
+  publishMessage(message)

@@ -12,6 +12,7 @@ S3_ACCESS_KEY = os.getenv('S3_ACCESS_KEY')
 S3_SECRET_KEY = os.getenv('S3_SECRET_KEY')
 S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
 
+SNS_TOPIC_ARN = os.getenv('SNS_TOPIC_ARN')
 SQS_QUEUE_URL = os.getenv('SQS_QUEUE_URL')
 
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
