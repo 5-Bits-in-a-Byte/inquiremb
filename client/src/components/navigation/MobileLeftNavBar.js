@@ -10,11 +10,11 @@ const MobileLeftNavBar = ({ openState, debug, chidren, ...props }) => {
   const location = useLocation();
   const active = location.pathname;
 
-  const node = useOnClickAway(() => openState.setState(false));
+  // const node = useOnClickAway(() => openState.setState(false));
 
   return (
     <>
-      <Wrapper debug={debug} openState={openState.state} ref={node}>
+      <Wrapper debug={debug} openState={openState.state} /* ref={node} */>
         <NavWrapper debug={debug}>
           <MenuItem
             to="/home"
