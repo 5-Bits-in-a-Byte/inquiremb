@@ -257,29 +257,10 @@ const PostFeed = ({
       <PostFeedWrapper>
         <ScrollingDiv>
           <CenterWrapper>
-            {displaySecondarySearchbar && width < 1200 ? (
-              <div
-                style={{
-                  width: `100%`,
-                  padding: `2.2em 1em 0 1em`,
-                  display: `flex`,
-                  justifyContent: `center`,
-                  alignItems: `center`,
-                }}
-              >
-                <SearchBar
-                  placeholder="Search for Post"
-                  displayIcon={false}
-                  onChange={handleSearch}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
             <SortingOptions>
               {width <= 1200 ? (
                 <>
-                  <Button
+                  {/* <Button
                     primary
                     style={{
                       marginTop: `0.5em`,
@@ -290,7 +271,7 @@ const PostFeed = ({
                     }}
                   >
                     Filters
-                  </Button>
+                  </Button> */}
 
                   {displaySecondarySearchbar ? (
                     <Button
@@ -328,22 +309,42 @@ const PostFeed = ({
                       Search
                     </Button>
                   )}
-
-                  <Button
-                    primary
-                    style={{
-                      marginTop: `0.5em`,
-                      marginBottom: `0.5em`,
-                      width: `100%`,
-                      margin: `8px auto 8px 0`,
-                      ...MarginLeftRight,
-                    }}
-                    onClick={(event) => {
-                      setDisplayMobileOptionsPanel(!displayMobileOptionsPanel);
-                    }}
-                  >
-                    Options
-                  </Button>
+                  {displayMobileOptionsPanel ? (
+                    <Button
+                      outlineSecondary
+                      style={{
+                        padding: `9px 12px`,
+                        width: `100%`,
+                        margin: `8px 0`,
+                        ...MarginLeftRight,
+                      }}
+                      onClick={(event) => {
+                        setDisplayMobileOptionsPanel(
+                          !displayMobileOptionsPanel
+                        );
+                      }}
+                    >
+                      Options
+                    </Button>
+                  ) : (
+                    <Button
+                      primary
+                      style={{
+                        marginTop: `0.5em`,
+                        marginBottom: `0.5em`,
+                        width: `100%`,
+                        margin: `8px auto 8px 0`,
+                        ...MarginLeftRight,
+                      }}
+                      onClick={(event) => {
+                        setDisplayMobileOptionsPanel(
+                          !displayMobileOptionsPanel
+                        );
+                      }}
+                    >
+                      Options
+                    </Button>
+                  )}
                 </>
               ) : (
                 <></>
@@ -382,6 +383,25 @@ const PostFeed = ({
                 {sortByMostRecent ? "Newest" : "Oldest"}
               </Button>
             </SortingOptions>
+            {displaySecondarySearchbar && width < 1200 ? (
+              <div
+                style={{
+                  width: `100%`,
+                  padding: `0.5em 1em 1em 1em`,
+                  display: `flex`,
+                  justifyContent: `center`,
+                  alignItems: `center`,
+                }}
+              >
+                <SearchBar
+                  placeholder="Search for Post"
+                  displayIcon={false}
+                  onChange={handleSearch}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
 
             {width <= 1200 && displayMobileOptionsPanel ? (
               <MobileOptionsPanel userRole={userRole} courseId={courseId} />
