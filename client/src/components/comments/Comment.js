@@ -90,7 +90,7 @@ const Comment = ({ comment, isDraft, callback }) => {
               uploadCallback: imageCallback,
               uploadEnabled: true,
               previewImage: true,
-              defaultSize: { width: "750" },
+              defaultSize: { width: "600" },
             },
           }}
         />
