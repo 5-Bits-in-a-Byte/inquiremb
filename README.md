@@ -42,7 +42,7 @@ Date this repo was first created: 02/06/2021
 
 Date the site was first publicly launched: 03/11/2021
 
-Date of the first live test in a real classroom: FALL 2021
+Date of the first live test in a real classroom: 09/26/2021
 
 ---
 
