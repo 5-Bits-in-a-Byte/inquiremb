@@ -13,7 +13,7 @@ from flask_restful import reqparse, Resource
 from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
 from inquire.utils.argparser_types import str2bool
-from inquire.utils.events import sendEvent
+# from inquire.utils.events import sendEvent
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 from inquire.socketio_app import io

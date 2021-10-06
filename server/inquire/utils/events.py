@@ -12,29 +12,29 @@ from inquire.config import SNS_TOPIC_ARN
 }
 """
 
-SNS = boto3.client('sns')
+# SNS = boto3.client('sns')
 
-def publishMessage(message, topic_arn=SNS_TOPIC_ARN):
-  """Send Subscription to thingy and do stuff SNS"""
+# def publishMessage(message, topic_arn=SNS_TOPIC_ARN):
+#   """Send Subscription to thingy and do stuff SNS"""
 
-  response = SNS.publish(
-    TopicArn=topic_arn,
-    MessageAttributes={
-        'Datetime': {
-            'DataType': 'String',
-            'StringValue': str(datetime.now())
-        }
-    },
-    Message=json.dumps(message),
-  )
+#   response = SNS.publish(
+#     TopicArn=topic_arn,
+#     MessageAttributes={
+#         'Datetime': {
+#             'DataType': 'String',
+#             'StringValue': str(datetime.now())
+#         }
+#     },
+#     Message=json.dumps(message),
+#   )
 
 
-def sendEvent(actor, action, subject, topics):
-  message = {
-      'actor': actor,
-      'action': action,
-      'subject': subject,
-      'topics': topics
-  }
+# def sendEvent(actor, action, subject, topics):
+#   message = {
+#       'actor': actor,
+#       'action': action,
+#       'subject': subject,
+#       'topics': topics
+#   }
 
-  publishMessage(message)
+#   publishMessage(message)
