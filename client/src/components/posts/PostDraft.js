@@ -197,6 +197,7 @@ const PostDraft = ({ userRole }) => {
             uploadCallback: imageCallback,
             uploadEnabled: true,
             previewImage: true,
+            defaultSize: { width: "750" },
           },
         }}
       />

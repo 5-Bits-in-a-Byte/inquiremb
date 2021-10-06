@@ -10,6 +10,7 @@ import GreyLightbulbImg from "../../imgs/lightbulb-grey.svg";
 import { UserContext } from "../context/UserProvider";
 import LazyFetch from "./requests/LazyFetch";
 import { UserRoleContext } from "../context/UserRoleProvider";
+import Dropdown from "./dropdown/Dropdown";
 
 /** Reaction Component
  * @brief Intended to be used above "Input" components to label them
@@ -20,7 +21,7 @@ import { UserRoleContext } from "../context/UserRoleProvider";
  * @param {number} postid id associated with the post this reaction falls within
  * @returns Reaction Component
  */
-const Reaction = ({ reactions, type, id, postid }) => {
+const Reaction = ({ reactions, type, id, postid, dropdown }) => {
   // console.log("reactions: ", reactions);
   const urlParams = useParams();
   const user = useContext(UserContext);
@@ -125,42 +126,68 @@ const Reaction = ({ reactions, type, id, postid }) => {
 
   return (
     <>
-      <a title={"Good post"}>
-        <ReactImg
-          src={reactClicked.gooded ? LightbulbImg : GreyLightbulbImg}
-          onClick={(event) => {
-            event.stopPropagation();
-            handleGood();
-          }}
-          clicked={reactClicked.gooded}
-          postid={postid}
-        />
-      </a>
-      <ReactValue>{reactionState.goods.length}</ReactValue>
-      <a title={"Helpful post"}>
-        <ReactImg
-          src={reactClicked.helpfuled ? GreenPlusImg : GreyPlusImg}
-          onClick={(event) => {
-            event.stopPropagation();
-            handleHelpful();
-          }}
-          clicked={reactClicked.helpfuled}
-          postid={postid}
-        />
-      </a>
-      <ReactValue>{reactionState.helpfuls.length}</ReactValue>
-      <a title={"Like post"}>
-        <ReactImg
-          src={reactClicked.liked ? LikedImg : UnlikedImg}
-          onClick={(event) => {
-            event.stopPropagation();
-            handleLike();
-          }}
-          clicked={reactClicked.liked}
-          postid={postid}
-        />
-      </a>
-      <ReactValue>{reactionState.likes.length}</ReactValue>
+      {dropdown ? (
+        <>
+          <Dropdown
+            // stopPropagation
+            options={[
+              {
+                onClick: handleGood,
+                label: `Mark Post As Good ${reactionState.goods.length}`,
+              },
+              {
+                onClick: handleHelpful,
+                label: `Mark Post As helpful ${reactionState.helpfuls.length}`,
+              },
+              {
+                onClick: handleLike,
+                label: `Like Post ${reactionState.likes.length}`,
+              },
+            ]}
+          >
+            <ReactDropdownText>Reactions</ReactDropdownText>
+          </Dropdown>
+        </>
+      ) : (
+        <>
+          <a title={"Good post"}>
+            <ReactImg
+              src={reactClicked.gooded ? LightbulbImg : GreyLightbulbImg}
+              onClick={(event) => {
+                event.stopPropagation();
+                handleGood();
+              }}
+              clicked={reactClicked.gooded}
+              postid={postid}
+            />
+          </a>
+          <ReactValue>{reactionState.goods.length}</ReactValue>
+          <a title={"Helpful post"}>
+            <ReactImg
+              src={reactClicked.helpfuled ? GreenPlusImg : GreyPlusImg}
+              onClick={(event) => {
+                event.stopPropagation();
+                handleHelpful();
+              }}
+              clicked={reactClicked.helpfuled}
+              postid={postid}
+            />
+          </a>
+          <ReactValue>{reactionState.helpfuls.length}</ReactValue>
+          <a title={"Like post"}>
+            <ReactImg
+              src={reactClicked.liked ? LikedImg : UnlikedImg}
+              onClick={(event) => {
+                event.stopPropagation();
+                handleLike();
+              }}
+              clicked={reactClicked.liked}
+              postid={postid}
+            />
+          </a>
+          <ReactValue>{reactionState.likes.length}</ReactValue>
+        </>
+      )}
     </>
   );
 };
@@ -181,4 +208,25 @@ const ReactImg = styled.img`
 
 const ReactValue = styled.h5`
   color: #8c8c8c;
+`;
+
+const ReactDropdownText = styled.h5`
+  padding: 0.75em;
+  background-color: #f8f8f8;
+  border-radius: 1em;
+  font-weight: 500;
+
+  transition: 150ms ease-out;
+
+  :hover {
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+  }
+
+  :active {
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+
+    border: 1px solid var(--inquire-blue); // for accessibility
+  }
 `;

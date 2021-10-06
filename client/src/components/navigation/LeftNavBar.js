@@ -49,15 +49,15 @@ const LeftNavBar = ({ props }) => {
           <div id="bar-container">
             <div
               id="bar-one"
-              class={`navButtonBar ${showMobileNav ? `x1` : ``}`}
+              className={`navButtonBar ${showMobileNav ? `x1` : ``}`}
             ></div>
             <div
               id="bar-two"
-              class={`navButtonBar ${showMobileNav ? `x2` : ``}`}
+              className={`navButtonBar ${showMobileNav ? `x2` : ``}`}
             ></div>
             <div
               id="bar-three"
-              class={`navButtonBar ${showMobileNav ? `x3` : ``}`}
+              className={`navButtonBar ${showMobileNav ? `x3` : ``}`}
             ></div>
           </div>
         </BurgerMenu>

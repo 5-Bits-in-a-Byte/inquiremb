@@ -12,6 +12,7 @@ import LazyFetch from "../../common/requests/LazyFetch";
 import PinIcon from "../../../imgs/pin.svg";
 import { Link } from "react-router-dom";
 import { useWindowDimensions } from "../../common/CustomHooks";
+import MobileReactionsDropdown from "../mobile/MobileReactionsDropdown";
 
 const accentColor = (type) => {
   switch (type) {
@@ -78,20 +79,24 @@ const PostWrapper = ({
   };
 
   const handleDelete = (postId, courseId) => {
-    LazyFetch({
-      type: "delete",
-      endpoint: "/courses/" + courseId + "/posts",
-      data: { _id: postId },
-      onSuccess: (data) => {
-        // console.log("Success: ", data);
-        if (postid) history.push("/course/" + courseId);
-        else window.location.reload();
-      },
-      onFailure: (err) => {
-        alert("Error deleting post.");
-        // console.log("Err: ", err);
-      },
-    });
+    let confirm = window.confirm("Are you sure you want to delete this post?");
+
+    if (confirm) {
+      LazyFetch({
+        type: "delete",
+        endpoint: "/courses/" + courseId + "/posts",
+        data: { _id: postId },
+        onSuccess: (data) => {
+          // console.log("Success: ", data);
+          if (postid) history.push("/course/" + courseId);
+          else window.location.reload();
+        },
+        onFailure: (err) => {
+          alert("Error deleting post.");
+          // console.log("Err: ", err);
+        },
+      });
+    }
   };
 
   const handleEdit = () => {
@@ -232,7 +237,7 @@ const PostWrapper = ({
         <PostTitle style={{ cursor: "pointer" }}>
           {postObject.title ? postObject.title : "Error getting post title"}
         </PostTitle>
-        <DropDownContainer>
+        <DropDownContainer id={"dropdown-container"}>
           {pinnedStatus ? (
             <img
               src={PinIcon}
@@ -245,7 +250,7 @@ const PostWrapper = ({
           ) : (
             <></>
           )}
-          {userRole && dropdownOptions && width >= 481 ? (
+          {userRole && dropdownOptions /*&& width >= 400*/ ? (
             <Dropdown options={dropdownOptions}>
               <Icon src={OptionDots} style={{ cursor: "pointer" }} />
             </Dropdown>
@@ -298,31 +303,46 @@ const PostWrapper = ({
         {/* <UserDescription isInstructor={postObject.isInstructor}>
           Posted by {postObject.postedBy.first} {postObject.postedBy.last}
         </UserDescription> */}
-        <ReactionSection>
-          {userRole && userRole.participation.reactions && (
-            <Reaction
-              reactions={postObject.reactions}
-              type="post"
-              id={postObject._id}
-              postid={postObject._id}
-            />
-          )}
+        {width >= 482 ? (
+          <ReactionSection>
+            {userRole && userRole.participation.reactions && (
+              <Reaction
+                reactions={postObject.reactions}
+                type="post"
+                id={postObject._id}
+                postid={postObject._id}
+              />
+            )}
 
-          <Icon
-            alt={"Number of comments"}
-            src={CommentImg}
-            width={"22px"}
-            style={{
-              float: "left",
-              marginRight: "8px",
-              marginLeft: "20px",
-              userSelect: "none",
-            }}
-          />
-          <h5 style={{ color: "#8c8c8c", marginRight: "1em" }}>
-            {postObject.comments}
-          </h5>
-        </ReactionSection>
+            <Icon
+              alt={"Number of comments"}
+              src={CommentImg}
+              width={"22px"}
+              style={{
+                float: "left",
+                marginRight: "8px",
+                marginLeft: "20px",
+                userSelect: "none",
+              }}
+            />
+            <h5 style={{ color: "#8c8c8c", marginRight: "1em" }}>
+              {postObject.comments}
+            </h5>
+          </ReactionSection>
+        ) : (
+          <>
+            <MobileReactionsDropdown
+              postObject={postObject}
+              userRole={userRole}
+              reactionSettings={{
+                reactions: postObject.reactions,
+                type: "post",
+                id: postObject._id,
+                postid: postObject._id,
+              }}
+            />
+          </>
+        )}
       </FooterContentWrapper>
     </Wrapper>
   );
@@ -360,7 +380,7 @@ const HeaderContentWrapper = styled.div`
   transition: 150ms ease-out;
 
   @media only screen and (max-width: 768px) {
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     height: auto;
   }
 `;
@@ -400,6 +420,11 @@ const DropDownContainer = styled.div`
   margin-bottom: 0.5em;
 
   /* background-color: #e7e7e7; */
+
+  @media only screen and (max-width: 768px) {
+    /* margin-left: 0; */
+    justify-self: flex-end;
+  }
 `;
 
 //#endregion
@@ -453,9 +478,9 @@ const ReactionSection = styled.div`
   height: 100%;
   align-items: center;
 
-  @media only screen and (max-width: 481px) {
+  /* @media only screen and (max-width: 481px) {
     width: 0;
     display: hidden;
     overflow: hidden;
-  }
+  } */
 `;
