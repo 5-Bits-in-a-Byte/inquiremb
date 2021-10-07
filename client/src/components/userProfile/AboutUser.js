@@ -304,6 +304,9 @@ const ContentWrapper = styled.div`
 `;
 
 const CustomColorSection = styled.div`
+  * {
+    z-index: 1000000;
+  }
   position: absolute;
   top: 0;
   left: 0;
