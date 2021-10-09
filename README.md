@@ -14,7 +14,7 @@
   <img alt="Python" src="https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white"/>
 </p>
 
-A message board for course instructors and students to post questions, provide answers, connect, and communicate. We hope to make your learning experience a better place one message at a time.
+A message board for course instructors and students to post questions, provide answers, connect, and communicate. We built Inquire as an intuitive tool to aid professors with classroom discussion and insentivise productive interaction amongst peers.
 
 ---
 
@@ -42,7 +42,7 @@ Date this repo was first created: 02/06/2021
 
 Date the site was first publicly launched: 03/11/2021
 
-Date of the first live test in a real classroom: FALL 2021
+Date of the first live test in a real classroom: 09/26/2021
 
 ---
 
