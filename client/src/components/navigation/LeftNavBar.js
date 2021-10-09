@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import MenuItem from "./MenuItem";
@@ -11,6 +11,12 @@ import InquireTooltip from "../common/InquireTooltip";
 import { useWindowDimensions } from "../common/CustomHooks";
 import MobileLeftNavBar from "./MobileLeftNavBar";
 import "./hamburger.css";
+import {
+  ColorContext,
+  ColorDispatchContext,
+  colorThemes,
+} from "../context/ColorModeContext";
+import Button from "../common/Button";
 
 /** LeftNavBar Component
  * @brief Wrapper containing MenuItems routing the user to the main website pages
@@ -19,6 +25,9 @@ import "./hamburger.css";
 const LeftNavBar = ({ props }) => {
   const [hidddenState, setHiddenState] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(false);
+
+  const setColorTheme = useContext(ColorDispatchContext);
+  const colorTheme = useContext(ColorContext);
 
   const { width, height } = useWindowDimensions();
 
@@ -83,6 +92,17 @@ const LeftNavBar = ({ props }) => {
             img={CourseImg}
             active={active === "/"}
           />
+          <Button
+            onClick={() => {
+              setColorTheme(
+                colorTheme === colorThemes.light
+                  ? colorThemes.dark
+                  : colorThemes.light
+              );
+            }}
+          >
+            This is the light button
+          </Button>
         </Wrapper>
       </Nav>
     </>

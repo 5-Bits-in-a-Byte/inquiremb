@@ -39,7 +39,8 @@ const ScrollDiv = styled.div`
 `;
 
 const WrapAll = styled.div`
-  background-color: ${({ theme }) => (theme ? css`white` : css`black`)};
+  transition: ease all 300ms;
+  background-color: ${(props) => props.theme.background};
   width: 100%;
   height: 85vh;
   display: flex;
