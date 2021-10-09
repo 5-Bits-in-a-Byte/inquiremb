@@ -1,16 +1,16 @@
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
 // Controls reconnect attempts
 // const io = socketIOClient(process.env.REACT_APP_SERVER_URL, {
 //   withCredentials: true,
 //   reconnectionAttempts: 1,
 // });
 
-let path = process.env.REACT_APP_SOCKETIO_PATH;
+// let path = process.env.REACT_APP_SOCKETIO_PATH;
 
-const io = socketIOClient(process.env.REACT_APP_SERVER_URL, {
-  path: path,
-  withCredentials: true,
-  reconnectionAttempts: 1,
-});
+// const io = socketIOClient(process.env.REACT_APP_SERVER_URL, {
+//   path: path,
+//   withCredentials: true,
+//   reconnectionAttempts: 1,
+// });
 
-export default io;
+// export default io;

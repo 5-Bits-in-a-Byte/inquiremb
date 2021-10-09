@@ -106,25 +106,25 @@ const PostFeed = ({
   const [displayMobileOptionsPanel, setDisplayMobileOptionsPanel] =
     useState(false);
 
-  useEffect(() => {
-    io.emit("join", { room: courseId, room_type: "course" });
-    // io.on("Post/create", (post) => {
-    //   // Ensure the user isn't the one who posted it
-    //   console.log("[SOCKETIO] Post/create: post - ", post);
-    //   if (
-    //     post &&
-    //     post.postedBy._id !== user._id &&
-    //     post.postedBy._id !== user.anonymousId
-    //   ) {
-    //     console.log("[PostFeed] socketPosts: ", [post, ...socketPosts]);
-    //     setSocketPosts([post, ...socketPosts]);
-    //   }
-    // });
+  // useEffect(() => {
+  //   io.emit("join", { room: courseId, room_type: "course" });
+  //   // io.on("Post/create", (post) => {
+  //   //   // Ensure the user isn't the one who posted it
+  //   //   console.log("[SOCKETIO] Post/create: post - ", post);
+  //   //   if (
+  //   //     post &&
+  //   //     post.postedBy._id !== user._id &&
+  //   //     post.postedBy._id !== user.anonymousId
+  //   //   ) {
+  //   //     console.log("[PostFeed] socketPosts: ", [post, ...socketPosts]);
+  //   //     setSocketPosts([post, ...socketPosts]);
+  //   //   }
+  //   // });
 
-    return () => {
-      io.emit("leave", { room: courseId });
-    };
-  }, []);
+  //   return () => {
+  //     io.emit("leave", { room: courseId });
+  //   };
+  // }, []);
 
   const [isCondensed, setCondensedState] = useState(false || width <= 540);
 
