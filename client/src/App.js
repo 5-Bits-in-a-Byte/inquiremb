@@ -13,6 +13,7 @@ import { UserRoleProvider } from "./components/context/UserRoleProvider";
 import PrivateRoute from "./PrivateRoute";
 import ConfigView from "./components/configPage/ConfigView";
 import UserProfile from "./components/userProfile/UserProfile";
+import { ColorProvider } from "./components/context/ColorModeContext";
 
 function App() {
   // Hello :)
@@ -20,50 +21,52 @@ function App() {
   return (
     <Router basename={"/app"}>
       <UserProvider>
-        <Switch>
-          <PrivateRoute path="/home" exact>
-            <NavigationWrapper>
-              <Home />
-            </NavigationWrapper>
-          </PrivateRoute>
-          <PrivateRoute path="/" exact>
-            <NavigationWrapper>
-              <Courses />
-            </NavigationWrapper>
-          </PrivateRoute>
-          {/* <Route path="/signup" exact>
+        <ColorProvider>
+          <Switch>
+            <PrivateRoute path="/home" exact>
+              <NavigationWrapper>
+                <Home />
+              </NavigationWrapper>
+            </PrivateRoute>
+            <PrivateRoute path="/" exact>
+              <NavigationWrapper>
+                <Courses />
+              </NavigationWrapper>
+            </PrivateRoute>
+            {/* <Route path="/signup" exact>
             <SignUp />
           </Route> */}
-          <Route path="/login" exact>
-            <Login />
-          </Route>
-          <PrivateRoute path="/userProfile/:profileId" exact>
-            <NavigationWrapper>
-              <UserProfile />
-            </NavigationWrapper>
-          </PrivateRoute>
-          <PrivateRoute path="/course/:courseId" exact>
-            <UserRoleProvider>
+            <Route path="/login" exact>
+              <Login />
+            </Route>
+            <PrivateRoute path="/userProfile/:profileId" exact>
               <NavigationWrapper>
-                <ClassView />
+                <UserProfile />
               </NavigationWrapper>
-            </UserRoleProvider>
-          </PrivateRoute>
-          <PrivateRoute path="/course/:courseId/post/:postid" exact>
-            <UserRoleProvider>
-              <NavigationWrapper>
-                <CommentView />
-              </NavigationWrapper>
-            </UserRoleProvider>
-          </PrivateRoute>
-          <PrivateRoute path="/course/:courseId/config">
-            <UserRoleProvider>
-              <NavigationWrapper>
-                <ConfigView />
-              </NavigationWrapper>
-            </UserRoleProvider>
-          </PrivateRoute>
-        </Switch>
+            </PrivateRoute>
+            <PrivateRoute path="/course/:courseId" exact>
+              <UserRoleProvider>
+                <NavigationWrapper>
+                  <ClassView />
+                </NavigationWrapper>
+              </UserRoleProvider>
+            </PrivateRoute>
+            <PrivateRoute path="/course/:courseId/post/:postid" exact>
+              <UserRoleProvider>
+                <NavigationWrapper>
+                  <CommentView />
+                </NavigationWrapper>
+              </UserRoleProvider>
+            </PrivateRoute>
+            <PrivateRoute path="/course/:courseId/config">
+              <UserRoleProvider>
+                <NavigationWrapper>
+                  <ConfigView />
+                </NavigationWrapper>
+              </UserRoleProvider>
+            </PrivateRoute>
+          </Switch>
+        </ColorProvider>
       </UserProvider>
     </Router>
   );

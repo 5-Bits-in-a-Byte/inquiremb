@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { createContext, useContext } from "react";
 import ColorImg from "../../imgs/color-palette.svg";
 import EditImg from "../../imgs/create-black.svg";
 import MessagesImg from "../../imgs/message-black.svg";

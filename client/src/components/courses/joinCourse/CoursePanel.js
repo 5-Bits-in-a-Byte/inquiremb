@@ -1,5 +1,6 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled, { css, ThemeConsumer, ThemeContext } from "styled-components";
+import { useContext } from "react";
 
 const CoursePanel = ({
   courseId,
