@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import Moment from "react-moment";
 import styled, { css } from "styled-components";
 import { UserContext } from "../../context/UserProvider";
 import { UserRoleContext } from "../../context/UserRoleProvider";
@@ -278,9 +279,19 @@ const PostWrapper = ({
       <HRSeperator />
       <FooterContentWrapper>
         {postObject.postedBy.anonymous ? (
-          <UserDescription isInstructor={postObject.isInstructor}>
-            Posted by {postObject.postedBy.first} {postObject.postedBy.last}
-          </UserDescription>
+          <UserInfoWrapper>
+            <UserDescription isInstructor={postObject.isInstructor}>
+              Posted by {postObject.postedBy.first} {postObject.postedBy.last}
+            </UserDescription>
+            <Moment
+              style={{
+                margin: `0.25em 0 0 0.5em`,
+                color: `#595959`,
+                fontSize: `12px`,
+              }}
+              date={postObject.createdDate}
+            />
+          </UserInfoWrapper>
         ) : (
           <Link
             style={{
@@ -295,14 +306,21 @@ const PostWrapper = ({
             }}
           >
             <UserIcon src={postObject.postedBy.picture} />
-            <UserDescription isInstructor={postObject.isInstructor}>
-              Posted by {postObject.postedBy.first} {postObject.postedBy.last}
-            </UserDescription>
+            <UserInfoWrapper>
+              <UserDescription isInstructor={postObject.isInstructor}>
+                Posted by {postObject.postedBy.first} {postObject.postedBy.last}
+              </UserDescription>
+              <Moment
+                style={{
+                  margin: `0.25em 0 0 0.5em`,
+                  color: `#595959`,
+                  fontSize: `12px`,
+                }}
+                date={postObject.createdDate}
+              />
+            </UserInfoWrapper>
           </Link>
         )}
-        {/* <UserDescription isInstructor={postObject.isInstructor}>
-          Posted by {postObject.postedBy.first} {postObject.postedBy.last}
-        </UserDescription> */}
         {width >= 482 ? (
           <ReactionSection>
             {userRole && userRole.participation.reactions && (
@@ -461,6 +479,13 @@ const FooterContentWrapper = styled.div`
   height: 50px;
 
   /* border: 1px solid orange; */
+`;
+
+const UserInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
 `;
 
 const UserDescription = styled.h5`
