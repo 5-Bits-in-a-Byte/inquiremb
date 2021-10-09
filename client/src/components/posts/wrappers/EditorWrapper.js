@@ -177,6 +177,7 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
               uploadCallback: imageCallback,
               uploadEnabled: true,
               previewImage: true,
+              defaultSize: { width: "750" },
             },
           }}
           onEditorStateChange={handleContentChange}
@@ -203,6 +204,7 @@ const EditorWrapper = ({ messageData, messageType, edit, commentId }) => {
               uploadCallback: imageCallback,
               uploadEnabled: true,
               previewImage: true,
+              defaultSize: { width: "750" },
             },
           }}
         />

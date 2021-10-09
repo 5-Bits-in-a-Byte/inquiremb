@@ -46,13 +46,11 @@ const WrapAll = styled.div`
 const WrapDisplay = styled.div`
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   flex-wrap: wrap;
   margin: 1em 1em 1em 1em;
   padding: 0;
-  //transition: 150ms ease-in-out;
 
-  @media only screen and (max-width: 650px) {
+  @media only screen and (max-width: 768px) {
     justify-content: center;
   }
 `;

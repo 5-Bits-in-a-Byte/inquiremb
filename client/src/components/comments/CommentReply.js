@@ -92,6 +92,7 @@ const CommentReply = ({
               uploadCallback: imageCallback,
               uploadEnabled: true,
               previewImage: true,
+              defaultSize: { width: "600" },
             },
           }}
         />
@@ -193,6 +194,7 @@ const CommentReply = ({
               uploadCallback: imageCallback,
               uploadEnabled: true,
               previewImage: true,
+              defaultSize: { width: "600" },
             },
           }}
         />

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import { useOnClickAway } from "../CustomHooks";
 import ClickAway from "./ClickAway";
 import DropdownOption from "./DropdownOption";
 
@@ -9,46 +10,47 @@ import DropdownOption from "./DropdownOption";
  * @param {object} props holds all of the passed in properties for this component
  * @returns A dropdown list of "Dropdown" Options
  */
-const Dropdown = (props) => {
+const Dropdown = ({ stopPropagation, ...props }) => {
   const [open, toggle] = useState(false);
+
+  const node = useOnClickAway((e) => {
+    toggle(false);
+  });
+
   return (
-    <ClickAway
-      style={{ display: "inline-block", height: "fit-content" }}
-      onClick={(event) => {
-        event.stopPropagation();
-        toggle(!open);
-      }}
-      onClickAway={() => toggle(false)}
-      closeCallback={props.closeCallback}
-      contents={
-        <>
-          <Wrapper>
-            {props.children}
-            {props.options && open && (
-              <Options {...props} open={open}>
-                {props.options.map((option, index) => (
-                  <DropdownOption
-                    onClick={(event) => {
-                      option.onClick();
-                    }}
-                    key={option.key || index}
-                    extras={option.extra}
-                  >
-                    {option.color ? (
-                      <CustomCircle color={option.color}></CustomCircle>
-                    ) : (
-                      <></>
-                    )}
-                    {option.label}
-                  </DropdownOption>
-                ))}
-              </Options>
-            )}
-            {props.content && open && props.content}
-          </Wrapper>
-        </>
-      }
-    />
+    <>
+      <Wrapper
+        ref={node}
+        onClick={(event) => {
+          toggle(!open);
+          event.stopPropagation();
+        }}
+      >
+        {props.children}
+        {props.options && open && (
+          <Options {...props} open={open}>
+            {props.options.map((option, index) => (
+              <DropdownOption
+                onClick={(event) => {
+                  stopPropagation && event.stopPropagation();
+                  option.onClick();
+                }}
+                key={option.key || index}
+                extras={option.extra}
+              >
+                {option.color ? (
+                  <CustomCircle color={option.color}></CustomCircle>
+                ) : (
+                  <></>
+                )}
+                {option.label}
+              </DropdownOption>
+            ))}
+          </Options>
+        )}
+        {props.content && open && props.content}
+      </Wrapper>
+    </>
   );
 };
 

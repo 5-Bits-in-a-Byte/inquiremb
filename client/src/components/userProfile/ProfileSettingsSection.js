@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ProfileSettingsCard from "./ProfileSettingsCard";
 import ChangeDisplayName from "./settingsFeatures/ChangeDisplayName";
+import ChangeUserEmail from "./settingsFeatures/ChangeUserEmail";
 
 const ProfileSettingsSection = ({ props }) => {
   return (
@@ -12,6 +13,9 @@ const ProfileSettingsSection = ({ props }) => {
           <ProfileSettingsCard title={`Change Display Name`}>
             <ChangeDisplayName />
           </ProfileSettingsCard>
+          {/* <ProfileSettingsCard title={`Change Account Email`}>
+            <ChangeUserEmail />
+          </ProfileSettingsCard> */}
         </FlexContainer>
       </Wrapper>
     </>

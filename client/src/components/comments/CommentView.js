@@ -95,51 +95,51 @@ const CommentView = ({ classroomName }) => {
         endpoint: "/courses/" + courseId + "/posts/" + post._id + "/comments",
         onSuccess: (data) => {
           setCommentData([...renderComments(data, userRole)]);
-          io.emit("join", { room: post._id, room_type: "post" });
+          // io.emit("join", { room: post._id, room_type: "post" });
         },
       });
     }
     // io.emit("join", { room: post._id, room_type: "post" });
     if (post) {
       return () => {
-        io.emit("leave", { room: post._id });
+        // io.emit("leave", { room: post._id });
       };
     }
   }, [post]);
 
-  useEffect(() => {
-    io.on("Comment/create", (comment) => {
-      //console.log(comment);
-      // Ensure the user isn't the one who posted it
-      if (
-        comment &&
-        comment.postedBy._id !== user._id &&
-        comment.postedBy._id !== user.anonymousId
-      ) {
-        // console.log(commentData);
-        setCommentData([
-          ...commentData,
-          <Comment comment={comment} key={comment._id} />,
-        ]);
-      }
-    });
-    io.on("Reply/create", (comment) => {
-      // console.log(comment, "ws");
-      // Take copy of socketComments and append reply to matching comment (with _id)
-      // console.log(commentData);
-      let allComments = [...commentData];
-      // console.log(allComments);
-      for (let i in allComments) {
-        // console.log(allComments[i], "in for loop");
-        if (allComments[i].props.comment._id === comment._id) {
-          // console.log("found a match");
-          allComments[i] = <Comment comment={comment} key={comment._id} />;
-          break;
-        }
-      }
-      setCommentData(allComments);
-    });
-  }, [commentData]);
+  // useEffect(() => {
+  //   io.on("Comment/create", (comment) => {
+  //     //console.log(comment);
+  //     // Ensure the user isn't the one who posted it
+  //     if (
+  //       comment &&
+  //       comment.postedBy._id !== user._id &&
+  //       comment.postedBy._id !== user.anonymousId
+  //     ) {
+  //       // console.log(commentData);
+  //       setCommentData([
+  //         ...commentData,
+  //         <Comment comment={comment} key={comment._id} />,
+  //       ]);
+  //     }
+  //   });
+  //   io.on("Reply/create", (comment) => {
+  //     // console.log(comment, "ws");
+  //     // Take copy of socketComments and append reply to matching comment (with _id)
+  //     // console.log(commentData);
+  //     let allComments = [...commentData];
+  //     // console.log(allComments);
+  //     for (let i in allComments) {
+  //       // console.log(allComments[i], "in for loop");
+  //       if (allComments[i].props.comment._id === comment._id) {
+  //         // console.log("found a match");
+  //         allComments[i] = <Comment comment={comment} key={comment._id} />;
+  //         break;
+  //       }
+  //     }
+  //     setCommentData(allComments);
+  //   });
+  // }, [commentData]);
 
   const draftNewComment = () => {
     setNewComments({
@@ -282,6 +282,13 @@ const OptionsContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   margin: 2.2em 0 1.1em 0;
+
+  @media only screen and (max-width: 769px) {
+    padding-left: calc(42px);
+    margin: 1.5em 0 1em 0;
+
+    justify-content: space-around;
+  }
 `;
 
 const ScrollingDiv = styled.div`
@@ -293,6 +300,9 @@ const ScrollingDiv = styled.div`
 
   @media only screen and (max-width: 1200px) {
     padding: 0 2.5em;
+  }
+  @media only screen and (max-width: 769px) {
+    padding: 0 1em;
   }
 `;
 

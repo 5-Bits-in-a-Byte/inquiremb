@@ -1,26 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
+import { useOnClickAway } from "../common/CustomHooks";
 
 const ProfileSettingsCard = ({ title, width, height, children, ...props }) => {
   // console.log(children);
 
   const [displayChildren, setDisplayChildren] = useState(false);
 
-  const node = useRef();
-
-  const handleClick = (event) => {
-    if (node.current.contains(event.target)) return;
-
+  const node = useOnClickAway((event) => {
     setDisplayChildren(false);
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-    };
-  }, []);
+  });
 
   return (
     <>
@@ -34,7 +23,6 @@ const ProfileSettingsCard = ({ title, width, height, children, ...props }) => {
         }}
       >
         {displayChildren ? <></> : <SettingTitle>{title}</SettingTitle>}
-        {/* <hr /> */}
         {displayChildren ? children : <></>}
       </Wrapper>
     </>

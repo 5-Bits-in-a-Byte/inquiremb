@@ -115,53 +115,38 @@ const PostDraft = ({ userRole }) => {
     <Wrapper sideBarColor={accent}>
       <HeaderContentWrapper>
         {displayGeneral && (
-          <Button
-            signin
+          <PostFlag
             onClick={() => {
               setContent({ ...content, type: "General" });
             }}
-            style={{ margin: "0 1em" }}
+            accentColor={accent}
+            selected={content.type === "General"}
+            isGeneral={userRole.publish.general}
           >
-            <PostFlag
-              accentColor={accent}
-              selected={content.type === "General"}
-              isGeneral={userRole.publish.general}
-            >
-              General
-            </PostFlag>
-          </Button>
+            General
+          </PostFlag>
         )}
         {displayQuestion && (
-          <Button
-            signin
+          <PostFlag
             onClick={() => {
               setContent({ ...content, type: "Question" });
             }}
-            style={{ margin: "0 1em" }}
+            accentColor={accent}
+            selected={content.type === "Question"}
           >
-            <PostFlag
-              accentColor={accent}
-              selected={content.type === "Question"}
-            >
-              Question
-            </PostFlag>
-          </Button>
+            Question
+          </PostFlag>
         )}
         {displayAnnouncement && (
-          <Button
-            signin
+          <PostFlag
             onClick={() => {
               setContent({ ...content, type: "Announcement" });
             }}
-            style={{ margin: "0 1em" }}
+            accentColor={accent}
+            selected={content.type === "Announcement"}
           >
-            <PostFlag
-              accentColor={accent}
-              selected={content.type === "Announcement"}
-            >
-              Announcement
-            </PostFlag>
-          </Button>
+            Announcement
+          </PostFlag>
         )}
       </HeaderContentWrapper>
       <DraftTextArea
@@ -197,6 +182,7 @@ const PostDraft = ({ userRole }) => {
             uploadCallback: imageCallback,
             uploadEnabled: true,
             previewImage: true,
+            defaultSize: { width: "750" },
           },
         }}
       />
@@ -272,14 +258,13 @@ const CircleIcon = styled.div`
 `;
 
 const PostFlag = styled.div`
-  /* margin-left: 1em; */
+  margin: 4px;
   padding: 2px 5px;
-  color: ${(props) =>
-    props.selected ? (props.isGeneral ? "#162B55" : "#ededed") : "#162B55"};
+  color: ${(props) => (props.selected ? "#ededed  " : "#162B55")};
   background-color: ${(props) =>
     props.selected
       ? props.isGeneral
-        ? "#e7e7e7"
+        ? "#565656"
         : props.accentColor
       : "#e7e7e7"};
   border-radius: 2px;

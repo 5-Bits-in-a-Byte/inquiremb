@@ -1,0 +1,42 @@
+/*
+ * Seth Tal
+ * These css stylings were made by me back in 2018 while working on my portfolio website
+ */
+
+#bar-container {
+  width: 100%;
+  height: 100%;
+}
+
+.navButtonBar {
+  width: 32px;
+  height: 4px;
+  margin: 0.5em auto;
+
+  border-radius: 10px;
+
+  background: var(--inquire-blue);
+
+  transition: 0.15s ease-in-out;
+}
+
+.x1 {
+  width: 42px;
+  height: 4px;
+  border-radius: 5px;
+
+  transform: translateY(10px) rotate(45deg);
+}
+
+.x2 {
+  /* display: none; */
+  transform: translateX(40px);
+}
+
+.x3 {
+  width: 42px;
+  height: 4px;
+  border-radius: 5px;
+
+  transform: translateY(-14px) rotate(-45deg);
+}

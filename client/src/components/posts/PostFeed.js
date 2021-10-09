@@ -14,6 +14,7 @@ import SearchPanel from "./SearchPanel";
 import LazyFetch from "../common/requests/LazyFetch";
 import { useWindowDimensions } from "../common/CustomHooks";
 import SearchBar from "../common/SearchBar";
+import MobileOptionsPanel from "./mobile/MobileOptionsPanel";
 // import LoadingDots from "../common/animation/LoadingDots";
 
 const convertToUpper = (postType) => {
@@ -88,7 +89,12 @@ const fetchData = (endpoint, socketPosts, setData) => {
   });
 };
 
-const PostFeed = ({ userRole, highlightedSection }) => {
+const PostFeed = ({
+  userRole,
+  highlightedSection,
+  setHighlightedSection,
+  ...props
+}) => {
   const user = useContext(UserContext);
   const [socketPosts, setSocketPosts] = useState([]);
 
@@ -97,25 +103,28 @@ const PostFeed = ({ userRole, highlightedSection }) => {
   const [displaySecondarySearchbar, setDisplaySecondarySearchbar] =
     useState(false);
 
-  useEffect(() => {
-    io.emit("join", { room: courseId, room_type: "course" });
-    // io.on("Post/create", (post) => {
-    //   // Ensure the user isn't the one who posted it
-    //   console.log("[SOCKETIO] Post/create: post - ", post);
-    //   if (
-    //     post &&
-    //     post.postedBy._id !== user._id &&
-    //     post.postedBy._id !== user.anonymousId
-    //   ) {
-    //     console.log("[PostFeed] socketPosts: ", [post, ...socketPosts]);
-    //     setSocketPosts([post, ...socketPosts]);
-    //   }
-    // });
+  const [displayMobileOptionsPanel, setDisplayMobileOptionsPanel] =
+    useState(false);
 
-    return () => {
-      io.emit("leave", { room: courseId });
-    };
-  }, []);
+  // useEffect(() => {
+  //   io.emit("join", { room: courseId, room_type: "course" });
+  //   // io.on("Post/create", (post) => {
+  //   //   // Ensure the user isn't the one who posted it
+  //   //   console.log("[SOCKETIO] Post/create: post - ", post);
+  //   //   if (
+  //   //     post &&
+  //   //     post.postedBy._id !== user._id &&
+  //   //     post.postedBy._id !== user.anonymousId
+  //   //   ) {
+  //   //     console.log("[PostFeed] socketPosts: ", [post, ...socketPosts]);
+  //   //     setSocketPosts([post, ...socketPosts]);
+  //   //   }
+  //   // });
+
+  //   return () => {
+  //     io.emit("leave", { room: courseId });
+  //   };
+  // }, []);
 
   const [isCondensed, setCondensedState] = useState(false || width <= 540);
 
@@ -217,6 +226,13 @@ const PostFeed = ({ userRole, highlightedSection }) => {
     }
   }, [socketPosts]);
 
+  useEffect(() => {
+    if (width > 1200) {
+      setDisplaySecondarySearchbar(false);
+      setDisplayMobileOptionsPanel(false);
+    }
+  }, [width]);
+
   const handleSearch = (e) => {
     if (e.target.value != "") {
       LazyFetch({
@@ -241,29 +257,10 @@ const PostFeed = ({ userRole, highlightedSection }) => {
       <PostFeedWrapper>
         <ScrollingDiv>
           <CenterWrapper>
-            {displaySecondarySearchbar && width < 1200 ? (
-              <div
-                style={{
-                  width: `100%`,
-                  padding: `2.2em 1em 0 1em`,
-                  display: `flex`,
-                  justifyContent: `center`,
-                  alignItems: `center`,
-                }}
-              >
-                <SearchBar
-                  placeholder="Search for Post"
-                  displayIcon={false}
-                  onChange={handleSearch}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
             <SortingOptions>
               {width <= 1200 ? (
                 <>
-                  <Button
+                  {/* <Button
                     primary
                     style={{
                       marginTop: `0.5em`,
@@ -274,7 +271,7 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                     }}
                   >
                     Filters
-                  </Button>
+                  </Button> */}
 
                   {displaySecondarySearchbar ? (
                     <Button
@@ -312,24 +309,47 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                       Search
                     </Button>
                   )}
-
-                  <Button
-                    primary
-                    style={{
-                      marginTop: `0.5em`,
-                      marginBottom: `0.5em`,
-                      width: `100%`,
-                      margin: `8px 0`,
-                      ...MarginLeftRight,
-                    }}
-                  >
-                    Options
-                  </Button>
+                  {displayMobileOptionsPanel ? (
+                    <Button
+                      outlineSecondary
+                      style={{
+                        padding: `9px 12px`,
+                        width: `100%`,
+                        margin: `8px 0`,
+                        ...MarginLeftRight,
+                      }}
+                      onClick={(event) => {
+                        setDisplayMobileOptionsPanel(
+                          !displayMobileOptionsPanel
+                        );
+                      }}
+                    >
+                      Options
+                    </Button>
+                  ) : (
+                    <Button
+                      primary
+                      style={{
+                        marginTop: `0.5em`,
+                        marginBottom: `0.5em`,
+                        width: `100%`,
+                        margin: `8px auto 8px 0`,
+                        ...MarginLeftRight,
+                      }}
+                      onClick={(event) => {
+                        setDisplayMobileOptionsPanel(
+                          !displayMobileOptionsPanel
+                        );
+                      }}
+                    >
+                      Options
+                    </Button>
+                  )}
                 </>
               ) : (
                 <></>
               )}
-              {width > 540 ? (
+              {width > 481 ? (
                 <>
                   <Button
                     secondary
@@ -360,9 +380,35 @@ const PostFeed = ({ userRole, highlightedSection }) => {
                   toggleSort(!sortByMostRecent);
                 }}
               >
-                {sortByMostRecent ? "Most Recent" : "Oldest"}
+                {sortByMostRecent ? "Newest" : "Oldest"}
               </Button>
             </SortingOptions>
+            {displaySecondarySearchbar && width < 1200 ? (
+              <div
+                style={{
+                  width: `100%`,
+                  padding: `0.5em 1em 1em 1em`,
+                  display: `flex`,
+                  justifyContent: `center`,
+                  alignItems: `center`,
+                }}
+              >
+                <SearchBar
+                  placeholder="Search for Post"
+                  displayIcon={false}
+                  onChange={handleSearch}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+
+            {width <= 1200 && displayMobileOptionsPanel ? (
+              <MobileOptionsPanel userRole={userRole} courseId={courseId} />
+            ) : (
+              <></>
+            )}
+
             {posts && posts.pinned.length > 0 && (
               <PostGroupingHeader>
                 <img
@@ -389,6 +435,10 @@ const PostFeed = ({ userRole, highlightedSection }) => {
 
 export default PostFeed;
 
+const Test = styled.button`
+  width: 1000px;
+`;
+
 const MarginLeftRight = {
   marginLeft: "0.5em",
   marginRight: "0.5em",
@@ -411,6 +461,10 @@ const ScrollingDiv = styled.div`
   width: 100%;
   padding: 0 40px;
   overflow: auto;
+
+  @media only screen and (max-width: 786px) {
+    padding: 0 1em;
+  }
 `;
 
 const CenterWrapper = styled.div`
@@ -441,13 +495,14 @@ const SortingOptions = styled.div`
     padding-right: 0;
     justify-content: center;
     position: relative;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
   }
-  /* @media only screen and (max-width: 768px) {
-    margin: 1em 0;
-    flex-direction: column;
-    flex: 1 1 100%;
-  } */
+  @media only screen and (max-width: 768px) {
+    /* margin: 0.8em 0 1em 2.2em; */
+    margin: 0.9em 0;
+    /* padding: 0 0 0 42px; */
+    padding-left: calc(42px + 1em);
+  }
 `;
 
 const PostGroupingHeader = styled.div`

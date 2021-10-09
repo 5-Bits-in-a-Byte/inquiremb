@@ -84,4 +84,8 @@ const CardsContainer = styled.div`
   overflow-y: scroll;
 
   transition: 150ms ease-out;
+
+  @media only screen and (max-width: 769px) {
+    justify-content: center;
+  }
 `;

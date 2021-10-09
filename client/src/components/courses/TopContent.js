@@ -53,6 +53,10 @@ const Title = styled.h3`
 
 const TopWrapper = styled.div`
   margin: 1em 1em 1em 1em;
+
+  @media only screen and (max-width: 769px) {
+    margin-left: calc(66px + 1em);
+  }
 `;
 
 const FlexWrapper = styled.div`

@@ -248,7 +248,9 @@ def retrieve_role(_id):
 
 def create_user(data, mode="google"):
     if mode == "google":
-        user = User(_id=data['sub'], first=data['given_name'], last=data['family_name'],
+        given_name = data.get('given_name', "")
+        family_name = data.get('family_name', "")
+        user = User(_id=data['sub'], first=given_name, last=family_name,
                     email=data['email'], picture=data['picture'], courses=[]).save()
     elif mode == "github":
         _id = str(data['id'])

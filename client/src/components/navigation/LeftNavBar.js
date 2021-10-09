@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import MenuItem from "./MenuItem";
@@ -8,53 +8,84 @@ import HomeImg from "../../imgs/home-white.svg";
 import CourseImg from "../../imgs/courses-white.svg";
 import MessagesImg from "../../imgs/messages-white.svg";
 import InquireTooltip from "../common/InquireTooltip";
+import { useWindowDimensions } from "../common/CustomHooks";
+import MobileLeftNavBar from "./MobileLeftNavBar";
+import "./hamburger.css";
 
 /** LeftNavBar Component
  * @brief Wrapper containing MenuItems routing the user to the main website pages
  * @returns LeftNavBar component
  */
-const LeftNavBar = () => {
+const LeftNavBar = ({ props }) => {
+  const [hidddenState, setHiddenState] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false);
+
+  const { width, height } = useWindowDimensions();
+
+  useEffect(() => {
+    if (width <= 768) {
+      setHiddenState(true);
+    } else {
+      setHiddenState(false);
+      setShowMobileNav(false);
+    }
+  }, [width]);
+
   const location = useLocation();
   const active = location.pathname;
+
   return (
-    <Nav>
-      <Wrapper>
-        {/* <InquireTooltip
-          tooltipText={`See recent post history.`}
-          // hoverDelay={1000}
-          customPosition={{
-            top: `25%`,
-            right: `auto`,
-            bottom: `auto`,
-            left: `100%`,
+    <>
+      {hidddenState ? (
+        <BurgerMenu
+          id={"Burger-Menu"}
+          onClick={(event) => {
+            // console.log("Burger Menu Click: ", showMobileNav);
+            setShowMobileNav(!showMobileNav);
+            event.stopPropagation();
           }}
-        > */}
-        <MenuItem
-          to="/home"
-          label="Recents"
-          img={ClockImg}
-          active={active === "/home"}
-        />
-        {/* </InquireTooltip> */}
-        {/* <InquireTooltip
-          tooltipText={"See your active classes."}
-          // hoverDelay={1000}
-          customPosition={{
-            top: `25%`,
-            right: `auto`,
-            bottom: `auto`,
-            left: `100%`,
-          }}
-        > */}
-        <MenuItem
-          to="/"
-          label="Courses"
-          img={CourseImg}
-          active={active === "/"}
-        />
-        {/* </InquireTooltip> */}
-      </Wrapper>
-    </Nav>
+        >
+          {/* THIS IS A CUSTOM HAMBURGER MENU ICON. It uses ./hamburger.css */}
+          <div id="bar-container">
+            <div
+              id="bar-one"
+              className={`navButtonBar ${showMobileNav ? `x1` : ``}`}
+            ></div>
+            <div
+              id="bar-two"
+              className={`navButtonBar ${showMobileNav ? `x2` : ``}`}
+            ></div>
+            <div
+              id="bar-three"
+              className={`navButtonBar ${showMobileNav ? `x3` : ``}`}
+            ></div>
+          </div>
+        </BurgerMenu>
+      ) : (
+        <></>
+      )}
+
+      <MobileLeftNavBar
+        openState={{ state: showMobileNav, setState: setShowMobileNav }}
+      />
+
+      <Nav hide={hidddenState}>
+        <Wrapper>
+          <MenuItem
+            to="/home"
+            label="Recents"
+            img={ClockImg}
+            active={active === "/home"}
+          />
+          <MenuItem
+            to="/"
+            label="Courses"
+            img={CourseImg}
+            active={active === "/"}
+          />
+        </Wrapper>
+      </Nav>
+    </>
   );
 };
 
@@ -69,6 +100,22 @@ const Nav = styled.nav`
   top: 0;
 
   z-index: 9998;
+  overflow: hidden;
+
+  transition: 150ms ease-out;
+
+  /* @media only screen and (max-width: 1200px) {
+  }
+  @media only screen and (max-width: 1025px) {
+  } */
+  @media only screen and (max-width: 769px) {
+    visibility: ${(props) => (props.hide ? "hidden" : "visible")};
+    width: ${(props) => (props.hide ? 0 : "80px")};
+  }
+  /* @media only screen and (max-width: 481px) {
+  }
+  @media only screen and (max-width: 400px) {
+  } */
 `;
 
 const Wrapper = styled.ul`
@@ -80,5 +127,55 @@ const Wrapper = styled.ul`
   align-items: center;
   justify-content: center;
 
+  transition: 150ms ease-out;
+
+  /* @media only screen and (max-width: 1200px) {
+  }
+  @media only screen and (max-width: 1025px) {
+  }
+  @media only screen and (max-width: 769px) {
+  }
+  @media only screen and (max-width: 481px) {
+  }
+  @media only screen and (max-width: 400px) {
+  } */
+`;
+
+const BurgerMenu = styled.div`
+  position: absolute;
+  top: 66px;
+  left: 0;
+
+  width: 42px;
+  height: 42px;
+  margin-top: 1em;
+  margin-left: 1.2em;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9998;
+
+  overflow: hidden;
+
+  box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.2);
+
+  background-color: #f8f8f8;
+  border-radius: 5px;
   /* border: 1px solid red; */
+
+  transition: 150ms ease-out;
+
+  :hover {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.45);
+    /* background-color: #dfdfdf; */
+  }
+
+  :active {
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.363);
+    /* border: 2px solid #d9d9d9; */
+
+    transform: translateY(4px);
+  }
 `;
