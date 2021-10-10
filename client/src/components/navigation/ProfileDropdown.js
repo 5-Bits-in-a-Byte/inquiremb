@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Arrow from "../../imgs/carrot-down-secondary.svg";
 import Dropdown from "../common/dropdown/Dropdown";
 import { UserContext } from "../context/UserProvider";
+import { ColorContext } from "../context/ColorModeContext";
 
 /** ProfileDropdown Component
  * @brief Dropdown container for link components for profile related tasks.
@@ -28,11 +29,13 @@ const ProfileDropdown = () => {
     { onClick: handleSignOut, label: "Sign Out" },
   ];
 
+  const theme = useContext(ColorContext);
+
   return (
-    <Wrapper>
+    <Wrapper theme={theme}>
       <Dropdown options={options}>
         <DropdownWrapper className="flex-row align">
-          <Name className="font-regular">
+          <Name className="font-regular" theme={theme}>
             {user.first} {user.last}
           </Name>
           <Profile className="flex-row align justify" src={user.picture} />
@@ -46,6 +49,8 @@ const ProfileDropdown = () => {
 export default ProfileDropdown;
 
 const Wrapper = styled.div`
+  color: ${(props) => props.theme.textColor};
+  background-color: ${(props) => props.theme.header};
   display: flex;
   justify-content: flex-end;
   cursor: pointer;
@@ -82,6 +87,7 @@ const ArrowImg = styled.img`
 `;
 
 const Name = styled.h4`
+  color: ${(props) => props.theme.textColor};
   white-space: nowrap;
   margin-right: 10px;
 

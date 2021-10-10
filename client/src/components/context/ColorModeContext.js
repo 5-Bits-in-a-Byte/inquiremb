@@ -21,8 +21,14 @@ export { ColorContext, ColorDispatchContext, ColorProvider };
 export const colorThemes = {
   light: {
     background: "white",
+    panel: "#162B55",
+    header: "white",
+    textColor: "black",
   },
   dark: {
-    background: "black",
+    background: "#181818",
+    panel: "#212121",
+    header: "#212121",
+    textColor: "white",
   },
 };

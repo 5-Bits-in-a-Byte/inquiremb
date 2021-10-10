@@ -18,7 +18,6 @@ const Courses = () => {
   const theme = useContext(ColorContext);
   let currentCourseState = generateCourseList(user.courses, setUser);
   const [courseList, setCourseList] = useState(currentCourseState);
-  console.log(theme);
 
   return (
     <WrapAll theme={theme}>

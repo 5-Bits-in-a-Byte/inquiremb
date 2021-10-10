@@ -27,7 +27,7 @@ const LeftNavBar = ({ props }) => {
   const [showMobileNav, setShowMobileNav] = useState(false);
 
   const setColorTheme = useContext(ColorDispatchContext);
-  const colorTheme = useContext(ColorContext);
+  const theme = useContext(ColorContext);
 
   const { width, height } = useWindowDimensions();
 
@@ -78,7 +78,7 @@ const LeftNavBar = ({ props }) => {
         openState={{ state: showMobileNav, setState: setShowMobileNav }}
       />
 
-      <Nav hide={hidddenState}>
+      <Nav hide={hidddenState} theme={theme}>
         <Wrapper>
           <MenuItem
             to="/home"
@@ -95,10 +95,11 @@ const LeftNavBar = ({ props }) => {
           <Button
             onClick={() => {
               setColorTheme(
-                colorTheme === colorThemes.light
+                theme === colorThemes.light
                   ? colorThemes.dark
                   : colorThemes.light
               );
+              console.log(theme.textColor);
             }}
           >
             This is the light button
@@ -114,7 +115,7 @@ export default LeftNavBar;
 const Nav = styled.nav`
   height: 100vh;
   width: 80px;
-  background-color: #162b55;
+  background-color: ${(props) => props.theme.panel};
   position: fixed;
   left: 0;
   top: 0;
