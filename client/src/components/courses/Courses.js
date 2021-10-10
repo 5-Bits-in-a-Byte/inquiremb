@@ -41,7 +41,9 @@ const WrapAll = styled.div`
   transition: ease all 300ms;
   background-color: ${(props) => props.theme.background};
   width: 100%;
-  height: 85vh;
+  // needed to changed the view height to extend the dark color across the entire page.
+  // I might be able to solve this by doing some changes higher up.
+  height: 100vh;
   display: flex;
   flex: 1;
   overflow: auto;

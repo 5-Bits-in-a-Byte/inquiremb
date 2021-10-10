@@ -27,6 +27,7 @@ export const colorThemes = {
     button: "#e7e7e7",
     logoFontColor: "#162B55",
     buttonHover: "dedede",
+    menuItemActive: "#0B1B3A",
   },
   dark: {
     background: "#181818",
@@ -36,5 +37,6 @@ export const colorThemes = {
     button: "#3d3d3d",
     logoFontColor: "white",
     buttonHover: "3d3d3d",
+    menuItemActive: "#3d3d3d",
   },
 };

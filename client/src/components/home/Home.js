@@ -6,6 +6,9 @@ import PostWrapper from "../posts/wrappers/PostWrapper";
 import PollWrapper from "../posts/wrappers/PollWrapper";
 import EditorWrapper from "../posts/wrappers/EditorWrapper";
 import { useWindowDimensions } from "../common/CustomHooks";
+import { useContext } from "react";
+import { ColorContext } from "../context/ColorModeContext";
+import { propTypes } from "react-polls";
 
 const convertToUpper = (postType) => {
   var first = postType[0].toUpperCase();
@@ -109,6 +112,7 @@ const generateSections = (data) => {
  * @returns Home Component
  */
 const Home = ({ props }) => {
+  const theme = useContext(ColorContext);
   const { width, height } = useWindowDimensions();
 
   let endpoint = "/home";
@@ -132,17 +136,20 @@ const Home = ({ props }) => {
     );
 
   return (
-    <Wrapper id={"recents-wrapper"} windowWidth={width}>
+    <Wrapper id={"recents-wrapper"} windowWidth={width} theme={theme}>
       <ViewWrapper>
         <ScrollingDiv>
           <MaxWidth>
-            <h1 align="center" style={{ margin: "1em" }}>
+            <h1
+              align="center"
+              style={{ margin: "1em", color: theme.logoFontColor }}
+            >
               Recent Posts
             </h1>
             {groups.length > 0 ? (
               groups
             ) : (
-              <h2 align="center">
+              <h2 align="center" style={{ color: theme.logoFontColor }}>
                 You currently have no unread posts to view.
               </h2>
             )}
@@ -156,6 +163,7 @@ const Home = ({ props }) => {
 export default Home;
 
 const Wrapper = styled.div`
+  background-color: ${(props) => props.theme.background};
   display: absolute;
   height: calc(100vh - 66px);
   overflow-y: auto;
@@ -177,4 +185,8 @@ const MaxWidth = styled.div`
   max-width: 900px;
   margin: auto;
   padding-bottom: 40px;
+`;
+
+const h1 = styled.h1`
+  color: ${(props) => props.theme.logoFontColor};
 `;
