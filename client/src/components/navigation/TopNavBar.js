@@ -11,6 +11,8 @@ import Arrow from "../../imgs/carrot-down-secondary.svg";
 import Icon from "../common/Icon";
 import InquireLogoSVG from "../../imgs/inquire_logo_navbar.svg";
 import "../common/css/noTextSelection.css";
+import { ColorContext } from "../context/ColorModeContext";
+import { dark } from "@material-ui/core/styles/createPalette";
 
 /** TopNavBar Component
  * @brief Wrapper the top content of the website such as profile icon / menu, etc etc
@@ -41,13 +43,15 @@ const TopNavBar = () => {
     options.push(option);
   }
 
+  const theme = useContext(ColorContext);
+
   return (
-    <Nav>
+    <Nav theme={theme}>
       <FlexWrapper>
         <Link to={"/"} style={{ textDecoration: `none` }}>
           <InquireLogo>
             <LogoIMG src={InquireLogoSVG} />
-            <LogoText>Inquire</LogoText>
+            <LogoText theme={theme}>Inquire</LogoText>
           </InquireLogo>
           {/* <LogoImg src={Logo} /> */}
         </Link>
@@ -57,7 +61,7 @@ const TopNavBar = () => {
           <SearchBar placeholder="Search for a post or class" />
         ) : (
           <Dropdown options={options}>
-            <DropdownSelector tabIndex="0">
+            <DropdownSelector tabIndex="0" theme={theme}>
               <SelectionName className={"noselect"}>
                 Quick Navigate
               </SelectionName>
@@ -112,6 +116,7 @@ const LogoIMG = styled.img`
 `;
 
 const LogoText = styled.h2`
+  color: ${(props) => props.theme.logoFontColor};
   margin-left: 0.5em;
   font-size: 32px;
   transition: 150ms ease-out;
@@ -139,7 +144,7 @@ const LogoText = styled.h2`
 const Nav = styled.nav`
   width: 100vw;
   height: 66px;
-  background-color: #fff;
+  background-color: ${(props) => props.theme.header};
   position: fixed;
   left: 0;
   top: 0;
@@ -159,7 +164,9 @@ const LogoImg = styled.img`
 `;
 
 const DropdownSelector = styled.div`
-  background-color: #e7e7e7;
+  // Cant quite seem to get props to work in here. Gonna circle back around to it.
+  background-color: ${(props) => props.theme.button};
+  color: ${(props) => props.theme.logoFontColor};
   height: 2rem;
   display: flex;
   align-items: center;
@@ -191,6 +198,7 @@ const DropdownSelector = styled.div`
 `;
 
 const SelectionName = styled.p`
+  color: inherit;
   flex: 1;
   text-align: center;
 `;

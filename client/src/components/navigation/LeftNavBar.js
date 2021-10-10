@@ -99,7 +99,7 @@ const LeftNavBar = ({ props }) => {
                   ? colorThemes.dark
                   : colorThemes.light
               );
-              console.log(theme.textColor);
+              console.log(theme.bing);
             }}
           >
             This is the light button

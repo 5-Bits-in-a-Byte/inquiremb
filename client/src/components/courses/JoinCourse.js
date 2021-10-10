@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useContext } from "react";
 import styled, { css } from "styled-components";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
+import { ColorContext } from "../context/ColorModeContext";
 import JoinConfirmation from "./joinCourse/JoinConfirmation";
 import JoinInfo from "./joinCourse/JoinInfo";
 
@@ -17,9 +19,11 @@ const JoinCourse = ({ courseList, setCourseList }) => {
   const [courses, joinCourse] = useState(null);
   const [display, toggleDisplay] = useState("flex");
 
+  const theme = useContext(ColorContext);
+
   return (
     <>
-      <CustomButton onClick={() => toggleModal(true)}>
+      <CustomButton onClick={() => toggleModal(true)} theme={theme}>
         Join a Course
       </CustomButton>
       {modalIsShown && (
@@ -65,10 +69,10 @@ const CustomButton = styled.div`
 
   border-radius: 4px;
   padding: 0.5em 0.125em;
-  background-color: #e7e7e7;
-  color: #162b55;
+  background-color: ${(props) => props.theme.button};
+  color: ${(props) => props.theme.logoFontColor};
   &:hover {
-    background-color: #dedede;
+    background-color: ${(props) => props.theme.buttonHover};
   }
 
   transition: 150ms ease-out;

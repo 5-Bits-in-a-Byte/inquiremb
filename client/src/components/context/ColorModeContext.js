@@ -24,11 +24,17 @@ export const colorThemes = {
     panel: "#162B55",
     header: "white",
     textColor: "black",
+    button: "#e7e7e7",
+    logoFontColor: "#162B55",
+    buttonHover: "dedede",
   },
   dark: {
     background: "#181818",
     panel: "#212121",
     header: "#212121",
     textColor: "white",
+    button: "#3d3d3d",
+    logoFontColor: "white",
+    buttonHover: "3d3d3d",
   },
 };

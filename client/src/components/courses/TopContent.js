@@ -3,6 +3,8 @@ import styled from "styled-components";
 import JoinCourse from "./JoinCourse";
 import CreateCourse from "./CreateCourse";
 import InquireTooltip from "../common/InquireTooltip";
+import { useContext } from "react";
+import { ColorContext } from "../context/ColorModeContext";
 
 /** TopContent
  * @brief Wrapper for the Create Course and Join Course buttons.
@@ -12,9 +14,11 @@ import InquireTooltip from "../common/InquireTooltip";
  * @returns Wrapper containing the Create / Join Course buttons
  */
 const TopContent = ({ courseList, setCourseList }) => {
+  const theme = useContext(ColorContext);
+
   return (
     <TopWrapper className="flex-row align">
-      <Title>COURSES</Title>
+      <Title theme={theme}>COURSES</Title>
       <FlexWrapper>
         {/* <InquireTooltip
           tooltipText={"Open join course modal."}
@@ -48,6 +52,7 @@ const TopContent = ({ courseList, setCourseList }) => {
 export default TopContent;
 
 const Title = styled.h3`
+  color: ${(props) => props.theme.logoFontColor};
   margin-right: 15px;
 `;
 

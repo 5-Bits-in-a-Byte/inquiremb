@@ -11,6 +11,7 @@ import {
   addNewCourseToList,
 } from "../common/externalMethods/CoursesHelperMethods";
 import { UserContext, UserDispatchContext } from "../context/UserProvider";
+import { ColorContext } from "../context/ColorModeContext";
 
 /** CreateCourse
  * @brief Overlay with modal background that allows the user to create a new course.
@@ -20,6 +21,7 @@ import { UserContext, UserDispatchContext } from "../context/UserProvider";
  * @returns CreateCourse component
  */
 const CreateCourse = ({ courseList, setCourseList }) => {
+  const theme = useContext(ColorContext);
   const [modalIsShown, toggleModal] = useState(false);
   // Course is set by the CourseInfo component when instructors create the course
   // The info is used to share the course link/access code provided by the API
@@ -30,7 +32,7 @@ const CreateCourse = ({ courseList, setCourseList }) => {
 
   return (
     <>
-      <CustomButton onClick={() => toggleModal(true)}>
+      <CustomButton onClick={() => toggleModal(true)} theme={theme}>
         Create a Course
       </CustomButton>
       {modalIsShown && (
@@ -79,10 +81,10 @@ const CustomButton = styled.div`
 
   border-radius: 4px;
   padding: 0.5em 0.125em;
-  background-color: #e7e7e7;
-  color: #162b55;
+  background-color: ${(props) => props.theme.button};
+  color: ${(props) => props.theme.logoFontColor};
   &:hover {
-    background-color: #dedede;
+    background-color: ${(props) => props.theme.buttonHover};
   }
 
   transition: 150ms ease-out;
