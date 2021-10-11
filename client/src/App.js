@@ -14,6 +14,8 @@ import PrivateRoute from "./PrivateRoute";
 import ConfigView from "./components/configPage/ConfigView";
 import UserProfile from "./components/userProfile/UserProfile";
 
+import CourseView from "./components/posts/PostFeedRefactor/CourseView";
+
 function App() {
   // Hello :)
 
@@ -45,7 +47,8 @@ function App() {
           <PrivateRoute path="/course/:courseId" exact>
             <UserRoleProvider>
               <NavigationWrapper>
-                <ClassView />
+                {/* <ClassView /> */}
+                <CourseView />
               </NavigationWrapper>
             </UserRoleProvider>
           </PrivateRoute>
