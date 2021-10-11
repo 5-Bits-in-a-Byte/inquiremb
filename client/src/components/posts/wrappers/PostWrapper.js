@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import Moment from "react-moment";
+import moment from "moment";
 import styled, { css } from "styled-components";
 import { UserContext } from "../../context/UserProvider";
 import { UserRoleContext } from "../../context/UserRoleProvider";
@@ -38,6 +39,10 @@ const PostWrapper = ({
   ...props
 }) => {
   // console.log("PostObject: ", postObject);
+
+  var m = moment(postObject.createdDate);
+  var s = m.format("llll");
+  console.log("s:", s);
 
   const user = useContext(UserContext);
   const userRole = useContext(UserRoleContext);
@@ -283,14 +288,23 @@ const PostWrapper = ({
             <UserDescription isInstructor={postObject.isInstructor}>
               Posted by {postObject.postedBy.first} {postObject.postedBy.last}
             </UserDescription>
-            <Moment
+            {/* <div
+              style={{
+                margin: `0.25em 0 0 0.5em`,
+                color: `#595959`,
+                fontSize: `12px`,
+              }}
+            >
+              s
+            </div> */}
+            {/* <Moment
               style={{
                 margin: `0.25em 0 0 0.5em`,
                 color: `#595959`,
                 fontSize: `12px`,
               }}
               date={postObject.createdDate}
-            />
+            /> */}
           </UserInfoWrapper>
         ) : (
           <Link
@@ -310,14 +324,23 @@ const PostWrapper = ({
               <UserDescription isInstructor={postObject.isInstructor}>
                 Posted by {postObject.postedBy.first} {postObject.postedBy.last}
               </UserDescription>
-              <Moment
+              <div
+                style={{
+                  margin: `0.25em 0 0 0.5em`,
+                  color: `#595959`,
+                  fontSize: `12px`,
+                }}
+              >
+                {s}
+              </div>
+              {/* <Moment
                 style={{
                   margin: `0.25em 0 0 0.5em`,
                   color: `#595959`,
                   fontSize: `12px`,
                 }}
                 date={postObject.createdDate}
-              />
+              /> */}
             </UserInfoWrapper>
           </Link>
         )}
