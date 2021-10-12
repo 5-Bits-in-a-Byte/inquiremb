@@ -17,6 +17,9 @@ from inquire.utils.argparser_types import str2bool
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 from inquire.socketio_app import io
+import pytz
+from bson.tz_util import utc
+import time
 
 
 class Posts(Resource):
@@ -105,10 +108,21 @@ class Posts(Resource):
                             "fields": self.create_poll_fields(field_names),
                             "user_votes": {}}
 
+        # Get the local time and then convert it to pacific time to save it in the database (helps make displaying date work across timezones)
+        now = time.time()
+        print("now:", now)
+        stamp = datetime.datetime.utcfromtimestamp(now)
+        print("stamp:", stamp)
+        localTime = datetime.datetime.now()
+        createdDate = localTime.astimezone(pytz.timezone('US/Pacific'))
+        updatedDate = localTime.astimezone(pytz.timezone('US/Pacific'))
+        print("localTime:", localTime)
+        print("createdDate:", createdDate)
+
         # Trying to add the post to the DB
         try:
             post = Post(courseId=courseId, postedBy=postedBy, title=args.title,
-                        isPrivate=args.isPrivate, content=args.content, isInstructor=highlighted).save()
+                        isPrivate=args.isPrivate, content=args.content, isInstructor=highlighted, createdDate=createdDate, updatedDate=updatedDate).save()
         except ValidationError as exc:
             return {"errors": str(exc)}, 400
 
@@ -122,7 +136,7 @@ class Posts(Resource):
 
         if not result['isPrivate'] and current_app.config['include_socketio']:
             current_app.socketio.emit('Post/create', result, room=courseId)
-        
+
         # sendEvent(
         #     actor=postedBy,
         #     action="created",
@@ -507,6 +521,7 @@ class Posts(Resource):
 
         # Convert datetime to a string
         date = str(result['createdDate'])
+        print("date:", date)
         result['createdDate'] = date
 
         date = str(result['updatedDate'])

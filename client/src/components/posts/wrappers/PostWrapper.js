@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import Moment from "react-moment";
-import moment from "moment";
+import moment, { ISO_8601 } from "moment";
+import "moment-timezone";
+import "moment/min/locales";
 import styled, { css } from "styled-components";
 import { UserContext } from "../../context/UserProvider";
 import { UserRoleContext } from "../../context/UserRoleProvider";
@@ -40,9 +42,27 @@ const PostWrapper = ({
 }) => {
   // console.log("PostObject: ", postObject);
 
-  var m = moment(postObject.createdDate);
+  // Set the correct locale for moment to use
+  var locale = window.navigator.language;
+  moment.locale(locale);
+
+  // var m = moment(postObject.createdDate);
+  // console.log(m.format("llll"));
+  // // var s = m.format("llll");
+  // var s = m.tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format("llll");
+  var currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log("timezone:", currentTimezone);
+
+  var m = moment.tz(postObject.createdDate, currentTimezone);
+  console.log("postObject.createdDate:", postObject.createdDate);
+  console.log("m:", m.format());
+
   var s = m.format("llll");
-  console.log("s:", s);
+
+  // On backend convert time to pacific
+  // Convert stored time to correct timezone using moment.tz(postObect.createdDate, currentTimezone)
+
+  // console.log("s:", s);
 
   const user = useContext(UserContext);
   const userRole = useContext(UserRoleContext);
@@ -288,15 +308,15 @@ const PostWrapper = ({
             <UserDescription isInstructor={postObject.isInstructor}>
               Posted by {postObject.postedBy.first} {postObject.postedBy.last}
             </UserDescription>
-            {/* <div
+            <div
               style={{
                 margin: `0.25em 0 0 0.5em`,
                 color: `#595959`,
                 fontSize: `12px`,
               }}
             >
-              s
-            </div> */}
+              {s}
+            </div>
             {/* <Moment
               style={{
                 margin: `0.25em 0 0 0.5em`,

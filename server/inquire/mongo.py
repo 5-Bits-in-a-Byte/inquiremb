@@ -117,8 +117,8 @@ class Post(MongoModel):
     reactions = fields.DictField(
         default={"likes": [], 'goods': [], 'helpfuls': []})
     comments = fields.IntegerField(default=0)
-    createdDate = fields.DateTimeField(default=datetime.datetime.now)
-    updatedDate = fields.DateTimeField(default=datetime.datetime.now)
+    createdDate = fields.DateTimeField(required=True)
+    updatedDate = fields.DateTimeField(required=True)
 
     def serialize(self, date):
         pass
