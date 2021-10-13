@@ -12,6 +12,7 @@ import ProfileSettingsCard from "./ProfileSettingsCard";
 import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import { fetchUser } from "../common/externalMethods/FetchUser";
 import ChangeDisplayName from "./settingsFeatures/ChangeDisplayName";
+import { ColorContext } from "../context/ColorModeContext";
 
 const renderEditButton = (
   toggleEdit,
@@ -103,6 +104,8 @@ const AboutUser = ({
   const [profilePicture, setProfilePicture] = useState(null);
   let endpoint = "/userProfiles";
 
+  const theme = useContext(ColorContext);
+
   useEffect(() => {
     LazyFetch({
       type: "get",
@@ -156,7 +159,7 @@ const AboutUser = ({
 
   return (
     <>
-      <Wrapper>
+      <Wrapper theme={theme}>
         <CustomColorSection bannerColor={bannerColor}>
           {displayColorSelector && (
             <ChromePicker
@@ -178,7 +181,7 @@ const AboutUser = ({
         </CustomColorSection>
         <ContentWrapper>
           <VerticalFlex>
-            <ImageWrapper>
+            <ImageWrapper theme={theme}>
               <UserProfileImage
                 src={profilePicture}
                 alt="User Profile Image."
@@ -197,8 +200,18 @@ const AboutUser = ({
           </VerticalFlex>
 
           <UserInfoWrapper>
-            <UserName backgroundColor={background}>{profileName}</UserName>
-            <h2 style={{ margin: `1.75em 0 0 0` }}>About</h2>
+            <UserName backgroundColor={background} theme={theme}>
+              {profileName}
+            </UserName>
+            <h2
+              theme={theme}
+              style={{
+                margin: `1.75em 0 0 0`,
+                color: "inherit",
+              }}
+            >
+              About
+            </h2>
             <AboutContent>
               {editingProfile ? (
                 <div>
@@ -246,7 +259,7 @@ const Wrapper = styled.div`
   margin: 1em;
   padding: 1em;
 
-  background-color: #fff;
+  background-color: ${(props) => props.theme.aboutPanelColor};
   border-radius: 10px;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
@@ -419,7 +432,7 @@ const ImageWrapper = styled.div`
   width: 200px;
   height: 200px;
 
-  background-color: #f8f8f8;
+  background-color: ${(props) => props.theme.panelContentHighlight};
 
   border-radius: 50%;
 

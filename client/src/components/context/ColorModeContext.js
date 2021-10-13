@@ -28,6 +28,10 @@ export const colorThemes = {
     logoFontColor: "#162B55",
     buttonHover: "dedede",
     menuItemActive: "#0B1B3A",
+    aboutPanelColor: "#fff",
+    panelContentHighlight: "#f8f8f8",
+    test: "black",
+    buttonBorder: "#dfdfdf",
   },
   dark: {
     background: "#181818",
@@ -38,5 +42,9 @@ export const colorThemes = {
     logoFontColor: "white",
     buttonHover: "3d3d3d",
     menuItemActive: "#3d3d3d",
+    aboutPanelColor: "#212121",
+    panelContentHighlight: "#181818",
+    test: "black",
+    buttonBorder: "black",
   },
 };

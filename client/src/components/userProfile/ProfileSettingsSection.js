@@ -1,14 +1,17 @@
 import React from "react";
+import { useContext } from "react";
 import styled from "styled-components";
+import { ColorContext } from "../context/ColorModeContext";
 import ProfileSettingsCard from "./ProfileSettingsCard";
 import ChangeDisplayName from "./settingsFeatures/ChangeDisplayName";
 import ChangeUserEmail from "./settingsFeatures/ChangeUserEmail";
 
 const ProfileSettingsSection = ({ props }) => {
+  const theme = useContext(ColorContext);
   return (
     <>
-      <Wrapper>
-        <h1>Settings</h1>
+      <Wrapper theme={theme}>
+        <h1 style={{ color: "inherit" }}>Settings</h1>
         <FlexContainer>
           <ProfileSettingsCard title={`Change Display Name`}>
             <ChangeDisplayName />
@@ -32,9 +35,10 @@ const Wrapper = styled.div`
   min-height: 100px;
   margin: 1em;
   padding: 1em 2em;
-
-  background-color: #fff;
   border-radius: 10px;
+
+  background-color: ${(props) => props.theme.aboutPanelColor};
+  color: ${(props) => props.theme.logoFontColor};
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
 `;

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 import styled, { css } from "styled-components";
 import { useOnClickAway } from "../common/CustomHooks";
+import { ColorContext } from "../context/ColorModeContext";
 
 const ProfileSettingsCard = ({ title, width, height, children, ...props }) => {
   // console.log(children);
@@ -11,9 +13,12 @@ const ProfileSettingsCard = ({ title, width, height, children, ...props }) => {
     setDisplayChildren(false);
   });
 
+  const theme = useContext(ColorContext);
+
   return (
     <>
       <Wrapper
+        theme={theme}
         ref={node}
         width={width}
         height={displayChildren ? "auto" : "3.5em"}
@@ -22,7 +27,11 @@ const ProfileSettingsCard = ({ title, width, height, children, ...props }) => {
           setDisplayChildren(!displayChildren);
         }}
       >
-        {displayChildren ? <></> : <SettingTitle>{title}</SettingTitle>}
+        {displayChildren ? (
+          <></>
+        ) : (
+          <SettingTitle theme={theme}>{title}</SettingTitle>
+        )}
         {displayChildren ? children : <></>}
       </Wrapper>
     </>
@@ -38,10 +47,11 @@ const Wrapper = styled.div`
   padding: 1em;
   margin: 1em;
 
-  border: 2px solid #dfdfdf;
+  border: 2px solid ${(props) => props.theme.buttonBorder};
   border-radius: 5px;
 
-  background-color: #f8f8f8;
+  background-color: ${(props) => props.theme.button};
+  color: ${(props) => props.theme.logoFontColor};
   box-shadow: 0px 1px 4px 2px rgb(0 0 0 / 7%);
 
   transition: 150ms ease-out;
@@ -52,6 +62,7 @@ const Wrapper = styled.div`
 `;
 
 const SettingTitle = styled.h1`
+  color: ${(props) => props.theme.logoFontColor};
   width: 100%;
   text-align: center;
   font-size: 16px;

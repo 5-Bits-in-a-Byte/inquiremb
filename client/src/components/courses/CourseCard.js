@@ -13,6 +13,7 @@ import CloseButtonIcon from "../../imgs/close.svg";
 import RemoveNickname from "../../imgs/remove-nickname.svg";
 import InquireTooltip from "../common/InquireTooltip";
 import { fetchUser } from "../common/externalMethods/FetchUser";
+import { ColorContext } from "../context/ColorModeContext";
 
 /** Course Card
  * @brief Component for displaying courses the user is a part of. Component is one of many courses
