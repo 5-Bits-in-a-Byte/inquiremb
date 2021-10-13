@@ -5,6 +5,7 @@ import Errors from "../common/Errors";
 import { fetchUser } from "../common/externalMethods/FetchUser";
 import Modal from "../common/Modal";
 import LazyFetch from "../common/requests/LazyFetch";
+import { ColorContext } from "../context/ColorModeContext";
 import { UserDispatchContext } from "../context/UserProvider";
 
 const UserCourseCard = ({
@@ -19,6 +20,7 @@ const UserCourseCard = ({
   const [errors, setErrorMessage] = useState(null);
   const [display, toggleDisplay] = useState("flex");
   const setUser = useContext(UserDispatchContext);
+  const theme = useContext(ColorContext);
 
   let title = userCourseObject?.courseName;
   let subtitle = "";
@@ -49,18 +51,18 @@ const UserCourseCard = ({
 
   return (
     <>
-      <CardWrapper courseColor={userCourseObject?.color}>
+      <CardWrapper courseColor={userCourseObject?.color} theme={theme}>
         <UpperSection courseColor={userCourseObject?.color}>
-          <CourseTitle>{title}</CourseTitle>
+          <CourseTitle theme={theme}>{title}</CourseTitle>
           <CourseSubtitle>{subtitle}</CourseSubtitle>
         </UpperSection>
         {isMyProfile ? (
-          <LowerSection>
+          <LowerSection theme={theme}>
             <Button
               outlineSecondary
               autoWidth
-              buttonColor={`#DC2B2B`}
-              style={{ color: `#DC2B2B` }}
+              buttonColor={`${theme.leaveCourseButton}`}
+              style={{ color: "inherit" }}
               onClick={() => {
                 toggleModal(true);
               }}
@@ -112,6 +114,7 @@ const UserCourseCard = ({
 export default UserCourseCard;
 
 const CardWrapper = styled.div`
+  background-color: ${(props) => props.theme.button};
   min-width: 8rem;
   /* min-height: 6rem; */
 
@@ -128,6 +131,7 @@ const CardWrapper = styled.div`
 `;
 
 const CourseTitle = styled.h4`
+  color: ${(props) => props.theme.logoFontColor};
   display: flex;
   /* justify-content: center; */
   align-items: center;
@@ -166,6 +170,7 @@ const UpperSection = styled.div`
 `;
 
 const LowerSection = styled.div`
+  color: ${(props) => props.theme.leaveCourseButton};
   width: 100%;
   /* height: 50%; */
 
