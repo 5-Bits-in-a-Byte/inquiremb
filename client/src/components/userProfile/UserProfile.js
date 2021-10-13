@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../common/Button";
+import { ColorContext } from "../context/ColorModeContext";
 import { UserContext } from "../context/UserProvider";
 import AboutUser from "./AboutUser";
 import ProfileSettingsSection from "./ProfileSettingsSection";
@@ -13,9 +14,11 @@ const UserProfile = ({ props }) => {
   const isMyProfile = user._id == profileId ? true : false;
   const [profileName, setProfileName] = useState(null);
 
+  const theme = useContext(ColorContext);
+
   return (
     <>
-      <Wrapper>
+      <Wrapper theme={theme}>
         <ScrollingDiv>
           {isMyProfile ? (
             <></>
@@ -54,6 +57,7 @@ const UserProfile = ({ props }) => {
 export default UserProfile;
 
 const Wrapper = styled.div`
+  background-color: ${(props) => props.theme.background};
   position: relative;
   display: flex;
   /* align-items: center; */

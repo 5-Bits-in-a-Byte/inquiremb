@@ -199,12 +199,11 @@ const AboutUser = ({
             )}
           </VerticalFlex>
 
-          <UserInfoWrapper>
+          <UserInfoWrapper theme={theme}>
             <UserName backgroundColor={background} theme={theme}>
               {profileName}
             </UserName>
             <h2
-              theme={theme}
               style={{
                 margin: `1.75em 0 0 0`,
                 color: "inherit",
@@ -334,6 +333,7 @@ const CustomColorSection = styled.div`
 `;
 
 const UserInfoWrapper = styled.div`
+  color: ${(props) => props.theme.logoFontColor};
   margin: 0 1em;
   width: 100%;
   height: 300px;
@@ -369,6 +369,7 @@ const UserName = styled.h1`
   white-space: pre-line;
 
   font-size: 36px;
+
   color: ${(props) =>
     props.backgroundColor == "dark" ? css`#fff` : css`#162B55`};
 

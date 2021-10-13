@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 import styled, { css } from "styled-components";
 import LazyFetch from "../common/requests/LazyFetch";
+import { ColorContext } from "../context/ColorModeContext";
 import UserCourseCard from "./UserCourseCard";
 
 const UserCourses = ({
@@ -44,10 +46,12 @@ const UserCourses = ({
     });
   }, [changeMade]);
 
+  const theme = useContext(ColorContext);
+
   return (
     <>
-      <SectionWrapper>
-        <h1>Courses</h1>
+      <SectionWrapper theme={theme}>
+        <h1 style={{ color: "inherit" }}>Courses</h1>
         <CardsContainer>
           {courses.length > 0
             ? courses
@@ -69,7 +73,8 @@ const SectionWrapper = styled.div`
   margin: 1em;
   padding: 1em 2em;
 
-  background-color: #fff;
+  background-color: ${(props) => props.theme.aboutPanelColor};
+  color: ${(props) => props.theme.logoFontColor};
   border-radius: 10px;
 
   box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.07);
