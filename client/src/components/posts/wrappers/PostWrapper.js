@@ -13,6 +13,7 @@ import PinIcon from "../../../imgs/pin.svg";
 import { Link } from "react-router-dom";
 import { useWindowDimensions } from "../../common/CustomHooks";
 import MobileReactionsDropdown from "../mobile/MobileReactionsDropdown";
+import { ColorContext } from "../../context/ColorModeContext";
 
 const accentColor = (type) => {
   switch (type) {
@@ -215,8 +216,10 @@ const PostWrapper = ({
   //   console.log("Pinned Status: ", pinnedStatus);
   // });
 
+  const theme = useContext(ColorContext);
   return (
     <Wrapper
+      theme={theme}
       onClick={() => {
         navigateToPost(postObject);
       }}
@@ -234,13 +237,14 @@ const PostWrapper = ({
         ) : (
           <></>
         )}
-        <PostTitle style={{ cursor: "pointer" }}>
+        <PostTitle theme={theme}>
           {postObject.title ? postObject.title : "Error getting post title"}
         </PostTitle>
         <DropDownContainer id={"dropdown-container"}>
           {pinnedStatus ? (
             <img
               src={PinIcon}
+              alt="please stop yelling at me, linter"
               style={{
                 margin: `0 1em 0 0`,
                 width: `18px`,
@@ -358,7 +362,7 @@ const Wrapper = styled.div`
   /* min-height: 255px; */
   /* height: 255px; */
 
-  background-color: #fff;
+  background-color: ${(props) => props.theme.aboutPanelColor};
   /* border: 1px solid red; */
   border-left: ${(props) =>
     props.sideBarColor
@@ -397,6 +401,8 @@ const CircleIcon = styled.div`
 `;
 
 const PostTitle = styled.h1`
+  color: ${(props) => props.theme.logoFontColor};
+  cursor: pointer;
   margin-left: 0.75em;
   padding: 5px;
   font-size: 18px;

@@ -11,6 +11,7 @@ import SectionTab from "./leftSideBar/SectionTab";
 import Sidebar from "./leftSideBar/Sidebar";
 import LoadingDots from "../common/animation/LoadingDots";
 import PostFeed from "./PostFeed";
+import { ColorContext } from "../context/ColorModeContext";
 
 // const PostView = React.lazy(() => import("./PostView"));
 
@@ -45,11 +46,12 @@ const ClassView = ({ props }) => {
 
   const setUserRole = useContext(UserRoleDispatchContext);
   const userRole = useContext(UserRoleContext);
+  const theme = useContext(ColorContext);
 
   // console.log("Role object: ", userRole);
 
   return (
-    <ClassViewWrapper>
+    <ClassViewWrapper theme={theme}>
       <Sidebar
         id={"Sidebar"}
         userRole={userRole}
@@ -85,6 +87,7 @@ SectionTab.propTypes = {
 export default ClassView;
 
 const ClassViewWrapper = styled.div`
+  background-color: ${(props) => props.theme.background};
   display: flex;
   height: 100%;
 `;

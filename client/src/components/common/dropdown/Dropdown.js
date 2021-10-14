@@ -28,7 +28,7 @@ const Dropdown = ({ stopPropagation, ...props }) => {
       >
         {props.children}
         {props.options && open && (
-          <Options {...props} open={open}>
+          <Options {...props} open={open} id="is it here?">
             {props.options.map((option, index) => (
               <DropdownOption
                 onClick={(event) => {
@@ -65,7 +65,7 @@ const Options = styled.div`
   display: none;
   position: absolute;
   overflow: hidden;
-  height: 0;
+  height: 100%;
   top: 115%;
   ${(props) =>
     props.right

@@ -11,10 +11,12 @@ import AnnouncementsImg from "../../../imgs/announcements.svg";
 import QuestionsImg from "../../../imgs/questions.svg";
 import PollsImg from "../../../imgs/polls.svg";
 import GeneralImg from "../../../imgs/general.svg";
+import { ColorContext } from "../../context/ColorModeContext";
 
 /* Sidebar view shows tabs of different post feeds and shows which one is selected */
 const Sidebar = ({ userRole, setHighlightedSection, highlightedSection }) => {
   const { courseId, postid } = useParams();
+  const theme = useContext(ColorContext);
 
   // Extracting the course name from the user context and current course ID
   var classroomID = useParams().courseId;
@@ -35,9 +37,11 @@ const Sidebar = ({ userRole, setHighlightedSection, highlightedSection }) => {
   return (
     <>
       <FlexWrapper>
-        <Container>
+        <Container theme={theme}>
           <Link to={"/course/" + courseId} style={{ textDecoration: "none" }}>
-            <ClassTitle nameFit={nameRatio}>{classroomName}</ClassTitle>
+            <ClassTitle nameFit={nameRatio} theme={theme}>
+              {classroomName}
+            </ClassTitle>
           </Link>
 
           <HR />
@@ -126,7 +130,7 @@ const FlexWrapper = styled.div`
 const Container = styled.div`
   height: calc(100vh - 55px);
   box-shadow: 5px 2px 6px -2px rgba(0, 0, 0, 0.15);
-  background-color: #fff;
+  background-color: ${(props) => props.theme.interiorPanel};
   max-width: 200px;
   transition: 150ms ease-out;
   @media only screen and (max-width: 1200px) {
@@ -136,6 +140,7 @@ const Container = styled.div`
 `;
 
 const ClassTitle = styled.h1`
+  color: ${(props) => props.theme.logoFontColor};
   height: 2em;
   line-height: 2.5em;
   font-size: ${(props) => props.nameFit * 1.5}rem;

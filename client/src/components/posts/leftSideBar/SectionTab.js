@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import styled, { css } from "styled-components";
+import styled, { css, ThemeConsumer } from "styled-components";
 import Icon from "../../common/Icon";
+import { ColorContext } from "../../context/ColorModeContext";
 
 const SectionTab = ({
   setHighlightedSection,
@@ -9,8 +10,10 @@ const SectionTab = ({
   imageLocation,
   tabText,
 }) => {
+  const theme = useContext(ColorContext);
   return (
     <Tab
+      theme={theme}
       highlight={highlightedSection === tabText}
       onClick={() => {
         setHighlightedSection(tabText);
@@ -26,7 +29,7 @@ const SectionTab = ({
           userSelect: "none",
         }}
       />
-      <TabText>{tabText}</TabText>
+      <TabText theme={theme}>{tabText}</TabText>
     </Tab>
   );
 };
@@ -41,6 +44,7 @@ export default SectionTab;
 
 //#region Tab Stylings
 const Tab = styled.div`
+  filter: ${(props) => props.theme.iconBrightness};
   display: flex;
   // border: 1px solid grey;
   width: 95%;
@@ -61,6 +65,7 @@ const Tab = styled.div`
 `;
 
 const TabText = styled.h3`
+  color: ${(props) => props.theme.logoFontColor};
   font-size: 1rem;
 
   user-select: none;

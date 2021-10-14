@@ -33,6 +33,8 @@ export const colorThemes = {
     test: "black",
     buttonBorder: "#dfdfdf",
     leaveCourseButton: "#DC2B2B",
+    interiorPanel: "#fff",
+    iconBrightness: "brightness(100%)",
   },
   dark: {
     background: "#181818",
@@ -48,5 +50,7 @@ export const colorThemes = {
     test: "black",
     buttonBorder: "black",
     leaveCourseButton: "white",
+    interiorPanel: "#191919",
+    iconBrightness: "brightness(3000%)",
   },
 };

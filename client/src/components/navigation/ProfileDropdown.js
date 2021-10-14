@@ -39,7 +39,7 @@ const ProfileDropdown = () => {
             {user.first} {user.last}
           </Name>
           <Profile className="flex-row align justify" src={user.picture} />
-          <ArrowImg src={Arrow} alt="Profile dropdown arrow" />
+          <ArrowImg src={Arrow} alt="Profile dropdown arrow" theme={theme} />
         </DropdownWrapper>
       </Dropdown>
     </Wrapper>
@@ -82,6 +82,7 @@ const Profile = styled.img`
 `;
 
 const ArrowImg = styled.img`
+  filter: ${(props) => props.theme.iconBrightness};
   height: 7px;
   margin-left: 7px;
 `;

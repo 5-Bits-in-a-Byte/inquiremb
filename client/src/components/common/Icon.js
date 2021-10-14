@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
+import { ColorContext, colorThemes } from "../context/ColorModeContext";
 
 const Icon = ({ src, onClick, msg, width, title, ...props }) => {
+  const theme = useContext(ColorContext);
   const clickHandler = props.clickable ? onClick : undefined;
   return (
     <IconDiv {...props} onClick={clickHandler} title={title}>
