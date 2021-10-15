@@ -123,8 +123,11 @@ class Posts(Resource):
         if not result['isPrivate'] and current_app.config['include_socketio']:
             current_app.socketio.emit('Post/create', result, room=courseId)
         
+
+        actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
         sendEvent(
-            actor=postedBy,
+            actor=actorObject,
             action="created",
             subject=self.serialize(post),
             topics=[courseId, post._id]
@@ -365,6 +368,16 @@ class Posts(Resource):
                 comment.delete()
             # Delete the post
             post.delete()
+
+            actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
+            sendEvent(
+                actor=actorObject,
+                action="deleted",
+                subject=self.serialize(post),
+                topics=[courseId, post._id]
+            )
+
             return {'deleted': True}, 200
         else:
             return {'deleted': False}, 403
@@ -450,6 +463,16 @@ class Posts(Resource):
             post.save()
 
         result = self.serialize(post)
+
+        actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
+        sendEvent(
+            actor=actorObject,
+            action="updated",
+            subject=self.serialize(post),
+            topics=[courseId, post._id]
+        )
+
         return result, 200
 
     def check_permissions(self, request_type, post_args):
