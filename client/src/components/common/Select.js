@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
+import { ColorContext } from "../context/ColorModeContext";
 
 /**
  * Read about react-select props here: https://react-select.com/props
  */
+
 export default ({ options, ...props }) => (
   <Select options={options} styles={customStyles} {...props} />
 );

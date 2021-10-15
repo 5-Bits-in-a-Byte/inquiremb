@@ -18,11 +18,13 @@ const renderEditButton = (
   toggleEdit,
   setAboutMe,
   editingProfile,
-  initialAboutMe
+  initialAboutMe,
+  theme
 ) => {
   if (editingProfile) {
     return (
       <Button
+        style={{ backgroundColor: `${theme.button}` }}
         secondary={true}
         buttonWidth={"10em"}
         buttonHeight={"2em"}
@@ -37,6 +39,7 @@ const renderEditButton = (
   } else {
     return (
       <Button
+        style={{ backgroundColor: `${theme.button}` }}
         secondary
         buttonWidth={"10em"}
         buttonHeight={"2em"}
@@ -192,7 +195,8 @@ const AboutUser = ({
                 toggleEdit,
                 setAboutMe,
                 editingProfile,
-                initialAboutMe
+                initialAboutMe,
+                theme
               )
             ) : (
               <></>

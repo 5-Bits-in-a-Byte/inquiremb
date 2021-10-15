@@ -68,7 +68,10 @@ const TopNavBar = () => {
               <Icon
                 className={"noselect"}
                 src={Arrow}
-                style={{ padding: "0 .75em 0 .25em" }}
+                style={{
+                  padding: "0 .75em 0 .25em",
+                  filter: `${theme.iconBrightness}`,
+                }}
               />
             </DropdownSelector>
           </Dropdown>

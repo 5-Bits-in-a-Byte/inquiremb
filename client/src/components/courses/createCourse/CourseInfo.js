@@ -9,6 +9,7 @@ import { UserContext, UserDispatchContext } from "../../context/UserProvider";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { fetchUser } from "../../common/externalMethods/FetchUser";
 import { generateCourseList } from "../../common/externalMethods/CoursesHelperMethods";
+import { ColorContext } from "../../context/ColorModeContext";
 
 const INVITE_OPTIONS = [
   {
@@ -71,13 +72,23 @@ const CourseInfo = ({ setCourse, setCourseList }) => {
     }, 1000);
   };
 
+  const theme = useContext(ColorContext);
+
   return (
     <>
-      <h3 style={{ marginLeft: 15 }}>CREATE A COURSE</h3>
+      <h3 style={{ marginLeft: 15, color: `${theme.logoFontColor}` }}>
+        CREATE A COURSE
+      </h3>
       <TopSection className="flex-row">
         <LeftColumn className="flex-col flex-1">
-          <InputLabel>Course Name</InputLabel>
+          <InputLabel style={{ color: `${theme.logoFontColor}` }}>
+            Course Name
+          </InputLabel>
           <Input
+            style={{
+              backgroundColor: `${theme.background}`,
+              color: `${theme.logoFontColor}`,
+            }}
             placeholder="ex, CIS 210"
             name="course"
             onChange={handleChange}
@@ -85,21 +96,30 @@ const CourseInfo = ({ setCourse, setCourseList }) => {
         </LeftColumn>
         <RightColumn className="flex-col"></RightColumn>
       </TopSection>
-      <HighlightedSection className="flex-row">
+      <HighlightedSection className="flex-row" theme={theme}>
         <LeftColumn className="flex-col flex-1">
           <InputLabel margin="0 0 7px">Student Access</InputLabel>
-          <Select defaultValue={INVITE_OPTIONS[0]} options={INVITE_OPTIONS} />
+          <Select
+            themeValue={theme}
+            defaultValue={INVITE_OPTIONS[0]}
+            options={INVITE_OPTIONS}
+          />
         </LeftColumn>
         <RightColumn className="flex-col flex-1">
           <InputLabel margin="0 0 7px">Description</InputLabel>
-          <p className="p-small">{INVITE_OPTIONS[0].description}</p>
+          <p className="p-small" style={{ color: `${theme.logoFontColor}` }}>
+            {INVITE_OPTIONS[0].description}
+          </p>
         </RightColumn>
       </HighlightedSection>
       <Button
         primary
         autoWidth
         loading={form.loading}
-        style={{ marginTop: 24 }}
+        style={{
+          marginTop: 24,
+          backgroundColor: `${theme.blueToLightGreyButton}`,
+        }}
         onClick={sendCourseRequest}
       >
         + Create Course
@@ -124,7 +144,7 @@ const TopSection = styled.div`
 `;
 
 const HighlightedSection = styled.div`
-  background-color: #f8f8f8;
+  background-color: ${(props) => props.theme.header};
   margin-top: 15px;
   padding: 15px;
 `;

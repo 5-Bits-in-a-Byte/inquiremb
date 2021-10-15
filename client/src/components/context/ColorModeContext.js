@@ -42,6 +42,7 @@ export const colorThemes = {
     draftTextArea: "white",
     checkbox: "#f1f1f1",
     modalPopup: "#fff",
+    selectBorder: "#818181",
   },
   dark: {
     background: "#181818",
@@ -66,5 +67,6 @@ export const colorThemes = {
     draftTextArea: "#181818",
     checkbox: "#3d3d3d",
     modalPopup: "#212121",
+    selectBorder: "white",
   },
 };
