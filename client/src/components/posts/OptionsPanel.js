@@ -6,6 +6,7 @@ import Button from "../common/Button";
 import { Link } from "react-router-dom";
 import CogIcon from "../../imgs/settings 1.svg";
 import { useWindowDimensions } from "../common/CustomHooks";
+import { ColorContext } from "../context/ColorModeContext";
 
 /**
  * Options Component ~ Button side panel for displaying buttons for the user
@@ -16,6 +17,7 @@ const OptionsPanel = ({ userRole, courseId, ...props }) => {
   const [panelPermissions, setPanelPermissions] = useState(null);
 
   const { width, height } = useWindowDimensions();
+  const theme = useContext(ColorContext);
 
   useEffect(() => {
     if (userRole)
@@ -44,8 +46,8 @@ const OptionsPanel = ({ userRole, courseId, ...props }) => {
     return (
       <OptionsWrapper>
         {/* {width >= 768 ? <OptionsHeader>OPTIONS</OptionsHeader> : <></>} */}
-        <OptionsHeader>OPTIONS</OptionsHeader>
-        <OptionsPanelWrapper>
+        <OptionsHeader theme={theme}>OPTIONS</OptionsHeader>
+        <OptionsPanelWrapper theme={theme}>
           {panelPermissions.displayDraftPost && (
             <Link
               style={{
@@ -126,6 +128,7 @@ const OptionsWrapper = styled.div`
 `;
 
 const OptionsHeader = styled.h1`
+  color: ${(props) => props.theme.logoFontColor};
   margin: 3em 0 1em 0;
 
   font-size: 14px;
@@ -136,7 +139,7 @@ const OptionsPanelWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: ${(props) => props.theme.header};
   width: 220px;
   padding: 14px;
   border-radius: 5px;

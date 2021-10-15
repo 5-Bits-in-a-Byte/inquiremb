@@ -1,7 +1,9 @@
 import React from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import SearchImg from "../../imgs/search-gray.svg";
 import Icon from "../common/Icon";
+import { ColorContext } from "../context/ColorModeContext";
 
 /** SearchBar Component
  *
@@ -11,8 +13,9 @@ import Icon from "../common/Icon";
  * @returns
  */
 const SearchBar = ({ onChange, placeholder, displayIcon }) => {
+  const theme = useContext(ColorContext);
   return (
-    <SearchDiv className="secondary-btn flex-row">
+    <SearchDiv className="secondary-btn flex-row" theme={theme}>
       {displayIcon ? (
         <Icon
           src={SearchImg}
@@ -25,7 +28,12 @@ const SearchBar = ({ onChange, placeholder, displayIcon }) => {
       ) : (
         <></>
       )}
-      <TextInput type="text" onChange={onChange} placeholder={placeholder} />
+      <TextInput
+        type="text"
+        onChange={onChange}
+        placeholder={placeholder}
+        theme={theme}
+      />
     </SearchDiv>
   );
 };
@@ -33,6 +41,7 @@ const SearchBar = ({ onChange, placeholder, displayIcon }) => {
 export default SearchBar;
 
 const SearchDiv = styled.div`
+  background-color: ${(props) => props.theme.button};
   height: 32px;
   align-items: center;
   border-radius: 3px;
@@ -44,6 +53,7 @@ const SearchDiv = styled.div`
 `;
 
 const TextInput = styled.input`
+  color: ${(props) => props.theme.logoFontColor};
   height: 100%;
   border: none;
   background-color: transparent;

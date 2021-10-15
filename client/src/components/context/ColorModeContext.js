@@ -35,6 +35,8 @@ export const colorThemes = {
     leaveCourseButton: "#DC2B2B",
     interiorPanel: "#fff",
     iconBrightness: "brightness(100%)",
+    whiteAndGreyButton: "#e7e7e7",
+    whiteAndGreyHoverBackground: "#dedede",
   },
   dark: {
     background: "#181818",
@@ -52,5 +54,7 @@ export const colorThemes = {
     leaveCourseButton: "white",
     interiorPanel: "#191919",
     iconBrightness: "brightness(3000%)",
+    whiteAndGreyButton: "#212121",
+    whiteAndGreyHoverBackground: "#1a1a1a",
   },
 };

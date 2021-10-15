@@ -8,6 +8,7 @@ import CogIcon from "../../imgs/settings 1.svg";
 import SearchBar from "../common/SearchBar";
 import LazyFetch from "../common/requests/LazyFetch";
 import { useWindowDimensions } from "../common/CustomHooks";
+import { ColorContext } from "../context/ColorModeContext";
 
 /**
  * Options Component ~ Button side panel for displaying buttons for the user
@@ -33,14 +34,15 @@ const SearchPanel = ({ courseId, onChangeCallback }) => {
   //   };
 
   const { width, height } = useWindowDimensions();
+  const theme = useContext(ColorContext);
 
   if (width <= 1200) return <></>;
   else
     return (
       <OptionsWrapper>
         {/* {width >= 768 ? <OptionsHeader>SEARCH</OptionsHeader> : <></>} */}
-        <OptionsHeader>SEARCH</OptionsHeader>
-        <OptionsPanel>
+        <OptionsHeader theme={theme}>SEARCH</OptionsHeader>
+        <OptionsPanel theme={theme}>
           <SearchBar
             placeholder="Search for Post"
             displayIcon={false}
@@ -72,6 +74,7 @@ const OptionsWrapper = styled.div`
 `;
 
 const OptionsHeader = styled.h1`
+  color: ${(props) => props.theme.logoFontColor};
   margin: 3em 0 1em 0;
 
   font-size: 14px;
@@ -82,7 +85,7 @@ const OptionsPanel = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: ${(props) => props.theme.header};
   width: 220px;
   padding: 14px;
   border-radius: 5px;

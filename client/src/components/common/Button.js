@@ -2,6 +2,8 @@ import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 import LoadingDots from "./animation/LoadingDots";
+import { useContext } from "react";
+import { ColorContext } from "../context/ColorModeContext";
 
 /**
  * The one true button to rule them all
@@ -11,6 +13,7 @@ import LoadingDots from "./animation/LoadingDots";
  */
 const Button = ({ children, loading, onClick, customStyledCSS, ...props }) => {
   const clickHandler = loading ? undefined : onClick;
+  const theme = useContext(ColorContext);
   return (
     <>
       {customStyledCSS ? (
@@ -18,7 +21,7 @@ const Button = ({ children, loading, onClick, customStyledCSS, ...props }) => {
           {loading ? <LoadingDots /> : children}
         </customStyledCSS>
       ) : (
-        <Btn {...props} onClick={clickHandler}>
+        <Btn {...props} onClick={clickHandler} theme={theme}>
           {loading ? <LoadingDots /> : children}
         </Btn>
       )}
@@ -64,10 +67,10 @@ const Btn = styled.button`
     css`
       border-radius: 4px;
       padding: 5px 12px;
-      background-color: #e7e7e7;
-      color: #162b55;
+      background-color: ${(props) => props.theme.whiteAndGreyButton};
+      color: ${(props) => props.theme.logoFontColor};
       &:hover {
-        background-color: #dedede;
+        background-color: ${(props) => props.theme.whiteAndGreyHoverBackground};
       }
     `}
   ${(props) =>
