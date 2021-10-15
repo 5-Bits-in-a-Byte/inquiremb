@@ -47,13 +47,24 @@ const PollTitlePanel = ({ titleText, setTitle }) => {
     <PollAttributeWrapper id="title-wrapper" theme={theme}>
       <PollDetailPanel id="title-field-container">
         {nameFieldState ? (
-          <PollOptionName style={{ margin: `0 1rem 0 0` }}>
+          <PollOptionName
+            style={{
+              margin: `0 1rem 0 0`,
+              color: `${theme.logoFontColor}`,
+            }}
+          >
             {nameField}
           </PollOptionName>
         ) : (
           <DraftTextArea
             minRows={1}
-            style={{ width: `500px`, marginRight: `1em` }}
+            style={{
+              width: `500px`,
+              marginRight: `1em`,
+              backgroundColor: `${theme.background}`,
+              color: `${theme.logoFontColor}`,
+              borderRadius: "5px",
+            }}
             onChange={(e) => {
               setNameField(e.target.value);
             }}
@@ -76,7 +87,10 @@ const PollTitlePanel = ({ titleText, setTitle }) => {
             setNameFieldState(!nameFieldState);
           }}
         >
-          <ChangeNameIcon src={PencilIcon} />
+          <ChangeNameIcon
+            src={PencilIcon}
+            style={{ filter: `${theme.iconBrightness}` }}
+          />
         </Button>
       </PollDetailPanel>
     </PollAttributeWrapper>
@@ -119,13 +133,24 @@ const PollOptionPanel = ({
     <PollAttributeWrapper theme={theme}>
       <PollDetailPanel>
         {nameFieldState ? (
-          <PollOptionName style={{ margin: `0 1rem 0 0` }}>
+          <PollOptionName
+            style={{
+              margin: `0 1rem 0 0`,
+              color: `${theme.logoFontColor}`,
+            }}
+          >
             {nameField}
           </PollOptionName>
         ) : (
           <DraftTextArea
             minRows={1}
-            style={{ width: `150px`, marginRight: `1em` }}
+            style={{
+              width: `150px`,
+              marginRight: `1em`,
+              backgroundColor: `${theme.background}`,
+              color: `${theme.logoFontColor}`,
+              borderRadius: "5px",
+            }}
             onChange={(e) => {
               setNameField(e.target.value);
             }}
@@ -151,7 +176,10 @@ const PollOptionPanel = ({
             setNameFieldState(!nameFieldState);
           }}
         >
-          <ChangeNameIcon src={PencilIcon} />
+          <ChangeNameIcon
+            src={PencilIcon}
+            style={{ filter: `${theme.iconBrightness}` }}
+          />
         </Button>
       </PollDetailPanel>
 
@@ -164,7 +192,10 @@ const PollOptionPanel = ({
           setcachedNameField(optionText);
         }}
       >
-        <ChangeNameIcon src={CloseButtonIcon} />
+        <ChangeNameIcon
+          src={CloseButtonIcon}
+          style={{ filter: `${theme.iconBrightness}` }}
+        />
       </Button>
     </PollAttributeWrapper>
   );
@@ -174,6 +205,7 @@ const PollOptionPanel = ({
  * Generates a list of Poll Option Components for State Management
  */
 const GenerateOptionList = (options, testNewOption, removeOption) => {
+  const theme = useContext(ColorContext);
   return options.map((option, index) => (
     <PollOptionPanel
       key={option}
