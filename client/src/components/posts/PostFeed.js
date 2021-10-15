@@ -15,6 +15,7 @@ import LazyFetch from "../common/requests/LazyFetch";
 import { useWindowDimensions } from "../common/CustomHooks";
 import SearchBar from "../common/SearchBar";
 import MobileOptionsPanel from "./mobile/MobileOptionsPanel";
+import { ColorContext } from "../context/ColorModeContext";
 // import LoadingDots from "../common/animation/LoadingDots";
 
 const convertToUpper = (postType) => {
@@ -252,6 +253,7 @@ const PostFeed = ({
     }
   };
 
+  const theme = useContext(ColorContext);
   return (
     <>
       <PostFeedWrapper>
@@ -363,7 +365,11 @@ const PostFeed = ({
                       fetchData(endpoint, socketPosts, setData);
                     }}
                   >
-                    <img src={LineWidthImg} />
+                    <img
+                      src={LineWidthImg}
+                      alt="Please stop yelling at me, linter"
+                      style={{ filter: `${theme.iconBrightness}` }}
+                    />
                   </Button>
                 </>
               ) : (
@@ -412,6 +418,7 @@ const PostFeed = ({
             {posts && posts.pinned.length > 0 && (
               <PostGroupingHeader>
                 <img
+                  alt="stop yelling at me, linter"
                   src={HollowPinImg}
                   style={{ width: 18, height: 18, marginRight: 5 }}
                 />
@@ -420,7 +427,7 @@ const PostFeed = ({
             )}
             {posts ? posts.pinned : <></>}
             {posts && posts.other.length > 0 && (
-              <PostGroupingHeader>All Posts</PostGroupingHeader>
+              <PostGroupingHeader theme={theme}>All Posts</PostGroupingHeader>
             )}
             {posts ? posts.other : <></>}
             <SearchPanel courseId={courseId} onChangeCallback={handleSearch} />
@@ -506,6 +513,7 @@ const SortingOptions = styled.div`
 `;
 
 const PostGroupingHeader = styled.div`
+  color: ${(props) => props.theme.logoFontColor};
   margin: 2.2em 0 0em 0;
   font-size: 1.25em;
   font-weight: 500;

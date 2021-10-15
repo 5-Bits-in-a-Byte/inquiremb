@@ -37,6 +37,7 @@ export const colorThemes = {
     whiteAndGreyButton: "#e7e7e7",
     whiteAndGreyHoverBackground: "#dedede",
     buttonSecondaryBorder: "#4a86fa",
+    blueToLightGreyButton: "#4A86FA",
   },
   dark: {
     background: "#181818",
@@ -57,5 +58,6 @@ export const colorThemes = {
     whiteAndGreyButton: "#212121",
     whiteAndGreyHoverBackground: "#1a1a1a",
     buttonSecondaryBorder: "white",
+    blueToLightGreyButton: "#3d3d3d",
   },
 };

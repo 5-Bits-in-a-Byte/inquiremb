@@ -57,7 +57,14 @@ const OptionsPanel = ({ userRole, courseId, ...props }) => {
               }}
               to={"/course/" + courseId + "/post/newQorA"}
             >
-              <Button primary autoWidth enableMargin={"0.5em"}>
+              <Button
+                primary
+                autoWidth
+                enableMargin={"0.5em"}
+                style={{
+                  backgroundColor: `${theme.blueToLightGreyButton}`,
+                }}
+              >
                 Draft Post
               </Button>
             </Link>
@@ -71,7 +78,14 @@ const OptionsPanel = ({ userRole, courseId, ...props }) => {
               }}
               to={"/course/" + courseId + "/post/newPoll"}
             >
-              <Button primary autoWidth enableMargin={"0.5em"}>
+              <Button
+                primary
+                autoWidth
+                enableMargin={"0.5em"}
+                style={{
+                  backgroundColor: `${theme.blueToLightGreyButton}`,
+                }}
+              >
                 Draft Poll
               </Button>
             </Link>
