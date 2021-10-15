@@ -9,6 +9,7 @@ import Checkbox from "../common/Checkbox";
 import LazyFetch from "../common/requests/LazyFetch";
 import { useHistory, useParams } from "react-router";
 import { UserRoleContext } from "../context/UserRoleProvider";
+import { ColorContext } from "../context/ColorModeContext";
 
 const max_options = 6;
 const default_title = "Inquire is a great website!";
@@ -41,8 +42,9 @@ const PollTitlePanel = ({ titleText, setTitle }) => {
     }
   };
 
+  const theme = useContext(ColorContext);
   return (
-    <PollAttributeWrapper id="title-wrapper">
+    <PollAttributeWrapper id="title-wrapper" theme={theme}>
       <PollDetailPanel id="title-field-container">
         {nameFieldState ? (
           <PollOptionName style={{ margin: `0 1rem 0 0` }}>
@@ -111,8 +113,10 @@ const PollOptionPanel = ({
     }
   };
 
+  const theme = useContext(ColorContext);
+
   return (
-    <PollAttributeWrapper>
+    <PollAttributeWrapper theme={theme}>
       <PollDetailPanel>
         {nameFieldState ? (
           <PollOptionName style={{ margin: `0 1rem 0 0` }}>
@@ -325,8 +329,10 @@ const PollConfig = ({ children, ...props }) => {
     RemoveOption
   );
 
+  const theme = useContext(ColorContext);
+
   return (
-    <Wrapper sideBarColor={accentColor(type)}>
+    <Wrapper sideBarColor={accentColor(type)} theme={theme}>
       {/* <HeaderContentWrapper>
         <CircleIcon accentColor={accentColor(type)} />
         <PostFlag accentColor={accentColor(type)} selected={type === "Poll"}>
@@ -335,12 +341,15 @@ const PollConfig = ({ children, ...props }) => {
       </HeaderContentWrapper> */}
       <GroupWrapper>
         <HeaderGroup>
-          <HeaderText>{"Poll Title"}</HeaderText>
+          <HeaderText theme={theme}>{"Poll Title"}</HeaderText>
         </HeaderGroup>
         <PollTitlePanel titleText={title} setTitle={setTitle} />
         <HeaderGroup>
-          <HeaderText>{"Create options for your poll."}</HeaderText>
+          <HeaderText theme={theme}>
+            {"Create options for your poll."}
+          </HeaderText>
           <HeaderInfoIcon
+            style={{ filter: `${theme.iconBrightness}` }}
             src={InfoIcon}
             onClick={() => {
               // console.log("Config data: ", title, options);
@@ -349,6 +358,7 @@ const PollConfig = ({ children, ...props }) => {
         </HeaderGroup>
         {test_option_components}
         <Button
+          style={{ backgroundColor: `${theme.button}` }}
           secondary
           buttonWidth={"175px"}
           buttonHeight={"36px"}
@@ -374,7 +384,14 @@ const PollConfig = ({ children, ...props }) => {
           ) : (
             <></>
           )}
-          <Button primary onClick={handleSubmit} style={{ margin: "0 1em" }}>
+          <Button
+            primary
+            onClick={handleSubmit}
+            style={{
+              margin: "0 1em",
+              backgroundColor: `${theme.blueToLightGreyButton}`,
+            }}
+          >
             Submit
           </Button>
         </ButtonSection>
@@ -386,6 +403,7 @@ const PollConfig = ({ children, ...props }) => {
 export default PollConfig;
 
 const Wrapper = styled.div`
+  color: white;
   margin: 2em;
   padding: 0.5em;
   /* width: 719px; */
@@ -393,7 +411,7 @@ const Wrapper = styled.div`
   /* min-height: 255px; */
   /* height: 255px; */
 
-  background-color: #fff;
+  background-color: ${(props) => props.theme.header};
   /* border: 1px solid red; */
   border-left: ${(props) =>
     props.sideBarColor
@@ -476,6 +494,7 @@ const HeaderGroup = styled.div`
 `;
 
 const HeaderText = styled.p`
+  color: ${(props) => props.theme.logoFontColor};
   margin: 0 0.5rem 0 0;
 
   font-size: 16px;

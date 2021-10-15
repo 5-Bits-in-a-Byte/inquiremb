@@ -1,7 +1,8 @@
-import React, { useRef, useEffect } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Checkmark from "./Checkmark";
+import { ColorContext } from "../context/ColorModeContext";
 
 /** Checkbox Component
  * A simple generic checkbox component to be used project wide where necessary.
@@ -13,9 +14,10 @@ import Checkmark from "./Checkmark";
  * @returns A simple checkbox component.
  */
 const Checkbox = ({ checkboxName, labelText, onChange, checkStatus }) => {
+  const theme = useContext(ColorContext);
   return (
-    <Wrapper>
-      <CheckLabel>
+    <Wrapper theme={theme}>
+      <CheckLabel theme={theme}>
         <Checkmark
           checkSize={"18px"}
           checkFloat={"left"}
@@ -55,7 +57,7 @@ const Wrapper = styled.div`
   margin: 0 1em;
   padding: 0.6em 0px;
 
-  background-color: #f1f1f1;
+  background-color: ${(props) => props.theme.checkbox};
   /* border: 2px solid red; */
   border-radius: 4px;
 `;
@@ -65,7 +67,7 @@ const CheckLabel = styled.label`
   line-height: 1em;
   user-select: none;
   cursor: pointer;
-  color: #162b55;
+  color: ${(props) => props.theme.logoFontColor};
 `;
 
 const SpecialInput = styled.input`

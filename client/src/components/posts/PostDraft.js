@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import DraftTextArea from "../common/DraftTextArea";
@@ -11,6 +11,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useHistory } from "react-router";
 import axios from "axios";
 import MaterialCheckbox from "../common/MaterialCheckbox";
+import { ColorContext } from "../context/ColorModeContext";
 
 const accentColor = (type) => {
   switch (type) {
@@ -111,8 +112,10 @@ const PostDraft = ({ userRole }) => {
   }
   var accent = accentColor(content.type);
 
+  const theme = useContext(ColorContext);
+
   return (
-    <Wrapper sideBarColor={accent}>
+    <Wrapper sideBarColor={accent} theme={theme}>
       <HeaderContentWrapper>
         {displayGeneral && (
           <PostFlag
@@ -150,6 +153,10 @@ const PostDraft = ({ userRole }) => {
         )}
       </HeaderContentWrapper>
       <DraftTextArea
+        style={{
+          backgroundColor: `${theme.draftTextArea}`,
+          color: `${theme.logoFontColor}`,
+        }}
         minRows={1}
         placeholder={titlePlaceholder}
         onChange={(e) => {
@@ -158,13 +165,15 @@ const PostDraft = ({ userRole }) => {
         name="title"
       />
       <Editor
+        theme={theme}
         name="content"
         editorStyle={{
-          // backgroundColor: "#f1f1f1",
           minHeight: "100px",
           padding: "0 8px",
           border: "2px solid #e7e7e7",
           borderRadius: "5px",
+          color: "inherit",
+          backgroundColor: `${theme.draftTextArea}`,
         }}
         // placeholder="Details"
         onEditorStateChange={handleContentChange}
@@ -207,7 +216,14 @@ const PostDraft = ({ userRole }) => {
               toggleChecked: toggleIsPrivate,
             }}
           />
-          <Button primary onClick={handleSubmit} style={{ margin: "0 1em" }}>
+          <Button
+            primary
+            onClick={handleSubmit}
+            style={{
+              margin: "0 1em",
+              backgroundColor: `${theme.blueToLightGreyButton}`,
+            }}
+          >
             Submit
           </Button>
         </ButtonSection>
@@ -219,6 +235,7 @@ const PostDraft = ({ userRole }) => {
 export default PostDraft;
 
 const Wrapper = styled.div`
+  color: ${(props) => props.theme.logoFontColor};
   margin: 2em;
   padding: 0.5em;
   /* width: 719px; */
@@ -226,7 +243,7 @@ const Wrapper = styled.div`
   /* min-height: 255px; */
   /* height: 255px; */
 
-  background-color: #fff;
+  background-color: ${(props) => props.theme.header};
   /* border: 1px solid red; */
   border-left: ${(props) =>
     props.sideBarColor

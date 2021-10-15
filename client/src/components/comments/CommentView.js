@@ -14,6 +14,7 @@ import PollConfig from "../posts/PollConfig";
 import PollWrapper from "../posts/wrappers/PollWrapper";
 import EditorWrapper from "../posts/wrappers/EditorWrapper";
 import { convertToRaw } from "draft-js";
+import { ColorContext } from "../context/ColorModeContext";
 
 const renderComments = (data, userRole) => {
   let ret = [];
@@ -39,6 +40,8 @@ const CommentView = ({ classroomName }) => {
   // const setUserRole = useContext(UserRoleDispatchContext);
   const userRole = useContext(UserRoleContext);
   // console.log("Comment View Role Object: ", userRole);
+
+  const theme = useContext(ColorContext);
 
   const handleVote = (voteAnswer) => {
     var pa = pollAns;
@@ -194,7 +197,7 @@ const CommentView = ({ classroomName }) => {
   const postExists = postid !== "newQorA" && postid !== "newPoll";
   // console.log("postid !== newPoll: ", postid !== "newPoll");
   return (
-    <CommentViewWrapper>
+    <CommentViewWrapper theme={theme}>
       <Sidebar
         classroomName={classroomName}
         setHighlightedSection={redirect}
@@ -260,6 +263,7 @@ CommentView.propTypes = {};
 export default CommentView;
 
 const CommentViewWrapper = styled.div`
+  background-color: ${(props) => props.theme.background};
   display: flex;
   height: 100%;
 `;

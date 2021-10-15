@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import Checkbox from "../common/Checkbox";
 
 const ColorContext = createContext(undefined);
 const ColorDispatchContext = createContext(undefined);
@@ -38,6 +39,8 @@ export const colorThemes = {
     whiteAndGreyHoverBackground: "#dedede",
     buttonSecondaryBorder: "#4a86fa",
     blueToLightGreyButton: "#4A86FA",
+    draftTextArea: "white",
+    checkbox: "#f1f1f1",
   },
   dark: {
     background: "#181818",
@@ -59,5 +62,7 @@ export const colorThemes = {
     whiteAndGreyHoverBackground: "#1a1a1a",
     buttonSecondaryBorder: "white",
     blueToLightGreyButton: "#3d3d3d",
+    draftTextArea: "#181818",
+    checkbox: "#3d3d3d",
   },
 };
