@@ -13,7 +13,7 @@ from flask_restful import reqparse, Resource
 from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
 from inquire.utils.argparser_types import str2bool
-# from inquire.utils.events import sendEvent
+from inquire.utils.events import sendEvent
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 from inquire.socketio_app import io
@@ -123,12 +123,12 @@ class Posts(Resource):
         if not result['isPrivate'] and current_app.config['include_socketio']:
             current_app.socketio.emit('Post/create', result, room=courseId)
         
-        # sendEvent(
-        #     actor=postedBy,
-        #     action="created",
-        #     subject=self.serialize(post),
-        #     topics=[courseId, post._id]
-        # )
+        sendEvent(
+            actor=postedBy,
+            action="created",
+            subject=self.serialize(post),
+            topics=[courseId, post._id]
+        )
 
         return result, 200
 
