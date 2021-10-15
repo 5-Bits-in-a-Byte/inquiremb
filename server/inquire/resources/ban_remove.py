@@ -6,6 +6,7 @@ from inquire.utils.argparser_types import str2bool
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 from inquire.socketio_app import io
+from inquire.utils.events import sendEvent
 
 
 class BanRemove(Resource):
@@ -41,13 +42,13 @@ class BanRemove(Resource):
 
         # NOTE: maybe add something to check if the user id is even in the class?
 
-        filler = ""
+        action = ""
         if args['type'] == "remove":
             if not current_user.permissions['admin']['removeUsers']:
                 return {"errors": ["You do not have permission to remove users in this course"]}, 401
             # Removing students
             self.remove_user(user, course)
-            filler = "removed"
+            action = "removed"
         elif args['type'] == "ban":
             if not current_user.permissions['admin']['banUsers']:
                 return {"errors": ["You do not have permission to ban users in this course"]}, 401
@@ -58,13 +59,23 @@ class BanRemove(Resource):
                 course.save()
                 # Remove the user from the course
                 self.remove_user(user, course)
-                filler = "banned"
+                action = "banned"
             # Unbanning students
             else:
                 course.blacklist.remove(args['userId'])
                 course.save()
-                filler = "unbanned"
-        return {"success": [f"{user.first} {user.last} was successfully {filler} from the course."]}, 200
+                action = "unbanned"
+
+        actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
+        sendEvent(
+            actor=actorObject,
+            action=action,
+            subject=user,
+            topics=[courseId, current_user._id, user._id]
+        )
+
+        return {"success": [f"{user.first} {user.last} was successfully {action} from the course."]}, 200
 
     def get(self, courseId):
         try:
