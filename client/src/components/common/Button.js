@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 import LoadingDots from "./animation/LoadingDots";
 import { useContext } from "react";
-import { ColorContext } from "../context/ColorModeContext";
+import { ColorContext, colorThemes } from "../context/ColorModeContext";
 
 /**
  * The one true button to rule them all
@@ -70,14 +70,13 @@ const Btn = styled.button`
       background-color: ${(props) => props.theme.whiteAndGreyButton};
       color: ${(props) => props.theme.logoFontColor};
       &:hover {
-        background-color: ${(props) => props.theme.whiteAndGreyHoverBackground};
+        background-color: ${(props) => props.theme.whiteAndGrey};
       }
     `}
   ${(props) =>
     props.outlineSecondary &&
     css`
-      border: 2px solid
-        ${(props) => (props.buttonColor ? props.buttonColor : css`#4a86fa`)};
+      border: 2px solid ${(props) => props.theme.buttonSecondaryBorder};
       border-radius: 4px;
       padding: 5px 12px;
       background-color: #e7e7e700;

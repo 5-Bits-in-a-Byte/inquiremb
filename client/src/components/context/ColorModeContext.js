@@ -1,4 +1,3 @@
-import { BlockMapBuilder } from "draft-js";
 import React, { createContext, useState } from "react";
 
 const ColorContext = createContext(undefined);
@@ -37,6 +36,7 @@ export const colorThemes = {
     iconBrightness: "brightness(100%)",
     whiteAndGreyButton: "#e7e7e7",
     whiteAndGreyHoverBackground: "#dedede",
+    buttonSecondaryBorder: "#4a86fa",
   },
   dark: {
     background: "#181818",
@@ -56,5 +56,6 @@ export const colorThemes = {
     iconBrightness: "brightness(3000%)",
     whiteAndGreyButton: "#212121",
     whiteAndGreyHoverBackground: "#1a1a1a",
+    buttonSecondaryBorder: "white",
   },
 };

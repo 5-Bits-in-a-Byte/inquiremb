@@ -96,7 +96,12 @@ const OptionsPanel = ({ userRole, courseId, ...props }) => {
                 enableMargin={"0.5em"}
                 // onClick={() => alert("This webpage has not yet been set up...")}
               >
-                <img src={CogIcon} alt="Config Page Button Icon" />
+                <img
+                  src={CogIcon}
+                  alt="Config Page Button Icon"
+                  theme={theme}
+                  style={{ filter: `${theme.iconBrightness}` }}
+                />
               </Button>
             </Link>
           )}
