@@ -75,6 +75,11 @@ const UserCourseCard = ({
         )}
         {modalIsShown && (
           <Modal
+            theme={theme}
+            style={{
+              color: `${theme.logoFontColor}`,
+              backgroundColor: `${theme.modalPopup}`,
+            }}
             close={() => {
               toggleModal(false);
               toggleDisplay("flex");
@@ -83,7 +88,11 @@ const UserCourseCard = ({
             data-testid={"leave-course-modal"}
           >
             <InnerModalWrapper className="flex-col align justify">
-              <Title style={{ display: display }}>CONFIRM LEAVING COURSE</Title>
+              <Title
+                style={{ display: display, color: `${theme.logoFontColor}` }}
+              >
+                CONFIRM LEAVING COURSE
+              </Title>
               <Success
                 style={
                   display == "none" ? { display: "block" } : { display: "none" }
@@ -91,13 +100,23 @@ const UserCourseCard = ({
               >
                 {success}
               </Success>
-              <ContentSection style={{ display: display }}>
+              <ContentSection
+                style={{
+                  display: display,
+                  backgroundColor: `${theme.modalPopup}`,
+                  color: `${theme.logoFontColor}`,
+                }}
+              >
                 Are you sure you want to leave {userCourseObject?.courseName}?
               </ContentSection>
               <Button
                 primary
                 autoWidth
-                style={{ marginTop: "10px", display: display }}
+                style={{
+                  marginTop: "10px",
+                  display: display,
+                  backgroundColor: `${theme.blueToLightGreyButton}`,
+                }}
                 onClick={handleLeaveCourse}
               >
                 Confirm

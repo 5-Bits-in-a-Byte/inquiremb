@@ -41,6 +41,7 @@ export const colorThemes = {
     blueToLightGreyButton: "#4A86FA",
     draftTextArea: "white",
     checkbox: "#f1f1f1",
+    modalPopup: "#fff",
   },
   dark: {
     background: "#181818",
@@ -64,5 +65,6 @@ export const colorThemes = {
     blueToLightGreyButton: "#3d3d3d",
     draftTextArea: "#181818",
     checkbox: "#3d3d3d",
+    modalPopup: "#212121",
   },
 };

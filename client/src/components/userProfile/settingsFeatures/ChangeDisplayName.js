@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Button from "../../common/Button";
 import { fetchUser } from "../../common/externalMethods/FetchUser";
 import LazyFetch from "../../common/requests/LazyFetch";
+import { ColorContext, colorThemes } from "../../context/ColorModeContext";
 import { UserContext, UserDispatchContext } from "../../context/UserProvider";
 
 const ChangeDisplayName = ({ props }) => {
@@ -59,13 +60,22 @@ const ChangeDisplayName = ({ props }) => {
     });
   };
 
+  const theme = useContext(ColorContext);
+
   return (
     <>
       <Wrapper>
         <FormWrapper>
           <form>
-            <label htmlFor="fname">First Name:</label> <br />
+            <label htmlFor="fname" style={{ color: `${theme.logoFontColor}` }}>
+              First Name:
+            </label>{" "}
+            <br />
             <input
+              style={{
+                backgroundColor: `${theme.background}`,
+                color: `${theme.logoFontColor}`,
+              }}
               type="text"
               id="fname"
               onChange={handleFirstNameChange}
@@ -74,8 +84,15 @@ const ChangeDisplayName = ({ props }) => {
               }}
             />
             <br />
-            <label htmlFor="fname">Last Name:</label> <br />
+            <label htmlFor="fname" style={{ color: `${theme.logoFontColor}` }}>
+              Last Name:
+            </label>{" "}
+            <br />
             <input
+              style={{
+                backgroundColor: `${theme.background}`,
+                color: `${theme.logoFontColor}`,
+              }}
               type="text"
               id="fname"
               onChange={handleLastNameChange}
@@ -87,6 +104,12 @@ const ChangeDisplayName = ({ props }) => {
           </form>
         </FormWrapper>
         <Button
+          style={{
+            backgroundColor: `${
+              theme === colorThemes.dark ? "#181818" : "#4A86FA"
+            }`,
+            borderRadius: "6px",
+          }}
           primary
           buttonWidth={"10em"}
           buttonHeight={"2.5em"}

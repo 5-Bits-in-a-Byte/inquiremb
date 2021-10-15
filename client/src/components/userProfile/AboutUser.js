@@ -215,6 +215,11 @@ const AboutUser = ({
               {editingProfile ? (
                 <div>
                   <DraftTextArea
+                    style={{
+                      backgroundColor: `${theme.background}`,
+                      borderRadius: "5px",
+                      color: `${theme.logoFontColor}`,
+                    }}
                     minRows={4}
                     maxRows={4}
                     placeholder="Here's something super interesting about me..."
@@ -224,6 +229,9 @@ const AboutUser = ({
                   ></DraftTextArea>
                   <ButtonWrapper>
                     <Button
+                      style={{
+                        backgroundColor: `${theme.blueToLightGreyButton}`,
+                      }}
                       primary
                       buttonWidth={"10em"}
                       buttonHeight={"1.5em"}
@@ -237,7 +245,7 @@ const AboutUser = ({
                   </ButtonWrapper>
                 </div>
               ) : (
-                <AboutText>{aboutMe}</AboutText>
+                <AboutText theme={theme}>{aboutMe}</AboutText>
               )}
             </AboutContent>
           </UserInfoWrapper>
@@ -281,6 +289,7 @@ const Wrapper = styled.div`
 `;
 
 const AboutText = styled.p`
+  color: ${(props) => props.theme.logoFontColor};
   white-space: initial;
 
   @media only screen and (max-width: 1200px) {
