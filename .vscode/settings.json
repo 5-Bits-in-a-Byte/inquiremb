@@ -7,5 +7,6 @@
     "editor.formatOnSave": true,
     "emmet.syntaxProfiles": {
         "javascript" : "js"
-    }
+    },
+    "python.envFile": "${workspaceFolder}/server/env.sh"
 }
