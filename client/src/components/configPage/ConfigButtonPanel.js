@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Button from "../common/Button";
 import "../common/css/noTextSelection.css";
+import { ColorContext } from "../context/ColorModeContext";
 
 /**
  *
@@ -10,8 +11,9 @@ import "../common/css/noTextSelection.css";
  * @returns
  */
 const ConfigButtonPanel = ({ panelText, ...props }) => {
+  const theme = useContext(ColorContext);
   return (
-    <ConfigPanelWrapper className={"noselect"}>
+    <ConfigPanelWrapper className={"noselect"} theme={theme}>
       <ConfigTextWrapper>{panelText}</ConfigTextWrapper>
       <ConfigChildrenWrapper>{props.children}</ConfigChildrenWrapper>
     </ConfigPanelWrapper>
@@ -23,6 +25,7 @@ export default ConfigButtonPanel;
 // ConfigButtonPanel.PropTypes = {};
 
 const ConfigPanelWrapper = styled.div`
+  background-color: ${(props) => props.theme.header};
   display: flex;
   align-items: center;
   justify-content: space-between;

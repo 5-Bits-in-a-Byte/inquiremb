@@ -10,6 +10,7 @@ import LoadingDots from "../common/animation/LoadingDots";
 import { UserRoleContext } from "../context/UserRoleProvider";
 import Errors from "../common/Errors";
 import { FormHelperText } from "@material-ui/core";
+import { ColorContext } from "../context/ColorModeContext";
 
 const colorTest = [
   "#dd0000",
@@ -196,6 +197,8 @@ const ConfigPanel = ({
   const [assignErrors, setAssignErrors] = useState(null);
   const [bannedErrors, setBannedErrors] = useState(null);
 
+  const theme = useContext(ColorContext);
+
   // Grab the banned users
   useEffect(() => {
     if (!bannedUserList) {
@@ -257,7 +260,7 @@ const ConfigPanel = ({
   });
 
   return (
-    <PanelWrapper>
+    <PanelWrapper theme={theme}>
       {userRole.admin.configure && (
         <ConfigPanelGroup
           panelHeader={"Edit the permissions of each role here."}
@@ -382,6 +385,7 @@ const ConfigPanel = ({
 export default ConfigPanel;
 
 const PanelWrapper = styled.div`
+  background-color: ${(props) => props.theme.header};
   max-width: 1200px;
   /* margin-bottom: 10em; */
   padding: 2rem;

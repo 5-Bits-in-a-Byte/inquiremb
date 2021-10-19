@@ -13,6 +13,7 @@ import { UserContext, UserDispatchContext } from "../context/UserProvider";
 import { DeleteUserCourse } from "../common/stateManagement/UpdateUser.js";
 import TempIcon from "../../imgs/temporary-user-icon.png";
 import LoadingDots from "../common/animation/LoadingDots";
+import { ColorContext } from "../context/ColorModeContext";
 
 const dummy_usernames = [
   "Amelia Ambassador",
@@ -64,6 +65,8 @@ const ConfigView = ({ props }) => {
 
   const userRole = useContext(UserRoleContext);
   const setUserRole = useContext(UserRoleDispatchContext);
+
+  const theme = useContext(ColorContext);
 
   const attemptGetUserRole = (courseId) => {
     LazyFetch({
@@ -175,22 +178,21 @@ const ConfigView = ({ props }) => {
       <LoadingDots size={48} color={"#4a86fa"} />
     </div>
   ) : (
-    <ConfigWrapper>
+    <ConfigWrapper theme={theme}>
       <ScrollingDiv>
         {/* <CenterContent> */}
         {userIsAdmin || userCanBan || userCanRemove ? (
           <h1
             style={{
               margin: `0 0 2rem 0`,
+              color: `${theme.logoFontColor}`,
               // textShadow: `0px 1px 4px rgba(0, 0, 0, 0.25)`,
             }}
           >
             Manage and Edit Course Configurations:
           </h1>
         ) : (
-          <h1 /* style={{ textShadow: `0px 1px 4px rgba(0, 0, 0, 0.25)` }} */>
-            ACCESS DENIED
-          </h1>
+          <h1 style={{ color: theme.logoFontColor }}>ACCESS DENIED</h1>
         )}
 
         {userIsAdmin || userCanBan || userCanRemove ? (
@@ -277,6 +279,7 @@ const ConfigView = ({ props }) => {
 export default ConfigView;
 
 const ConfigWrapper = styled.div`
+  background-color: ${(props) => props.theme.background};
   width: 100%;
   min-height: 100vh;
   position: relative;

@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import InfoIcon from "../../imgs/Info_tip.svg";
+import { ColorContext } from "../context/ColorModeContext";
 
 const ConfigPanelGroup = ({ panelHeader, children, ...props }) => {
+  const theme = useContext(ColorContext);
   return (
     <GroupWrapper>
       <HeaderGroup>
-        <HeaderText>{panelHeader}</HeaderText>
-        <HeaderInfoIcon src={InfoIcon} />
+        <HeaderText theme={theme}>{panelHeader}</HeaderText>
+        <HeaderInfoIcon theme={theme} src={InfoIcon} />
       </HeaderGroup>
       {children}
     </GroupWrapper>
@@ -35,6 +37,7 @@ const HeaderGroup = styled.div`
 `;
 
 const HeaderText = styled.p`
+  color: ${(props) => props.theme.logoFontColor};
   margin: 0 0.5rem 0 0;
 
   font-size: 16px;
@@ -43,6 +46,7 @@ const HeaderText = styled.p`
 `;
 
 const HeaderInfoIcon = styled.img`
+  filter: ${(props) => props.theme.iconBrightness};
   width: 16px;
   height: 16px;
 `;
