@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 import InputLabel from "../../common/InputLabel";
 import Errors from "../../common/Errors";
 import LazyFetch from "../../common/requests/LazyFetch";
+import { ColorContext } from "../../context/ColorModeContext";
+import styled from "styled-components";
 
 const JoinCourse = ({ joinCourse }) => {
   const [disabledCourse, toggleDisabledCourse] = useState(false);
   const [disabledAccess, toggleDisabledAccess] = useState(false);
+  const theme = useContext(ColorContext);
 
   const [form, setForm] = useState({
     courseName: null,
@@ -66,37 +69,70 @@ const JoinCourse = ({ joinCourse }) => {
     }, 1000);
   };
   return (
-    <>
-      <h3>SEARCH FOR A COURSE</h3>
+    <JoinInfoWrapper theme={theme}>
+      <h3 style={{ color: `${theme.logoFontColor}` }}>SEARCH FOR A COURSE</h3>
       <InputLabel>Course Name</InputLabel>
       <Input
         placeholder="ex, CIS 210"
         name="courseName"
         disabled={disabledCourse}
-        style={disabledCourse ? { opacity: "50%" } : { opacity: "100%" }}
+        style={
+          disabledCourse
+            ? {
+                opacity: "50%",
+                backgroundColor: `${theme.background}`,
+                color: `${theme.logoFontColor}`,
+              }
+            : {
+                opacity: "100%",
+                backgroundColor: `${theme.background}`,
+                color: `${theme.logoFontColor}`,
+              }
+        }
         onChange={handleChange}
       />
-      <h3 style={{ marginTop: 30 }}>OR JOIN BY ACCESS CODE</h3>
+      <h3 style={{ marginTop: 30, color: `${theme.logoFontColor}` }}>
+        OR JOIN BY ACCESS CODE
+      </h3>
       <InputLabel>Access Code</InputLabel>
       <Input
         placeholder="ex, AcK21k"
         name="accessCode"
         disabled={disabledAccess}
-        style={disabledAccess ? { opacity: "50%" } : { opacity: "100%" }}
+        style={
+          disabledAccess
+            ? {
+                opacity: "50%",
+                backgroundColor: `${theme.background}`,
+                color: `${theme.logoFontColor}`,
+              }
+            : {
+                opacity: "100%",
+                backgroundColor: `${theme.background}`,
+                color: `${theme.logoFontColor}`,
+              }
+        }
         onChange={handleChange}
       />
       <Button
         primary
         autoWidth
         loading={form.loading}
-        style={{ marginTop: 24 }}
+        style={{
+          marginTop: 24,
+          backgroundColor: `${theme.blueToLightGreyButton}`,
+        }}
         onClick={sendJoinRequest}
       >
         + Join Course
       </Button>
       <Errors errors={form.errors} />
-    </>
+    </JoinInfoWrapper>
   );
 };
 
 export default JoinCourse;
+
+const JoinInfoWrapper = styled.div`
+  background-color: ${(props) => props.theme.header};
+`;

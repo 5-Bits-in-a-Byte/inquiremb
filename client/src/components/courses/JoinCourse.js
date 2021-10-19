@@ -28,6 +28,7 @@ const JoinCourse = ({ courseList, setCourseList }) => {
       </CustomButton>
       {modalIsShown && (
         <Modal
+          style={{ backgroundColor: `${theme.header}`, borderRadius: "10px" }}
           close={() => {
             toggleModal(false);
             toggleDisplay("flex");
