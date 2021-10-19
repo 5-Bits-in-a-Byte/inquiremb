@@ -37,7 +37,7 @@ const CreateCourse = ({ courseList, setCourseList }) => {
       </CustomButton>
       {modalIsShown && (
         <Modal
-          style={{ backgroundColor: `${theme.header}` }}
+          style={{ backgroundColor: `${theme.header}`, borderRadius: "10px" }}
           close={() => {
             setCourseList(generateCourseList(user.courses, setUser));
             toggleModal(false);

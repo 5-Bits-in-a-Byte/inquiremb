@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled, { css } from "styled-components";
+import { ColorContext } from "../../context/ColorModeContext";
 import { useOnClickAway } from "../CustomHooks";
 import ClickAway from "./ClickAway";
 import DropdownOption from "./DropdownOption";
@@ -17,6 +18,8 @@ const Dropdown = ({ stopPropagation, ...props }) => {
     toggle(false);
   });
 
+  const theme = useContext(ColorContext);
+
   return (
     <>
       <Wrapper
@@ -28,7 +31,7 @@ const Dropdown = ({ stopPropagation, ...props }) => {
       >
         {props.children}
         {props.options && open && (
-          <Options {...props} open={open} id="is it here?">
+          <Options {...props} open={open} theme={theme}>
             {props.options.map((option, index) => (
               <DropdownOption
                 onClick={(event) => {
@@ -82,7 +85,7 @@ const Options = styled.div`
     props.open &&
     css`
       display: block;
-      background: white;
+      background: ${(props) => props.theme.dropDown};
       border-radius: 4px;
       padding: 5px 0;
       height: auto;

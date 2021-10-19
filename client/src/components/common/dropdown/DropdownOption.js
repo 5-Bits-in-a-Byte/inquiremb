@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { ColorContext } from "../../context/ColorModeContext";
 import "../css/noTextSelection.css";
 
 /** DropdownOption Component
@@ -9,9 +10,12 @@ import "../css/noTextSelection.css";
  * @returns An object representing an option of a simple dropdown menu.
  */
 const DropdownOption = ({ extra, ...props }) => {
+  const theme = useContext(ColorContext);
   return (
-    <Option className={"noselect"} {...props}>
-      <Label className={"noselect"}>{props.children}</Label>
+    <Option className={"noselect"} {...props} theme={theme}>
+      <Label className={"noselect"} theme={theme}>
+        {props.children}
+      </Label>
       {extra}
     </Option>
   );
@@ -26,13 +30,13 @@ const Option = styled.div`
   white-space: nowrap;
   width: 100%;
   &:hover {
-    background: #f0f0f0;
+    background: ${(props) => props.theme.dropDownHover};
   }
 `;
 
 const Label = styled.a`
   font-size: 14px;
-  color: #333333;
+  color: ${(props) => props.theme.dropDownText};
   margin-left: 10px;
   margin-right: 10px;
 `;

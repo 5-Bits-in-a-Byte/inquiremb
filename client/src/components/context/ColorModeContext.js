@@ -43,6 +43,9 @@ export const colorThemes = {
     checkbox: "#f1f1f1",
     modalPopup: "#fff",
     selectBorder: "#818181",
+    dropDown: "white",
+    dropDownHover: "#f0f0f0",
+    dropDownText: "#333333",
   },
   dark: {
     background: "#181818",
@@ -68,5 +71,8 @@ export const colorThemes = {
     checkbox: "#3d3d3d",
     modalPopup: "#212121",
     selectBorder: "white",
+    dropDown: "#181818",
+    dropDownHover: "black",
+    dropDownText: "white",
   },
 };

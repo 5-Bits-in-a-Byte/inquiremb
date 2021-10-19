@@ -33,7 +33,13 @@ const ProfileDropdown = () => {
 
   return (
     <Wrapper theme={theme}>
-      <Dropdown options={options}>
+      <Dropdown
+        options={options}
+        style={{
+          backgroundColor: `${theme.dropDown}`,
+          color: `${theme.logoFontColor}`,
+        }}
+      >
         <DropdownWrapper className="flex-row align">
           <Name className="font-regular" theme={theme}>
             {user.first} {user.last}
