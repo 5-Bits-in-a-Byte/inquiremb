@@ -16,7 +16,7 @@ const Courses = () => {
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
   const theme = useContext(ColorContext);
-  let currentCourseState = generateCourseList(user.courses, setUser);
+  let currentCourseState = generateCourseList(user.courses, setUser, theme);
   const [courseList, setCourseList] = useState(currentCourseState);
 
   return (

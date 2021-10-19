@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { ColorContext } from "../../context/ColorModeContext";
 import CourseCard from "../../courses/CourseCard";
 
 /** generateCourseList (list)
@@ -7,11 +9,12 @@ import CourseCard from "../../courses/CourseCard";
  * @param {function} setUser the method of setting the new UserContext.
  * @returns a list of CourseCard components
  */
-export const generateCourseList = (userCourses, setUser) => {
+export const generateCourseList = (userCourses, setUser, theme) => {
   let ret = [];
   userCourses.forEach((course, index) => {
     ret.push(
       <CourseCard
+        theme={theme}
         key={course.courseId}
         id={course.courseId}
         courseName={course.courseName}

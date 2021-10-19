@@ -24,6 +24,7 @@ import { ColorContext } from "../context/ColorModeContext";
 class CourseCard extends React.Component {
   constructor(props) {
     super(props);
+    this.theme = props.theme;
     this.state = {
       numMsgs: 0,
       courseColor: props.color,
@@ -142,7 +143,7 @@ class CourseCard extends React.Component {
             left: `100%`,
           }}
         > */}
-        <AlignedDiv>
+        <AlignedDiv theme={this.theme}>
           <ColorDiv color={this.state.courseColor}>
             <MessageDiv>
               <Link to={"/course/" + this.props.id + "/post/newQorA"}>
@@ -165,7 +166,7 @@ class CourseCard extends React.Component {
               )}
             </MessageDiv>
           </ColorDiv>
-          <CourseInfo>
+          <CourseInfo theme={this.props.theme}>
             <div style={{ padding: "0px 20px 0px 0px" }}>
               {this.state.nicknameActive ? (
                 <div>
@@ -180,7 +181,7 @@ class CourseCard extends React.Component {
                   to={"/course/" + this.props.id}
                   style={{ textDecoration: "none" }}
                 >
-                  <CourseName>
+                  <CourseName theme={this.theme}>
                     {this.state.nickname
                       ? this.state.nickname
                       : this.props.courseName}
@@ -192,7 +193,9 @@ class CourseCard extends React.Component {
                   to={"/course/" + this.props.id}
                   style={{ textDecoration: "none" }}
                 >
-                  <CourseTitle>{this.props.courseName}</CourseTitle>
+                  <CourseTitle theme={this.theme}>
+                    {this.props.courseName}
+                  </CourseTitle>
                 </Link>
               ) : (
                 <></>
@@ -207,7 +210,10 @@ class CourseCard extends React.Component {
                 src={EditImg}
                 alt={"Nickname"}
                 width={"20em"}
-                style={{ padding: "5px 5px 8px 0px" }}
+                style={{
+                  padding: "5px 5px 8px 0px",
+                  filter: `${this.theme.iconBrightness}`,
+                }}
                 title={"Add/Edit nickname"}
                 onClick={this.toggleNickname}
               />
@@ -219,7 +225,10 @@ class CourseCard extends React.Component {
                 src={RemoveNickname}
                 alt={"Remove Nickname"}
                 width={"20em"}
-                style={{ padding: "5px 5px 8px 5px" }}
+                style={{
+                  padding: "5px 5px 8px 5px",
+                  filter: `${this.theme.iconBrightness}`,
+                }}
                 title={"Remove nickname"}
                 onClick={this.removeNickname}
               />
@@ -231,7 +240,10 @@ class CourseCard extends React.Component {
                 src={ColorImg}
                 alt={"Color"}
                 width={"16em"}
-                style={{ padding: "5px 5px 8px 5px" }}
+                style={{
+                  padding: "5px 5px 8px 5px",
+                  filter: `${this.theme.iconBrightness}`,
+                }}
                 title={"Change color"}
                 onClick={this.toggleColorDisplay}
               />
@@ -292,7 +304,7 @@ const AlignedDiv = styled.div`
   margin: 0.5em;
   overflow: hidden;
 
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.header};
   box-shadow: 0px 0.25em 0.5em 0.125em rgba(0, 0, 0, 0.07);
   border-radius: 0.35em;
 
@@ -347,8 +359,8 @@ const CourseInfo = styled(Link)`
 `;
 
 const CourseName = styled.h1`
+  color: ${(props) => props.theme.logoFontColor};
   font-size: 1.2em;
-  color: #162b55;
 `;
 
 const CourseTitle = styled.h3`
