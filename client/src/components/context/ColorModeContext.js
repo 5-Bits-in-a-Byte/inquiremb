@@ -46,6 +46,7 @@ export const colorThemes = {
     dropDown: "white",
     dropDownHover: "#f0f0f0",
     dropDownText: "#333333",
+    mobileSideBar: "#162B55",
   },
   dark: {
     background: "#181818",
@@ -74,5 +75,6 @@ export const colorThemes = {
     dropDown: "#181818",
     dropDownHover: "black",
     dropDownText: "white",
+    mobileSideBar: "#212121",
   },
 };

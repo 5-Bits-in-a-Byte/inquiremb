@@ -1,20 +1,32 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useLocation } from "react-router";
 import styled, { css } from "styled-components";
 import ClockImg from "../../imgs/clock.svg";
 import CourseImg from "../../imgs/courses-white.svg";
 import { useOnClickAway } from "../common/CustomHooks";
+import {
+  ColorContext,
+  ColorDispatchContext,
+  colorThemes,
+} from "../context/ColorModeContext";
 import MenuItem from "./MenuItem";
+import Button from "../common/Button";
 
 const MobileLeftNavBar = ({ openState, debug, chidren, ...props }) => {
   const location = useLocation();
   const active = location.pathname;
+  const setColorTheme = useContext(ColorDispatchContext);
+  const theme = useContext(ColorContext);
 
   // const node = useOnClickAway(() => openState.setState(false));
 
   return (
     <>
-      <Wrapper debug={debug} openState={openState.state} /* ref={node} */>
+      <Wrapper
+        theme={theme}
+        debug={debug}
+        openState={openState.state} /* ref={node} */
+      >
         <NavWrapper debug={debug}>
           <MenuItem
             to="/home"
@@ -38,6 +50,16 @@ const MobileLeftNavBar = ({ openState, debug, chidren, ...props }) => {
               console.log(event);
             }}
           />
+          <Button
+            onClick={() => {
+              setColorTheme(
+                theme === colorThemes.light
+                  ? colorThemes.dark
+                  : colorThemes.light
+              );
+              console.log(theme.bing);
+            }}
+          ></Button>
         </NavWrapper>
       </Wrapper>
     </>
@@ -59,14 +81,15 @@ const Wrapper = styled.div`
         `};
 
   height: 100vh;
-  padding-top: calc(66px + 58px);
+  // removed the calc call here
+  padding-top: 124px;
   position: fixed;
   left: 0;
   top: 0;
 
   overflow: hidden;
 
-  background-color: #162b55;
+  background-color: ${(props) => props.theme.mobileSideBar};
   box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.25);
 
   z-index: 9997;
