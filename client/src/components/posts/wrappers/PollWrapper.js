@@ -3,10 +3,13 @@ import Poll from "react-polls";
 import { useParams } from "react-router";
 import LazyFetch from "../../common/requests/LazyFetch";
 import { UserRoleContext } from "../../context/UserRoleProvider";
+import { ColorContext, colorThemes } from "../../context/ColorModeContext";
 
 const PollWrapper = ({ post }) => {
   const { courseId } = useParams();
   const userRole = useContext(UserRoleContext);
+
+  const theme = useContext(ColorContext);
 
   // console.log("pollWrapper post: ", post);
   const establishPollAns = (post) => {
@@ -56,6 +59,11 @@ const PollWrapper = ({ post }) => {
             ? post.content.vote
             : pollAns[0].option
         }
+        customStyles={{
+          theme: `${theme === colorThemes.light ? "black" : "white"}`,
+          align: "center",
+          questionColor: `${theme.pollQuestionColor}`,
+        }}
         noStorage
         onClick={(event) => {
           event.stopPropagation();
