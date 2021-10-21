@@ -301,6 +301,7 @@ const PostFeed = ({
                         width: `100%`,
                         margin: `8px 0`,
                         ...MarginLeftRight,
+                        backgroundColor: `${theme.blueToLightGreyButton}`,
                       }}
                       onClick={(event) => {
                         setDisplaySecondarySearchbar(
@@ -337,6 +338,7 @@ const PostFeed = ({
                         width: `100%`,
                         margin: `8px auto 8px 0`,
                         ...MarginLeftRight,
+                        backgroundColor: `${theme.blueToLightGreyButton}`,
                       }}
                       onClick={(event) => {
                         setDisplayMobileOptionsPanel(
@@ -359,6 +361,7 @@ const PostFeed = ({
                       marginTop: `0.5em`,
                       marginBottom: `0.5em`,
                       ...MarginLeftRight,
+                      color: `${theme.logoFontColor}`,
                     }}
                     onClick={() => {
                       setCondensedState(!isCondensed);

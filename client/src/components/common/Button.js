@@ -58,7 +58,7 @@ const Btn = styled.button`
   transition: ease-in-out 100ms;
 
   :focus {
-    border: 2px solid var(--inquire-blue);
+    border: 2px solid ${(props) => props.theme.logoFontColor};
   }
 
   // If secondary prop === true
@@ -80,7 +80,7 @@ const Btn = styled.button`
       border-radius: 4px;
       padding: 5px 12px;
       background-color: #e7e7e700;
-      color: #162b55;
+      color: ${(props) => props.theme.logoFontColor};
       &:hover {
         transform: ${(props) =>
           props.animatedHover ? css`translateY(-0.5px);` : ""};

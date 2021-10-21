@@ -6,11 +6,14 @@ import Button from "../../common/Button";
 import CogIcon from "../../../imgs/settings 1.svg";
 import { useContext } from "react";
 import { UserRoleContext } from "../../context/UserRoleProvider";
+import { ColorContext } from "../../context/ColorModeContext";
 
 const MobileOptionsPanel = ({ courseId, children, ...props }) => {
   const [panelPermissions, setPanelPermissions] = useState(null);
 
   const userRole = useContext(UserRoleContext);
+
+  const theme = useContext(ColorContext);
 
   const { width, height } = useWindowDimensions();
 
@@ -43,7 +46,12 @@ const MobileOptionsPanel = ({ courseId, children, ...props }) => {
               }}
               to={"/course/" + courseId + "/post/newQorA"}
             >
-              <Button primary autoWidth enableMargin={"0.5em"}>
+              <Button
+                primary
+                autoWidth
+                enableMargin={"0.5em"}
+                style={{ backgroundColor: `${theme.blueToLightGreyButton}` }}
+              >
                 Draft Post
               </Button>
             </Link>
@@ -57,7 +65,12 @@ const MobileOptionsPanel = ({ courseId, children, ...props }) => {
               }}
               to={"/course/" + courseId + "/post/newPoll"}
             >
-              <Button primary autoWidth enableMargin={"0.5em"}>
+              <Button
+                primary
+                autoWidth
+                enableMargin={"0.5em"}
+                style={{ backgroundColor: `${theme.blueToLightGreyButton}` }}
+              >
                 Draft Poll
               </Button>
             </Link>
@@ -83,7 +96,11 @@ const MobileOptionsPanel = ({ courseId, children, ...props }) => {
                   enableMargin={"0.5em"}
                   // onClick={() => alert("This webpage has not yet been set up...")}
                 >
-                  <img src={CogIcon} alt="Config Page Button Icon" />
+                  <img
+                    src={CogIcon}
+                    alt="Config Page Button Icon"
+                    style={{ filter: `${theme.iconBrightness}` }}
+                  />
                 </Button>
               </Link>
             )}
