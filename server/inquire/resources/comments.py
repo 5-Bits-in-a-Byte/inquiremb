@@ -131,7 +131,7 @@ class Comments(Resource):
           actor=actorObject,
           action="created",
           subject=self.serialize(comment),
-          topics=[courseId, post._id, comment._id]
+          topics=[courseId, post._id, str(comment._id)]
         )
 
         return result, 200
@@ -201,7 +201,7 @@ class Comments(Resource):
             actor=actorObject,
             action="updated",
             subject=self.serialize(comment),
-            topics=[courseId, post._id, comment._id]
+            topics=[courseId, post._id, str(comment._id)]
         )
 
         return result, 200
@@ -281,7 +281,7 @@ class Comments(Resource):
                     actor=actorObject,
                     action="deleted",
                     subject=self.serialize(comment),
-                    topics=[courseId, post._id, comment._id]
+                    topics=[courseId, post._id, str(comment._id)]
                 )
 
                 return {'deleted': True}, 200

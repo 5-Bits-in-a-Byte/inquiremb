@@ -99,7 +99,7 @@ class Replies(Resource):
           actor=actorObject,
           action="created",
           subject=self.serialize(reply),
-          topics=[courseId, post._id, comment._id, reply._id]
+          topics=[courseId, post._id, str(comment._id), reply._id]
         )
 
         return result, 200
@@ -175,7 +175,7 @@ class Replies(Resource):
               actor=actorObject,
               action="updated",
               subject=self.serialize(reply),
-              topics=[courseId, post._id, comment._id, reply._id]
+              topics=[courseId, post._id, str(comment._id), reply._id]
             )
 
             return result, 200
@@ -261,7 +261,7 @@ class Replies(Resource):
               actor=actorObject,
               action="deleted",
               subject=self.serialize(reply),
-              topics=[courseId, post._id, comment._id, reply._id]
+              topics=[courseId, post._id, str(comment._id), reply._id]
             )
             
             return {'deleted': True}, 200
