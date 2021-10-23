@@ -15,6 +15,8 @@ from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
 from inquire.socketio_app import io
 
+from inquire.utils.events import sendEvent
+
 import datetime
 
 
@@ -122,6 +124,16 @@ class Comments(Resource):
         result = self.serialize(comment)
         if current_app.config['include_socketio']:
             current_app.socketio.emit('Comment/create', result, room=postId)
+        
+        actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
+        sendEvent(
+          actor=actorObject,
+          action="created",
+          subject=self.serialize(comment),
+          topics=[courseId, post._id, comment._id]
+        )
+
         return result, 200
 
     @permission_layer(required_permissions=["edit-comment"])
@@ -182,6 +194,16 @@ class Comments(Resource):
         comment.save()
         post.save()
         result = self.serialize(comment)
+
+        actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
+        sendEvent(
+            actor=actorObject,
+            action="updated",
+            subject=self.serialize(comment),
+            topics=[courseId, post._id, comment._id]
+        )
+
         return result, 200
 
     @permission_layer(required_permissions=["delete-comment"])
@@ -252,6 +274,16 @@ class Comments(Resource):
                 post.comments -= 1
                 post.save()
                 comment.delete()
+
+                actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
+                sendEvent(
+                    actor=actorObject,
+                    action="deleted",
+                    subject=self.serialize(comment),
+                    topics=[courseId, post._id, comment._id]
+                )
+
                 return {'deleted': True}, 200
             else:
                 return {'deleted': False}, 403
