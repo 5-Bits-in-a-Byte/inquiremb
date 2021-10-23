@@ -13,6 +13,8 @@ from inquire.auth import current_user, permission_layer
 from inquire.mongo import *
 from inquire.socketio_app import io
 
+from inquire.utils.events import sendEvent
+
 
 class Replies(Resource):
     @permission_layer(required_permissions=["publish-reply"])
@@ -90,6 +92,16 @@ class Replies(Resource):
         if current_app.config['include_socketio']:
             current_app.socketio.emit(
                 'Reply/create', self.serialize(comment), room=postId)
+        
+        actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
+        sendEvent(
+          actor=actorObject,
+          action="created",
+          subject=self.serialize(reply),
+          topics=[courseId, post._id, comment._id, reply._id]
+        )
+
         return result, 200
 
     @permission_layer(required_permissions=["edit-reply"])
@@ -156,6 +168,16 @@ class Replies(Resource):
             reply.content = args['content']
             comment.save()
             result = self.serialize(comment)
+
+            actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
+            sendEvent(
+              actor=actorObject,
+              action="updated",
+              subject=self.serialize(reply),
+              topics=[courseId, post._id, comment._id, reply._id]
+            )
+
             return result, 200
 
     @permission_layer(required_permissions=["delete-reply"])
@@ -232,6 +254,16 @@ class Replies(Resource):
         if id_match or current_user.permissions['admin']['configure']:
             comment.replies.remove(reply)
             comment.save()
+
+            actorObject = {"first": current_user.first, "last": current_user.last, "_id": current_user._id}
+
+            sendEvent(
+              actor=actorObject,
+              action="deleted",
+              subject=self.serialize(reply),
+              topics=[courseId, post._id, comment._id, reply._id]
+            )
+            
             return {'deleted': True}, 200
         else:
             return {'deleted': False}, 403
