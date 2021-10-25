@@ -10,6 +10,7 @@ class Users(Resource):
     parser.add_argument('first')
     parser.add_argument('last')
     parser.add_argument('email')
+    parser.add_argument('receiveEmailNotifications')
     args = parser.parse_args()
 
     if current_user._id != args["userId"]:
@@ -31,9 +32,15 @@ class Users(Resource):
     if args['email'] is not None:
       user.email = args['email']
     
+    if args['receiveEmailNotifications'] is not None:
+      user.userProfileData['receiveEmailNotifications'] = args['receiveEmailNotifications']
+      user.userProfileData['accountFlags']['emailNotificationPrompt'] = False
+    
     user.save()
+
     return {"success": f"Successfully updated user data.", "data" : {
-      "first" : user.first, 
-      "last"  : user.last,
-      "email" : user.email,
+        "first" : user.first, 
+        "last"  : user.last,
+        "email" : user.email,
+        "receiveEmailNotifications" : user.userProfileData['receiveEmailNotifications'],
       }}

@@ -64,6 +64,8 @@ const Content = styled.div`
 
   transition: 150ms ease-out;
 
+  ${({ customBorder }) => customBorder};
+
   @media only screen and (max-width: 1201px) {
     width: auto;
     min-width: 1px;

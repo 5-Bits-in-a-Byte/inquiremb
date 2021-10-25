@@ -27,7 +27,8 @@ for user in userObjects:
     "about" : user['userProfileData']['about'],
     "bannerColor": user['userProfileData']['bannerColor'],
     "theme": True,
-    "accontFlags" : {
+    "receiveEmailNotifications": False,
+    "accountFlags" : {
       "emailNotificationPrompt": True,
     },
   }

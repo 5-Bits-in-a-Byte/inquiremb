@@ -4,6 +4,7 @@ import styled from "styled-components";
 import TopContent from "./TopContent";
 import { generateCourseList } from "../common/externalMethods/CoursesHelperMethods";
 import UserDataCheck from "../common/UserDataCheck";
+import EmailNotificationCheck from "../common/EmailNotificationCheck";
 
 /** Courses Component
  * @brief Contains the programmatically generated list of user course cards from the UserCourses list in the UserContext
@@ -22,6 +23,7 @@ const Courses = () => {
         <TopContent courseList={courseList} setCourseList={setCourseList} />
         <WrapDisplay className="content">{courseList}</WrapDisplay>
         {user && <UserDataCheck userData={user} />}
+        {user && <EmailNotificationCheck userData={user} debug />}
       </ScrollDiv>
     </WrapAll>
   );
