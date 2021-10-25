@@ -23,7 +23,7 @@ const Courses = () => {
         <TopContent courseList={courseList} setCourseList={setCourseList} />
         <WrapDisplay className="content">{courseList}</WrapDisplay>
         {user && <UserDataCheck userData={user} />}
-        {user && <EmailNotificationCheck userData={user} debug />}
+        {user && <EmailNotificationCheck userData={user} />}
       </ScrollDiv>
     </WrapAll>
   );

@@ -33,8 +33,9 @@ class Users(Resource):
       user.email = args['email']
     
     if args['receiveEmailNotifications'] is not None:
-      user.userProfileData['receiveEmailNotifications'] = args['receiveEmailNotifications']
-      user.userProfileData['accountFlags']['emailNotificationPrompt'] = False
+      user.userProfileData['receiveEmailNotifications'] = True if args['receiveEmailNotifications'] == "True" else False
+      if user.userProfileData['accountFlags']['emailNotificationPrompt'] == True:
+        user.userProfileData['accountFlags']['emailNotificationPrompt'] = False
     
     user.save()
 

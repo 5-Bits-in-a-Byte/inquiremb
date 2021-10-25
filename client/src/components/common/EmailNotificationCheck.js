@@ -16,20 +16,10 @@ const EmailNotificationCheck = ({ userData, debug, ...props }) => {
   const [showDataForm, setShowDataForm] = useState(
     userData.userProfileData?.accountFlags?.emailNotificationPrompt
   );
+
   const [emailNotificationState, setEmailNotificationState] = useState(
-    userData.userProfileData.recieveEmailNotifications
+    userData.userProfileData.receiveEmailNotifications
   );
-
-  const userDataCheck = (user) => {
-    debug && console.log("[EmailNotificationCheck] UserData: ", user);
-    if (user.first == "" || user.last == "") {
-      setShowDataForm(true);
-    }
-  };
-
-  useEffect(() => {
-    userDataCheck(userData);
-  }, []);
 
   const handleFormSubmission = (event) => {
     debug && console.log("[EmailNotificationCheck] Event Data: ", event);
