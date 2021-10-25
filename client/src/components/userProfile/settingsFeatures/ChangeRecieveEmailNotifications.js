@@ -9,15 +9,9 @@ const ChangeRecieveEmailNotifications = ({ debug, ...props }) => {
   const user = useContext(UserContext);
   const setUser = useContext(UserDispatchContext);
 
-  console.log(user);
-
   const [emailNotificationState, setEmailNotificationState] = useState(
     user.userProfileData.receiveEmailNotifications
   );
-
-  useEffect(() => {
-    console.log("State - ", emailNotificationState);
-  }, [emailNotificationState]);
 
   const handleFormSubmission = (event) => {
     debug &&
