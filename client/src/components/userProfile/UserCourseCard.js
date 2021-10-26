@@ -133,7 +133,7 @@ const UserCourseCard = ({
 export default UserCourseCard;
 
 const CardWrapper = styled.div`
-  background-color: ${(props) => props.theme.button};
+  background-color: ${(props) => props.theme.courseCardBackground};
   min-width: 8rem;
   /* min-height: 6rem; */
 

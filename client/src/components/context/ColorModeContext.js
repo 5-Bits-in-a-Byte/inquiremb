@@ -48,6 +48,7 @@ export const colorThemes = {
     dropDownText: "#333333",
     mobileSideBar: "#162B55",
     pollQuestionColor: "black",
+    courseCardBackground: "white",
   },
   dark: {
     background: "#181818",
@@ -78,5 +79,6 @@ export const colorThemes = {
     dropDownText: "white",
     mobileSideBar: "#212121",
     pollQuestionColor: "#f8f8f8",
+    courseCardBackground: "#3d3d3d",
   },
 };
