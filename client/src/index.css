@@ -8,7 +8,7 @@
 :after,
 :before {
   box-sizing: border-box;
-  color: #162b55;
+  /* color: #162b55; */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
