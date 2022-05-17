@@ -14,7 +14,7 @@
   <img alt="Python" src="https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white"/>
 </p>
 
-A message board for course instructors and students to post questions, provide answers, connect, and communicate. We built Inquire as an intuitive tool to aid professors with classroom discussion and insentivise productive interaction amongst peers.
+A message board for course instructors and students to post questions, provide answers, connect, and communicate. We built Inquire as an intuitive tool to aid professors with classroom discussion and incentivize productive interaction amongst peers.
 
 ---
 
